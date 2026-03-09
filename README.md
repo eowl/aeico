@@ -1,75 +1,101 @@
-# eolic
+# Aeico
 
-> A simple web components kit
-
-[![npm version](https://img.shields.io/npm/v/eolic.svg)](https://www.npmjs.com/package/eolic)
-[![license](https://img.shields.io/npm/l/eolic.svg)](https://github.com/eowl/eolic/blob/main/LICENSE)
-
-## ⚠️ Work in Progress
-
-This is an early placeholder version for package name reservation. Full functionality will be implemented in future releases.
+AEICO(Advanced Element Interface for Component Objects)
+Lightweight Web Components library for building form fields and UI elements.
 
 ## Installation
 
 ```bash
-npm install eolic
+# npm
+npm install aeico
+
+# yarn
+yarn add aeico
+
+# pnpm
+pnpm add aeico
 ```
 
-## Usage
+## Quick Start
 
-```javascript
-const { createComponent, define } = require('eolic');
+```typescript
+import { setComponentConfig, SelectField, InputField } from 'aeico'
 
-// Create a custom component
-const MyComponent = createComponent('my-component', {
-  render() {
-    this.innerHTML = '<p>Hello from eolic!</p>';
+// Configure global settings
+setComponentConfig({
+  theme: 'dark',
+  enableI18n: true,
+  i18nService: {
+    t: (key) => translations[key],
+    subscribe: (callback) => { /* ... */ }
   }
-});
+})
 
-// Register the component
-define('my-component', MyComponent);
+// Use components
+const select = document.createElement('select-field')
+select.setAttribute('value', 'option1')
+select.setAttribute('options', JSON.stringify(['option1', 'option2']))
+document.body.appendChild(select)
 ```
 
-## API
+## Components
 
-### `createComponent(name, options)`
+### AeicoElement
 
-Create a custom web component.
+Base class for all Aeico components. Provides:
+- Props system with type inference
+- Event system with custom prefixes
+- Stylesheet management
+- i18n integration
 
-- **name**: Component name
-- **options**: Component options
-  - **render**: Render function called when component is connected
+### AeicoField
 
-Returns a custom element constructor.
+Base class for form field components. Extends `AeicoElement` with:
+- Value management
+- Reset/Clear functionality
+- Change event handling
+- Field-specific styling
 
-### `define(name, constructor)`
+### Form Fields
 
-Register a custom element.
+- **SelectField**: Dropdown select with options
+- **InputField**: Text input with placeholder
+- **RangeField**: Range slider with value display
+- **CheckboxField**: Checkbox/toggle with variants
 
-- **name**: Element name (must contain a hyphen)
-- **constructor**: Custom element constructor
+## API Documentation
 
-### `version`
+### Configuration
 
-Current version string.
+```typescript
+setComponentConfig({
+  theme?: 'dark' | 'light',
+  enableI18n?: boolean,
+  i18nService?: {
+    t: (key: string) => string,
+    subscribe: (callback: () => void) => () => void
+  }
+})
+```
 
-## Roadmap
+### Component Props
 
-- [ ] Enhanced component lifecycle hooks
-- [ ] Built-in state management
-- [ ] Component composition utilities
-- [ ] TypeScript support
-- [ ] Comprehensive documentation
+All components support:
+- `value`: Current value
+- `defaultValue`: Initial value for reset
+- `disabled`: Disable state
+- `showReset`: Show reset button
+- `showClear`: Show clear button
+- `size`: Size variant ('sm' | 'md' | 'lg')
+- `theme`: Theme override
+
+### Events
+
+All field components emit:
+- `field-change`: Value changed
+- `field-reset`: Reset to default
+- `field-clear`: Cleared
 
 ## License
 
-ISC © [eowl](https://github.com/eowl)
-
-## Contributing
-
-This project is in early development. Contributions are welcome once the core API is established.
-
-## Repository
-
-[https://github.com/eowl/eolic](https://github.com/eowl/eolic)
+ISC

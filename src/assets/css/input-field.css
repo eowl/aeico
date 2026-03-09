@@ -1,0 +1,128 @@
+:host {
+  display: block;
+  flex: 1;
+  min-width: 0;
+
+  /* Layout variables */
+  --input-field-gap: 4px;
+  
+  /* Input element variables */
+  --input-font-size: 12px;
+  --input-padding: 4px 7px;
+  --input-border-width: 1px;
+  --input-border-radius: 2px;
+  --input-border-color: rgba(255, 255, 255, 0.08);
+  --input-border-color-hover: rgba(255, 255, 255, 0.12);
+  --input-border-color-focus: #0e639c;
+  --input-bg: #1e1e1e;
+  --input-bg-hover: #252525;
+  --input-bg-focus: #252525;
+  --input-color: #cccccc;
+  --input-placeholder-color: #6a6a6a;
+  --input-transition: border-color 0.12s, background 0.12s;
+  
+  /* Clear button variables */
+  --clear-btn-size: 16px;
+  --clear-btn-font-size: 11px;
+  --clear-btn-border-radius: 2px;
+  --clear-btn-bg: #3a3a3a;
+  --clear-btn-bg-hover: #5a2a2a;
+  --clear-btn-color: #909090;
+  --clear-btn-color-hover: #ff6b6b;
+  --clear-btn-transition: all 0.12s;
+  
+  /* Reset button variables */
+  --reset-btn-size: 16px;
+  --reset-btn-font-size: 11px;
+  --reset-btn-border-radius: 2px;
+  --reset-btn-bg: #3a3a3a;
+  --reset-btn-bg-hover: #1a3a4a;
+  --reset-btn-color: #909090;
+  --reset-btn-color-hover: #4fc3f7;
+  --reset-btn-transition: all 0.12s;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: var(--input-field-gap);
+  width: 100%;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--input-font-size);
+  padding: var(--input-padding);
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--input-border-radius);
+  background: var(--input-bg);
+  color: var(--input-color);
+  transition: var(--input-transition);
+}
+
+input::placeholder {
+  color: var(--input-placeholder-color);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--input-border-color-focus);
+  background: var(--input-bg-focus);
+}
+
+input:hover:not(:focus) {
+  border-color: var(--input-border-color-hover);
+  background: var(--input-bg-hover);
+}
+
+input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Clear button styles */
+.clear-btn {
+  width: var(--clear-btn-size);
+  height: var(--clear-btn-size);
+  border: none;
+  border-radius: var(--clear-btn-border-radius);
+  cursor: pointer;
+  font-size: var(--clear-btn-font-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--clear-btn-bg);
+  color: var(--clear-btn-color);
+  transition: var(--clear-btn-transition);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.clear-btn:hover {
+  background: var(--clear-btn-bg-hover);
+  color: var(--clear-btn-color-hover);
+}
+
+/* Reset button styles */
+.reset-btn {
+  width: var(--reset-btn-size);
+  height: var(--reset-btn-size);
+  border: none;
+  border-radius: var(--reset-btn-border-radius);
+  cursor: pointer;
+  font-size: var(--reset-btn-font-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--reset-btn-bg);
+  color: var(--reset-btn-color);
+  transition: var(--reset-btn-transition);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.reset-btn:hover {
+  background: var(--reset-btn-bg-hover);
+  color: var(--reset-btn-color-hover);
+}

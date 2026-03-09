@@ -1,0 +1,84 @@
+:host {
+  display: block;
+  flex: 1;
+  min-width: 0;
+
+  /* Layout variables */
+  --select-field-gap: 2px;
+  
+  /* Select element variables */
+  --select-font-size: 12px;
+  --select-padding: 4px 7px;
+  --select-border-width: 1px;
+  --select-border-radius: 2px;
+  --select-border-color: rgba(255, 255, 255, 0.08);
+  --select-border-color-hover: rgba(255, 255, 255, 0.12);
+  --select-border-color-focus: #0e639c;
+  --select-bg: #1e1e1e;
+  --select-bg-hover: #252525;
+  --select-bg-focus: #252525;
+  --select-color: #cccccc;
+  --select-transition: border-color 0.12s, background 0.12s;
+  
+  /* Reset button variables */
+  --reset-btn-size: 16px;
+  --reset-btn-font-size: 11px;
+  --reset-btn-border-radius: 2px;
+  --reset-btn-bg: #3a3a3a;
+  --reset-btn-bg-hover: #1a3a4a;
+  --reset-btn-color: #909090;
+  --reset-btn-color-hover: #4fc3f7;
+  --reset-btn-transition: all 0.12s;
+}
+
+.select-container {
+  display: flex;
+  align-items: center;
+  gap: var(--select-field-gap);
+  width: 100%;
+}
+
+select {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--select-font-size);
+  padding: var(--select-padding);
+  border: var(--select-border-width) solid var(--select-border-color);
+  border-radius: var(--select-border-radius);
+  background: var(--select-bg);
+  color: var(--select-color);
+  cursor: pointer;
+  transition: var(--select-transition);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--select-border-color-focus);
+  background: var(--select-bg-focus);
+}
+
+select:hover:not(:focus) {
+  border-color: var(--select-border-color-hover);
+  background: var(--select-bg-hover);
+}
+
+.reset-btn {
+  width: var(--reset-btn-size);
+  height: var(--reset-btn-size);
+  border: none;
+  border-radius: var(--reset-btn-border-radius);
+  cursor: pointer;
+  font-size: var(--reset-btn-font-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--reset-btn-bg);
+  color: var(--reset-btn-color);
+  transition: var(--reset-btn-transition);
+  flex-shrink: 0;
+}
+
+.reset-btn:hover {
+  background: var(--reset-btn-bg-hover);
+  color: var(--reset-btn-color-hover);
+}

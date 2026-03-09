@@ -1,30 +1,45 @@
 {
-  "name": "eolic",
+  "name": "aeico",
   "version": "0.1.0",
-  "description": "simple web components kit",
+  "description": "Lightweight Web Components library for building form fields and UI elements",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "dev": "vite build --watch",
+    "type-check": "tsc --noEmit"
+  },
   "keywords": [
     "web-components",
-    "custom-elements",
-    "components",
-    "eolic"
+    "ui-components",
+    "form-fields",
+    "custom-elements"
   ],
-  "homepage": "https://github.com/eowl/eolic#readme",
+  "homepage": "https://github.com/eowl/aeico#readme",
   "bugs": {
-    "url": "https://github.com/eowl/eolic/issues"
+    "url": "https://github.com/eowl/aeico/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eowl/eolic.git"
+    "url": "git+https://github.com/eowl/aeico.git"
   },
-  "license": "ISC",
   "author": "eowl",
-  "type": "commonjs",
-  "main": "index.js",
-  "files": [
-    "index.js",
-    "README.md"
-  ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
   }
 }
