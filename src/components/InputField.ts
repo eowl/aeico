@@ -1,16 +1,16 @@
 import AeicoField from '../AeicoField'
-import type { InferProperties, PropertiesDeclaration, WatchersDeclaration } from '../types'
+import type { InferProperties, Props, Watchers } from '../types'
 import inputFieldStyle from '../assets/css/input-field.css?inline'
 
 class InputField extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
 
-  static properties: PropertiesDeclaration = {
+  static properties: Props = {
     placeholder: { type: String },
     type: { type: String },
   }
 
-  static watchers: WatchersDeclaration = {
+  static watchers: Watchers = {
     value: 'onValueChanged',
     placeholder: 'onPlaceholderChanged',
     type: 'onTypeChanged',

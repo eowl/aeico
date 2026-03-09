@@ -1,10 +1,10 @@
 import styleSheetLoader from './utils/styleSheetLoader'
 import type { 
   StyleProps, 
-  PropertiesDeclaration,
-  PropertyDeclaration,
+  Props,
+  Prop,
   ComputedDeclaration,
-  WatchersDeclaration,
+  Watchers,
   StyleVariableGenerator,
   InferProperties
 } from './types'
@@ -157,7 +157,7 @@ class AeicoElement extends HTMLElement {
    *   }
    * }
    */
-  static properties: PropertiesDeclaration = {
+  static properties: Props = {
     useDefaultStyleSheet: { type: Boolean },
     styleSheetText: { type: String },
     styleSheet: { type: Object },
@@ -193,7 +193,7 @@ class AeicoElement extends HTMLElement {
    *   options: 'onOptionsChanged'
    * }
    */
-  static watchers?: WatchersDeclaration
+  static watchers?: Watchers
 
   /**
    * Static stylesheet for this component
@@ -243,7 +243,7 @@ class AeicoElement extends HTMLElement {
    * Walks up the prototype chain to collect all properties from parent classes
    */
   static get observedAttributes(): string[] {
-    const allProps = this.collectProperties() as PropertiesDeclaration
+    const allProps = this.collectProperties() as Props
     return Object.entries(allProps)
       .filter(([_, decl]) => decl.attribute !== false)
       .map(([key]) => this.toKebab(key))
@@ -252,8 +252,8 @@ class AeicoElement extends HTMLElement {
   /**
    * Collect all properties from prototype chain
    */
-  private static collectProperties(): Record<string, PropertyDeclaration> {
-    const collected: Record<string, PropertyDeclaration> = {}
+  private static collectProperties(): Record<string, Prop> {
+    const collected: Record<string, Prop> = {}
     let currentClass: any = this
     
     while (currentClass && currentClass !== HTMLElement) {
@@ -489,7 +489,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Serialize attribute value
    */
-  private _serializeAttribute(value: any, propDecl: PropertyDeclaration): string {
+  private _serializeAttribute(value: any, propDecl: Prop): string {
     if (propDecl.converter?.toAttribute) {
       return propDecl.converter.toAttribute(value, propDecl.type) ?? ''
     }
@@ -510,7 +510,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Deserialize attribute value
    */
-  private _deserializeAttribute(value: string, propDecl: PropertyDeclaration): any {
+  private _deserializeAttribute(value: string, propDecl: Prop): any {
     if (propDecl.converter?.fromAttribute) {
       return propDecl.converter.fromAttribute(value, propDecl.type)
     }

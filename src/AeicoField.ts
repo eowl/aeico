@@ -1,5 +1,5 @@
 import AeicoElement from './AeicoElement'
-import type { FieldI18nKeys, InferProperties, PropertiesDeclaration, WatchersDeclaration } from './types'
+import type { FieldI18nKeys, InferProperties, Props, Watchers } from './types'
 import { fieldStyleGenerator } from './utils/fieldStyles'
 import { getComponentConfig } from './configProvider'
 
@@ -19,7 +19,7 @@ class AeicoField extends AeicoElement {
   /**
    * Define base field properties (extends AeicoElement properties)
    */
-  static properties: PropertiesDeclaration = {
+  static properties: Props = {
     value: { type: String },
     defaultValue: { type: String },
     showReset: { type: Boolean },
@@ -32,7 +32,7 @@ class AeicoField extends AeicoElement {
   /**
    * Property watchers
    */
-  static watchers: WatchersDeclaration = {
+  static watchers: Watchers = {
     showReset: 'onShowResetChanged',
     showClear: 'onShowClearChanged',
     disabled: 'onDisabledChanged',

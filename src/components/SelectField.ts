@@ -1,19 +1,19 @@
 import AeicoField from '../AeicoField'
 import { isSelectOption } from '../types'
-import type { InferProperties, PropertiesDeclaration, WatchersDeclaration } from '../types'
+import type { InferProperties, Props, Watchers } from '../types'
 import { getI18nService, hasI18nService } from '../i18n'
 import selectFieldStyle from '../assets/css/select-field.css?inline'
 
 class SelectField extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null
 
-  static get properties(): PropertiesDeclaration {
+  static get properties(): Props {
     return {
       options: { type: Array },
     }
   }
 
-  static get watchers(): WatchersDeclaration {
+  static get watchers(): Watchers {
     return {
       value: 'onValueChanged',
       options: 'onOptionsChanged',

@@ -1,17 +1,17 @@
 import AeicoField from '../AeicoField'
-import type { InferProperties, PropertiesDeclaration, WatchersDeclaration } from '../types'
+import type { InferProperties, Props, Watchers } from '../types'
 import checkboxFieldStyle from '../assets/css/checkbox-field.css?inline'
 
 class CheckboxField extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
 
-  static properties: PropertiesDeclaration = {
+  static properties: Props = {
     checked: { type: Boolean },
     defaultChecked: { type: Boolean },
     variant: { type: String }, // 'checkbox' | 'toggle'
   }
 
-  static watchers: WatchersDeclaration = {
+  static watchers: Watchers = {
     checked: 'onCheckedChanged',
     variant: 'onVariantChanged',
   }

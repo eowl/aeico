@@ -1,6 +1,6 @@
 import AeicoField from '../AeicoField'
 import { isSelectOption } from '../types'
-import type { InferProperties, PropertiesDeclaration, WatchersDeclaration } from '../types'
+import type { InferProperties, Props, Watchers } from '../types'
 import rangeFieldStyle from '../assets/css/range-field.css?inline'
 
 class RangeField extends AeicoField {
@@ -9,7 +9,7 @@ class RangeField extends AeicoField {
 
   protected static stylesheet = rangeFieldStyle
 
-  static properties: PropertiesDeclaration = {
+  static properties: Props = {
     options: { type: Array },
     percentage: { type: Boolean },
     min: { type: Number },
@@ -17,7 +17,7 @@ class RangeField extends AeicoField {
     step: { type: Number },
   }
 
-  static watchers: WatchersDeclaration = {
+  static watchers: Watchers = {
     value: 'onValueChanged',
     options: 'onOptionsChanged',
     min: 'onMinChanged',

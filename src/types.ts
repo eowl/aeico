@@ -192,7 +192,7 @@ export type PropertyType =
 /**
  * Property declaration with metadata
  */
-export interface PropertyDeclaration<T = any> {
+export interface Prop<T = any> {
   /** Property type constructor */
   type?: PropertyType
   
@@ -212,7 +212,7 @@ export interface PropertyDeclaration<T = any> {
 /**
  * Properties declaration object
  */
-export type PropertiesDeclaration = Record<string, PropertyDeclaration>
+export type Props = Record<string, Prop>
 
 /**
  * Computed property configuration
@@ -232,7 +232,7 @@ export type ComputedDeclaration = Record<string, ComputedPropertyConfig>
 /**
  * Watchers declaration (property name -> method name)
  */
-export type WatchersDeclaration = Record<string, string>
+export type Watchers = Record<string, string>
 
 /**
  * Convert PropertyType to TypeScript type
