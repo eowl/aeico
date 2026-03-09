@@ -51,13 +51,9 @@ export type { ComponentEventEmitter } from './events'
 
 // Types
 export {
-  PropTypes,
   isSelectOption
 } from './types'
 export type {
-  Props,
-  PropType,
-  InferProps,
   ThemeType,
   SizeType,
   I18nKeys,
@@ -72,8 +68,7 @@ export type {
   StyleProvider,
   StyleGenerationConfig,
   SelectOption,
-  SelectOptions,
-  PropTypeToTS
+  SelectOptions
 } from './types'
 
 // Utilities

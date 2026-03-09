@@ -97,51 +97,6 @@ export type DateTimeFieldConfig = FieldConfig & {
   showClear?: boolean
 }
 
-export const PropNumber = 'number' as const
-export const PropString = 'string' as const
-export const PropBoolean = 'boolean' as const
-export const PropObject = 'object' as const
-export const PropArray = 'array' as const
-export const PropAny = 'any' as const
-
-export type PropType = typeof PropNumber | typeof PropString | typeof PropBoolean | typeof PropObject | typeof PropArray | typeof PropAny
-
-export const PropTypes = {
-  number: PropNumber,
-  string: PropString,
-  boolean: PropBoolean,
-  object: PropObject,
-  array: PropArray,
-  any: PropAny,
-} as const
-
-export type Props = Record<string, PropType>
-
-export type PropTypeToTS<T extends PropType> = 
-  T extends typeof PropString ? string :
-  T extends typeof PropNumber ? number :
-  T extends typeof PropBoolean ? boolean :
-  T extends typeof PropArray ? any[] :
-  T extends typeof PropObject ? Record<string, any> :
-  T extends typeof PropAny ? any :
-  never
-
-type StringLiteralKeys<T> = keyof T extends infer K
-  ? K extends string
-    ? string extends K
-      ? never
-      : K
-    : never
-  : never
-
-export type InferProps<S extends Props> = {
-  -readonly [K in StringLiteralKeys<S>]?: PropTypeToTS<S[K]>
-}
-
-export type CamelToKebab<S extends string> = S extends `${infer T}${infer U}`
-  ? `${T extends Capitalize<T> ? '-' : ''}${Lowercase<T>}${CamelToKebab<U>}`
-  : S
-
 /**
  * Style variable generator type
  * Components can implement this to provide automatic style generation based on props
