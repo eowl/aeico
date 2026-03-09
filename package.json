@@ -1,0 +1,30 @@
+{
+  "name": "eolic",
+  "version": "0.1.0",
+  "description": "simple web components kit",
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "components",
+    "eolic"
+  ],
+  "homepage": "https://github.com/eowl/eolic#readme",
+  "bugs": {
+    "url": "https://github.com/eowl/eolic/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eowl/eolic.git"
+  },
+  "license": "ISC",
+  "author": "eowl",
+  "type": "commonjs",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
