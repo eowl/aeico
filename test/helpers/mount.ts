@@ -7,6 +7,26 @@
 const wrappers: Element[] = []
 
 /**
+ * Wait for a custom element to be defined, with a 2-second timeout guard.
+ * Use this instead of bare customElements.whenDefined() to avoid test hangs
+ * caused by typos or missing imports.
+ */
+export function whenDefined(tagName: string): Promise<CustomElementConstructor> {
+  let timerId: ReturnType<typeof setTimeout>
+  const timeout = new Promise<never>((_, reject) => {
+    timerId = setTimeout(
+      () => reject(new Error(`whenDefined(): <${tagName}> was not defined within 2000ms. Check the tag name or ensure the module is imported.`)),
+      2000
+    )
+  })
+  
+  return Promise.race([
+    customElements.whenDefined(tagName).then(ctor => { clearTimeout(timerId); return ctor }),
+    timeout,
+  ])
+}
+
+/**
  * Mount an HTML string into document.body and return the root element.
  * Automatically awaits custom element upgrade for hyphenated tag names.
  */
@@ -15,10 +35,10 @@ export async function mount<T extends HTMLElement>(html: string): Promise<T> {
   wrapper.innerHTML = html.trim()
   document.body.appendChild(wrapper)
   wrappers.push(wrapper)
-  
+
   const el = wrapper.firstElementChild as T
   if (el.localName.includes('-')) {
-    await customElements.whenDefined(el.localName)
+    await whenDefined(el.localName)
   }
 
   return el

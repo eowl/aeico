@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai'
-import { mount, unmountAll, updated } from '../helpers/mount.js'
+import { mount, unmountAll, updated, whenDefined } from '../helpers/mount.js'
 import InputField from '../../src/components/InputField.js'
 
 before(async () => {
-  await customElements.whenDefined('input-field')
+  await whenDefined('input-field')
 })
 
 afterEach(() => {
