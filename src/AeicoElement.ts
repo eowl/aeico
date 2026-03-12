@@ -86,6 +86,7 @@ class AeicoElement extends HTMLElement {
   static toKebab(str: string): string {
     // Strip leading underscores and numbers to ensure valid custom element name
     const cleaned = str.replace(/^[_\d]+/, '')
+    
     return cleaned.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
   }
 
@@ -573,7 +574,6 @@ class AeicoElement extends HTMLElement {
   }
 
 
-
   /**
    * Generate CSS custom property values for this component instance.
    * Uses the static styleGenerator if defined, reading reactive properties directly.
@@ -595,6 +595,19 @@ class AeicoElement extends HTMLElement {
    * Automatically subscribes to i18n language changes if enabled
    */
   connectedCallback() {
+    this.adaptStylesheet()
+
+    if (this.i18nEnabled) {
+      this.subscribeToI18n()
+    }
+  }
+
+  /**
+   * Adapt stylesheets based on configuration and properties
+   * Called on first connection and whenever style-related properties change
+   * Triggers the StyleAdapter to apply styles to the shadow root
+   */
+  adaptStylesheet() {
     const constructor = this.constructor as typeof AeicoElement
 
     this.styleAdapter.initialize({
@@ -607,11 +620,8 @@ class AeicoElement extends HTMLElement {
       pendingStyleProps: this.pendingStyleProps,
       generateStyleVars: () => this.generateStyleVars(),
     })
-    this.pendingStyleProps = undefined
 
-    if (this.i18nEnabled) {
-      this.subscribeToI18n()
-    }
+    this.pendingStyleProps = undefined
   }
 
   /**
