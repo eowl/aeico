@@ -6,7 +6,7 @@ import { buildTestRunnerHtml } from './test/helpers/testRunnerHtml.mjs'
 const TIMEOUT_MS = 3000
 
 export default {
-  files: 'test/**/*.test.ts',
+  files: 'test/specs/**/*.test.ts',
   nodeResolve: true,
   browsers: [
     playwrightLauncher({ product: 'chromium' }),

@@ -528,12 +528,11 @@ class AeicoElement extends HTMLElement {
     if (propDecl.converter?.fromAttribute) {
       return propDecl.converter.fromAttribute(value, propDecl.type)
     }
-    
-    if (!value) return value
-    
+
     switch (propDecl.type) {
       case Boolean:
-        return value === 'true'
+        // "" means the attribute was present without a value, e.g. <el checked>
+        return value === 'true' || value === ''
       case Number:
         return Number(value)
       case Array:

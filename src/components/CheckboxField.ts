@@ -33,6 +33,7 @@ class CheckboxField extends AeicoField {
   }
 
   render() {
+
     this.shadowRoot!.innerHTML = ''
 
     const container = document.createElement('div')
@@ -47,16 +48,16 @@ class CheckboxField extends AeicoField {
 
     // Create input element
     this.fieldElement = document.createElement('input')
-    const input = this.fieldElement as HTMLInputElement
-    input.type = 'checkbox'
-    input.className = variant === 'toggle' ? 'toggle-input' : 'checkbox-input'
+    this.fieldElement.type = 'checkbox'
+    this.fieldElement.className = variant === 'toggle' ? 'toggle-input' : 'checkbox-input'
 
     const currentValue = this.checked
-    if (currentValue !== undefined && currentValue !== null) {
-      input.checked = Boolean(currentValue)
+        
+    if (currentValue !== undefined && currentValue !== null) {  
+      this.fieldElement.checked = Boolean(currentValue)
     }
 
-    input.addEventListener('change', this.boundOnChange)
+    this.fieldElement.addEventListener('change', this.boundOnChange)
 
     wrapper.appendChild(this.fieldElement)
 
@@ -87,6 +88,7 @@ class CheckboxField extends AeicoField {
    * Note: CheckboxField overrides setValue to sync props.checked
    */
   protected writeValue(checked: boolean): void {
+    
     if (this.fieldElement) {
       this.fieldElement.checked = Boolean(checked)
     }
