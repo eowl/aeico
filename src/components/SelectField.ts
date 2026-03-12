@@ -22,7 +22,7 @@ class SelectField extends AeicoField {
 
   declare options?: any[]
 
-  protected static stylesheet = selectFieldStyle
+  protected static stylesheets = [selectFieldStyle]
 
   protected onLanguageChange() {
     super.onLanguageChange()

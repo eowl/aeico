@@ -44,7 +44,7 @@ export type StyleProps = {
   useDefaultStyleSheet?: boolean
   styleSheetText?: string
   styleSheet?: CSSStyleSheet
-  loadStyleSheets?: string[]
+  styleSheetNames?: string[]
   cssVars?: Record<string, string>
   
   /** Component theme, defaults to 'dark' */

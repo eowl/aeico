@@ -1,0 +1,90 @@
+/* Grid Layout System - 12 Column Grid */
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 8px 12px;
+  align-items: start;
+}
+
+/* Auto Layout - Default 6 column span with responsive data-col attribute */
+.grid-auto > *[data-col] {
+  grid-column: span 6;
+}
+
+.grid-auto > *[data-col="1"] {
+  grid-column: span 1;
+}
+
+.grid-auto > *[data-col="2"] {
+  grid-column: span 2;
+}
+
+.grid-auto > *[data-col="3"] {
+  grid-column: span 3;
+}
+
+.grid-auto > *[data-col="4"] {
+  grid-column: span 4;
+}
+
+.grid-auto > *[data-col="5"] {
+  grid-column: span 5;
+}
+
+.grid-auto > *[data-col="6"] {
+  grid-column: span 6;
+}
+
+.grid-auto > *[data-col="7"] {
+  grid-column: span 7;
+}
+
+.grid-auto > *[data-col="8"] {
+  grid-column: span 8;
+}
+
+.grid-auto > *[data-col="9"] {
+  grid-column: span 9;
+}
+
+.grid-auto > *[data-col="10"] {
+  grid-column: span 10;
+}
+
+.grid-auto > *[data-col="11"] {
+  grid-column: span 11;
+}
+
+.grid-auto > *[data-col="12"] {
+  grid-column: span 12;
+}
+
+/* Single Column Layout */
+.grid-single {
+  grid-template-columns: 1fr;
+}
+
+.grid-single > * {
+  grid-column: span 1;
+}
+
+/* Special element rules for backward compatibility */
+.grid-12 > option-field {
+  grid-column: span 6;
+}
+
+.grid-auto > option-field:not([data-col]) {
+  grid-column: span 6;
+}
+
+.grid-auto > option-field[data-element="checkbox"]:not([data-col]) {
+  grid-column: span 12;
+}
+
+.grid-12 > option-field[data-element="image-selector"] {
+  grid-column: 1 / -1;
+}
+
+.grid-12 > option-field[data-element="datetime-field"]:not([data-col]) {
+  grid-column: span 6;
+}

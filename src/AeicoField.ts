@@ -1,7 +1,6 @@
 import AeicoElement from './AeicoElement'
 import type { FieldI18nKeys, InferProperties, Props, Watchers } from './types'
 import { fieldStyleGenerator } from './utils/fieldStyles'
-import { getComponentConfig } from './configProvider'
 
 export type FieldAction = 'clear' | 'reset' | 'change'
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -89,23 +88,21 @@ class AeicoField extends AeicoElement {
   }
 
   /**
-   * Generate style variables based on field props (size and theme)
-   * Overrides AeicoElement's method to pass size prop
-   * 
-   * @param config Configuration object containing size, theme, and other properties
+   * Generate CSS custom property values for this field instance.
+   * Reads theme and size from the element's own reactive properties,
+   * falling back to global config / defaultSize when not set.
    */
-  protected generateStyleVars(config?: Record<string, any>): Record<string, string> {
+  protected generateStyleVars(): Record<string, string> {
     const constructor = this.constructor as typeof AeicoField
     if (!constructor.styleGenerator) {
       return {}
     }
-    
-    // Get default theme from ConfigProvider if not specified
-    const globalConfig = getComponentConfig()
-    
+
+    const globalConfig = this.effectiveConfig
+
     return constructor.styleGenerator.generate({
-      theme: config?.theme ?? globalConfig.theme,
-      size: config?.size ?? constructor.defaultSize,
+      theme: this.theme ?? globalConfig.theme,
+      size: (this as any).size ?? constructor.defaultSize,
     })
   }
 

@@ -7,7 +7,7 @@ class RangeField extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
   private valueLabel: HTMLSpanElement | null = null
 
-  protected static stylesheet = rangeFieldStyle
+  protected static stylesheets = [rangeFieldStyle]
 
   static properties: Props = {
     options: { type: Array },
@@ -36,12 +36,6 @@ class RangeField extends AeicoField {
     super()
   }
 
-  connectedCallback() {
-    super.connectedCallback()
-    // Load additional common styles required by this field
-    this.loadStyles(['form-controls'])
-  }
-
   /**
    * Write value to the range element (DOM only)
    */
@@ -49,7 +43,10 @@ class RangeField extends AeicoField {
     const strValue = String(value || '')
 
     if (this.fieldElement) {
-      this.fieldElement.value = strValue
+      // Only update DOM when value actually changes to avoid interruption during dragging
+      if (this.fieldElement.value !== strValue) {
+        this.fieldElement.value = strValue
+      }
     }
     
     if (this.valueLabel) {
@@ -104,7 +101,16 @@ class RangeField extends AeicoField {
     const displayValue = this.percentage ? `${currentValue || this.fieldElement.value}%` : String(currentValue || this.fieldElement.value)
     this.valueLabel.textContent = displayValue
     
-    this.fieldElement.addEventListener('input', this.boundOnChange)
+    // Update label in real-time during dragging (does not trigger property system to avoid DOM re-render interruption)
+    this.fieldElement.addEventListener('input', () => {
+      if (this.fieldElement && this.valueLabel) {
+        const v = this.fieldElement.value
+        this.valueLabel.textContent = this.percentage ? `${v}%` : v
+      }
+    })
+    
+    // Only submit value on mouse release/click (change event), avoid triggering performUpdate → render() during dragging
+    this.fieldElement.addEventListener('change', this.boundOnChange)
     
     container.appendChild(this.fieldElement)
     container.appendChild(this.valueLabel)
@@ -135,7 +141,8 @@ class RangeField extends AeicoField {
     if (Array.isArray(options) && options.length > 0) {
       const values = options.map(opt => 
         isSelectOption(opt) ? Number(opt.value) : Number(opt)
-      )
+      ).sort((a, b) => a - b)
+      
       if (min === undefined) {
         this.fieldElement.min = String(Math.min(...values))
       }
@@ -143,7 +150,16 @@ class RangeField extends AeicoField {
         this.fieldElement.max = String(Math.max(...values))
       }
       if (step === undefined) {
-        this.fieldElement.step = '1'
+        // auto step: calculate the minimum difference between adjacent values
+        let minDiff = Infinity
+        for (let i = 1; i < values.length; i++) {
+          const diff = values[i] - values[i - 1]
+          if (diff > 0 && diff < minDiff) {
+            minDiff = diff
+          }
+        }
+        // if not found a suitable step, default to 1
+        this.fieldElement.step = minDiff === Infinity ? '1' : String(minDiff)
       }
     }
   }

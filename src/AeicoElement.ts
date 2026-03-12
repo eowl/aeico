@@ -1,4 +1,4 @@
-import styleSheetLoader from './utils/styleSheetLoader'
+import { StyleAdapter } from './utils/StyleAdapter'
 import type { 
   StyleProps, 
   Props,
@@ -12,26 +12,21 @@ import { getComponentConfig } from './configProvider'
 import { createEventEmitter, type ComponentEventEmitter } from './events'
 
 class AeicoElement extends HTMLElement {
-  private _sheets: CSSStyleSheet[] = []
-  private _loadedSheets: Set<CSSStyleSheet> = new Set()
-  private static _preloaded = false
-  private _stylesInitialized = false
-  private _pendingStyleProps?: StyleProps
-  protected enableBaseStyles = true
+  private pendingStyleProps?: StyleProps
 
   // Batch update system
-  private _updateRequested = false
-  private _changedProperties = new Map<string, any>()
-  private _isFirstUpdate = true
+  private updateRequested = false
+  private changedProperties = new Map<string, any>()
+  private isFirstUpdate = true
   
   // Computed properties cache
-  private _computedCache = new Map<string, { deps: string; value: any }>()
+  private computedCache = new Map<string, { deps: string; value: any }>()
 
   // Static global config (shared across all instances)
-  private static _globalConfig: ReturnType<typeof getComponentConfig>
+  private static globalConfig: ReturnType<typeof getComponentConfig>
   
   // Instance-level config overrides
-  private _instanceConfig?: Partial<{
+  private instanceConfig?: Partial<{
     enableI18n: boolean
     theme: string
   }>
@@ -58,14 +53,14 @@ class AeicoElement extends HTMLElement {
    * console.log(AeicoField.events.change)  // 'field-change'
    * console.log(AeicoField.events.customEvent)  // 'field-customEvent'
    */
-  private static _staticEvents?: any
+  private static staticEvents?: any
   static get events() {
-    if (!this._staticEvents) {
+    if (!this.staticEvents) {
       const namespace = (this as any).eventNamespace
-      this._staticEvents = createEventEmitter(new EventTarget(), this.eventPrefix, namespace).events
+      this.staticEvents = createEventEmitter(new EventTarget(), this.eventPrefix, namespace).events
     }
 
-    return this._staticEvents
+    return this.staticEvents
   }
 
   /**
@@ -97,7 +92,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Instance event emitter - lazily initialized
    */
-  private _eventEmitter?: ComponentEventEmitter
+  private eventEmitter?: ComponentEventEmitter
 
   /**
    * Instance events getter - provides instance-level access to event names
@@ -108,16 +103,16 @@ class AeicoElement extends HTMLElement {
    * element.addEventListener(element.events.customEvent, handler)  // Dynamically generated
    */
   get events() {
-    if (!this._eventEmitter) {
+    if (!this.eventEmitter) {
       const constructor = this.constructor as typeof AeicoElement
       const namespace = (constructor as any).eventNamespace
-      this._eventEmitter = createEventEmitter(
+      this.eventEmitter = createEventEmitter(
         this,
         constructor.eventPrefix,
         namespace
       )
     }
-    return this._eventEmitter.events
+    return this.eventEmitter.events
   }
 
   /**
@@ -133,16 +128,16 @@ class AeicoElement extends HTMLElement {
    * // With eventPrefix='': dispatches 'change'
    */
   protected emit(eventKey: string, detail?: any): void {
-    if (!this._eventEmitter) {
+    if (!this.eventEmitter) {
       const constructor = this.constructor as typeof AeicoElement
       const namespace = (constructor as any).eventNamespace
-      this._eventEmitter = createEventEmitter(
+      this.eventEmitter = createEventEmitter(
         this,
         constructor.eventPrefix,
         namespace
       )
     }
-    this._eventEmitter.emit(eventKey, detail)
+    this.eventEmitter.emit(eventKey, detail)
   }
 
   /**
@@ -158,7 +153,7 @@ class AeicoElement extends HTMLElement {
    * }
    */
   static properties: Props = {
-    useDefaultStyleSheet: { type: Boolean },
+    enableStylesheets: { type: Boolean },
     styleSheetText: { type: String },
     styleSheet: { type: Object },
     loadStyleSheets: { type: Array },
@@ -196,22 +191,37 @@ class AeicoElement extends HTMLElement {
   static watchers?: Watchers
 
   /**
-   * Static stylesheet for this component
-   * Subclasses can override to provide component-specific styles
-   * 
+   * Private CSS stylesheets for this component (loaded via `?inline` imports).
+   * Applied in order after `useStyles`. Replaces the single `stylesheet` property.
+   *
    * @example
    * ```typescript
    * class MyComponent extends AeicoElement {
-   *   protected static stylesheet = myComponentStyles
+   *   protected static stylesheets = [myComponentStyles]
    * }
    * ```
    */
-  protected static stylesheet?: string
+  protected static stylesheets?: string[]
+
+  /**
+   * Named styles to load from the shared style registry before applying this
+   * component's own stylesheets. Names must either be registered via `preloadStyles`
+   * in `setComponentConfig`, or be a preset `PresetStyleName` (auto-resolved via
+   * the preset fallback).
+   *
+   * @example
+   * ```typescript
+   * class RangeField extends AeicoField {
+   *   protected static useStyles = ['form-controls']
+   * }
+   * ```
+   */
+  protected static useStyles?: string[]
 
   /**
    * Instance property declarations
    */
-  declare useDefaultStyleSheet?: boolean
+  declare enableStylesheets?: boolean
   declare styleSheetText?: string
   declare styleSheet?: CSSStyleSheet
   declare loadStyleSheets?: string[]
@@ -271,8 +281,8 @@ class AeicoElement extends HTMLElement {
    */
   protected get effectiveConfig() {
     return {
-      ...AeicoElement._globalConfig,
-      ...this._instanceConfig
+      ...AeicoElement.globalConfig,
+      ...this.instanceConfig
     }
   }
   
@@ -286,26 +296,29 @@ class AeicoElement extends HTMLElement {
   /**
    * Unsubscribe function for i18n language change listener
    */
-  private _i18nUnsubscribe: (() => void) | null = null
+  private i18nUnsubscribe: (() => void) | null = null
+
+  protected styleAdapter!: StyleAdapter
 
   constructor() {
     super()
     this.attachShadow({ mode: 'open', delegatesFocus: true })
+    this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style)
     
     // Initialize static global config (only once)
-    if (!AeicoElement._globalConfig) {
-      AeicoElement._globalConfig = getComponentConfig()
+    if (!AeicoElement.globalConfig) {
+      AeicoElement.globalConfig = getComponentConfig()
     }
 
     // Initialize reactive properties and computed properties
-    this._initializeProperties()
-    this._initializeComputed()
+    this.initializeProperties()
+    this.initializeComputed()
   }
 
   /**
    * Initialize reactive properties directly on instance
    */
-  private _initializeProperties() {
+  private initializeProperties() {
     const constructor = this.constructor as typeof AeicoElement
     const allProps = constructor.collectProperties()
     
@@ -334,7 +347,7 @@ class AeicoElement extends HTMLElement {
             return (this as any)[internalKey]  // Fallback to internal storage
           }
           
-          return this._deserializeAttribute(attrValue, propDecl)
+          return this.deserializeAttribute(attrValue, propDecl)
         },
         set: (value: any) => {
           const oldValue = (this as any)[propName]
@@ -359,7 +372,7 @@ class AeicoElement extends HTMLElement {
             if (value === null || value === undefined) {
               this.removeAttribute(attrName)
             } else {
-              const serialized = this._serializeAttribute(value, propDecl)
+              const serialized = this.serializeAttribute(value, propDecl)
               this.setAttribute(attrName, serialized)
             }
           }
@@ -376,7 +389,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Initialize computed properties directly on instance
    */
-  private _initializeComputed() {
+  private initializeComputed() {
     const constructor = this.constructor as typeof AeicoElement
     if (!constructor.computed) return
     
@@ -388,7 +401,7 @@ class AeicoElement extends HTMLElement {
             .map(dep => String((this as any)[dep]))
             .join('|')
           
-          const cached = this._computedCache.get(computedName)
+          const cached = this.computedCache.get(computedName)
           
           // Cache hit
           if (cached && cached.deps === depsKey) {
@@ -397,7 +410,7 @@ class AeicoElement extends HTMLElement {
           
           // Recompute
           const value = config.compute(this)
-          this._computedCache.set(computedName, { deps: depsKey, value })
+          this.computedCache.set(computedName, { deps: depsKey, value })
           return value
         },
         enumerable: true,
@@ -411,11 +424,11 @@ class AeicoElement extends HTMLElement {
    */
   protected requestUpdate(name?: string, oldValue?: any): void {
     if (name !== undefined) {
-      this._changedProperties.set(name, oldValue)
+      this.changedProperties.set(name, oldValue)
     }
     
-    if (!this._updateRequested) {
-      this._updateRequested = true
+    if (!this.updateRequested) {
+      this.updateRequested = true
       queueMicrotask(() => this.performUpdate())
     }
   }
@@ -424,19 +437,19 @@ class AeicoElement extends HTMLElement {
    * Perform the actual update
    */
   private async performUpdate(): Promise<void> {
-    const changedProps = this._changedProperties
-    this._changedProperties = new Map()
-    this._updateRequested = false
+    const changedProps = this.changedProperties
+    this.changedProperties = new Map()
+    this.updateRequested = false
     
     // willUpdate hook (can return false to prevent update)
     const shouldUpdate = this.willUpdate(changedProps)
     if (shouldUpdate === false) return
     
     // Trigger watchers
-    this._triggerWatchers(changedProps)
+    this.triggerWatchers(changedProps)
     
     // Invalidate computed properties cache
-    this._invalidateComputed(changedProps)
+    this.invalidateComputed(changedProps)
     
     // Call render (if exists)
     if (typeof (this as any).render === 'function') {
@@ -447,16 +460,16 @@ class AeicoElement extends HTMLElement {
     this.updated(changedProps)
     
     // firstUpdated hook
-    if (this._isFirstUpdate) {
+    if (this.isFirstUpdate) {
       this.firstUpdated(changedProps)
-      this._isFirstUpdate = false
+      this.isFirstUpdate = false
     }
   }
 
   /**
    * Trigger watchers for changed properties
    */
-  private _triggerWatchers(changedProps: Map<string, any>): void {
+  private triggerWatchers(changedProps: Map<string, any>): void {
     const constructor = this.constructor as typeof AeicoElement
     if (!constructor.watchers) return
     
@@ -472,7 +485,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Invalidate computed properties that depend on changed properties
    */
-  private _invalidateComputed(changedProps: Map<string, any>): void {
+  private invalidateComputed(changedProps: Map<string, any>): void {
     const constructor = this.constructor as typeof AeicoElement
     if (!constructor.computed) return
     
@@ -481,7 +494,7 @@ class AeicoElement extends HTMLElement {
     for (const [computedName, config] of Object.entries(constructor.computed)) {
       const hasChangedDep = config.deps.some(dep => changedNames.includes(dep))
       if (hasChangedDep) {
-        this._computedCache.delete(computedName)
+        this.computedCache.delete(computedName)
       }
     }
   }
@@ -489,7 +502,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Serialize attribute value
    */
-  private _serializeAttribute(value: any, propDecl: Prop): string {
+  private serializeAttribute(value: any, propDecl: Prop): string {
     if (propDecl.converter?.toAttribute) {
       return propDecl.converter.toAttribute(value, propDecl.type) ?? ''
     }
@@ -510,7 +523,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Deserialize attribute value
    */
-  private _deserializeAttribute(value: string, propDecl: Prop): any {
+  private deserializeAttribute(value: string, propDecl: Prop): any {
     if (propDecl.converter?.fromAttribute) {
       return propDecl.converter.fromAttribute(value, propDecl.type)
     }
@@ -534,9 +547,9 @@ class AeicoElement extends HTMLElement {
     }
   }
 
-  // ========================================
-  // Lifecycle Hooks
-  // ========================================
+  /*
+    * Lifecycle hooks - can be overridden by subclasses
+    */
 
   /**
    * Called before update (can return false to prevent update)
@@ -559,134 +572,22 @@ class AeicoElement extends HTMLElement {
     // Override in subclass
   }
 
-  protected enableBaseStylesheet() {
-    this.enableBaseStyles = true
-  }
 
-  protected disableBaseStylesheet() {
-    this.enableBaseStyles = false
-  }
-
-  addStyle(style: string) {
-    const sheet = styleSheetLoader.getSheet(style)
-    this._addSheet(sheet)
-  }
-
-  addStyleSheet(sheet: CSSStyleSheet) {
-    this._addSheet(sheet)
-  }
-
-  addStyleSheets(sheets: CSSStyleSheet[]) {
-    for (const sheet of sheets) {
-      this._addSheet(sheet)
-    }
-  }
-
-  loadStyles(names: string[]) {
-    const sheets = styleSheetLoader.getCommonSheets(names)
-    this.addStyleSheets(sheets)
-  }
-
-  setCssVars(vars: Record<string, string>) {
-    Object.entries(vars).forEach(([key, value]) => {
-      this.style.setProperty(key, value)
-    })
-  }
-
-  private _addSheet(sheet: CSSStyleSheet) {
-    if (!this._loadedSheets.has(sheet)) {
-      this._loadedSheets.add(sheet)
-      this._sheets.push(sheet)
-      this.shadowRoot!.adoptedStyleSheets = this._sheets
-    }
-  }
-
-  private addBaseStyle() {
-    const sheet = styleSheetLoader.getCommonSheet('components')
-    if (sheet) {
-      this._addSheet(sheet)
-    }
-  }
 
   /**
-   * Initialize styles when component is first connected to DOM
-   * This method is called automatically by connectedCallback
+   * Generate CSS custom property values for this component instance.
+   * Uses the static styleGenerator if defined, reading reactive properties directly.
+   * Subclasses should override this method to pass additional props (e.g. size).
    */
-  private _initializeStyles() {
-    if (this._stylesInitialized) {
-      return  // Prevent re-initialization
-    }
-    
-    // Add base styles
-    if (this.enableBaseStyles) {
-      this.addBaseStyle()
-    }
-    
-    // Apply static stylesheet
-    const constructor = this.constructor as typeof AeicoElement
-    if (constructor.stylesheet) {
-      this.addStyle(constructor.stylesheet)
-    }
-    
-    // Apply pending style props if any
-    if (this._pendingStyleProps) {
-      this.applyStyleProps(this._pendingStyleProps)
-      this._pendingStyleProps = undefined
-    }
-    
-    this._stylesInitialized = true
-  }
-
-  /**
-   * Generate style variables based on component props
-   * Uses the styleGenerator if available, combining with component properties
-   * 
-   * @param config Configuration object containing theme and other properties
-   * @returns CSS variables object
-   */
-  protected generateStyleVars(config?: Record<string, any>): Record<string, string> {
+  protected generateStyleVars(): Record<string, string> {
     const constructor = this.constructor as typeof AeicoElement
     if (!constructor.styleGenerator) {
       return {}
     }
-    
+
     return constructor.styleGenerator.generate({
-      theme: config?.theme,
+      theme: this.theme,
     })
-  }
-
-  /**
-   * Apply style configuration to the component instance
-   * Note: Static stylesheet is handled by _initializeStyles, not here
-   * @param styleProps Style configuration object
-   */
-  private applyStyleProps(styleProps?: StyleProps) {
-    if (!styleProps) {
-      return
-    }
-
-    if (styleProps.loadStyleSheets && Array.isArray(styleProps.loadStyleSheets)) {
-      this.loadStyles(styleProps.loadStyleSheets)
-    }
-
-    if (styleProps.styleSheetText && typeof styleProps.styleSheetText === 'string') {
-      this.addStyle(styleProps.styleSheetText)
-    }
-
-    if (styleProps.styleSheet && styleProps.styleSheet instanceof CSSStyleSheet) {
-      this.addStyleSheet(styleProps.styleSheet)
-    }
-
-    // Generate and apply style variables based on props (e.g., theme)
-    const generatedVars = this.generateStyleVars(styleProps)
-    if (Object.keys(generatedVars).length > 0) {
-      this.setCssVars(generatedVars)
-    }
-
-    // Apply manual cssVars last (highest priority, overrides generated vars)
-    if (styleProps.cssVars && typeof styleProps.cssVars === 'object') {
-      this.setCssVars(styleProps.cssVars)
-    }
   }
 
   /**
@@ -694,15 +595,20 @@ class AeicoElement extends HTMLElement {
    * Automatically subscribes to i18n language changes if enabled
    */
   connectedCallback() {
-    // Preload common styles (class-level, only once)
-    if (!AeicoElement._preloaded) {
-      styleSheetLoader.preloadCommonStyles()
-      AeicoElement._preloaded = true
-    }
-    
-    // Initialize styles on first connection
-    this._initializeStyles()
-    
+    const constructor = this.constructor as typeof AeicoElement
+
+    this.styleAdapter.initialize({
+      applyStyleNames: AeicoElement.globalConfig?.applyStyleNames,
+      enableStylesheets: this.enableStylesheets,
+      globalEnableComponentStylesheets: AeicoElement.globalConfig?.enableComponentStylesheets,
+      constructorName: constructor.name,
+      useStyles: constructor.useStyles,
+      stylesheets: constructor.stylesheets,
+      pendingStyleProps: this.pendingStyleProps,
+      generateStyleVars: () => this.generateStyleVars(),
+    })
+    this.pendingStyleProps = undefined
+
     if (this.i18nEnabled) {
       this.subscribeToI18n()
     }
@@ -729,9 +635,9 @@ class AeicoElement extends HTMLElement {
    * Subscribe to i18n language changes
    */
   protected subscribeToI18n() {
-    const config = getComponentConfig()
-    if (config.i18nService) {
-      this._i18nUnsubscribe = config.i18nService.subscribe(() => {
+    const i18nService = this.effectiveConfig?.i18nService
+    if (i18nService) {
+      this.i18nUnsubscribe = i18nService.subscribe(() => {
         this.onLanguageChange()
       })
     }
@@ -741,9 +647,9 @@ class AeicoElement extends HTMLElement {
    * Unsubscribe from i18n language changes
    */
   protected unsubscribeFromI18n() {
-    if (this._i18nUnsubscribe) {
-      this._i18nUnsubscribe()
-      this._i18nUnsubscribe = null
+    if (this.i18nUnsubscribe) {
+      this.i18nUnsubscribe()
+      this.i18nUnsubscribe = null
     }
   }
 
@@ -765,10 +671,11 @@ class AeicoElement extends HTMLElement {
    * @returns Translated text or fallback
    */
   protected t(key: string, fallback?: string): string {
-    const config = getComponentConfig()
-    if (config.i18nService) {
-      return config.i18nService.t(key)
+    const i18nService = this.effectiveConfig?.i18nService
+    if (i18nService) {
+      return i18nService.t(key)
     }
+    
     return fallback || key
   }
   
@@ -792,12 +699,8 @@ class AeicoElement extends HTMLElement {
         }
       })
       
-      // Apply style props
-      if (instance.isConnected) {
-        instance.applyStyleProps(config as StyleProps)
-      } else {
-        instance._pendingStyleProps = config as StyleProps
-      }
+      // Style props are deferred to initializeStyles() when the element connects to DOM
+      instance.pendingStyleProps = config as StyleProps
     }
     
     return instance

@@ -17,6 +17,96 @@ input[type="range"] {
   margin: 0;
 }
 
+.input-range,
+.slider-input,
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+}
+
+.input-range {
+  margin: 10px 0;
+}
+
+.input-range::-webkit-slider-thumb,
+.slider-input::-webkit-slider-thumb,
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #0e639c;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.12s;
+}
+
+.input-range::-webkit-slider-thumb:hover,
+.slider-input::-webkit-slider-thumb:hover,
+input[type="range"]:hover::-webkit-slider-thumb {
+  background: #1177bb;
+  transform: scale(1.1);
+}
+
+.input-range::-webkit-slider-thumb:active,
+.slider-input::-webkit-slider-thumb:active,
+input[type="range"]:active::-webkit-slider-thumb {
+  background: #1177bb;
+  transform: scale(1.2);
+}
+
+.input-range::-moz-range-thumb,
+.slider-input::-moz-range-thumb,
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: #0e639c;
+  cursor: pointer;
+  transition: background 0.12s, transform 0.12s;
+}
+
+.input-range::-moz-range-thumb:hover,
+.slider-input::-moz-range-thumb:hover,
+input[type="range"]:hover::-moz-range-thumb {
+  background: #1177bb;
+  transform: scale(1.1);
+}
+
+.input-range::-moz-range-thumb:active,
+.slider-input::-moz-range-thumb:active,
+input[type="range"]:active::-moz-range-thumb {
+  background: #1177bb;
+  transform: scale(1.2);
+}
+
+.input-range:disabled,
+.slider-input:disabled,
+input[type="range"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.input-range:disabled::-webkit-slider-thumb,
+.slider-input:disabled::-webkit-slider-thumb,
+input[type="range"]:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+}
+
+.input-range:disabled::-moz-range-thumb,
+.slider-input:disabled::-moz-range-thumb,
+input[type="range"]:disabled::-moz-range-thumb {
+  cursor: not-allowed;
+}
+
 .value-label {
   min-width: 14px;
   text-align: center;

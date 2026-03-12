@@ -1,0 +1,213 @@
+:host {
+  display: block;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ===== Container ===== */
+
+.radio-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+/* ===== Radio type ===== */
+
+.type-radio {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.radio-option input[type="radio"] {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #0e639c;
+  flex-shrink: 0;
+}
+
+.radio-option input[type="radio"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.radio-option .radio-label {
+  font-size: 12px;
+  color: #cccccc;
+  line-height: 1;
+}
+
+/* ===== Button type ===== */
+
+.button-group {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.button-option {
+  padding: 3px 10px;
+  font-size: 12px;
+  color: #cccccc;
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.button-option:hover:not(.selected):not(:disabled) {
+  background: #252525;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.button-option.selected {
+  background: #0e639c;
+  border-color: #0e639c;
+  color: #ffffff;
+}
+
+.button-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Button-group type (connected) ===== */
+
+.button-group-connected {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.button-group-connected-option {
+  flex: 1;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: #cccccc;
+  background: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-right-width: 0;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  user-select: none;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.4;
+  min-width: 0;
+  border-radius: 0;
+}
+
+.button-group-connected-option:first-child {
+  border-radius: 2px 0 0 2px;
+}
+
+.button-group-connected-option:last-child {
+  border-radius: 0 2px 2px 0;
+  border-right-width: 1px;
+}
+
+.button-group-connected-option:hover:not(.selected):not(:disabled) {
+  background: #252525;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.button-group-connected-option.selected {
+  background: #0e639c;
+  border-color: #0e639c;
+  color: #ffffff;
+  /* make adjacent borders match */
+  box-shadow: 1px 0 0 0 #0e639c, -1px 0 0 0 #0e639c;
+}
+
+.button-group-connected-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Segmented type (pill style) ===== */
+
+.segmented-group {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  padding: 2px;
+  flex: 1;
+  min-width: 0;
+  gap: 1px;
+}
+
+.segmented-option {
+  flex: 1;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: #aaaaaa;
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  user-select: none;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.4;
+  min-width: 0;
+}
+
+.segmented-option:hover:not(.selected):not(:disabled) {
+  color: #cccccc;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.segmented-option.selected {
+  background: #0e639c;
+  color: #ffffff;
+}
+
+.segmented-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Reset / Clear buttons ===== */
+
+.reset-btn,
+.clear-btn {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #3a3a3a;
+  color: #909090;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+
+.reset-btn:hover,
+.clear-btn:hover {
+  background: #1a3a4a;
+  color: #4fc3f7;
+}

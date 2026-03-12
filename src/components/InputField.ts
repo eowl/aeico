@@ -19,7 +19,7 @@ class InputField extends AeicoField {
   declare placeholder?: string
   declare type?: string
 
-  protected static stylesheet = inputFieldStyle
+  protected static stylesheets = [inputFieldStyle]
 
   protected onValueChanged(value: string): void {
     this.writeValue(value || '')

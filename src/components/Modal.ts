@@ -1,28 +1,63 @@
 import AeicoElement from '../AeicoElement'
+import type { InferProperties, Props, Watchers } from '../types'
 import modalStyles from '../assets/css/modal.css?inline'
-
-export type ModalConfig = {
-  title?: string
-  width?: string
-  height?: string
-  closeOnOverlayClick?: boolean
-  showCloseButton?: boolean
-}
-
-export type ModalProps = ModalConfig
 
 class Modal extends AeicoElement {
   private overlay: HTMLElement | null = null
   private modalContainer: HTMLElement | null = null
   private titleElement: HTMLElement | null = null
   private closeBtn: HTMLElement | null = null
-  private config: ModalConfig = {}
 
-  protected static stylesheet: string = modalStyles
+  static properties: Props = {
+    label: { type: String },
+    width: { type: String },
+    height: { type: String },
+    closeOnOverlayClick: { type: Boolean },
+    showCloseButton: { type: Boolean },
+  }
 
-  constructor() {
-    super()
-    
+  static watchers: Watchers = {
+    label: 'onModalTitleChanged',
+    width: 'onWidthChanged',
+    height: 'onHeightChanged',
+    showCloseButton: 'onShowCloseButtonChanged',
+  }
+
+  declare label?: string
+  declare width?: string
+  declare height?: string
+  declare closeOnOverlayClick?: boolean
+  declare showCloseButton?: boolean
+
+  protected static stylesheets = [modalStyles]
+
+  protected onLabelChanged(label: string): void {
+    if (this.titleElement) {
+      this.titleElement.textContent = label || ''
+    }
+  }
+
+  protected onWidthChanged(width: string): void {
+    if (this.modalContainer) {
+      this.modalContainer.style.width = width || ''
+    }
+  }
+
+  protected onHeightChanged(height: string): void {
+    if (this.modalContainer) {
+      this.modalContainer.style.height = height || ''
+    }
+  }
+
+  protected onShowCloseButtonChanged(show: boolean): void {
+    if (this.closeBtn) {
+      this.closeBtn.style.display = show === false ? 'none' : 'flex'
+    }
+  }
+
+  render() {
+    this.shadowRoot!.innerHTML = ''
+
     const template = document.createElement('template')
     template.innerHTML = `
       <div class="modal-overlay">
@@ -44,13 +79,19 @@ class Modal extends AeicoElement {
     this.modalContainer = this.shadowRoot!.querySelector('.modal-container')
     this.titleElement = this.shadowRoot!.querySelector('.modal-title')
     this.closeBtn = this.shadowRoot!.querySelector('.modal-close-btn')
+
+    // Apply initial property values
+    if (this.label) this.onLabelChanged(this.label)
+    if (this.width) this.onWidthChanged(this.width)
+    if (this.height) this.onHeightChanged(this.height)
+    if (this.showCloseButton !== undefined) this.onShowCloseButtonChanged(this.showCloseButton)
+
+    this.setupEventListeners()
+    this.updateCloseButtonTitle()
   }
 
   connectedCallback() {
     super.connectedCallback()
-    this.applyConfig()
-    this.setupEventListeners()
-    this.updateCloseButtonTitle()
   }
 
   /**
@@ -61,59 +102,10 @@ class Modal extends AeicoElement {
     this.updateCloseButtonTitle()
   }
 
-  static get observedAttributes() {
-    return ['config']
-  }
-
-  attributeChangedCallback(name: string, _: string, newValue: string) {
-    if (name === 'config' && newValue) {
-      try {
-        this.config = JSON.parse(newValue)
-        this.applyConfig()
-      } catch (error) {
-        console.error('Failed to parse modal config:', error)
-      }
-    }
-  }
-
-  protected setProps(config: ModalConfig) {
-    this.config = { ...this.config, ...config }
-    this.applyConfig()
-    
-    return this
-  }
-
-  /**
-   * Public method to apply props configuration
-   * Called by AeicoElement.create()
-   */
-  applyProps(config: ModalConfig) {
-    this.setProps(config)
-  }
-
-  applyConfig() {
-    if (this.titleElement && this.config.title) {
-      this.titleElement.textContent = this.config.title
-    }
-    
-    if (this.modalContainer) {
-      if (this.config.width) {
-        this.modalContainer.style.width = this.config.width
-      }
-      if (this.config.height) {
-        this.modalContainer.style.height = this.config.height
-      }
-    }
-    
-    if (this.closeBtn) {
-      this.closeBtn.style.display = this.config.showCloseButton === false ? 'none' : 'flex'
-    }
-  }
-
   setupEventListeners() {
     if (this.overlay) {
       this.overlay.addEventListener('click', (e) => {
-        if (e.target === this.overlay && this.config.closeOnOverlayClick !== false) {
+        if (e.target === this.overlay && this.closeOnOverlayClick !== false) {
           this.close()
         }
       })
@@ -152,13 +144,12 @@ class Modal extends AeicoElement {
     return this.style.display === 'block'
   }
 
-  setTitle(title: string) {
-    if (this.titleElement) {
-      this.titleElement.textContent = title
-    }
+  setLabel(label: string) {
+    this.label = label
   }
 }
 
 Modal.register('app-modal')
 
 export default Modal
+export type ModalProps = InferProperties<typeof Modal>

@@ -20,7 +20,7 @@ class CheckboxField extends AeicoField {
   declare defaultChecked?: boolean
   declare variant?: string
 
-  protected static stylesheet = checkboxFieldStyle
+  protected static stylesheets = [checkboxFieldStyle]
 
   protected onCheckedChanged(checked: boolean): void {
     if (this.fieldElement) {
