@@ -80,8 +80,8 @@ export type FieldI18nKeys = I18nKeys & {
 export type FieldConfig = BaseProps<FieldI18nKeys> & {
   value?: string | number
   defaultValue?: string | number
-  showReset?: boolean
-  showClear?: boolean
+  resettable?: boolean
+  clearable?: boolean
 }
 
 /**
@@ -94,7 +94,7 @@ export type DateTimeFieldI18nKeys = FieldI18nKeys & {
 
 export type DateTimeFieldConfig = FieldConfig & {
   options?: string[]
-  showClear?: boolean
+  clearable?: boolean
 }
 
 /**

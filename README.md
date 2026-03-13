@@ -84,8 +84,8 @@ All components support:
 - `value`: Current value
 - `defaultValue`: Initial value for reset
 - `disabled`: Disable state
-- `showReset`: Show reset button
-- `showClear`: Show clear button
+- `resettable`: Show reset button
+- `clearable`: Show clear button
 - `size`: Size variant ('sm' | 'md' | 'lg')
 - `theme`: Theme override
 

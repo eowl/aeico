@@ -21,9 +21,9 @@ class AeicoField extends AeicoElement {
   static properties: Props = {
     value: { type: String },
     defaultValue: { type: String },
-    showReset: { type: Boolean },
+    resettable: { type: Boolean },
     resetText: { type: String },
-    showClear: { type: Boolean },
+    clearable: { type: Boolean },
     clearText: { type: String },
     size: { type: String },
   }
@@ -32,8 +32,8 @@ class AeicoField extends AeicoElement {
    * Property watchers
    */
   static watchers: Watchers = {
-    showReset: 'onShowResetChanged',
-    showClear: 'onShowClearChanged',
+    resettable: 'onResettableChanged',
+    clearable: 'onClearableChanged',
     disabled: 'onDisabledChanged',
   }
 
@@ -72,9 +72,9 @@ class AeicoField extends AeicoElement {
   // Declare reactive properties for TypeScript
   declare value?: string
   declare defaultValue?: string
-  declare showReset?: boolean
+  declare resettable?: boolean
   declare resetText?: string
-  declare showClear?: boolean
+  declare clearable?: boolean
   declare clearText?: string
   declare size?: string
   declare disabled?: boolean
@@ -205,14 +205,14 @@ class AeicoField extends AeicoElement {
   }
 
   protected renderClearButton(container: HTMLElement) {
-    if (this.showClear) {
+    if (this.clearable) {
       this.clearBtn = this.createClearButton(this.boundOnClear)
       container.appendChild(this.clearBtn)
     }
   }
 
   protected renderResetButton(container: HTMLElement) {
-    if (this.showReset) {
+    if (this.resettable) {
       this.resetBtn = this.createResetButton(this.boundOnReset)
       container.appendChild(this.resetBtn)
     }
@@ -224,16 +224,16 @@ class AeicoField extends AeicoElement {
   }
 
   /**
-   * Watcher for showReset property
+   * Watcher for resettable property
    */
-  protected onShowResetChanged() {
+  protected onResettableChanged() {
     this.render()
   }
 
   /**
-   * Watcher for showClear property
+   * Watcher for clearable property
    */
-  protected onShowClearChanged() {
+  protected onClearableChanged() {
     this.render()
   }
 
