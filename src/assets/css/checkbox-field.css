@@ -10,29 +10,29 @@
   --checkbox-size: 14px;
   --checkbox-border-width: 1px;
   --checkbox-border-radius: 2px;
-  --checkbox-border-color: rgba(255, 255, 255, 0.1);
-  --checkbox-bg: #1e1e1e;
-  --checkbox-bg-checked: #0e639c;
-  --checkbox-accent-color: #0e639c;
-  
+  --checkbox-border-color: var(--border-subtle);
+  --checkbox-bg: var(--surface-base);
+  --checkbox-bg-checked: var(--color-primary);
+  --checkbox-accent-color: var(--color-primary);
+
   /* Toggle variables */
   --toggle-width: 32px;
   --toggle-height: 16px;
   --toggle-slider-size: 12px;
   --toggle-border-radius: calc(var(--toggle-height) / 2);
-  --toggle-bg: #3a3a3a;
-  --toggle-bg-checked: #0e639c;
+  --toggle-bg: var(--color-gray);
+  --toggle-bg-checked: var(--color-primary);
   --toggle-slider-bg: #ffffff;
   --toggle-transition: 0.2s;
-  
+
   /* Reset button variables */
   --reset-btn-size: 16px;
   --reset-btn-font-size: 11px;
   --reset-btn-border-radius: 2px;
-  --reset-btn-bg: #3a3a3a;
-  --reset-btn-bg-hover: #1a3a4a;
-  --reset-btn-color: #909090;
-  --reset-btn-color-hover: #4fc3f7;
+  --reset-btn-bg: var(--action-btn-bg);
+  --reset-btn-bg-hover: var(--action-btn-bg-hover);
+  --reset-btn-color: var(--action-btn-color);
+  --reset-btn-color-hover: var(--action-btn-color-hover);
   --reset-btn-transition: all 0.12s;
 }
 

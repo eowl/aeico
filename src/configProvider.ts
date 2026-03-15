@@ -75,7 +75,6 @@ export type ComponentConfig = BaseConfig & {
 
 export type ResultConfig = BaseConfig & {
   preloadedStyleNames?: string[]
-  applyStyleNames?: string[]
   enableComponentStylesheets?: boolean
 }
 
@@ -98,7 +97,6 @@ class ConfigProvider {
   private static instance: ConfigProvider
   private config: ComponentConfig | null = null
   private preloadedStyleNames: Set<string> = new Set()
-  private applyStyleNames: Set<string> = new Set()
   private enableComponentStylesheets: boolean | undefined = undefined
 
   /* Private constructor to enforce singleton pattern */
@@ -141,8 +139,9 @@ class ConfigProvider {
     }
 
     if (config.applyAllPresetStyles) {
-      for (const name of styleStore.getAllPresetNames()) {
-        this.applyStyleNames.add(name)
+      const allNames = styleStore.getAllPresetNames()
+      for (const name of allNames) {
+        this.applyToDocument(name)
       }
     }
 
@@ -188,16 +187,30 @@ class ConfigProvider {
         if (overridden) {
           console.log(`[ConfigProvider] applyStyles: "${entry}" overrides a style previously registered in preloadStyles.`)
         }
-        this.applyStyleNames.add(entry)
+        this.applyToDocument(entry)
       } else {
         for (const [name, cssText] of Object.entries(entry)) {
           const overridden = styleStore.overrideStyle(name, cssText)
-          this.applyStyleNames.add(name)
           if (overridden) {
             console.log(`[ConfigProvider] applyStyles: "${name}" overrides a style previously registered in preloadStyles.`)
           }
+          this.applyToDocument(name)
         }
       }
+    }
+  }
+
+  /**
+   * Push a named stylesheet to document.adoptedStyleSheets so that CSS custom
+   * properties cascade into all shadow roots via normal CSS inheritance —
+   * regardless of when each component was connected to the DOM.
+   */
+  private applyToDocument(name: string): void {
+    if (typeof document === 'undefined') return
+    const sheet = styleStore.resolveStyle(name as PresetStyleName)
+    if (!sheet) return
+    if (!document.adoptedStyleSheets.includes(sheet)) {
+      document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet]
     }
   }
 
@@ -213,7 +226,6 @@ class ConfigProvider {
       disabled: this.config.disabled ?? DEFAULT_CONFIG.disabled,
       i18nService: this.config.i18nService ?? DEFAULT_CONFIG.i18nService,
       preloadedStyleNames: this.preloadedStyleNames.size ? Array.from(this.preloadedStyleNames) : undefined,
-      applyStyleNames: this.applyStyleNames.size ? Array.from(this.applyStyleNames) : undefined,
       enableComponentStylesheets: this.enableComponentStylesheets
     }
   }

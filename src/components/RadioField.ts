@@ -1,7 +1,7 @@
 import AeicoField from '../AeicoField'
 import { isSelectOption } from '../types'
 import type { InferProperties, Props, Watchers } from '../types'
-import radioFieldStyle from '../assets/css/radio-field.css?inline'
+import { radioFieldSpec } from '../assets/css/specs'
 
 export type RadioFieldType = 'radio' | 'button' | 'button-group' | 'segmented'
 export type RadioOption = string | { label?: string; value: any }
@@ -15,7 +15,7 @@ class RadioField extends AeicoField {
 
   private static _instanceCount = 0
 
-  protected static stylesheets = [radioFieldStyle]
+  protected static stylesheets = [radioFieldSpec]
 
   static properties: Props = {
     options: { type: Array },

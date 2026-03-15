@@ -1,6 +1,6 @@
 import AeicoField from '../AeicoField'
 import type { InferProperties, Props, Watchers } from '../types'
-import inputFieldStyle from '../assets/css/input-field.css?inline'
+import { inputFieldSpec } from '../assets/css/specs'
 
 class InputField extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
@@ -19,7 +19,7 @@ class InputField extends AeicoField {
   declare placeholder?: string
   declare type?: string
 
-  protected static stylesheets = [inputFieldStyle]
+  protected static stylesheets = [inputFieldSpec]
 
   protected onValueChanged(value: string): void {
     this.writeValue(value || '')

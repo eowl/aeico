@@ -8,14 +8,16 @@
  *   via content fingerprinting, preventing duplicate sheet objects with identical CSS
  */
 
+import variablesStyle from '../assets/css/common/variables.css?inline'
 import baseStyle from '../assets/css/common/base.css?inline'
 import gridStyle from '../assets/css/common/grid.css?inline'
 import formControlsStyle from '../assets/css/common/form-controls.css?inline'
 import buttonStyle from '../assets/css/common/button.css?inline'
 import dialogStyle from '../assets/css/common/dialog.css?inline'
 import alertStyle from '../assets/css/common/alert.css?inline'
+import type { StyleSpec } from '../types'
 
-export type PresetStyleName = 'base' | 'grid' | 'form-controls' | 'button' | 'dialog' | 'alert'
+export type PresetStyleName = 'variables' | 'base' | 'grid' | 'form-controls' | 'button' | 'dialog' | 'alert'
 
 class StyleStore {
   private static instance: StyleStore
@@ -36,6 +38,9 @@ class StyleStore {
    */
   private externalSheetMap: WeakMap<CSSStyleSheet, CSSStyleSheet> = new WeakMap()
 
+  /** StyleSpec id → resolved CSSStyleSheet, for deduplication across instances */
+  private specCache: Map<string, CSSStyleSheet> = new Map()
+
   private preloaded = false
 
   private constructor() {}
@@ -54,7 +59,8 @@ class StyleStore {
     'form-controls': formControlsStyle,
     'button': buttonStyle,
     'dialog': dialogStyle,
-    'alert': alertStyle
+    'alert': alertStyle,
+    'variables': variablesStyle
   }
 
   /**
@@ -213,12 +219,53 @@ class StyleStore {
   }
 
   /**
+   * Recursively resolve a StyleSpec and its deps into two lists:
+   * - documentSheets: CSSStyleSheets to push into document.adoptedStyleSheets
+   * - shadowSheets:   CSSStyleSheets to adopt into the component's shadow root
+   *
+   * Deduplicates by spec.id — each spec is parsed only once regardless of how
+   * many components share the same dependency.
+   */
+  resolveSpec(spec: StyleSpec): { documentSheets: CSSStyleSheet[]; shadowSheets: CSSStyleSheet[] } {
+    const documentSheets: CSSStyleSheet[] = []
+    const shadowSheets: CSSStyleSheet[] = []
+    const visited = new Set<string>()
+
+    const walk = (s: StyleSpec) => {
+      if (visited.has(s.id)) return
+      visited.add(s.id)
+
+      // Resolve deps first (depth-first)
+      for (const dep of s.deps ?? []) {
+        walk(dep)
+      }
+
+      // Resolve this spec's sheet
+      let sheet = this.specCache.get(s.id)
+      if (!sheet) {
+        sheet = this.getSheet(s.code)
+        this.specCache.set(s.id, sheet)
+      }
+
+      if (s.scope === 'document') {
+        documentSheets.push(sheet)
+      } else {
+        shadowSheets.push(sheet)
+      }
+    }
+
+    walk(spec)
+    return { documentSheets, shadowSheets }
+  }
+
+  /**
    * Clear all cached stylesheets.
    */
   clearCache(): void {
     this.sheetCache.clear()
     this.sharedSheetCache.clear()
     this.cssTextCache.clear()
+    this.specCache.clear()
     this.preloaded = false
   }
 

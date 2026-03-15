@@ -2,7 +2,7 @@ import AeicoField from '../AeicoField'
 import { isSelectOption } from '../types'
 import type { InferProperties, Props, Watchers } from '../types'
 import { getI18nService, hasI18nService } from '../i18n'
-import selectFieldStyle from '../assets/css/select-field.css?inline'
+import { selectFieldSpec } from '../assets/css/specs'
 
 class SelectField extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null
@@ -22,7 +22,7 @@ class SelectField extends AeicoField {
 
   declare options?: any[]
 
-  protected static stylesheets = [selectFieldStyle]
+  protected static stylesheets = [selectFieldSpec]
 
   protected onLanguageChange() {
     super.onLanguageChange()

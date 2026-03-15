@@ -1,6 +1,6 @@
 import AeicoElement from '../AeicoElement'
 import type { InferProperties, Props, Watchers } from '../types'
-import modalStyles from '../assets/css/modal.css?inline'
+import { modalSpec } from '../assets/css/specs'
 
 class Modal extends AeicoElement {
   private overlay: HTMLElement | null = null
@@ -29,7 +29,7 @@ class Modal extends AeicoElement {
   declare closeOnOverlayClick?: boolean
   declare showCloseButton?: boolean
 
-  protected static stylesheets = [modalStyles]
+  protected static stylesheets = [modalSpec]
 
   protected onLabelChanged(label: string): void {
     if (this.titleElement) {

@@ -11,34 +11,33 @@
   --input-padding: 4px 7px;
   --input-border-width: 1px;
   --input-border-radius: 2px;
-  --input-border-color: rgba(255, 255, 255, 0.08);
-  --input-border-color-hover: rgba(255, 255, 255, 0.12);
-  --input-border-color-focus: #0e639c;
-  --input-bg: #1e1e1e;
-  --input-bg-hover: #252525;
-  --input-bg-focus: #252525;
-  --input-color: #cccccc;
-  --input-placeholder-color: #6a6a6a;
+  --input-border-color: var(--border-subtle);
+  --input-border-color-hover: var(--border-default);
+  --input-border-color-focus: var(--border-focus);
+  --input-bg: var(--surface-base);
+  --input-bg-hover: var(--surface-raised);
+  --input-bg-focus: var(--surface-raised);
+  --input-color: var(--color-text-muted);
+  --input-placeholder-color: var(--gray-800);
   --input-transition: border-color 0.12s, background 0.12s;
-  
+
   /* Clear button variables */
   --clear-btn-size: 16px;
   --clear-btn-font-size: 11px;
   --clear-btn-border-radius: 2px;
-  --clear-btn-bg: #3a3a3a;
-  --clear-btn-bg-hover: #5a2a2a;
-  --clear-btn-color: #909090;
-  --clear-btn-color-hover: #ff6b6b;
+  --clear-btn-bg: var(--action-btn-bg);
+  /* --clear-btn-bg-hover and --clear-btn-color-hover inherit from :root */
+  --clear-btn-color: var(--action-btn-color);
   --clear-btn-transition: all 0.12s;
-  
+
   /* Reset button variables */
   --reset-btn-size: 16px;
   --reset-btn-font-size: 11px;
   --reset-btn-border-radius: 2px;
-  --reset-btn-bg: #3a3a3a;
-  --reset-btn-bg-hover: #1a3a4a;
-  --reset-btn-color: #909090;
-  --reset-btn-color-hover: #4fc3f7;
+  --reset-btn-bg: var(--action-btn-bg);
+  --reset-btn-bg-hover: var(--action-btn-bg-hover);
+  --reset-btn-color: var(--action-btn-color);
+  --reset-btn-color-hover: var(--action-btn-color-hover);
   --reset-btn-transition: all 0.12s;
 }
 

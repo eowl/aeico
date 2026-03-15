@@ -11,23 +11,23 @@
   --select-padding: 4px 7px;
   --select-border-width: 1px;
   --select-border-radius: 2px;
-  --select-border-color: rgba(255, 255, 255, 0.08);
-  --select-border-color-hover: rgba(255, 255, 255, 0.12);
-  --select-border-color-focus: #0e639c;
-  --select-bg: #1e1e1e;
-  --select-bg-hover: #252525;
-  --select-bg-focus: #252525;
-  --select-color: #cccccc;
+  --select-border-color: var(--border-subtle);
+  --select-border-color-hover: var(--border-default);
+  --select-border-color-focus: var(--border-focus);
+  --select-bg: var(--surface-base);
+  --select-bg-hover: var(--surface-raised);
+  --select-bg-focus: var(--surface-raised);
+  --select-color: var(--color-text-muted);
   --select-transition: border-color 0.12s, background 0.12s;
-  
+
   /* Reset button variables */
   --reset-btn-size: 16px;
   --reset-btn-font-size: 11px;
   --reset-btn-border-radius: 2px;
-  --reset-btn-bg: #3a3a3a;
-  --reset-btn-bg-hover: #1a3a4a;
-  --reset-btn-color: #909090;
-  --reset-btn-color-hover: #4fc3f7;
+  --reset-btn-bg: var(--action-btn-bg);
+  --reset-btn-bg-hover: var(--action-btn-bg-hover);
+  --reset-btn-color: var(--action-btn-color);
+  --reset-btn-color-hover: var(--action-btn-color-hover);
   --reset-btn-transition: all 0.12s;
 }
 

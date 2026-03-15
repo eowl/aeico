@@ -1,13 +1,10 @@
 import styleStore from './styleStore'
-import type { StyleProps } from '../types'
+import type { StyleProps, StyleEntry, StyleSpec } from '../types'
 
 /**
  * Options passed to StyleAdapter.initialize() on first connectedCallback.
  */
 export type StyleAdapterInitOptions = {
-  /** Global applyStyleNames from ComponentConfig — always applied (Layer 1) */
-  applyStyleNames?: string[]
-
   /**
    * Instance-level override for component stylesheet loading (three-state):
    * true  → force on  (overrides global)
@@ -25,8 +22,8 @@ export type StyleAdapterInitOptions = {
   /** Static useStyles list declared on the component class (Layer 2) */
   useStyles?: string[]
 
-  /** Static inline stylesheet strings declared on the component class (Layer 2) */
-  stylesheets?: string[]
+  /** Static stylesheet entries declared on the component class (Layer 2) */
+  stylesheets?: StyleEntry[]
 
   /** Instance-level explicit style props set via create() (Layer 3) */
   pendingStyleProps?: StyleProps
@@ -69,11 +66,6 @@ export class StyleAdapter {
   initialize(options: StyleAdapterInitOptions): void {
     if (this.initialized) return
 
-    // Layer 1: Host-injected global styles — always applied
-    if (options.applyStyleNames?.length) {
-      this.adoptShared(options.applyStyleNames)
-    }
-
     // Layer 2: Component default styles
     // three-state: true → force on, false → force off, undefined → follow global
     const loadComponentStyles = options.enableStylesheets === true
@@ -95,10 +87,23 @@ export class StyleAdapter {
         }
       }
 
-      // 2b: Private inline stylesheets (static stylesheets array)
+      // 2b: StyleEntry array — supports StyleSpec (with scope/deps), raw string, CSSStyleSheet
       if (options.stylesheets?.length) {
-        for (const css of options.stylesheets) {
-          this.adoptStyleText(css)
+        for (const entry of options.stylesheets) {
+          if (typeof entry === 'string') {
+            // Raw CSS string — shadow scope by default
+            this.adoptStyleText(entry)
+          } else if (entry instanceof CSSStyleSheet) {
+            // Pre-built CSSStyleSheet — shadow scope by default
+            this.adopt(styleStore.normalizeSheet(entry))
+          } else {
+            // StyleSpec — resolve deps recursively, route by scope
+            const { documentSheets, shadowSheets } = styleStore.resolveSpec(entry as StyleSpec)
+            StyleAdapter.applyToDocument(documentSheets)
+            for (const sheet of shadowSheets) {
+              this.adopt(sheet)
+            }
+          }
         }
       }
     }
@@ -109,6 +114,20 @@ export class StyleAdapter {
     }
 
     this.initialized = true
+  }
+
+  /**
+   * Push CSSStyleSheet objects to document.adoptedStyleSheets (deduplicates).
+   * Called for 'document'-scoped StyleSpec entries so that CSS custom properties
+   * cascade into all shadow roots via CSS inheritance.
+   */
+  static applyToDocument(sheets: CSSStyleSheet[]): void {
+    if (typeof document === 'undefined') return
+    const current = document.adoptedStyleSheets
+    const toAdd = sheets.filter(s => !current.includes(s))
+    if (toAdd.length) {
+      document.adoptedStyleSheets = [...current, ...toAdd]
+    }
   }
 
   /**

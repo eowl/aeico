@@ -1,6 +1,7 @@
 import { StyleAdapter } from './utils/StyleAdapter'
 import type { 
-  StyleProps, 
+  StyleProps,
+  StyleEntry,
   Props,
   Prop,
   ComputedDeclaration,
@@ -202,7 +203,7 @@ class AeicoElement extends HTMLElement {
    * }
    * ```
    */
-  protected static stylesheets?: string[]
+  protected static stylesheets?: StyleEntry[]
 
   /**
    * Named styles to load from the shared style registry before applying this
@@ -305,11 +306,6 @@ class AeicoElement extends HTMLElement {
     super()
     this.attachShadow({ mode: 'open', delegatesFocus: true })
     this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style)
-    
-    // Initialize static global config (only once)
-    if (!AeicoElement.globalConfig) {
-      AeicoElement.globalConfig = getComponentConfig()
-    }
 
     // Initialize reactive properties and computed properties
     this.initializeProperties()
@@ -594,6 +590,13 @@ class AeicoElement extends HTMLElement {
    * Automatically subscribes to i18n language changes if enabled
    */
   connectedCallback() {
+    // Cache global config on first connection (setComponentConfig is guaranteed
+    // to have run by this point — connectedCallback fires after all top-level
+    // synchronous module code has executed)
+    if (!AeicoElement.globalConfig) {
+      AeicoElement.globalConfig = getComponentConfig()
+    }
+
     this.adaptStylesheet()
 
     if (this.i18nEnabled) {
@@ -608,11 +611,11 @@ class AeicoElement extends HTMLElement {
    */
   adaptStylesheet() {
     const constructor = this.constructor as typeof AeicoElement
+    const config = AeicoElement.globalConfig
 
     this.styleAdapter.initialize({
-      applyStyleNames: AeicoElement.globalConfig?.applyStyleNames,
       enableStylesheets: this.enableStylesheets,
-      globalEnableComponentStylesheets: AeicoElement.globalConfig?.enableComponentStylesheets,
+      globalEnableComponentStylesheets: config?.enableComponentStylesheets,
       constructorName: constructor.name,
       useStyles: constructor.useStyles,
       stylesheets: constructor.stylesheets,

@@ -1,13 +1,13 @@
 import AeicoField from '../AeicoField'
 import { isSelectOption } from '../types'
 import type { InferProperties, Props, Watchers } from '../types'
-import rangeFieldStyle from '../assets/css/range-field.css?inline'
+import { rangeFieldSpec } from '../assets/css/specs'
 
 class RangeField extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
   private valueLabel: HTMLSpanElement | null = null
 
-  protected static stylesheets = [rangeFieldStyle]
+  protected static stylesheets = [rangeFieldSpec]
 
   static properties: Props = {
     options: { type: Array },

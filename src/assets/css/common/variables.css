@@ -1,0 +1,231 @@
+:root,
+:host {
+  /* ==========================================================================
+   * § 1a  Base Hues  — single source of truth for each color
+   *
+   * Change one value here; the entire derived scale and all semantic tokens
+   * update automatically via color-mix() in § 1b.
+   * ========================================================================== */
+
+  --blue:   #0e639c;
+  --green:  #28a745;
+  --red:    #dc3545;
+  --yellow: #ffc107;
+  --cyan:   #17a2b8;
+
+
+  /* ==========================================================================
+   * § 1b  Color Scales  — derived from base hues via color-mix()
+   *
+   *   -100  lightest  color-mix(base 20%, white)
+   *   -200            color-mix(base 40%, white)
+   *   -300            color-mix(base 60%, white)
+   *   -400            color-mix(base 80%, white)
+   *   -500  base      alias for the base hue
+   *   -600            color-mix(base 80%, black)
+   *   -700            color-mix(base 60%, black)
+   *   -800            color-mix(base 40%, black)
+   *   -900  darkest   color-mix(base 20%, black)
+   * ========================================================================== */
+
+  /* Blue */
+  --blue-100: color-mix(in srgb, var(--blue) 20%, white);
+  --blue-200: color-mix(in srgb, var(--blue) 40%, white);
+  --blue-300: color-mix(in srgb, var(--blue) 60%, white);
+  --blue-400: color-mix(in srgb, var(--blue) 80%, white);
+  --blue-500: var(--blue);
+  --blue-600: color-mix(in srgb, var(--blue) 80%, black);
+  --blue-700: color-mix(in srgb, var(--blue) 60%, black);
+  --blue-800: color-mix(in srgb, var(--blue) 40%, black);
+  --blue-900: color-mix(in srgb, var(--blue) 20%, black);
+
+  /* Green */
+  --green-100: color-mix(in srgb, var(--green) 20%, white);
+  --green-200: color-mix(in srgb, var(--green) 40%, white);
+  --green-300: color-mix(in srgb, var(--green) 60%, white);
+  --green-400: color-mix(in srgb, var(--green) 80%, white);
+  --green-500: var(--green);
+  --green-600: color-mix(in srgb, var(--green) 80%, black);
+  --green-700: color-mix(in srgb, var(--green) 60%, black);
+  --green-800: color-mix(in srgb, var(--green) 40%, black);
+  --green-900: color-mix(in srgb, var(--green) 20%, black);
+
+  /* Red */
+  --red-100: color-mix(in srgb, var(--red) 20%, white);
+  --red-200: color-mix(in srgb, var(--red) 40%, white);
+  --red-300: color-mix(in srgb, var(--red) 60%, white);
+  --red-400: color-mix(in srgb, var(--red) 80%, white);
+  --red-500: var(--red);
+  --red-600: color-mix(in srgb, var(--red) 80%, black);
+  --red-700: color-mix(in srgb, var(--red) 60%, black);
+  --red-800: color-mix(in srgb, var(--red) 40%, black);
+  --red-900: color-mix(in srgb, var(--red) 20%, black);
+
+  /* Yellow */
+  --yellow-100: color-mix(in srgb, var(--yellow) 20%, white);
+  --yellow-200: color-mix(in srgb, var(--yellow) 40%, white);
+  --yellow-300: color-mix(in srgb, var(--yellow) 60%, white);
+  --yellow-400: color-mix(in srgb, var(--yellow) 80%, white);
+  --yellow-500: var(--yellow);
+  --yellow-600: color-mix(in srgb, var(--yellow) 80%, black);
+  --yellow-700: color-mix(in srgb, var(--yellow) 60%, black);
+  --yellow-800: color-mix(in srgb, var(--yellow) 40%, black);
+  --yellow-900: color-mix(in srgb, var(--yellow) 20%, black);
+
+  /* Cyan */
+  --cyan-100: color-mix(in srgb, var(--cyan) 20%, white);
+  --cyan-200: color-mix(in srgb, var(--cyan) 40%, white);
+  --cyan-300: color-mix(in srgb, var(--cyan) 60%, white);
+  --cyan-400: color-mix(in srgb, var(--cyan) 80%, white);
+  --cyan-500: var(--cyan);
+  --cyan-600: color-mix(in srgb, var(--cyan) 80%, black);
+  --cyan-700: color-mix(in srgb, var(--cyan) 60%, black);
+  --cyan-800: color-mix(in srgb, var(--cyan) 40%, black);
+  --cyan-900: color-mix(in srgb, var(--cyan) 20%, black);
+
+  /* Gray  (dark-theme: lower index = darker surface, higher = lighter text)
+   *   100–400 : background / surface layers
+   *   500–800 : element backgrounds, borders
+   *   900–950 : readable text                                                  */
+  --gray-100: #161616;
+  --gray-200: #1e1e1e;
+  --gray-300: #252525;
+  --gray-400: #2a2a2a;
+  --gray-500: #3a3a3a;
+  --gray-600: #4a4a4a;
+  --gray-700: #5a5a5a;
+  --gray-800: #6a6a6a;
+  --gray-900: #909090;
+  --gray-950: #cccccc;
+
+
+  /* ==========================================================================
+   * § 2  Semantic Tokens  — reference § 1 scales
+   *
+   * Use these in component styles; never use raw hex values directly.
+   * State values (hover/active/disabled) are hand-tuned for dark-theme
+   * vibrancy rather than strict scale steps.
+   * ========================================================================== */
+
+  /* Primary (Blue) */
+  --color-primary:          var(--blue-500);
+  --color-primary-hover:    #1177bb;
+  --color-primary-active:   #0d5a8a;
+  --color-primary-disabled: #0a4a6e;
+
+  /* Success (Green) */
+  --color-success:          var(--green-500);
+  --color-success-hover:    #2cbd4f;
+  --color-success-active:   #23923d;
+  --color-success-disabled: #1e7d35;
+
+  /* Danger (Red) */
+  --color-danger:           var(--red-500);
+  --color-danger-hover:     #e04b59;
+  --color-danger-active:    #c82333;
+  --color-danger-disabled:  #a92a38;
+
+  /* Warning (Yellow) */
+  --color-warning:          var(--yellow-500);
+  --color-warning-hover:    #ffca2c;
+  --color-warning-active:   #e0a800;
+  --color-warning-disabled: #cc9a06;
+
+  /* Info (Cyan) */
+  --color-info:             var(--cyan-500);
+  --color-info-hover:       #1ab5cd;
+  --color-info-active:      #138a9f;
+  --color-info-disabled:    #10778a;
+
+  /* Gray — UI element backgrounds and borders */
+  --color-gray-dark:     var(--gray-400);
+  --color-gray:          var(--gray-500);
+  --color-gray-light:    var(--gray-600);
+  --color-gray-lighter:  var(--gray-700);
+  --color-gray-lightest: var(--gray-800);
+
+  /* Text */
+  --color-text-main:       #ffffff;
+  --color-text-muted:      var(--gray-950);
+  --color-text-disabled:   #666666;
+  --color-text-link:       var(--color-primary-hover);
+  --color-text-link-hover: #1890ff;
+
+  /* Subtle background / border / text — for contextual components
+   * (alerts, badges, tags…). Mirrors Bootstrap 5.3's naming pattern.         */
+  --color-primary-bg-subtle:       rgba( 14,  99, 156, 0.10);
+  --color-primary-border-subtle:   rgba( 14,  99, 156, 0.30);
+  --color-primary-text-emphasis:   #8bb8e8;
+
+  --color-success-bg-subtle:       rgba( 40, 167,  69, 0.10);
+  --color-success-border-subtle:   rgba( 40, 167,  69, 0.30);
+  --color-success-text-emphasis:   #75b798;
+
+  --color-danger-bg-subtle:        rgba(220,  53,  69, 0.10);
+  --color-danger-border-subtle:    rgba(220,  53,  69, 0.30);
+  --color-danger-text-emphasis:    #e88b8b;
+
+  --color-warning-bg-subtle:       rgba(255, 193,   7, 0.10);
+  --color-warning-border-subtle:   rgba(255, 193,   7, 0.30);
+  --color-warning-text-emphasis:   #e8ca8b;
+
+  --color-info-bg-subtle:          rgba( 23, 162, 184, 0.10);
+  --color-info-border-subtle:      rgba( 23, 162, 184, 0.30);
+  --color-info-text-emphasis:      #8bd3e8;
+
+  --color-secondary-bg-subtle:     rgba(108, 117, 125, 0.10);
+  --color-secondary-border-subtle: rgba(108, 117, 125, 0.30);
+  --color-secondary-text-emphasis: #b0b0b0;
+
+  --color-light-bg-subtle:         rgba(248, 249, 250, 0.05);
+  --color-light-border-subtle:     rgba(248, 249, 250, 0.20);
+
+  --color-dark-bg-subtle:          rgba( 52,  58,  64, 0.30);
+  --color-dark-border-subtle:      rgba( 52,  58,  64, 0.50);
+
+
+  /* ==========================================================================
+   * § 3  Surface Tokens
+   * ========================================================================== */
+
+  --surface-sunken:  var(--gray-100);   /* #161616 — inset / disabled bg */
+  --surface-base:    var(--gray-200);   /* #1e1e1e — main background */
+  --surface-raised:  var(--gray-300);   /* #252525 — cards, hover bg */
+  --surface-overlay: var(--gray-400);   /* #2a2a2a — popovers, menus */
+
+
+  /* ==========================================================================
+   * § 4  Border Tokens
+   * ========================================================================== */
+
+  --border-subtle:   rgba(255, 255, 255, 0.08);
+  --border-default:  rgba(255, 255, 255, 0.12);
+  --border-hover:    rgba(255, 255, 255, 0.20);
+  --border-focus:    var(--color-primary);
+  --border-disabled: rgba(255, 255, 255, 0.06);
+
+
+  /* ==========================================================================
+   * § 5  Focus / Interaction Tokens
+   * ========================================================================== */
+
+  --focus-ring:    rgba(14, 99, 156, 0.25);
+  --focus-ring-sm: rgba(14, 99, 156, 0.10);
+
+
+  /* ==========================================================================
+   * § 6  Shared Component Tokens
+   *
+   * Action buttons (reset / clear) are reused across all field components.
+   * Each field's :host block references these as defaults; they can be
+   * overridden per-component by redefining the variable in :host.
+   * ========================================================================== */
+
+  --action-btn-bg:              var(--color-gray);   /* #3a3a3a */
+  --action-btn-bg-hover:        #1a3a4a;
+  --action-btn-color:           var(--gray-900);     /* #909090 */
+  --action-btn-color-hover:     #4fc3f7;
+
+  --clear-btn-bg-hover:         #5a2a2a;
+  --clear-btn-color-hover:      #ff6b6b;
+}
