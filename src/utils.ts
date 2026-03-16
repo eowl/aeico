@@ -14,11 +14,6 @@
 
 // Style utilities
 export { default as styleStore } from './utils/styleStore'
-export { 
-  createFieldCssVars, 
-  mergeFieldCssVars, 
-  fieldStyleGenerator 
-} from './utils/fieldStyles'
 
 // Type guards
 export { isSelectOption } from './types'

@@ -1,6 +1,5 @@
 import AeicoElement from './AeicoElement'
 import type { FieldI18nKeys, InferProperties, Props, Watchers } from './types'
-import { fieldStyleGenerator } from './utils/fieldStyles'
 import { WithTheme } from './mixins/WithTheme'
 import { WithI18n } from './mixins/WithI18n'
 
@@ -47,14 +46,6 @@ class AeicoField extends AeicoFieldBase {
   }
 
   /**
-   * Style variable generator for field components
-   * Generates CSS variables based on size and theme props
-   */
-  protected static styleGenerator = fieldStyleGenerator
-
-  protected static defaultSize: string = 'md'
-
-  /**
    * The underlying form control element (input, select, etc.)
    * Subclasses should set this to their specific element
    */
@@ -94,25 +85,6 @@ class AeicoField extends AeicoFieldBase {
     this.boundOnReset = this.onReset.bind(this)
     this.boundOnClear = this.onClear.bind(this)
     this.boundOnChange = this.onChange.bind(this)
-  }
-
-  /**
-   * Generate CSS custom property values for this field instance.
-   * Reads theme and size from the element's own reactive properties,
-   * falling back to global config / defaultSize when not set.
-   */
-  public generateStyleVars(): Record<string, string> {
-    const constructor = this.constructor as typeof AeicoField
-    if (!constructor.styleGenerator) {
-      return {}
-    }
-
-    const globalConfig = this.effectiveConfig
-
-    return constructor.styleGenerator.generate({
-      theme: this.theme ?? globalConfig.theme,
-      size: (this as any).size ?? constructor.defaultSize,
-    })
   }
 
   /**

@@ -211,3 +211,36 @@
   background: var(--action-btn-bg-hover);
   color: var(--action-btn-color-hover);
 }
+
+
+/* Size Variants */
+
+:host([size="sm"]) {
+  --radio-size: 11px;
+  --radio-label-font: 11px;
+  --button-font: 11px;
+  --button-padding: 2px 8px;
+}
+
+.radio-option input[type="radio"] {
+  width: var(--radio-size, 13px);
+  height: var(--radio-size, 13px);
+}
+
+.radio-option .radio-label {
+  font-size: var(--radio-label-font, 12px);
+}
+
+.button-option,
+.button-group-connected-option,
+.segmented-option {
+  font-size: var(--button-font, 12px);
+  padding: var(--button-padding, 3px 10px);
+}
+
+:host([size="lg"]) {
+  --radio-size: 15px;
+  --radio-label-font: 14px;
+  --button-font: 14px;
+  --button-padding: 5px 12px;
+}

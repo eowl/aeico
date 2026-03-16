@@ -125,3 +125,24 @@ input:disabled {
   background: var(--reset-btn-bg-hover);
   color: var(--reset-btn-color-hover);
 }
+
+
+/* Size Variants */
+
+:host([size="sm"]) {
+  --input-font-size: 11px;
+  --input-padding: 2px 5px;
+  --clear-btn-size: 14px;
+  --clear-btn-font-size: 10px;
+  --reset-btn-size: 14px;
+  --reset-btn-font-size: 10px;
+}
+
+:host([size="lg"]) {
+  --input-font-size: 14px;
+  --input-padding: 6px 9px;
+  --clear-btn-size: 18px;
+  --clear-btn-font-size: 12px;
+  --reset-btn-size: 18px;
+  --reset-btn-font-size: 12px;
+}

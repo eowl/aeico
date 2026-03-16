@@ -68,13 +68,4 @@ export type {
 
 // Utilities
 export { default as styleStore } from './utils/styleStore'
-export {
-  createFieldCssVars,
-  mergeFieldCssVars,
-  fieldStyleGenerator
-} from './utils/fieldStyles'
-export type {
-  FieldSize,
-  FieldTheme,
-  FieldStyleOptions
-} from './utils/fieldStyles'
+

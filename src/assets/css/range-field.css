@@ -137,3 +137,47 @@ input[type="range"]:disabled::-moz-range-thumb {
   background: var(--action-btn-bg-hover);
   color: var(--action-btn-color-hover);
 }
+
+/* Size Variants */
+:host([size="sm"]) {
+  --range-height: 3px;
+  --range-thumb-size: 11px;
+  --value-label-font: 11px;
+  --reset-btn-size: 14px;
+}
+
+:host([size="lg"]) {
+  --range-height: 5px;
+  --range-thumb-size: 17px;
+  --value-label-font: 14px;
+  --reset-btn-size: 18px;
+}
+
+.input-range,
+.slider-input,
+input[type="range"] {
+  height: var(--range-height, 4px);
+}
+
+.input-range::-webkit-slider-thumb,
+.slider-input::-webkit-slider-thumb,
+input[type="range"]::-webkit-slider-thumb {
+  width: var(--range-thumb-size, 14px);
+  height: var(--range-thumb-size, 14px);
+}
+
+.input-range::-moz-range-thumb,
+.slider-input::-moz-range-thumb,
+input[type="range"]::-moz-range-thumb {
+  width: var(--range-thumb-size, 14px);
+  height: var(--range-thumb-size, 14px);
+}
+
+.value-label {
+  font-size: var(--value-label-font, 12px);
+}
+
+.reset-btn {
+  width: var(--reset-btn-size, 16px);
+  height: var(--reset-btn-size, 16px);
+}

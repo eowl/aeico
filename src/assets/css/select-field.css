@@ -82,3 +82,20 @@ select:hover:not(:focus) {
   background: var(--reset-btn-bg-hover);
   color: var(--reset-btn-color-hover);
 }
+
+
+/*Size Variants */
+
+:host([size="sm"]) {
+  --select-font-size: 11px;
+  --select-padding: 2px 5px;
+  --reset-btn-size: 14px;
+  --reset-btn-font-size: 10px;
+}
+
+:host([size="lg"]) {
+  --select-font-size: 14px;
+  --select-padding: 6px 9px;
+  --reset-btn-size: 18px;
+  --reset-btn-font-size: 12px;
+}

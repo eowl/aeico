@@ -229,3 +229,108 @@
   --clear-btn-bg-hover:         #5a2a2a;
   --clear-btn-color-hover:      #ff6b6b;
 }
+
+
+/* ============================================================================
+ * § 7  Light Theme Overrides
+ *
+ * Applied when:
+ *   - :root has [data-theme="light"] attribute (global theme)
+ *   - :host has [theme="light"] attribute (component-level theme)
+ *
+ * Usage:
+ *   // Global light theme
+ *   document.documentElement.setAttribute('data-theme', 'light')
+ *
+ *   // Component light theme
+ *   <select-field theme="light"></select-field>
+ *   SelectField.create({ theme: 'light' })
+ * ========================================================================== */
+
+:root[theme="light"],
+:host([theme="light"]) {
+
+  /* § 7a  Gray Scale — inverted for light backgrounds
+   *   100–400 : light surface layers (inverted from dark)
+   *   500–800 : medium tones for borders and less prominent elements
+   *   900–950 : dark text colors                                             */
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+  --gray-950: #000000;
+
+
+  /* § 7b  Surface Tokens */
+  --surface-sunken:  #f8f9fa;   /* inset areas, disabled backgrounds */
+  --surface-base:    #ffffff;   /* main background */
+  --surface-raised:  #f8f9fa;   /* cards, elevated elements */
+  --surface-overlay: #ffffff;   /* dropdowns, popovers, modals */
+
+
+  /* § 7c  Border Tokens */
+  --border-subtle:   rgba(0, 0, 0, 0.08);
+  --border-default:  rgba(0, 0, 0, 0.15);
+  --border-hover:    rgba(0, 0, 0, 0.25);
+  --border-focus:    var(--color-primary);
+  --border-disabled: rgba(0, 0, 0, 0.06);
+
+
+  /* § 7d  Text Colors */
+  --color-text-main:     #212529;
+  --color-text-muted:    #6c757d;
+  --color-text-disabled: #adb5bd;
+  --color-text-link:     #0e639c;
+  --color-text-link-hover: #084273;
+
+
+  /* § 7e  Focus / Interaction Tokens */
+  --focus-ring:    rgba(14, 99, 156, 0.30);
+  --focus-ring-sm: rgba(14, 99, 156, 0.15);
+
+
+  /* § 7f  Action Button Tokens (light theme specific) */
+  --action-btn-bg:           #e9ecef;
+  --action-btn-bg-hover:     #0e639c;
+  --action-btn-color:        #6c757d;
+  --action-btn-color-hover:  #ffffff;
+
+  --clear-btn-bg-hover:      #dc3545;
+  --clear-btn-color-hover:   #ffffff;
+
+
+  /* § 7g  Subtle Background Variants — lower opacity for light backgrounds */
+  --color-primary-bg-subtle:       rgba(14, 99, 156, 0.08);
+  --color-success-bg-subtle:       rgba(40, 167, 69, 0.08);
+  --color-danger-bg-subtle:        rgba(220, 53, 69, 0.08);
+  --color-warning-bg-subtle:       rgba(255, 193, 7, 0.08);
+  --color-info-bg-subtle:          rgba(23, 162, 184, 0.08);
+  --color-secondary-bg-subtle:     rgba(108, 117, 125, 0.08);
+  --color-light-bg-subtle:         rgba(248, 249, 250, 0.10);
+  --color-dark-bg-subtle:          rgba(52, 58, 64, 0.08);
+
+
+  /* § 7h  Text Emphasis Variants — darker for readability on light bg */
+  --color-primary-text-emphasis:   #084273;
+  --color-success-text-emphasis:   #1a5c2e;
+  --color-danger-text-emphasis:    #7d2027;
+  --color-warning-text-emphasis:   #7d6104;
+  --color-info-text-emphasis:      #115968;
+  --color-secondary-text-emphasis: #3c4146;
+
+
+  /* § 7i  Border Emphasis Variants — higher opacity for visibility */
+  --color-primary-border-subtle:   rgba(14, 99, 156, 0.40);
+  --color-success-border-subtle:   rgba(40, 167, 69, 0.40);
+  --color-danger-border-subtle:    rgba(220, 53, 69, 0.40);
+  --color-warning-border-subtle:   rgba(255, 193, 7, 0.40);
+  --color-info-border-subtle:      rgba(23, 162, 184, 0.40);
+  --color-secondary-border-subtle: rgba(108, 117, 125, 0.40);
+  --color-light-border-subtle:     rgba(248, 249, 250, 0.30);
+  --color-dark-border-subtle:      rgba(52, 58, 64, 0.40);
+}

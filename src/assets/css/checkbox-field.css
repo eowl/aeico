@@ -146,3 +146,26 @@
   background: var(--reset-btn-bg-hover);
   color: var(--reset-btn-color-hover);
 }
+
+
+/* ============================================================================
+ * Size Variants
+ * ========================================================================== */
+
+:host([size="sm"]) {
+  --checkbox-size: 12px;
+  --toggle-width: 24px;
+  --toggle-height: 12px;
+  --toggle-slider-size: 8px;
+  --reset-btn-size: 14px;
+  --reset-btn-font-size: 10px;
+}
+
+:host([size="lg"]) {
+  --checkbox-size: 16px;
+  --toggle-width: 40px;
+  --toggle-height: 20px;
+  --toggle-slider-size: 16px;
+  --reset-btn-size: 18px;
+  --reset-btn-font-size: 12px;
+}
