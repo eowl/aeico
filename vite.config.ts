@@ -4,19 +4,35 @@ import path from 'path'
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/index.ts'),
+      entry: {
+        index: path.resolve(__dirname, 'src/index.ts'),
+        core: path.resolve(__dirname, 'src/core.ts'),
+        components: path.resolve(__dirname, 'src/components.ts'),
+        mixins: path.resolve(__dirname, 'src/mixins/index.ts'),
+        utils: path.resolve(__dirname, 'src/utils.ts'),
+      },
       name: 'Aeico',
-      formats: ['es', 'cjs'],
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`
+      // Remove formats here, specify in output options instead
     },
     rollupOptions: {
       // No external dependencies for now, bundle everything
       external: [],
-      output: {
-        // Preserve module structure for better tree-shaking
-        preserveModules: false,
-        exports: 'named'
-      }
+      output: [
+        // ES Module format
+        {
+          format: 'es',
+          exports: 'named',
+          entryFileNames: '[name].js',
+          chunkFileNames: 'chunks/[name].js',
+        },
+        // CommonJS format  
+        {
+          format: 'cjs',
+          exports: 'named',
+          entryFileNames: '[name].cjs',
+          chunkFileNames: 'chunks/[name].cjs',
+        }
+      ]
     },
     sourcemap: true,
     minify: false, // Keep readable for development

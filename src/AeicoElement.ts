@@ -160,10 +160,7 @@ class AeicoElement extends HTMLElement {
     styleSheet: { type: Object },
     loadStyleSheets: { type: Array },
     cssVars: { type: Object },
-    theme: { type: String },
-    enableI18n: { type: Boolean },
     disabled: { type: Boolean },
-    i18n: { type: Object },
   }
 
   /**
@@ -228,21 +225,19 @@ class AeicoElement extends HTMLElement {
   declare styleSheet?: CSSStyleSheet
   declare loadStyleSheets?: string[]
   declare cssVars?: Record<string, any>
-  declare theme?: string
-  declare enableI18n?: boolean
   declare disabled?: boolean
-  declare i18n?: Record<string, any>
 
   /**
    * Style variable generator for this component
    * Subclasses can override to provide custom style generation based on props
+   * Note: For theme support, consider using the WithTheme mixin
    * 
    * @example
    * ```typescript
    * class MyComponent extends AeicoElement {
    *   protected static styleGenerator: StyleVariableGenerator = {
    *     generate(config) {
-   *       return { '--my-color': config.theme === 'dark' ? '#fff' : '#000' }
+   *       return { '--my-custom-var': 'value' }
    *     }
    *   }
    * }
@@ -287,18 +282,6 @@ class AeicoElement extends HTMLElement {
       ...this.instanceConfig
     }
   }
-  
-  /**
-   * Check if i18n is enabled for this component
-   */
-  protected get i18nEnabled(): boolean {
-    return this.effectiveConfig.enableI18n ?? false
-  }
-
-  /**
-   * Unsubscribe function for i18n language change listener
-   */
-  private i18nUnsubscribe: (() => void) | null = null
 
   protected styleAdapter!: StyleAdapter
 
@@ -322,6 +305,15 @@ class AeicoElement extends HTMLElement {
     for (const [propName, propDecl] of Object.entries(allProps)) {
       const kebabName = constructor.toKebab(propName)
       const internalKey = `_${String(propName)}`  // Internal storage
+      
+      // Capture pre-upgrade property value (set before element was defined/upgraded)
+      let preUpgradeValue: any = undefined
+      let hasPreUpgrade = false
+      if (this.hasOwnProperty(propName)) {
+        preUpgradeValue = (this as any)[propName]
+        hasPreUpgrade = true
+        delete (this as any)[propName]
+      }
       
       // Initialize internal storage
       ;(this as any)[internalKey] = undefined
@@ -380,6 +372,11 @@ class AeicoElement extends HTMLElement {
         enumerable: true,
         configurable: true
       })
+
+      // Restore pre-upgrade property value through the new accessor
+      if (hasPreUpgrade && preUpgradeValue !== undefined) {
+        ;(this as any)[propName] = preUpgradeValue
+      }
     }
   }
 
@@ -571,18 +568,18 @@ class AeicoElement extends HTMLElement {
 
   /**
    * Generate CSS custom property values for this component instance.
-   * Uses the static styleGenerator if defined, reading reactive properties directly.
-   * Subclasses should override this method to pass additional props (e.g. size).
+   * Uses the static styleGenerator if defined.
+   * Note: For theme-based style generation, use the WithTheme mixin
+   * 
+   * @returns Record of CSS custom properties
    */
-  protected generateStyleVars(): Record<string, string> {
+  public generateStyleVars(): Record<string, string> {
     const constructor = this.constructor as typeof AeicoElement
     if (!constructor.styleGenerator) {
       return {}
     }
 
-    return constructor.styleGenerator.generate({
-      theme: this.theme,
-    })
+    return constructor.styleGenerator.generate({})
   }
 
   /**
@@ -598,10 +595,6 @@ class AeicoElement extends HTMLElement {
     }
 
     this.adaptStylesheet()
-
-    if (this.i18nEnabled) {
-      this.subscribeToI18n()
-    }
   }
 
   /**
@@ -628,10 +621,9 @@ class AeicoElement extends HTMLElement {
 
   /**
    * Lifecycle: Component disconnected from DOM
-   * Automatically unsubscribes from i18n language changes
    */
   disconnectedCallback() {
-    this.unsubscribeFromI18n()
+    // Base implementation - subclasses can override
   }
 
   /**
@@ -643,53 +635,7 @@ class AeicoElement extends HTMLElement {
     // They trigger requestUpdate() which batches updates
   }
 
-  /**
-   * Subscribe to i18n language changes
-   */
-  protected subscribeToI18n() {
-    const i18nService = this.effectiveConfig?.i18nService
-    if (i18nService) {
-      this.i18nUnsubscribe = i18nService.subscribe(() => {
-        this.onLanguageChange()
-      })
-    }
-  }
 
-  /**
-   * Unsubscribe from i18n language changes
-   */
-  protected unsubscribeFromI18n() {
-    if (this.i18nUnsubscribe) {
-      this.i18nUnsubscribe()
-      this.i18nUnsubscribe = null
-    }
-  }
-
-  /**
-   * Handle language change event
-   * Override in subclass to update UI with new translations
-   * 
-   * Remember to call super.onLanguageChange() if you override this method
-   */
-  protected onLanguageChange() {
-    // Base implementation - subclasses can override
-  }
-
-  /**
-   * Get translated text for a key
-   * 
-   * @param key Translation key
-   * @param fallback Fallback text if i18n service is not available
-   * @returns Translated text or fallback
-   */
-  protected t(key: string, fallback?: string): string {
-    const i18nService = this.effectiveConfig?.i18nService
-    if (i18nService) {
-      return i18nService.t(key)
-    }
-    
-    return fallback || key
-  }
   
   /**
    * Create a new instance of the component with configuration

@@ -1,27 +1,15 @@
-import type { I18nService, ThemeType } from './types'
+import type { I18nService } from './types'
 import styleStore, { type PresetStyleName } from './utils/styleStore'
 
 export type preloadStyleEntry = PresetStyleName | Record<string, string>
 export type preloadStyles = preloadStyleEntry[]
 
 type BaseConfig = {
-   /**
-   * Default theme for components
-   * @default 'dark'
-   */
-  theme?: ThemeType
-
   /**
    * Whether to enable i18n by default for all components
    * @default true
    */
   enableI18n?: boolean
-
-  /**
-   * Whether components are disabled by default
-   * @default false
-   */
-  disabled?: boolean
 
   /**
    * i18n service implementation
@@ -79,9 +67,7 @@ export type ResultConfig = BaseConfig & {
 }
 
 const DEFAULT_CONFIG: ResultConfig = {
-  theme: 'dark',
   enableI18n: true,
-  disabled: false,
   i18nService: {
     t: (key: string) => key,
     subscribe: () => () => {}
@@ -221,9 +207,7 @@ class ConfigProvider {
     }
 
     return {
-      theme: this.config.theme ?? DEFAULT_CONFIG.theme,
       enableI18n: this.config.enableI18n ?? DEFAULT_CONFIG.enableI18n,
-      disabled: this.config.disabled ?? DEFAULT_CONFIG.disabled,
       i18nService: this.config.i18nService ?? DEFAULT_CONFIG.i18nService,
       preloadedStyleNames: this.preloadedStyleNames.size ? Array.from(this.preloadedStyleNames) : undefined,
       enableComponentStylesheets: this.enableComponentStylesheets

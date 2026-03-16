@@ -186,7 +186,8 @@ class RangeField extends AeicoField {
   }
 }
 
-RangeField.register()
+// Component is no longer auto-registered
+// Call RangeField.register() explicitly if needed
 
 export default RangeField
 export type RangeFieldProps = InferProperties<typeof RangeField>

@@ -161,7 +161,8 @@ class CheckboxField extends AeicoField {
   }
 }
 
-CheckboxField.register()
+// Component is no longer auto-registered
+// Call CheckboxField.register() explicitly if needed
 
 export default CheckboxField
 export type CheckboxFieldProps = InferProperties<typeof CheckboxField>

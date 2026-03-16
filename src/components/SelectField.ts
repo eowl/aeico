@@ -24,7 +24,7 @@ class SelectField extends AeicoField {
 
   protected static stylesheets = [selectFieldSpec]
 
-  protected onLanguageChange() {
+  public onLanguageChange() {
     super.onLanguageChange()
     this.updateOptions()
   }
@@ -108,7 +108,8 @@ class SelectField extends AeicoField {
   }
 }
 
-SelectField.register()
+// Component is no longer auto-registered
+// Call SelectField.register() explicitly if needed
 
 export default SelectField
 

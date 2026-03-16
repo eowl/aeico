@@ -36,7 +36,7 @@ class RadioField extends AeicoField {
     this._groupName = `radio-field-${++RadioField._instanceCount}`
   }
 
-  protected onLanguageChange() {
+  public onLanguageChange() {
     super.onLanguageChange()
     this.render()
   }
@@ -197,8 +197,8 @@ class RadioField extends AeicoField {
   }
 }
 
-RadioField.register()
-
+// Component is no longer auto-registered
+// Call RadioField.register() explicitly if needed
 export default RadioField
 
 export type RadioFieldProps = InferProperties<typeof RadioField>

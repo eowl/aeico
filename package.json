@@ -11,6 +11,26 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./core": {
+      "types": "./dist/types/core.d.ts",
+      "import": "./dist/core.js",
+      "require": "./dist/core.cjs"
+    },
+    "./components": {
+      "types": "./dist/types/components.d.ts",
+      "import": "./dist/components.js",
+      "require": "./dist/components.cjs"
+    },
+    "./mixins": {
+      "types": "./dist/types/mixins/index.d.ts",
+      "import": "./dist/mixins.js",
+      "require": "./dist/mixins.cjs"
+    },
+    "./utils": {
+      "types": "./dist/types/utils.d.ts",
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs"
     }
   },
   "files": [

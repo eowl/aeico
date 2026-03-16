@@ -95,10 +95,8 @@ class InputField extends AeicoField {
   }
 }
 
-/**
- * register the InputField component as a custom element with the tag name 'input-field'
- */
-InputField.register()
+// Component is no longer auto-registered
+// Call InputField.register() explicitly if needed
 
 export default InputField
 export type InputFieldProps = InferProperties<typeof InputField>

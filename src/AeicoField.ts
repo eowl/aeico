@@ -1,20 +1,29 @@
 import AeicoElement from './AeicoElement'
 import type { FieldI18nKeys, InferProperties, Props, Watchers } from './types'
 import { fieldStyleGenerator } from './utils/fieldStyles'
+import { WithTheme } from './mixins/WithTheme'
+import { WithI18n } from './mixins/WithI18n'
 
 export type FieldAction = 'clear' | 'reset' | 'change'
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
 /**
+ * Base class with theme and i18n support
+ * Composed using WithTheme and WithI18n mixins
+ */
+const AeicoFieldBase = WithI18n(WithTheme(AeicoElement))
+
+/**
  * Base class for form field components
  * 
  * Provides common functionality for field components including:
+ * - Theme support (via WithTheme mixin)
+ * - i18n integration (via WithI18n mixin)
  * - Reset button management
- * - i18n integration (via AeicoElement)
  * - Value management
  * - Common configuration handling
  */
-class AeicoField extends AeicoElement {
+class AeicoField extends AeicoFieldBase {
   /**
    * Define base field properties (extends AeicoElement properties)
    */
@@ -92,7 +101,7 @@ class AeicoField extends AeicoElement {
    * Reads theme and size from the element's own reactive properties,
    * falling back to global config / defaultSize when not set.
    */
-  protected generateStyleVars(): Record<string, string> {
+  public generateStyleVars(): Record<string, string> {
     const constructor = this.constructor as typeof AeicoField
     if (!constructor.styleGenerator) {
       return {}
@@ -130,7 +139,7 @@ class AeicoField extends AeicoElement {
    * Handle language change event
    * Updates reset button label and allows subclasses to add custom behavior
    */
-  protected onLanguageChange() {
+  public onLanguageChange() {
     super.onLanguageChange()
     this.updateResetButtonLabel()
     this.updateClearButtonLabel()

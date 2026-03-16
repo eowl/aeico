@@ -1,8 +1,15 @@
 import AeicoElement from '../AeicoElement'
 import type { InferProperties, Props, Watchers } from '../types'
 import { modalSpec } from '../assets/css/specs'
+import { WithTheme } from '../mixins/WithTheme'
+import { WithI18n } from '../mixins/WithI18n'
 
-class Modal extends AeicoElement {
+/**
+ * Base class with theme and i18n support
+ */
+const ModalBase = WithI18n(WithTheme(AeicoElement))
+
+class Modal extends ModalBase {
   private overlay: HTMLElement | null = null
   private modalContainer: HTMLElement | null = null
   private titleElement: HTMLElement | null = null
@@ -97,7 +104,7 @@ class Modal extends AeicoElement {
   /**
    * Handle language change from base class
    */
-  protected onLanguageChange() {
+  public onLanguageChange() {
     super.onLanguageChange()
     this.updateCloseButtonTitle()
   }

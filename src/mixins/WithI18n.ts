@@ -1,0 +1,161 @@
+import type { Constructor } from './compose'
+import { getComponentConfig } from '../configProvider'
+
+/**
+ * WithI18n Mixin
+ * 
+ * Adds internationalization support to a component, including:
+ * - enableI18n property for controlling i18n feature
+ * - i18n property for custom translations
+ * - t() method for translating keys
+ * - onLanguageChange() lifecycle hook
+ * - Automatic subscription to language changes
+ * 
+ * @example
+ * ```typescript
+ * import { WithI18n } from './mixins/WithI18n'
+ * import AeicoElement from './AeicoElement'
+ * 
+ * class MyComponent extends WithI18n(AeicoElement) {
+ *   render() {
+ *     this.shadowRoot.innerHTML = `
+ *       <button>${this.t('buttons.save', 'Save')}</button>
+ *     `
+ *   }
+ * 
+ *   protected onLanguageChange() {
+ *     super.onLanguageChange()
+ *     this.render() // Re-render with new translations
+ *   }
+ * }
+ * ```
+ */
+export function WithI18n<T extends Constructor>(Base: T) {
+  return class extends Base {
+    declare enableI18n?: boolean
+    declare i18n?: Record<string, any>
+
+    /**
+     * Unsubscribe function for i18n language change listener
+     */
+    public i18nUnsubscribe: (() => void) | null = null
+
+    /**
+     * Get effective i18n configuration (global + instance overrides)
+     */
+    public get effectiveI18nConfig() {
+      const globalConfig = getComponentConfig()
+      return {
+        enableI18n: this.enableI18n ?? globalConfig?.enableI18n ?? false,
+        i18nService: globalConfig?.i18nService
+      }
+    }
+
+    /**
+     * Check if i18n is enabled for this component
+     */
+    public get i18nEnabled(): boolean {
+      return this.effectiveI18nConfig.enableI18n
+    }
+
+    /**
+     * Lifecycle: Component connected to DOM
+     * Automatically subscribes to i18n language changes if enabled
+     */
+    connectedCallback() {
+      // Call parent connectedCallback if exists
+      if (super.connectedCallback) {
+        (super.connectedCallback as any)()
+      }
+
+      if (this.i18nEnabled) {
+        this.subscribeToI18n()
+      }
+    }
+
+    /**
+     * Lifecycle: Component disconnected from DOM
+     * Automatically unsubscribes from i18n language changes
+     */
+    disconnectedCallback() {
+      // Call parent disconnectedCallback if exists
+      if (super.disconnectedCallback) {
+        (super.disconnectedCallback as any)()
+      }
+
+      this.unsubscribeFromI18n()
+    }
+
+    /**
+     * Subscribe to i18n language changes
+     */
+    public subscribeToI18n() {
+      const i18nService = this.effectiveI18nConfig?.i18nService
+      if (i18nService) {
+        this.i18nUnsubscribe = i18nService.subscribe(() => {
+          this.onLanguageChange()
+        })
+      }
+    }
+
+    /**
+     * Unsubscribe from i18n language changes
+     */
+    public unsubscribeFromI18n() {
+      if (this.i18nUnsubscribe) {
+        this.i18nUnsubscribe()
+        this.i18nUnsubscribe = null
+      }
+    }
+
+    /**
+     * Handle language change event
+     * Override in subclass to update UI with new translations
+     * 
+     * Remember to call super.onLanguageChange() if you override this method
+     * 
+     * @example
+     * ```typescript
+     * public onLanguageChange() {
+     *   super.onLanguageChange()
+     *   this.render() // Re-render with new translations
+     * }
+     * ```
+     */
+    public onLanguageChange() {
+      // Base implementation - subclasses can override
+    }
+
+    /**
+     * Get translated text for a key
+     * 
+     * @param key Translation key
+     * @param fallback Fallback text if i18n service is not available
+     * @returns Translated text or fallback
+     * 
+     * @example
+     * ```typescript
+     * const text = this.t('buttons.save', 'Save')
+     * ```
+     */
+    public t(key: string, fallback?: string): string {
+      const i18nService = this.effectiveI18nConfig?.i18nService
+      if (i18nService) {
+        return i18nService.t(key)
+      }
+      
+      return fallback || key
+    }
+  }
+}
+
+/**
+ * Type augmentation for components using WithI18n
+ */
+export interface WithI18nInterface {
+  enableI18n?: boolean
+  i18n?: Record<string, any>
+  i18nEnabled: boolean
+  t(key: string, fallback?: string): string
+  onLanguageChange(): void
+}

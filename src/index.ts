@@ -1,38 +1,29 @@
 /**
  * Aeico - Lightweight Web Components Library
  * 
- * Main entry point for the Aeico components library.
- * Exports all components, utilities, types, and configuration functions.
+ * Main entry point — exports core classes, mixins, configuration, and utilities.
+ * 
+ * ```typescript
+ * import { AeicoElement, setComponentConfig, WithTheme } from 'aeico'
+ * import { SelectField, Button } from 'aeico/components'
+ * ```
+ * 
+ * Note: Components are exported from `aeico/components`, not from `aeico`.
  */
 
-// Import field components to trigger registration side effects
-import './components/SelectField'
-import './components/RangeField'
-import './components/InputField'
-import './components/CheckboxField'
-import './components/RadioField'
-import './components/Modal'
-
-// Base components
+// Base classes
 export { default as AeicoElement } from './AeicoElement'
 export { default as AeicoField } from './AeicoField'
 export type { AeicoElementProps } from './AeicoElement'
 export type { AeicoFieldProps, FieldAction, FieldElement } from './AeicoField'
 
-// Components
-export { default as SelectField } from './components/SelectField'
-export { default as RangeField } from './components/RangeField'
-export { default as InputField } from './components/InputField'
-export { default as CheckboxField } from './components/CheckboxField'
-export { default as RadioField } from './components/RadioField'
-export { default as Modal } from './components/Modal'
-export type { SelectFieldProps } from './components/SelectField'
-export type { RangeFieldProps } from './components/RangeField'
-export type { InputFieldProps } from './components/InputField'
-export type { CheckboxFieldProps } from './components/CheckboxField'
-export type { RadioFieldProps } from './components/RadioField'
-export type { RadioFieldType, RadioOption, RadioOptions } from './components/RadioField'
-export type { ModalProps } from './components/Modal'
+// Mixins
+export { compose } from './mixins/compose'
+export type { Constructor, Mixin } from './mixins/compose'
+export { WithTheme } from './mixins/WithTheme'
+export type { WithThemeInterface } from './mixins/WithTheme'
+export { WithI18n } from './mixins/WithI18n'
+export type { WithI18nInterface } from './mixins/WithI18n'
 
 // Configuration & Services
 export {
