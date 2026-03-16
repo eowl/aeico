@@ -7,7 +7,7 @@ export default defineConfig({
       entry: {
         index: path.resolve(__dirname, 'src/index.ts'),
         core: path.resolve(__dirname, 'src/core.ts'),
-        components: path.resolve(__dirname, 'src/components.ts'),
+        components: path.resolve(__dirname, 'src/components/index.ts'),
         mixins: path.resolve(__dirname, 'src/mixins/index.ts'),
         utils: path.resolve(__dirname, 'src/utils.ts'),
       },
