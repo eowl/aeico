@@ -133,12 +133,6 @@ class Button extends AeicoComponent {
     }
   }
 
-  /**
-   * Register the component
-   */
-  static register(name: string = 'ae-button') {
-    super.register(name)
-  }
 }
 
 // Auto-register when this module is imported as side effect

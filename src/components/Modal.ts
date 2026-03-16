@@ -12,6 +12,8 @@ class Modal extends AeicoComponent {
   private titleElement: HTMLElement | null = null
   private closeBtn: HTMLElement | null = null
 
+  static tagName = 'modal'
+
   static properties: Props = {
     label: { type: String },
     width: { type: String },
@@ -21,7 +23,7 @@ class Modal extends AeicoComponent {
   }
 
   static watchers: Watchers = {
-    label: 'onModalTitleChanged',
+    label: 'onLabelChanged',
     width: 'onWidthChanged',
     height: 'onHeightChanged',
     showCloseButton: 'onShowCloseButtonChanged',
@@ -153,7 +155,7 @@ class Modal extends AeicoComponent {
   }
 }
 
-Modal.register('app-modal')
+Modal.register()
 
 export default Modal
 export type ModalProps = InferProperties<typeof Modal>

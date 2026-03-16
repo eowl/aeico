@@ -17,6 +17,8 @@ class RadioField extends AeicoField {
 
   protected static stylesheets = [radioFieldSpec]
 
+  static tagName = 'radio'
+
   static properties: Props = {
     options: { type: Array },
     type: { type: String },

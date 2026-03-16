@@ -9,6 +9,8 @@ class RangeField extends AeicoField {
 
   protected static stylesheets = [rangeFieldSpec]
 
+  static tagName = 'range'
+
   static properties: Props = {
     options: { type: Array },
     percentage: { type: Boolean },

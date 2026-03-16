@@ -7,6 +7,8 @@ import { selectFieldSpec } from '../assets/css/specs'
 class SelectField extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null
 
+  static tagName = 'select'
+
   static get properties(): Props {
     return {
       options: { type: Array },

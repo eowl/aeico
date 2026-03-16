@@ -138,13 +138,6 @@ class Alert extends AeicoComponent {
       }
     }
   }
-
-  /**
-   * Register the component
-   */
-  static register(name: string = 'ae-alert') {
-    super.register(name)
-  }
 }
 
 // Auto-register when this module is imported as side effect

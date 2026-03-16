@@ -5,6 +5,8 @@ import { inputFieldSpec } from '../assets/css/specs'
 class InputField extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
 
+  static tagName = 'input'
+
   static properties: Props = {
     placeholder: { type: String },
     type: { type: String },

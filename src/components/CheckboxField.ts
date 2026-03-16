@@ -5,6 +5,8 @@ import { checkboxFieldSpec } from '../assets/css/specs'
 class CheckboxField extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
 
+  static tagName = 'checkbox'
+
   static properties: Props = {
     checked: { type: Boolean },
     defaultChecked: { type: Boolean },
