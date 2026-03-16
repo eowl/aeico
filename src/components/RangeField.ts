@@ -1,4 +1,4 @@
-import AeicoField from '../core/AeicoField'
+import AeicoField from './AeicoField'
 import { isSelectOption } from '../core/types'
 import type { InferProperties, Props, Watchers } from '../core/types'
 import { rangeFieldSpec } from '../assets/css/specs'

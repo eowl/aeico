@@ -230,7 +230,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Style variable generator for this component
    * Subclasses can override to provide custom style generation based on props
-   * Note: For theme support, consider using the WithTheme mixin
+   * Note: For theme support, consider using the Themeable mixin
    * 
    * @example
    * ```typescript
@@ -569,7 +569,7 @@ class AeicoElement extends HTMLElement {
   /**
    * Generate CSS custom property values for this component instance.
    * Uses the static styleGenerator if defined.
-   * Note: For theme-based style generation, use the WithTheme mixin
+   * Note: For theme-based style generation, use the Themeable mixin
    * 
    * @returns Record of CSS custom properties
    */

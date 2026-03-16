@@ -1,13 +1,6 @@
-import AeicoElement from '../core/AeicoElement'
 import type { InferProperties, Props } from '../core/types'
-import { WithTheme } from '../mixins/WithTheme'
-import { WithI18n } from '../mixins/WithI18n'
 import buttonStyle from '../assets/css/common/button.css?inline'
-
-/**
- * Base class with theme and i18n support
- */
-const ButtonBase = WithI18n(WithTheme(AeicoElement))
+import AeicoComponent from './AeicoComponent'
 
 /**
  * Button Component
@@ -32,7 +25,7 @@ const ButtonBase = WithI18n(WithTheme(AeicoElement))
  * <ae-button variant="ghost">Cancel</ae-button>
  * ```
  */
-class Button extends ButtonBase {
+class Button extends AeicoComponent {
   static properties: Props = {
     variant: { type: String },
     size: { type: String },

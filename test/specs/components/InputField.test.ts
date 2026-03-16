@@ -3,6 +3,7 @@ import { mount, unmountAll, updated, whenDefined } from '../../helpers/mount.js'
 import InputField from '../../../src/components/InputField.js'
 
 before(async () => {
+  InputField.register()
   await whenDefined('input-field')
 })
 

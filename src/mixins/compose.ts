@@ -10,12 +10,12 @@
  * @example
  * ```typescript
  * import { compose } from './mixins/compose'
- * import { WithTheme } from './mixins/WithTheme'
- * import { WithI18n } from './mixins/WithI18n'
+ * import { Themeable } from './mixins/Themeable'
+ * import { Localizable } from './mixins/Localizable'
  * import AeicoElement from './AeicoElement'
  * 
  * // Compose multiple mixins
- * const MyBase = compose(WithTheme, WithI18n)(AeicoElement)
+ * const MyBase = compose(Themeable, Localizable)(AeicoElement)
  * 
  * class MyComponent extends MyBase {
  *   // Now has both theme and i18n capabilities
@@ -25,16 +25,18 @@
  * @example
  * ```typescript
  * // Select only the capabilities you need
- * const SimpleBase = compose(WithTheme)(AeicoElement)
+ * const SimpleBase = compose(Themeable)(AeicoElement)
  * 
  * class SimpleComponent extends SimpleBase {
  *   // Only has theme capability
  * }
  * ```
  */
-export const compose = <T extends any[]>(...mixins: T) =>
-  <U extends Constructor>(Base: U) =>
-    mixins.reduce((acc, mixin) => mixin(acc), Base)
+export function compose(...mixins: Mixin[]) {
+  return <T extends Constructor>(Base: T): T => {
+    return mixins.reduce((acc, mixin) => mixin(acc), Base as Constructor) as T
+  }
+}
 
 /**
  * Constructor type for mixin composition with Web Component lifecycle methods

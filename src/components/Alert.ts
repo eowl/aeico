@@ -1,13 +1,7 @@
-import AeicoElement from '../core/AeicoElement'
 import type { InferProperties, Props } from '../core/types'
-import { WithTheme } from '../mixins/WithTheme'
-import { WithI18n } from '../mixins/WithI18n'
 import alertStyle from '../assets/css/common/alert.css?inline'
+import AeicoComponent from './AeicoComponent'
 
-/**
- * Base class with theme and i18n support
- */
-const AlertBase = WithI18n(WithTheme(AeicoElement))
 
 /**
  * Alert Component
@@ -35,7 +29,7 @@ const AlertBase = WithI18n(WithTheme(AeicoElement))
  * <ae-alert variant="warning" size="sm">Small warning</ae-alert>
  * ```
  */
-class Alert extends AlertBase {
+class Alert extends AeicoComponent {
   static properties: Props = {
     variant: { type: String },
     size: { type: String },

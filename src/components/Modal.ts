@@ -1,15 +1,12 @@
-import AeicoElement from '../core/AeicoElement'
 import type { InferProperties, Props, Watchers } from '../core/types'
 import { modalSpec } from '../assets/css/specs'
-import { WithTheme } from '../mixins/WithTheme'
-import { WithI18n } from '../mixins/WithI18n'
+import AeicoComponent from './AeicoComponent'
 
 /**
  * Base class with theme and i18n support
  */
-const ModalBase = WithI18n(WithTheme(AeicoElement))
 
-class Modal extends ModalBase {
+class Modal extends AeicoComponent {
   private overlay: HTMLElement | null = null
   private modalContainer: HTMLElement | null = null
   private titleElement: HTMLElement | null = null

@@ -1,28 +1,20 @@
-import AeicoElement from './AeicoElement'
-import type { FieldI18nKeys, InferProperties, Props, Watchers } from './types'
-import { WithTheme } from '../mixins/WithTheme'
-import { WithI18n } from '../mixins/WithI18n'
+import type { FieldI18nKeys, InferProperties, Props, Watchers } from '../core/types'
+import AeicoComponent from './AeicoComponent'
 
 export type FieldAction = 'clear' | 'reset' | 'change'
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
 
 /**
- * Base class with theme and i18n support
- * Composed using WithTheme and WithI18n mixins
- */
-const AeicoFieldBase = WithI18n(WithTheme(AeicoElement))
-
-/**
  * Base class for form field components
  * 
  * Provides common functionality for field components including:
- * - Theme support (via WithTheme mixin)
- * - i18n integration (via WithI18n mixin)
+ * - Theme support (via Themeable mixin)
+ * - i18n integration (via Localizable mixin)
  * - Reset button management
  * - Value management
  * - Common configuration handling
  */
-class AeicoField extends AeicoFieldBase {
+class AeicoField extends AeicoComponent {
   /**
    * Define base field properties (extends AeicoElement properties)
    */

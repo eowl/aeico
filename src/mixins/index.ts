@@ -6,11 +6,11 @@
  * 
  * @example
  * ```typescript
- * import { compose, WithTheme, WithI18n } from 'aeico/mixins'
+ * import { compose, Themeable, Localizable } from 'aeico/mixins'
  * import { AeicoElement } from 'aeico/core'
  * 
  * // Compose multiple capabilities
- * const MyBase = compose(WithTheme, WithI18n)(AeicoElement)
+ * const MyBase = compose(Themeable, Localizable)(AeicoElement)
  * 
  * class MyComponent extends MyBase {
  *   // Now has theme and i18n support
@@ -21,8 +21,8 @@
 export { compose } from './compose'
 export type { Constructor, Mixin } from './compose'
 
-export { WithTheme } from './WithTheme'
-export type { WithThemeInterface } from './WithTheme'
+export { Themeable } from './Themeable'
+export type { ThemeableProps } from './Themeable'
 
-export { WithI18n } from './WithI18n'
-export type { WithI18nInterface } from './WithI18n'
+export { Localizable } from './Localizable'
+export type { LocalizableProps } from './Localizable'

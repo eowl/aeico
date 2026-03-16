@@ -6,6 +6,7 @@ import CheckboxField from '../../../src/components/CheckboxField.js'
 const TAG_NAME = 'checkbox-field'
 
 before(async () => {
+  CheckboxField.register()
   await whenDefined(TAG_NAME)
 })
 

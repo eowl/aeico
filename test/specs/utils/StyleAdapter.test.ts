@@ -77,7 +77,7 @@ describe('StyleAdapter', () => {
       styleStore.preloadStyle('test-init-layer1', '.layer1 { color: red; }')
       const { shadowRoot, style } = makeShadowRoot()
       const adapter = new StyleAdapter(shadowRoot, style)
-      adapter.initialize({ ...baseOptions, applyStyleNames: ['test-init-layer1'] })
+      adapter.initialize({ ...baseOptions, useStyles: ['test-init-layer1'] })
       expect(shadowRoot.adoptedStyleSheets).to.have.lengthOf(1)
     })
 

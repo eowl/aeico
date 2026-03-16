@@ -4,7 +4,7 @@
  * Main entry point — exports core classes, mixins, configuration, and utilities.
  * 
  * ```typescript
- * import { AeicoElement, setComponentConfig, WithTheme } from 'aeico'
+ * import { AeicoElement, setComponentConfig, Themeable } from 'aeico'
  * import { SelectField, Button } from 'aeico/components'
  * ```
  * 
@@ -13,17 +13,17 @@
 
 // Base classes
 export { default as AeicoElement } from './core/AeicoElement'
-export { default as AeicoField } from './core/AeicoField'
+export { default as AeicoField } from './components/AeicoField'
 export type { AeicoElementProps } from './core/AeicoElement'
-export type { AeicoFieldProps, FieldAction, FieldElement } from './core/AeicoField'
+export type { AeicoFieldProps, FieldAction, FieldElement } from './components/AeicoField'
 
 // Mixins
 export { compose } from './mixins/compose'
 export type { Constructor, Mixin } from './mixins/compose'
-export { WithTheme } from './mixins/WithTheme'
-export type { WithThemeInterface } from './mixins/WithTheme'
-export { WithI18n } from './mixins/WithI18n'
-export type { WithI18nInterface } from './mixins/WithI18n'
+export { Themeable } from './mixins/Themeable'
+export type { ThemeableProps } from './mixins/Themeable'
+export { Localizable } from './mixins/Localizable'
+export type { LocalizableProps } from './mixins/Localizable'
 
 // Configuration & Services
 export {

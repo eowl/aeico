@@ -2,7 +2,7 @@ import type { Constructor } from './compose'
 import { getComponentConfig } from '../core/configProvider'
 
 /**
- * WithI18n Mixin
+ * Localizable Mixin
  * 
  * Adds internationalization support to a component, including:
  * - enableI18n property for controlling i18n feature
@@ -13,10 +13,10 @@ import { getComponentConfig } from '../core/configProvider'
  * 
  * @example
  * ```typescript
- * import { WithI18n } from './mixins/WithI18n'
+ * import { Localizable } from './mixins/Localizable'
  * import AeicoElement from './AeicoElement'
  * 
- * class MyComponent extends WithI18n(AeicoElement) {
+ * class MyComponent extends Localizable(AeicoElement) {
  *   render() {
  *     this.shadowRoot.innerHTML = `
  *       <button>${this.t('buttons.save', 'Save')}</button>
@@ -30,7 +30,7 @@ import { getComponentConfig } from '../core/configProvider'
  * }
  * ```
  */
-export function WithI18n<T extends Constructor>(Base: T) {
+export function Localizable<T extends Constructor>(Base: T) {
   return class extends Base {
     declare enableI18n?: boolean
     declare i18n?: Record<string, any>
@@ -150,9 +150,9 @@ export function WithI18n<T extends Constructor>(Base: T) {
 }
 
 /**
- * Type augmentation for components using WithI18n
+ * Type augmentation for components using Localizable
  */
-export interface WithI18nInterface {
+export type LocalizableProps = {
   enableI18n?: boolean
   i18n?: Record<string, any>
   i18nEnabled: boolean

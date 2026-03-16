@@ -2,7 +2,7 @@ import type { Constructor } from './compose'
 import type { Props } from '../core/types'
 
 /**
- * WithTheme Mixin
+ * Themeable Mixin
  * 
  * Adds theme support to a component via the theme attribute.
  * Theme switching is now handled purely via CSS using :host([theme]) selectors.
@@ -12,10 +12,10 @@ import type { Props } from '../core/types'
  * 
  * @example
  * ```typescript
- * import { WithTheme } from './mixins/WithTheme'
+ * import { Themeable } from './mixins/Themeable'
  * import AeicoElement from './AeicoElement'
  * 
- * class MyComponent extends WithTheme(AeicoElement) {
+ * class MyComponent extends Themeable(AeicoElement) {
  *   // theme property is automatically available
  * }
  * 
@@ -36,8 +36,8 @@ import type { Props } from '../core/types'
  * }
  * ```
  */
-export function WithTheme<T extends Constructor>(Base: T) {
-  const ThemeClass = class extends Base {
+export function Themeable<T extends Constructor>(Base: T) {
+  return class extends Base {
     static properties: Props = {
       ...(Base as any).properties,
       theme: { type: String },
@@ -46,12 +46,11 @@ export function WithTheme<T extends Constructor>(Base: T) {
     declare theme?: string
   }
 
-  return ThemeClass
 }
 
 /**
- * Type augmentation for components using WithTheme
+ * Type augmentation for components using Themeable
  */
-export interface WithThemeInterface {
+export type ThemeableProps = {
   theme?: string
 }

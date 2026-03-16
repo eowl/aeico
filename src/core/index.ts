@@ -7,10 +7,10 @@
  * @example
  * ```typescript
  * import { AeicoElement, AeicoField } from 'aeico/core'
- * import { compose, WithTheme, WithI18n } from 'aeico/mixins'
+ * import { compose, Themeable, Localizable } from 'aeico/mixins'
  * 
  * // Build your own base class
- * const MyBase = compose(WithTheme, WithI18n)(AeicoElement)
+ * const MyBase = compose(Themeable, Localizable)(AeicoElement)
  * 
  * class MyComponent extends MyBase {
  *   // Your component implementation
@@ -20,8 +20,7 @@
 
 // Base classes
 export { default as AeicoElement } from './AeicoElement'
-export { default as AeicoField } from './AeicoField'
 
 // Types
 export type { AeicoElementProps } from './AeicoElement'
-export type { AeicoFieldProps, FieldAction, FieldElement } from './AeicoField'
+export type { AeicoFieldProps, FieldAction, FieldElement } from '../components/AeicoField'
