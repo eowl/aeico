@@ -6,10 +6,10 @@ export default defineConfig({
     lib: {
       entry: {
         index: path.resolve(__dirname, 'src/index.ts'),
-        core: path.resolve(__dirname, 'src/core.ts'),
+        core: path.resolve(__dirname, 'src/core/index.ts'),
         components: path.resolve(__dirname, 'src/components/index.ts'),
         mixins: path.resolve(__dirname, 'src/mixins/index.ts'),
-        utils: path.resolve(__dirname, 'src/utils.ts'),
+        utils: path.resolve(__dirname, 'src/utils/index.ts'),
       },
       name: 'Aeico',
       // Remove formats here, specify in output options instead

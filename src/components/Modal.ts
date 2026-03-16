@@ -1,5 +1,5 @@
-import AeicoElement from '../AeicoElement'
-import type { InferProperties, Props, Watchers } from '../types'
+import AeicoElement from '../core/AeicoElement'
+import type { InferProperties, Props, Watchers } from '../core/types'
 import { modalSpec } from '../assets/css/specs'
 import { WithTheme } from '../mixins/WithTheme'
 import { WithI18n } from '../mixins/WithI18n'

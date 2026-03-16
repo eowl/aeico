@@ -1,5 +1,5 @@
-import AeicoElement from '../AeicoElement'
-import type { InferProperties, Props } from '../types'
+import AeicoElement from '../core/AeicoElement'
+import type { InferProperties, Props } from '../core/types'
 import { WithTheme } from '../mixins/WithTheme'
 import { WithI18n } from '../mixins/WithI18n'
 import buttonStyle from '../assets/css/common/button.css?inline'

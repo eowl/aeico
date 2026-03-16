@@ -1,7 +1,7 @@
 import AeicoElement from './AeicoElement'
 import type { FieldI18nKeys, InferProperties, Props, Watchers } from './types'
-import { WithTheme } from './mixins/WithTheme'
-import { WithI18n } from './mixins/WithI18n'
+import { WithTheme } from '../mixins/WithTheme'
+import { WithI18n } from '../mixins/WithI18n'
 
 export type FieldAction = 'clear' | 'reset' | 'change'
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement

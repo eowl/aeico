@@ -15,7 +15,7 @@ import formControlsStyle from '../assets/css/common/form-controls.css?inline'
 import buttonStyle from '../assets/css/common/button.css?inline'
 import dialogStyle from '../assets/css/common/dialog.css?inline'
 import alertStyle from '../assets/css/common/alert.css?inline'
-import type { StyleSpec } from '../types'
+import type { StyleSpec } from '../core/types'
 
 export type PresetStyleName = 'variables' | 'base' | 'grid' | 'form-controls' | 'button' | 'dialog' | 'alert'
 

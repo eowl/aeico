@@ -12,10 +12,10 @@
  */
 
 // Base classes
-export { default as AeicoElement } from './AeicoElement'
-export { default as AeicoField } from './AeicoField'
-export type { AeicoElementProps } from './AeicoElement'
-export type { AeicoFieldProps, FieldAction, FieldElement } from './AeicoField'
+export { default as AeicoElement } from './core/AeicoElement'
+export { default as AeicoField } from './core/AeicoField'
+export type { AeicoElementProps } from './core/AeicoElement'
+export type { AeicoFieldProps, FieldAction, FieldElement } from './core/AeicoField'
 
 // Mixins
 export { compose } from './mixins/compose'
@@ -31,23 +31,23 @@ export {
   getComponentConfig,
   hasComponentConfig,
   getConfigValue
-} from './configProvider'
-export type { ComponentConfig } from './configProvider'
+} from './core/configProvider'
+export type { ComponentConfig } from './core/configProvider'
 
 export { 
   setI18nService,
   getI18nService,
   hasI18nService
-} from './i18n'
+} from './core/i18n'
 
 // Event system
-export { createEventEmitter } from './events'
-export type { ComponentEventEmitter } from './events'
+export { createEventEmitter } from './core/events'
+export type { ComponentEventEmitter } from './core/events'
 
 // Types
 export {
   isSelectOption
-} from './types'
+} from './core/types'
 export type {
   ThemeType,
   SizeType,
@@ -64,7 +64,7 @@ export type {
   StyleGenerationConfig,
   SelectOption,
   SelectOptions
-} from './types'
+} from './core/types'
 
 // Utilities
 export { default as styleStore } from './utils/styleStore'

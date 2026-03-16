@@ -1,5 +1,5 @@
 import styleStore from './styleStore'
-import type { StyleProps, StyleEntry, StyleSpec } from '../types'
+import type { StyleProps, StyleEntry, StyleSpec } from '../core/types'
 
 /**
  * Options passed to StyleAdapter.initialize() on first connectedCallback.

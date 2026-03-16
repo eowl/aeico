@@ -1,4 +1,4 @@
-import { StyleAdapter } from './utils/StyleAdapter'
+import { StyleAdapter } from '../utils/StyleAdapter'
 import type { 
   StyleProps,
   StyleEntry,

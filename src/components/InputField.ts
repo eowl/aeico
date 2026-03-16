@@ -1,5 +1,5 @@
-import AeicoField from '../AeicoField'
-import type { InferProperties, Props, Watchers } from '../types'
+import AeicoField from '../core/AeicoField'
+import type { InferProperties, Props, Watchers } from '../core/types'
 import { inputFieldSpec } from '../assets/css/specs'
 
 class InputField extends AeicoField {

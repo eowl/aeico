@@ -13,7 +13,7 @@
       "require": "./dist/index.cjs"
     },
     "./core": {
-      "types": "./dist/types/core.d.ts",
+      "types": "./dist/types/core/index.d.ts",
       "import": "./dist/core.js",
       "require": "./dist/core.cjs"
     },
@@ -28,7 +28,7 @@
       "require": "./dist/mixins.cjs"
     },
     "./utils": {
-      "types": "./dist/types/utils.d.ts",
+      "types": "./dist/types/utils/index.d.ts",
       "import": "./dist/utils.js",
       "require": "./dist/utils.cjs"
     }

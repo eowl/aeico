@@ -20,7 +20,7 @@ import inputFieldCss from './input-field.css?inline'
 import checkboxFieldCss from './checkbox-field.css?inline'
 import modalCss from './modal.css?inline'
 
-import type { StyleSpec } from '../../types'
+import type { StyleSpec } from '../../core/types'
 
 export const variablesSpec: StyleSpec = {
   id: 'aeico:variables',

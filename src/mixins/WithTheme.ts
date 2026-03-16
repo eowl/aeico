@@ -1,5 +1,5 @@
 import type { Constructor } from './compose'
-import type { Props } from '../types'
+import type { Props } from '../core/types'
 
 /**
  * WithTheme Mixin

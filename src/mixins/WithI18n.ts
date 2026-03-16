@@ -1,5 +1,5 @@
 import type { Constructor } from './compose'
-import { getComponentConfig } from '../configProvider'
+import { getComponentConfig } from '../core/configProvider'
 
 /**
  * WithI18n Mixin
