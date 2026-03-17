@@ -35,6 +35,7 @@ class CheckboxField extends AeicoField {
   }
 
   render() {
+    if (this.fieldElement) return
 
     this.shadowRoot!.innerHTML = ''
 

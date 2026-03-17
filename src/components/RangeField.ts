@@ -84,6 +84,8 @@ class RangeField extends AeicoField {
   }
 
   render() {
+    if (this.fieldElement) return
+
     this.shadowRoot!.innerHTML = ''
     
     const container = document.createElement('div')

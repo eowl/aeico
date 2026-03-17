@@ -62,6 +62,8 @@ class Modal extends AeicoComponent {
   }
 
   render() {
+    if (this.overlay) return
+
     this.shadowRoot!.innerHTML = ''
 
     const template = document.createElement('template')
@@ -98,6 +100,7 @@ class Modal extends AeicoComponent {
 
   connectedCallback() {
     super.connectedCallback()
+    this.render()
   }
 
   /**

@@ -3,7 +3,7 @@ import { mount, unmountAll, updated, whenDefined } from '../../helpers/mount.js'
 import { randomItem } from '../../helpers/utils.js'
 import CheckboxField from '../../../src/components/CheckboxField.js'
 
-const TAG_NAME = 'checkbox-field'
+const TAG_NAME = 'ae-checkbox'
 
 before(async () => {
   CheckboxField.register()

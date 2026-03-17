@@ -48,14 +48,20 @@ class RadioField extends AeicoField {
   }
 
   protected onOptionsChanged(): void {
+    this._radioInputs = []
+    this._optionButtons = []
     this.render()
   }
 
   protected onTypeChanged(): void {
+    this._radioInputs = []
+    this._optionButtons = []
     this.render()
   }
 
   render() {
+    if (this._radioInputs?.length) return
+
     this.shadowRoot!.innerHTML = ''
     this._radioInputs = []
     this._optionButtons = []

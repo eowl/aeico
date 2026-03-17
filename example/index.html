@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aeico Components</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --surface-bg: #121212;
+      --card-bg: #1e1e1e;
+      --border-color: #333;
+      --text-primary: #e0e0e0;
+      --text-secondary: #999;
+      --accent: #6366f1;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--surface-bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .section .tag {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--accent);
+      background: rgba(99, 102, 241, 0.1);
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin-top: 0.75rem;
+    }
+
+    .demo-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    #event-log {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      background: #0a0a0a;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      max-height: 150px;
+      overflow-y: auto;
+      color: #a5f3fc;
+    }
+
+    #event-log:empty::before {
+      content: 'Events will appear here...';
+      color: var(--text-secondary);
+    }
+
+    .clear-log {
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Aeico Components</h1>
+  <p class="subtitle">Interactive showcase of all components</p>
+
+  <!-- InputField -->
+  <div class="section">
+    <h2>InputField</h2>
+    <span class="tag">&lt;ae-input&gt;</span>
+    <div class="demo-group">
+      <label>With resettable</label>
+      <ae-input placeholder="Type something..." resettable></ae-input>
+      <label>With clearable</label>
+      <ae-input placeholder="Clearable input" clearable value="Hello"></ae-input>
+      <label>With resettable and clearable</label>
+      <ae-input placeholder="Resettable and clearable input" resettable clearable value="Hello" defaultValue="Hello"></ae-input>
+    </div>
+  </div>
+
+  <!-- CheckboxField -->
+  <div class="section">
+    <h2>CheckboxField</h2>
+    <span class="tag">&lt;ae-checkbox&gt;</span>
+    <div class="demo-row">
+      <ae-checkbox resettable></ae-checkbox>
+      <ae-checkbox checked resettable></ae-checkbox>
+      <ae-checkbox variant="toggle"></ae-checkbox>
+      <ae-checkbox variant="toggle" checked></ae-checkbox>
+    </div>
+  </div>
+
+  <!-- RadioField -->
+  <div class="section">
+    <h2>RadioField</h2>
+    <span class="tag">&lt;ae-radio&gt;</span>
+    <div class="demo-group">
+      <label>Default</label>
+      <ae-radio id="radio-default"></ae-radio>
+      <label>Button style</label>
+      <ae-radio id="radio-button" type="button"></ae-radio>
+      <label>Segmented style</label>
+      <ae-radio id="radio-segmented" type="segmented"></ae-radio>
+    </div>
+  </div>
+
+  <!-- RangeField -->
+  <div class="section">
+    <h2>RangeField</h2>
+    <span class="tag">&lt;ae-range&gt;</span>
+    <div class="demo-group">
+      <label>Default (0–100)</label>
+      <ae-range value="50" resettable></ae-range>
+      <label>Percentage (step 5)</label>
+      <ae-range value="75" min="0" max="100" step="5" percentage resettable></ae-range>
+    </div>
+  </div>
+
+  <!-- SelectField -->
+  <div class="section">
+    <h2>SelectField</h2>
+    <span class="tag">&lt;ae-select&gt;</span>
+    <div class="demo-group">
+      <label>Default</label>
+      <ae-select id="select-default" resettable></ae-select>
+    </div>
+  </div>
+
+  <!-- Button -->
+  <div class="section">
+    <h2>Button</h2>
+    <span class="tag">&lt;ae-button&gt;</span>
+    <div class="demo-row">
+      <ae-button>Default</ae-button>
+      <ae-button variant="primary">Primary</ae-button>
+      <ae-button variant="secondary">Secondary</ae-button>
+      <ae-button variant="success">Success</ae-button>
+      <ae-button variant="danger">Danger</ae-button>
+      <ae-button variant="warning">Warning</ae-button>
+      <ae-button variant="info">Info</ae-button>
+    </div>
+    <div class="demo-row">
+      <ae-button variant="ghost">Ghost</ae-button>
+      <ae-button variant="ghost-primary">Ghost Primary</ae-button>
+      <ae-button variant="ghost-danger">Ghost Danger</ae-button>
+      <ae-button variant="text">Text</ae-button>
+      <ae-button disabled>Disabled</ae-button>
+    </div>
+    <div class="demo-row">
+      <ae-button size="xs" variant="primary">XS</ae-button>
+      <ae-button size="sm" variant="primary">SM</ae-button>
+      <ae-button size="md" variant="primary">MD</ae-button>
+      <ae-button size="lg" variant="primary">LG</ae-button>
+    </div>
+  </div>
+
+  <!-- Alert -->
+  <div class="section">
+    <h2>Alert</h2>
+    <span class="tag">&lt;ae-alert&gt;</span>
+    <div class="demo-group">
+      <ae-alert variant="primary">Primary alert message</ae-alert>
+      <ae-alert variant="success">Success alert message</ae-alert>
+      <ae-alert variant="warning">Warning alert message</ae-alert>
+      <ae-alert variant="danger">Danger alert message</ae-alert>
+      <ae-alert variant="info">Info alert message</ae-alert>
+      <ae-alert variant="info" dismissible>Dismissible alert — click to close</ae-alert>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="section">
+    <h2>Modal</h2>
+    <span class="tag">&lt;ae-modal&gt;</span>
+    <div class="demo-row">
+      <ae-button variant="primary" id="open-modal-btn">Open Modal</ae-button>
+    </div>
+    <ae-modal id="demo-modal" label="Demo Modal" width="480px" show-close-button>
+      <p style="padding: 1rem; color: var(--text-primary);">This is the modal content. Click the overlay or close button to dismiss.</p>
+    </ae-modal>
+  </div>
+
+  <!-- Event Log -->
+  <div class="section">
+    <h2>Event Log <span class="clear-log" id="clear-log">[clear]</span></h2>
+    <div id="event-log"></div>
+  </div>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

@@ -45,10 +45,14 @@ class SelectField extends AeicoField {
   }
 
   protected onOptionsChanged(): void {
-    this.updateOptions()
+    if (this.fieldElement) {
+      this.updateOptions()
+    }
   }
 
   render() {
+    if (this.fieldElement) return
+
     this.shadowRoot!.innerHTML = ''
     
     const container = document.createElement('div')
