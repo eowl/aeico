@@ -177,25 +177,32 @@
     <span class="tag">&lt;ae-button&gt;</span>
     <div class="demo-row">
       <ae-button>Default</ae-button>
-      <ae-button variant="primary">Primary</ae-button>
-      <ae-button variant="secondary">Secondary</ae-button>
-      <ae-button variant="success">Success</ae-button>
-      <ae-button variant="danger">Danger</ae-button>
-      <ae-button variant="warning">Warning</ae-button>
-      <ae-button variant="info">Info</ae-button>
+      <ae-button color="primary">Primary</ae-button>
+      <ae-button color="secondary">Secondary</ae-button>
+      <ae-button color="success">Success</ae-button>
+      <ae-button color="danger">Danger</ae-button>
+      <ae-button color="warning">Warning</ae-button>
+      <ae-button color="info">Info</ae-button>
     </div>
     <div class="demo-row">
-      <ae-button variant="ghost">Ghost</ae-button>
-      <ae-button variant="ghost-primary">Ghost Primary</ae-button>
-      <ae-button variant="ghost-danger">Ghost Danger</ae-button>
-      <ae-button variant="text">Text</ae-button>
+      <ae-button variant="outlined">Default</ae-button>
+      <ae-button variant="outlined" color="primary">Primary</ae-button>
+      <ae-button variant="outlined" color="success">Success</ae-button>
+      <ae-button variant="outlined" color="danger">Danger</ae-button>
+      <ae-button variant="outlined" color="warning">Warning</ae-button>
+    </div>
+    <div class="demo-row">
+      <ae-button variant="ghost">Default</ae-button>
+      <ae-button variant="ghost" color="primary">Primary</ae-button>
+      <ae-button variant="ghost" color="danger">Danger</ae-button>
+      <ae-button variant="text" color="primary">Text</ae-button>
       <ae-button disabled>Disabled</ae-button>
     </div>
     <div class="demo-row">
-      <ae-button size="xs" variant="primary">XS</ae-button>
-      <ae-button size="sm" variant="primary">SM</ae-button>
-      <ae-button size="md" variant="primary">MD</ae-button>
-      <ae-button size="lg" variant="primary">LG</ae-button>
+      <ae-button size="xs" color="primary">XS</ae-button>
+      <ae-button size="sm" color="primary">SM</ae-button>
+      <ae-button size="md" color="primary">MD</ae-button>
+      <ae-button size="lg" color="primary">LG</ae-button>
     </div>
   </div>
 
@@ -204,12 +211,20 @@
     <h2>Alert</h2>
     <span class="tag">&lt;ae-alert&gt;</span>
     <div class="demo-group">
-      <ae-alert variant="primary">Primary alert message</ae-alert>
-      <ae-alert variant="success">Success alert message</ae-alert>
-      <ae-alert variant="warning">Warning alert message</ae-alert>
-      <ae-alert variant="danger">Danger alert message</ae-alert>
-      <ae-alert variant="info">Info alert message</ae-alert>
-      <ae-alert variant="info" dismissible>Dismissible alert — click to close</ae-alert>
+      <label>Subtle (default)</label>
+      <ae-alert color="primary">Primary</ae-alert>
+      <ae-alert color="success">Success</ae-alert>
+      <ae-alert color="warning">Warning</ae-alert>
+      <ae-alert color="danger">Danger</ae-alert>
+      <ae-alert color="info">Info</ae-alert>
+      <label>Filled</label>
+      <ae-alert variant="filled" color="primary">Filled primary</ae-alert>
+      <ae-alert variant="filled" color="success">Filled success</ae-alert>
+      <ae-alert variant="filled" color="danger">Filled danger</ae-alert>
+      <label>Outlined</label>
+      <ae-alert variant="outlined" color="primary">Outlined primary</ae-alert>
+      <ae-alert variant="outlined" color="warning">Outlined warning</ae-alert>
+      <ae-alert color="info" dismissible>Dismissible alert — click to close</ae-alert>
     </div>
   </div>
 
@@ -218,7 +233,7 @@
     <h2>Modal</h2>
     <span class="tag">&lt;ae-modal&gt;</span>
     <div class="demo-row">
-      <ae-button variant="primary" id="open-modal-btn">Open Modal</ae-button>
+      <ae-button color="primary" id="open-modal-btn">Open Modal</ae-button>
     </div>
     <ae-modal id="demo-modal" label="Demo Modal" width="480px" show-close-button>
       <p style="padding: 1rem; color: var(--text-primary);">This is the modal content. Click the overlay or close button to dismiss.</p>

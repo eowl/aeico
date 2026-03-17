@@ -31,6 +31,7 @@ import AeicoComponent from './AeicoComponent'
  */
 class Alert extends AeicoComponent {
   static properties: Props = {
+    color: { type: String },
     variant: { type: String },
     size: { type: String },
     dismissible: { type: Boolean },
@@ -42,7 +43,8 @@ class Alert extends AeicoComponent {
   protected static useStyles = ['alert']
   protected static stylesheets = [alertStyle]
 
-  declare variant?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
+  declare color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
+  declare variant?: 'subtle' | 'filled' | 'outlined'
   declare size?: 'sm' | 'md' | 'lg'
   declare dismissible?: boolean
   declare icon?: boolean
@@ -52,16 +54,17 @@ class Alert extends AeicoComponent {
 
   connectedCallback() {
     super.connectedCallback()
+    // Set defaults so :host([attr]) CSS selectors match
+    if (!this.hasAttribute('variant')) this.setAttribute('variant', 'subtle')
+    if (!this.hasAttribute('color')) this.setAttribute('color', 'primary')
     this.render()
   }
 
   protected updated(changedProps: Map<string, any>) {
     super.updated(changedProps)
-    
-    if (changedProps.has('variant') || 
-        changedProps.has('size') ||
-        changedProps.has('dismissible') ||
-        changedProps.has('icon')) {
+    // color/variant/size/icon are handled by :host([attr]) CSS — no re-render needed
+    // dismissible changes the DOM structure (adds/removes close button)
+    if (changedProps.has('dismissible')) {
       this.render()
     }
   }
@@ -75,19 +78,8 @@ class Alert extends AeicoComponent {
   protected render() {
     if (!this.shadowRoot || !this.isVisible) return
 
-    const variant = this.variant || 'primary'
-    const size = this.size || 'md'
-    
-    const classes = [
-      'alert',
-      `alert-${variant}`,
-      this.dismissible ? 'alert-dismissible' : '',
-      this.icon ? 'alert-icon' : '',
-      size !== 'md' ? `alert-${size}` : ''
-    ].filter(Boolean).join(' ')
-
     this.shadowRoot.innerHTML = `
-      <div class="${classes}" role="alert" part="alert">
+      <div class="alert" role="alert" part="alert">
         <slot></slot>
         ${this.dismissible ? `
           <button 

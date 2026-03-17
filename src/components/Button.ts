@@ -27,6 +27,7 @@ import AeicoComponent from './AeicoComponent'
  */
 class Button extends AeicoComponent {
   static properties: Props = {
+    color: { type: String },
     variant: { type: String },
     size: { type: String },
     disabled: { type: Boolean },
@@ -38,7 +39,8 @@ class Button extends AeicoComponent {
   protected static useStyles = ['button']
   protected static stylesheets = [buttonStyle]
 
-  declare variant?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'ghost' | 'ghost-primary' | 'ghost-danger' | 'text'
+  declare color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
+  declare variant?: 'filled' | 'outlined' | 'ghost' | 'text'
   declare size?: 'xs' | 'sm' | 'md' | 'lg'
   declare disabled?: boolean
   declare type?: 'button' | 'submit' | 'reset'
@@ -52,17 +54,21 @@ class Button extends AeicoComponent {
 
   connectedCallback() {
     super.connectedCallback()
+    // Set defaults so :host([attr]) CSS selectors match
+    if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled')
+    if (!this.hasAttribute('color')) this.setAttribute('color', 'default')
+    if (!this.hasAttribute('size')) this.setAttribute('size', 'md')
     this.render()
   }
 
   protected updated(changedProps: Map<string, any>) {
     super.updated(changedProps)
-    
-    if (changedProps.has('disabled') || 
-        changedProps.has('variant') || 
-        changedProps.has('size') ||
-        changedProps.has('type')) {
-      this.render()
+    // color/variant/size are handled by :host([attr]) CSS — no re-render needed
+    if (changedProps.has('disabled') && this.buttonElement) {
+      this.buttonElement.toggleAttribute('disabled', !!this.disabled)
+    }
+    if (changedProps.has('type') && this.buttonElement) {
+      this.buttonElement.type = this.type || 'button'
     }
   }
 
@@ -82,19 +88,11 @@ class Button extends AeicoComponent {
   protected render() {
     if (!this.shadowRoot) return
 
-    const variant = this.variant || 'default'
-    const size = this.size || 'md'
     const type = this.type || 'button'
-    
-    const classes = [
-      'btn',
-      `btn-${variant}`,
-      `btn-${size}`
-    ].join(' ')
 
     this.shadowRoot.innerHTML = `
       <button 
-        class="${classes}" 
+        class="btn" 
         type="${type}"
         ${this.disabled ? 'disabled' : ''}
         part="button"
