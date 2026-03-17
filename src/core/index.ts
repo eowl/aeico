@@ -19,8 +19,10 @@
  */
 
 // Base classes
+export { default as AeicoBase } from './AeicoBase'
 export { default as AeicoElement } from './AeicoElement'
 
 // Types
+export type { AeicoBaseProps } from './AeicoBase'
 export type { AeicoElementProps } from './AeicoElement'
 export type { AeicoFieldProps, FieldAction, FieldElement } from '../components/AeicoField'
