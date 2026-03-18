@@ -39,11 +39,11 @@ class Button extends AeicoComponent {
   protected static useStyles = ['button']
   protected static stylesheets = [buttonStyle]
 
-  declare color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
-  declare variant?: 'filled' | 'outlined' | 'ghost' | 'text'
-  declare size?: 'xs' | 'sm' | 'md' | 'lg'
-  declare disabled?: boolean
-  declare type?: 'button' | 'submit' | 'reset'
+  color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' = 'default'
+  variant?: 'filled' | 'outlined' | 'ghost' | 'text' = 'filled'
+  size?: 'xs' | 'sm' | 'md' | 'lg' = 'md'
+  disabled?: boolean = false
+  type?: 'button' | 'submit' | 'reset' = 'button'
 
   private buttonElement: HTMLButtonElement | null = null
 
@@ -54,10 +54,6 @@ class Button extends AeicoComponent {
 
   connectedCallback() {
     super.connectedCallback()
-    // Set defaults so :host([attr]) CSS selectors match
-    if (!this.hasAttribute('variant')) this.setAttribute('variant', 'filled')
-    if (!this.hasAttribute('color')) this.setAttribute('color', 'default')
-    if (!this.hasAttribute('size')) this.setAttribute('size', 'md')
     this.render()
   }
 

@@ -1,6 +1,8 @@
 /* ── Color tokens (per-color, sets CSS vars on :host) ────────────────────── */
+/* 'default' color is the :host base — any [color="..."] rule overrides via higher specificity */
 
-:host([color="default"]) {
+:host {
+  display: inline-block;
   --btn-solid-bg:          var(--color-gray);
   --btn-solid-bg-hover:    var(--color-gray-light);
   --btn-solid-bg-active:   var(--color-gray-dark);
@@ -97,7 +99,8 @@
   display: inline-block;
 }
 
-/* Base styles */
+/* 'filled' is the default variant — rules live in .btn so they apply when no [variant] attr is present.
+   Other variants override these below. */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -109,7 +112,6 @@
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
-  border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
   outline: none;
@@ -122,15 +124,23 @@
   border-radius: 4px;
   min-width: 64px;
   height: 32px;
+
+  /* filled (default variant) */
+  background:   var(--btn-solid-bg);
+  border: 1px solid var(--btn-border);
+  color:        var(--btn-solid-color);
 }
 
-.btn:focus {
-  outline: none;
+.btn:focus  { outline: none; }
+.btn:active { transform: translateY(1px); }
+
+.btn:hover:not(:disabled) {
+  background:   var(--btn-solid-bg-hover);
+  border-color: var(--btn-border-hover);
+  color:        var(--btn-solid-color-hover, var(--btn-solid-color));
 }
 
-.btn:active {
-  transform: translateY(1px);
-}
+.btn:active:not(:disabled) { background: var(--btn-solid-bg-active); }
 
 /* md is the default, built into .btn base styles above */
 
@@ -158,22 +168,7 @@
   border-radius: 4px;
 }
 
-/* filled: solid background */
-:host([variant="filled"]) .btn {
-  background:   var(--btn-solid-bg);
-  border-color: var(--btn-border);
-  color:        var(--btn-solid-color);
-}
-
-:host([variant="filled"]) .btn:hover:not(:disabled) {
-  background:   var(--btn-solid-bg-hover);
-  border-color: var(--btn-border-hover);
-  color:        var(--btn-solid-color-hover, var(--btn-solid-color));
-}
-
-:host([variant="filled"]) .btn:active:not(:disabled) {
-  background:   var(--btn-solid-bg-active);
-}
+/* filled: default variant (base .btn already covers it) */
 
 /* outlined: transparent bg + themed border */
 :host([variant="outlined"]) .btn {

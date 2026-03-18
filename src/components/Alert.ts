@@ -43,8 +43,8 @@ class Alert extends AeicoComponent {
   protected static useStyles = ['alert']
   protected static stylesheets = [alertStyle]
 
-  declare color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
-  declare variant?: 'subtle' | 'filled' | 'outlined'
+  color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'primary'
+  variant?: 'subtle' | 'filled' | 'outlined' = 'subtle'
   declare size?: 'sm' | 'md' | 'lg'
   declare dismissible?: boolean
   declare icon?: boolean
@@ -54,9 +54,7 @@ class Alert extends AeicoComponent {
 
   connectedCallback() {
     super.connectedCallback()
-    // Set defaults so :host([attr]) CSS selectors match
-    if (!this.hasAttribute('variant')) this.setAttribute('variant', 'subtle')
-    if (!this.hasAttribute('color')) this.setAttribute('color', 'primary')
+
     this.render()
   }
 

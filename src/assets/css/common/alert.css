@@ -2,14 +2,28 @@
   position: relative;
   padding: 12px 16px;
   margin-bottom: 12px;
-  border: 1px solid transparent;
   border-radius: 4px;
   font-size: 12px;
   line-height: 1.6;
+
+  /* subtle (default variant): uses token vars set on :host */
+  background-color: var(--alert-subtle-bg);
+  color:            var(--alert-subtle-color);
+  border: 1px solid var(--alert-subtle-border);
 }
 
 .alert:last-child {
   margin-bottom: 0;
+}
+
+/* 'primary' color is the :host base — any [color="..."] rule overrides via higher specificity */
+:host {
+  --alert-solid-bg:     var(--color-primary);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-primary);
+  --alert-subtle-bg:    var(--color-primary-bg-subtle);
+  --alert-subtle-color: var(--color-primary-text-emphasis);
+  --alert-subtle-border:var(--color-primary-border-subtle);
 }
 
 :host([color="primary"]) {
@@ -84,11 +98,7 @@
   --alert-subtle-border:var(--color-dark-border-subtle);
 }
 
-:host([variant="subtle"]) .alert {
-  background-color: var(--alert-subtle-bg);
-  color:            var(--alert-subtle-color);
-  border-color:     var(--alert-subtle-border);
-}
+/* subtle: default variant (base .alert already covers it) */
 
 :host([variant="filled"]) .alert {
   background-color: var(--alert-solid-bg);
