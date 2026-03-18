@@ -43,8 +43,8 @@ class Alert extends AeicoComponent {
   protected static useStyles = ['alert']
   protected static stylesheets = [alertStyle]
 
-  color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' = 'primary'
-  variant?: 'subtle' | 'filled' | 'outlined' = 'subtle'
+  declare color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
+  declare variant?: 'subtle' | 'filled' | 'outlined'
   declare size?: 'sm' | 'md' | 'lg'
   declare dismissible?: boolean
   declare icon?: boolean

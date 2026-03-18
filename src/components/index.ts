@@ -40,6 +40,7 @@ export { default as RadioField } from './RadioField'
 
 // UI components
 export { default as Button } from './Button'
+export { default as ButtonGroup } from './ButtonGroup'
 export { default as Alert } from './Alert'
 export { default as Modal } from './Modal'
 
@@ -50,5 +51,6 @@ export type { InputFieldProps } from './InputField'
 export type { CheckboxFieldProps } from './CheckboxField'
 export type { RadioFieldProps, RadioFieldType, RadioOption, RadioOptions } from './RadioField'
 export type { ButtonProps } from './Button'
+export type { ButtonGroupProps } from './ButtonGroup'
 export type { AlertProps } from './Alert'
 export type { ModalProps } from './Modal'
