@@ -65,28 +65,13 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Register the component as a custom element. Automatically converts class name to kebab-case for the tag name.
-   * @param name Optional custom tag name. If not provided, uses the kebab-case version of the class name.
-   * @example
-   * ```typescript
-   * class MyComponent extends BaseElement { ... }
-   * MyComponent.register()  // registers as 'my-component'
-   * ```
-   */
-  static register(name?: string) {
-    const tagName = name || this.toKebab(this.name)
-    if (!customElements.get(tagName)) {
-      customElements.define(tagName, this)
-    }
-  }
-
-  /**
    * Convert camelCase or PascalCase to kebab-case.
    * Strips leading underscores/numbers to ensure valid custom element names.
    * @example toKebab('MyComponent') // => 'my-component'
    */
   static toKebab(str: string): string {
     const cleaned = str.replace(/^[_\d]+/, '')
+
     return cleaned.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
   }
 
@@ -118,16 +103,12 @@ class BaseElement extends HTMLElement {
     return collected
   }
 
-  // ─── Constructor ─────────────────────────────────────────────────────────────
-
   constructor() {
     super()
     this.attachShadow({ mode: 'open', delegatesFocus: true })
     this.initializeProperties()
     this.initializeComputed()
   }
-
-  // ─── Internal property initialisation ────────────────────────────────────────
 
   private initializeProperties() {
     const constructor = this.constructor as typeof BaseElement
@@ -230,7 +211,6 @@ class BaseElement extends HTMLElement {
     }
   }
 
-
   /**
    * Perform the update cycle: willUpdate → render → updated → firstUpdated.
    * Called automatically after requestUpdate is triggered.
@@ -292,7 +272,6 @@ class BaseElement extends HTMLElement {
     }
   }
 
-  
   /**
    * Serialize a property value to a string for attribute reflection.
    * Handles custom converters and basic types (Boolean, Number, Array, Object).
@@ -340,7 +319,6 @@ class BaseElement extends HTMLElement {
     }
   }
 
-  
   /**
    * Lifecycle methods to override in subclasses:
    * - willUpdate(changedProperties): called before update, can return false to skip update
@@ -360,6 +338,29 @@ class BaseElement extends HTMLElement {
   connectedCallback() {}
   disconnectedCallback() {}
   attributeChangedCallback(_name: string, _oldValue: string | null, _newValue: string | null) {}
+
+  static tagName?: string
+
+  /**
+   * Register the component as a custom element. Automatically converts class name to kebab-case for the tag name.
+   * @param name Optional custom tag name. If not provided, uses the kebab-case version of the class name.
+   * @example
+   * ```typescript
+   * class MyComponent extends BaseElement { ... }
+   * MyComponent.register()  // registers as 'my-component'
+   * ```
+   */
+  static register(name?: string) {
+    const tagName = name || this.tagName || this.toKebab(this.name)
+
+    if (!tagName || !tagName.includes('-')) {
+      throw new Error(`Invalid registration: ${tagName} must contain a dash.`);
+    }
+
+    if (!customElements.get(tagName)) {
+      customElements.define(tagName, this as unknown as CustomElementConstructor);
+    }
+  }
 }
 
 export default BaseElement

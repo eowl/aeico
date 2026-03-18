@@ -15,8 +15,6 @@ const TAG_NAME_PREFIX = 'ae'
  */
 class AeicoComponent extends BaseComponent {
 
-  static tagName: string = ''
-
   static register(name?: string) {
     const tagName = name || `${TAG_NAME_PREFIX}-${this.tagName || this.toKebab(this.name)}`
 
