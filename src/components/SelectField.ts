@@ -6,6 +6,8 @@ import { selectFieldSpec } from '../assets/css/specs'
 
 class SelectField extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null
+  private slotEl: HTMLSlotElement | null = null
+  private isSlotMode = false
 
   static tagName = 'select'
 
@@ -46,7 +48,51 @@ class SelectField extends AeicoField {
 
   protected onOptionsChanged(): void {
     if (this.fieldElement) {
-      this.updateOptions()
+      // Only update if not in slot mode or slot is empty
+      this.detectMode()
+      if (!this.isSlotMode) {
+        this.updateOptions()
+      }
+    }
+  }
+
+  /**
+   * Detect whether to use slot mode (Light DOM options) or attribute mode
+   */
+  private detectMode(): void {
+    if (!this.slotEl) {
+      this.isSlotMode = false
+      
+      return
+    }
+    const slottedElements = this.slotEl.assignedElements({ flatten: true })
+    const hasOptions = slottedElements.some(el => el.tagName.toLowerCase() === 'option')
+    this.isSlotMode = hasOptions
+  }
+
+  /**
+   * Setup slot mode: clone Light DOM options to shadow select
+   */
+  private setupSlotMode(): void {
+    if (!this.fieldElement || !this.slotEl) return
+    
+    // Get all option elements from Light DOM
+    const slottedElements = this.slotEl.assignedElements({ flatten: true })
+    const slottedOptions = slottedElements.filter(el => el.tagName.toLowerCase() === 'option')
+    
+    // Clear existing options
+    this.fieldElement.innerHTML = ''
+    
+    // Clone each option element to shadow select
+    slottedOptions.forEach(optionEl => {
+      const clonedOption = optionEl.cloneNode(true) as HTMLOptionElement
+      this.fieldElement!.appendChild(clonedOption)
+    })
+    
+    // Restore value if needed
+    const currentValue = this.value
+    if (currentValue) {
+      this.fieldElement.value = String(currentValue)
     }
   }
 
@@ -58,8 +104,20 @@ class SelectField extends AeicoField {
     const container = document.createElement('div')
     container.className = 'select-container'
     
+    // Create slot for Light DOM options
+    this.slotEl = document.createElement('slot')
+    this.slotEl.style.display = 'none' // Hide slot, we'll clone its content
+    this.slotEl.addEventListener('slotchange', () => this.onSlotChange())
+    
     this.fieldElement = document.createElement('select')
-    this.updateOptions()
+    
+    // Detect mode and setup accordingly
+    this.detectMode()
+    if (this.isSlotMode) {
+      this.setupSlotMode()
+    } else {
+      this.updateOptions()
+    }
     
     const currentValue = this.value
     if (currentValue) {
@@ -68,6 +126,7 @@ class SelectField extends AeicoField {
     
     this.fieldElement.addEventListener('change', this.boundOnChange)
     
+    container.appendChild(this.slotEl)
     container.appendChild(this.fieldElement)
     
     this.renderActionButtons(container)
@@ -75,8 +134,21 @@ class SelectField extends AeicoField {
     this.shadowRoot!.appendChild(container)
   }
 
+  /**
+   * Handle slot content changes
+   */
+  private onSlotChange(): void {
+    this.detectMode()
+    if (this.isSlotMode) {
+      this.setupSlotMode()
+    }
+  }
+
   updateOptions() {
     if (!this.fieldElement) return
+    
+    // In slot mode, don't generate options from attribute
+    if (this.isSlotMode) return
     
     const currentValue = this.value
     const valueToRestore = this.fieldElement.value || currentValue

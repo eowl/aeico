@@ -39,7 +39,16 @@ document.querySelectorAll<any>('ae-radio').forEach(el => {
   el.value = 'a'
 })
 
-// Select options
+// SelectField
+
+// Slot Mode (HTML)
+
+const selectSlotEl = document.querySelector<any>('#select-slot')
+if (selectSlotEl) {
+  selectSlotEl.value = 'banana' // 仍可通过 JS 设置 value
+}
+
+// Attribute Mode（JS Method）
 const selectEl = document.querySelector<any>('#select-default')
 if (selectEl) {
   selectEl.options = [

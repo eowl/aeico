@@ -165,9 +165,28 @@
   <div class="section">
     <h2>SelectField</h2>
     <span class="tag">&lt;ae-select&gt;</span>
+    
+    <!-- Slot Mode -->
     <div class="demo-group">
-      <label>Default</label>
+      <label>Slot Mode (HTML)</label>
+      <ae-select id="select-slot" resettable>
+        <option value="apple">Apple</option>
+        <option value="banana" selected>Banana</option>
+        <option value="cherry">Cherry</option>
+        <option value="grape">Grape</option>
+      </ae-select>
+      <small style="color: #666; display: block; margin-top: 4px;">
+        Slot Mode: options defined in HTML, does not support dynamic updates
+      </small>
+    </div>
+    
+    <!-- Attribute Mode -->
+    <div class="demo-group">
+      <label>Attribute Mode (JS)</label>
       <ae-select id="select-default" resettable></ae-select>
+      <small style="color: #666; display: block; margin-top: 4px;">
+        Attribute Mode: options set via JavaScript, supports dynamic updates
+      </small>
     </div>
   </div>
 
