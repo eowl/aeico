@@ -113,6 +113,10 @@ class BaseElement extends HTMLElement {
     return this._ElementBuilder ??= new ElementBuilder()
   }
 
+  protected draw(block: () => void) {
+    this.tags.build(this.shadowRoot || this, block);
+  }
+
   protected get container(): ShadowRoot | HTMLElement {
     const ctor = this.constructor as typeof BaseElement
 

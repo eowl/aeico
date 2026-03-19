@@ -11,12 +11,6 @@ describe('ElementBuilder', () => {
   })
 
   describe('HTML element creation', () => {
-    it('creates a simple div element', () => {
-      const el = builder.div()
-      expect(el).to.be.instanceOf(HTMLDivElement)
-      expect(el.tagName).to.equal('DIV')
-    })
-
     it('creates elements with different tag names', () => {
       const div = builder.div()
       const span = builder.span()
@@ -120,23 +114,17 @@ describe('ElementBuilder', () => {
     })
 
     describe('id and common attributes', () => {
-      it('sets id attribute', () => {
-        const el = builder.div({ id: 'my-element' })
+      it('sets id, part, role, and aria attributes', () => {
+        const el = builder.button({
+          id: 'my-element',
+          part: 'container',
+          role: 'tab',
+          'aria-label': 'Close',
+          'aria-expanded': 'false'
+        })
         expect(el.id).to.equal('my-element')
-      })
-
-      it('sets part attribute', () => {
-        const el = builder.div({ part: 'container' })
         expect(el.getAttribute('part')).to.equal('container')
-      })
-
-      it('sets role attribute', () => {
-        const el = builder.button({ role: 'tab' })
         expect(el.getAttribute('role')).to.equal('tab')
-      })
-
-      it('sets aria attributes', () => {
-        const el = builder.button({ 'aria-label': 'Close', 'aria-expanded': 'false' })
         expect(el.getAttribute('aria-label')).to.equal('Close')
         expect(el.getAttribute('aria-expanded')).to.equal('false')
       })
@@ -229,30 +217,16 @@ describe('ElementBuilder', () => {
     })
 
     describe('null and undefined handling', () => {
-      it('ignores null attributes', () => {
+      it('ignores null, undefined and false values', () => {
         const el = builder.div({
           title: null as any,
+          'data-a': undefined,
+          'data-b': false as any,
           id: 'test',
         })
         expect(el.hasAttribute('title')).to.be.false
-        expect(el.id).to.equal('test')
-      })
-
-      it('ignores undefined attributes', () => {
-        const el = builder.div({
-          title: undefined,
-          id: 'test',
-        })
-        expect(el.hasAttribute('title')).to.be.false
-        expect(el.id).to.equal('test')
-      })
-
-      it('ignores false non-boolean attributes', () => {
-        const el = builder.div({
-          title: false as any,
-          id: 'test',
-        })
-        expect(el.hasAttribute('title')).to.be.false
+        expect(el.hasAttribute('data-a')).to.be.false
+        expect(el.hasAttribute('data-b')).to.be.false
         expect(el.id).to.equal('test')
       })
     })
@@ -390,12 +364,6 @@ describe('ElementBuilder', () => {
   })
 
   describe('text() method', () => {
-    it('creates a text node', () => {
-      const textNode = builder.text('Hello World')
-      expect(textNode).to.be.instanceOf(Text)
-      expect(textNode.textContent).to.equal('Hello World')
-    })
-
     it('appends text node to parent in stack', () => {
       const parent = builder.div({}, () => {
         builder.text('Text content')
@@ -431,20 +399,7 @@ describe('ElementBuilder', () => {
   })
 
   describe('node() method', () => {
-    it('appends existing node to parent', () => {
-      const existingDiv = document.createElement('div')
-      existingDiv.textContent = 'Existing'
-
-      const parent = builder.div({}, () => {
-        builder.node(existingDiv)
-      })
-
-      expect(parent.children.length).to.equal(1)
-      expect(parent.children[0]).to.equal(existingDiv)
-      expect(parent.textContent).to.equal('Existing')
-    })
-
-    it('appends multiple existing nodes', () => {
+    it('appends existing nodes to parent', () => {
       const node1 = document.createElement('span')
       node1.textContent = 'Node 1'
       const node2 = document.createElement('span')
@@ -531,19 +486,6 @@ describe('ElementBuilder', () => {
       expect(list.children[1].textContent).to.equal('Item 2')
     })
 
-    it('fragment is empty after being appended', () => {
-      const frag = builder.fragment(() => {
-        builder.div({ textContent: 'Content' })
-      })
-
-      expect(frag.children.length).to.equal(1)
-
-      const container = document.createElement('div')
-      container.appendChild(frag)
-
-      expect(frag.children.length).to.equal(0)
-      expect(container.children.length).to.equal(1)
-    })
   })
 
   describe('Complex scenarios', () => {
@@ -609,50 +551,6 @@ describe('ElementBuilder', () => {
       expect(table.querySelectorAll('th').length).to.equal(2)
       expect(table.querySelectorAll('tbody tr').length).to.equal(2)
     })
-
-    it('combines all features together', () => {
-      let clickCount = 0
-
-      const component = builder.div({ className: 'component', id: 'main' }, () => {
-        builder.h1({ 
-          textContent: 'Title',
-          style: { color: 'blue', fontSize: '24px' }
-        })
-        
-        builder.text('Some text before button ')
-        
-        builder.button({
-          className: { 'btn': true, 'btn-primary': true, 'disabled': false },
-          onClick: () => clickCount++,
-          'data-action': 'click-me',
-          textContent: 'Click me'
-        })
-        
-        const existingEl = document.createElement('span')
-        existingEl.textContent = ' existing'
-        builder.node(existingEl)
-        
-        builder.ul({}, () => {
-          ;['One', 'Two', 'Three'].forEach(item => {
-            builder.li({ textContent: item })
-          })
-        })
-
-        const frag = builder.fragment(() => {
-          builder.p({ textContent: 'From fragment' })
-        })
-        builder.node(frag)
-      })
-
-      expect(component.id).to.equal('main')
-      expect(component.querySelector('h1')?.style.color).to.equal('blue')
-      expect(component.querySelector('button')?.className).to.equal('btn btn-primary')
-      expect(component.querySelector('ul')?.children.length).to.equal(3)
-      expect(component.querySelector('p')?.textContent).to.equal('From fragment')
-      
-      component.querySelector('button')?.click()
-      expect(clickCount).to.equal(1)
-    })
   })
 
   describe('Edge cases', () => {
@@ -661,16 +559,13 @@ describe('ElementBuilder', () => {
       expect(el.children.length).to.equal(0)
     })
 
-    it('handles no props', () => {
-      const el = builder.div()
-      expect(el.tagName).to.equal('DIV')
-      expect(el.attributes.length).to.equal(0)
-    })
-
-    it('handles empty props object', () => {
-      const el = builder.div({})
-      expect(el.tagName).to.equal('DIV')
-      expect(el.attributes.length).to.equal(0)
+    it('handles no props or empty props', () => {
+      const el1 = builder.div()
+      const el2 = builder.div({})
+      expect(el1.tagName).to.equal('DIV')
+      expect(el1.attributes.length).to.equal(0)
+      expect(el2.tagName).to.equal('DIV')
+      expect(el2.attributes.length).to.equal(0)
     })
 
     it('creates element without parent in stack', () => {

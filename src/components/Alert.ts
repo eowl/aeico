@@ -75,25 +75,25 @@ class Alert extends AeicoComponent {
   protected render() {
     if (!this.isVisible) return
 
-    const { div, slot, button, span } = this.tags
+    this.draw(() => {
+      const { div, slot, button, span } = this.tags
 
-    const el = div({ className: 'alert', role: 'alert', part: 'alert' }, () => {
-      slot()
+      div({ className: 'alert', role: 'alert', part: 'alert' }, () => {
+        slot()
 
-      if (this.dismissible) {
-        button({
-          className: 'alert-close',
-          type: 'button',
-          'aria-label': 'Close',
-          part: 'close-button',
-          onclick: () => this.handleClose()
-        }, () => {
-          span({ 'aria-hidden': 'true', textContent: '\u00d7' })
-        })
-      }
+        if (this.dismissible) {
+          button({
+            className: 'alert-close',
+            type: 'button',
+            'aria-label': 'Close',
+            part: 'close-button',
+            onclick: () => this.handleClose()
+          }, () => {
+            span({ 'aria-hidden': 'true', textContent: '\u00d7' })
+          })
+        }
+      })
     })
-
-    this.replaceContent(el)
   }
 
   /**
