@@ -9,13 +9,22 @@ type TagProps = {
 }
 
 type TagFunction<K extends keyof HTMLElementTagNameMap> = 
-  (props?: TagProps, block?: () => void) => HTMLElementTagNameMap[K]
+  (props?: TagProps, cb?: () => void) => HTMLElementTagNameMap[K]
 
 type HTMLTags = {
   readonly [K in keyof HTMLElementTagNameMap]: TagFunction<K>
 }
 
-interface ElementBuilder extends HTMLTags {}
+type SVGTagFunction<K extends keyof SVGElementTagNameMap> = 
+  (props?: TagProps, cb?: () => void) => SVGElementTagNameMap[K]
+
+type SVGOnlyTags = {
+  readonly [K in Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap | 'text'>]: SVGTagFunction<K>
+}
+
+const SVG_NS = 'http://www.w3.org/2000/svg'
+
+interface ElementBuilder extends HTMLTags, SVGOnlyTags {}
 
 class ElementBuilder {
   private stack: Node[] = []
@@ -30,16 +39,20 @@ class ElementBuilder {
     })
   }
 
-  private _create<T extends keyof HTMLElementTagNameMap>(
-    tagName: T,
+  private _create(
+    tagName: string,
     props?: TagProps,
     cb?: () => void
-  ): HTMLElementTagNameMap[T] {
-    const el = document.createElement(tagName)
+  ): Element {
+    const parent = this.stack[this.stack.length - 1]
+    const isSVG = tagName === 'svg'
+      || (parent instanceof Element && parent.namespaceURI === SVG_NS)
+
+    const el = isSVG
+      ? document.createElementNS(SVG_NS, tagName)
+      : document.createElement(tagName)
 
     if (props) this._applyProps(el, props)
-
-    const parent = this.stack[this.stack.length - 1]
     if (parent) parent.appendChild(el)
 
     if (cb) {
@@ -51,18 +64,15 @@ class ElementBuilder {
     return el
   }
 
-  private _applyProps(el: HTMLElement, props: TagProps) {
+  private _applyProps(el: Element, props: TagProps) {
     for (const [key, value] of Object.entries(props)) {
       if (value == null || value === false) continue
         
       if (key === 'className' || key === 'class') {
-        if (typeof value === 'object') {
-          el.className = Object.entries(value)
-            .filter(([_, active]) => active)
-            .map(([name]) => name).join(' ')
-        } else {
-          el.className = String(value)
-        }
+        const classValue = typeof value === 'object'
+          ? Object.entries(value).filter(([_, active]) => active).map(([name]) => name).join(' ')
+          : String(value)
+        el.setAttribute('class', classValue)
 
         continue
       }
@@ -73,7 +83,7 @@ class ElementBuilder {
       }
 
       if (key === 'style') {
-        if (typeof value === 'object') Object.assign(el.style, value)
+        if (typeof value === 'object' && 'style' in el) Object.assign((el as HTMLElement).style, value)
         continue
       }
 
@@ -91,12 +101,14 @@ class ElementBuilder {
     }
   }
 
-  el = <T extends keyof HTMLElementTagNameMap>(
+  el = <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
     tagName: T,
     props?: TagProps,
     cb?: () => void
-  ): HTMLElementTagNameMap[T] => {
-    return this._create(tagName, props, cb)
+  ): T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T]
+    : T extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[T]
+    : Element => {
+    return this._create(tagName, props, cb) as any
   }
 
   text = (content: string): Text => {
@@ -125,4 +137,4 @@ class ElementBuilder {
 }
 
 export default ElementBuilder
-export type { TagProps, HTMLTags }
+export type { TagProps, HTMLTags, SVGOnlyTags }
