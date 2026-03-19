@@ -49,7 +49,6 @@ class Alert extends AeicoComponent {
   declare dismissible?: boolean
   declare icon?: boolean
 
-  private closeButton: HTMLButtonElement | null = null
   private isVisible: boolean = true
 
   connectedCallback() {
@@ -74,30 +73,27 @@ class Alert extends AeicoComponent {
   }
 
   protected render() {
-    if (!this.shadowRoot || !this.isVisible) return
+    if (!this.isVisible) return
 
-    this.shadowRoot.innerHTML = `
-      <div class="alert" role="alert" part="alert">
-        <slot></slot>
-        ${this.dismissible ? `
-          <button 
-            class="alert-close" 
-            type="button" 
-            aria-label="Close"
-            part="close-button"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        ` : ''}
-      </div>
-    `
+    const { div, slot, button, span } = this.tags
 
-    if (this.dismissible) {
-      this.closeButton = this.shadowRoot.querySelector('.alert-close')
-      if (this.closeButton) {
-        this.closeButton.addEventListener('click', () => this.handleClose())
+    const el = div({ className: 'alert', role: 'alert', part: 'alert' }, () => {
+      slot()
+
+      if (this.dismissible) {
+        button({
+          className: 'alert-close',
+          type: 'button',
+          'aria-label': 'Close',
+          part: 'close-button',
+          onclick: () => this.handleClose()
+        }, () => {
+          span({ 'aria-hidden': 'true', textContent: '\u00d7' })
+        })
       }
-    }
+    })
+
+    this.replaceContent(el)
   }
 
   /**
@@ -121,11 +117,9 @@ class Alert extends AeicoComponent {
    * Hide the alert (without removing from DOM)
    */
   hide() {
-    if (this.shadowRoot) {
-      const alertElement = this.shadowRoot.querySelector('.alert') as HTMLElement
-      if (alertElement) {
-        alertElement.style.display = 'none'
-      }
+    const alertElement = this.queryElement<HTMLElement>('.alert')
+    if (alertElement) {
+      alertElement.style.display = 'none'
     }
   }
 }

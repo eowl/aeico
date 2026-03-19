@@ -6,6 +6,7 @@ import type {
   InferProperties
 } from './types'
 import { createEventEmitter, type ComponentEventEmitter } from './events'
+import ElementBuilder from './ElementBuilder'
 
 /**
  * BaseElement — internal reactive foundation for all Aeico elements.
@@ -103,9 +104,41 @@ class BaseElement extends HTMLElement {
     return collected
   }
 
+  static useShadowDOM: boolean = true
+  static shadowOptions: ShadowRootInit = { mode: 'open', delegatesFocus: true }
+
+  private _ElementBuilder?: ElementBuilder
+
+  protected get tags(): ElementBuilder {
+    return this._ElementBuilder ??= new ElementBuilder()
+  }
+
+  protected get container(): ShadowRoot | HTMLElement {
+    const ctor = this.constructor as typeof BaseElement
+
+    return ctor.useShadowDOM ? this.shadowRoot! : this
+  }
+
+  protected replaceContent(content: Node | DocumentFragment): void {
+    this.container.replaceChildren(content)
+  }
+
+  protected appendContent(content: Node | DocumentFragment): void {
+    this.container.appendChild(content)
+  }
+
+  protected queryElement<T extends Element = Element>(selector: string): T | null {
+    return this.container.querySelector<T>(selector)
+  }
+
   constructor() {
     super()
-    this.attachShadow({ mode: 'open', delegatesFocus: true })
+    
+    const ctor = this.constructor as typeof BaseElement
+    if (ctor.useShadowDOM) {
+      this.attachShadow(ctor.shadowOptions)
+    }
+
     this.initializeProperties()
     this.initializeComputed()
   }
