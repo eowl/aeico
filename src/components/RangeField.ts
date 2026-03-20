@@ -113,7 +113,7 @@ class RangeField extends AeicoField {
       }
     })
     
-    // Only submit value on mouse release/click (change event), avoid triggering performUpdate → render() during dragging
+    // Only submit value on mouse release/click (change event), avoid triggering executeUpdate → render() during dragging
     this.fieldElement.addEventListener('change', this.boundOnChange)
     
     container.appendChild(this.fieldElement)

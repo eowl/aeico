@@ -64,8 +64,8 @@ class ButtonGroup extends AeicoComponent {
     this.render()
   }
 
-  protected updated(changedProps: Map<string, any>) {
-    super.updated(changedProps)
+  protected onUpdated(changedProps: Map<string, any>) {
+    super.onUpdated(changedProps)
     if (['variant', 'color', 'size', 'compact', 'disabled'].some(k => changedProps.has(k))) {
       this.syncChildren()
     }

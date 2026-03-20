@@ -57,8 +57,8 @@ class Button extends AeicoComponent {
     this.render()
   }
 
-  protected updated(changedProps: Map<string, any>) {
-    super.updated(changedProps)
+  protected onUpdated(changedProps: Map<string, any>) {
+    super.onUpdated(changedProps)
     // color/variant/size are handled by :host([attr]) CSS — no re-render needed
     if (changedProps.has('disabled') && this.buttonElement) {
       this.buttonElement.toggleAttribute('disabled', !!this.disabled)

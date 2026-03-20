@@ -57,8 +57,7 @@ class Alert extends AeicoComponent {
     this.render()
   }
 
-  protected updated(changedProps: Map<string, any>) {
-    super.updated(changedProps)
+  protected onUpdated(changedProps: Map<string, any>) {
     // color/variant/size/icon are handled by :host([attr]) CSS — no re-render needed
     // dismissible changes the DOM structure (adds/removes close button)
     if (changedProps.has('dismissible')) {

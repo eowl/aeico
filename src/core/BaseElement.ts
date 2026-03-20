@@ -13,7 +13,7 @@ import ElementBuilder from './ElementBuilder'
  *
  * Provides:
  * - Reactive property system (static properties / watchers / computed)
- * - Batched update lifecycle (willUpdate → render → updated → firstUpdated)
+ * - Batched update lifecycle (onPrepare → render → onUpdated (+ onMounted*))
  * - Event system (emit / events)
  * - Custom element registration helpers (register / toKebab)
  *
@@ -22,9 +22,9 @@ import ElementBuilder from './ElementBuilder'
  */
 class BaseElement extends HTMLElement {
   // Batch update system
-  private updateRequested = false
+  private updatePending = false
   private changedProperties = new Map<string, any>()
-  private isFirstUpdate = true
+  private hasMounted = false
 
   // Computed properties cache
   private computedCache = new Map<string, { deps: string; value: any }>()
@@ -87,6 +87,7 @@ class BaseElement extends HTMLElement {
 
   static get observedAttributes(): string[] {
     const allProps = this.collectProperties() as Props
+
     return Object.entries(allProps)
       .filter(([_, decl]) => decl.attribute !== false)
       .map(([key]) => this.toKebab(key))
@@ -95,12 +96,14 @@ class BaseElement extends HTMLElement {
   private static collectProperties(): Record<string, Prop> {
     const collected: Record<string, Prop> = {}
     let currentClass: any = this
+
     while (currentClass && currentClass !== HTMLElement) {
       if (currentClass.hasOwnProperty('properties') && currentClass.properties) {
         Object.assign(collected, currentClass.properties)
       }
       currentClass = Object.getPrototypeOf(currentClass)
     }
+
     return collected
   }
 
@@ -147,6 +150,12 @@ class BaseElement extends HTMLElement {
     this.initializeComputed()
   }
 
+
+  /**
+   * Initialize reactive properties by defining getters/setters based on static `properties` declaration.
+   * For each property, defines a getter/setter that reads/writes an internal value and reflects to attributes if configured.
+   * Also captures pre-upgrade property values (set before the element was upgraded) and re-applies them after defining accessors.
+   */
   private initializeProperties() {
     const constructor = this.constructor as typeof BaseElement
     const allProps = constructor.collectProperties()
@@ -171,11 +180,13 @@ class BaseElement extends HTMLElement {
           if (propDecl.attribute === false) {
             return (this as any)[internalKey]
           }
+
           const attrName = typeof propDecl.attribute === 'string' ? propDecl.attribute : kebabName
           const attrValue = this.getAttribute(attrName)
           if (attrValue === null) {
             return (this as any)[internalKey]
           }
+
           return this.deserializeAttribute(attrValue, propDecl)
         },
         set: (value: any) => {
@@ -184,6 +195,7 @@ class BaseElement extends HTMLElement {
           if (propDecl.attribute === false) {
             ;(this as any)[internalKey] = value
             this.requestUpdate(propName, oldValue)
+
             return
           }
 
@@ -213,6 +225,14 @@ class BaseElement extends HTMLElement {
     }
   }
 
+  /**
+   * Initialize computed properties by defining getters that compute values based on dependencies and cache results.
+   * Computed properties are defined in the static `computed` object, where each key is a property name and the value is an object with:
+   * - deps: array of dependent property names
+   * - compute: function that takes the component instance and returns the computed value
+   * The getter checks if the dependencies have changed since the last computation (using a cache key) and either returns the cached value or recomputes it.
+   * Computed properties are automatically invalidated when their dependencies change (handled in invalidateComputed).
+   */
   private initializeComputed() {
     const constructor = this.constructor as typeof BaseElement
     if (!constructor.computed) return
@@ -225,6 +245,7 @@ class BaseElement extends HTMLElement {
           if (cached && cached.deps === depsKey) return cached.value
           const value = config.compute(this)
           this.computedCache.set(computedName, { deps: depsKey, value })
+
           return value
         },
         enumerable: true,
@@ -242,37 +263,38 @@ class BaseElement extends HTMLElement {
     if (name !== undefined) {
       this.changedProperties.set(name, oldValue)
     }
-    if (!this.updateRequested) {
-      this.updateRequested = true
-      queueMicrotask(() => this.performUpdate())
+    
+    if (!this.updatePending) {
+      this.updatePending = true
+      queueMicrotask(() => this.executeUpdate())
     }
   }
 
   /**
-   * Perform the update cycle: willUpdate → render → updated → firstUpdated.
+   * Execute the update cycle: onPrepare → render → onUpdated → onMounted.
    * Called automatically after requestUpdate is triggered.
-   * Can be overridden to customize update behavior, but should call super.performUpdate() if so.
+   * Can be overridden to customize update behavior, but should call super.executeUpdate() if so.
    */
-  private async performUpdate(): Promise<void> {
+  private async executeUpdate(): Promise<void> {
     const changedProps = this.changedProperties
     this.changedProperties = new Map()
-    this.updateRequested = false
+    this.updatePending = false
 
-    const shouldUpdate = this.willUpdate(changedProps)
+    const shouldUpdate = this.onPrepare(changedProps)
     if (shouldUpdate === false) return
 
     this.triggerWatchers(changedProps)
     this.invalidateComputed(changedProps)
 
     if (typeof (this as any).render === 'function') {
-      ;(this as any).render()
+      this.render()
     }
 
-    this.updated(changedProps)
+    this.onUpdated(changedProps)
 
-    if (this.isFirstUpdate) {
-      this.firstUpdated(changedProps)
-      this.isFirstUpdate = false
+    if (!this.hasMounted) {
+      this.onMounted(changedProps)
+      this.hasMounted = true
     }
   }
 
@@ -284,6 +306,7 @@ class BaseElement extends HTMLElement {
   private triggerWatchers(changedProps: Map<string, any>): void {
     const constructor = this.constructor as typeof BaseElement
     if (!constructor.watchers) return
+
     for (const [propName, oldValue] of changedProps) {
       const methodName = constructor.watchers[propName]
       if (methodName && typeof (this as any)[methodName] === 'function') {
@@ -357,14 +380,20 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Lifecycle methods to override in subclasses:
-   * - willUpdate(changedProperties): called before update, can return false to skip update
-   * - updated(changedProperties): called after update
-   * - firstUpdated(changedProperties): called after the first update
+   * Render method to override in subclasses. Called during the update cycle after onPrepare and before onUpdated.
+   * Should contain the logic to update the component's DOM based on its properties/state.
    */
-  protected willUpdate(_changedProperties: Map<string, any>): boolean | void {}
-  protected updated(_changedProperties: Map<string, any>): void {}
-  protected firstUpdated(_changedProperties: Map<string, any>): void {}
+  protected render(): void {}
+
+  /**
+   * Lifecycle methods to override in subclasses:
+   * - onPrepare(changedProperties): called before update, can return false to skip update
+   * - onUpdated(changedProperties): called after update
+   * - onMounted(changedProperties): called after the first update
+   */
+  protected onPrepare(_changedProperties: Map<string, any>): boolean | void {}
+  protected onUpdated(_changedProperties: Map<string, any>): void {}
+  protected onMounted(_changedProperties: Map<string, any>): void {}
 
   /**
    * Standard custom element lifecycle callbacks (optional to implement):
@@ -376,6 +405,10 @@ class BaseElement extends HTMLElement {
   disconnectedCallback() {}
   attributeChangedCallback(_name: string, _oldValue: string | null, _newValue: string | null) {}
 
+  /**
+   * Custom element registration helper. Automatically converts class name to kebab-case for the tag name.
+   * @param name Optional custom tag name. If not provided, uses the kebab-case version of the class name.
+   */
   static tagName?: string
 
   /**

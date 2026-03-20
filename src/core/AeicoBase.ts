@@ -7,7 +7,7 @@ import type { Props, InferProperties } from './types'
  *
  * Provides:
  * - Reactive property system (static properties / watchers / computed)
- * - Batched update lifecycle (willUpdate / updated / firstUpdated)
+ * - Batched update lifecycle (onPrepare → render → onUpdated (+ onMounted*))
  * - Event system (emit / events)
  * - Custom element registration (register / toKebab)
  * - `disabled` property (common to all UI components)
