@@ -114,7 +114,7 @@ class BaseElement extends HTMLElement {
   }
 
   protected draw(block: () => void) {
-    this.tags.build(this.shadowRoot || this, block);
+    this.tags.build(this.container, block)
   }
 
   protected get container(): ShadowRoot | HTMLElement {
