@@ -2,17 +2,11 @@ import type { InferProperties, Props, Watchers } from '../core/types'
 import { modalSpec } from '../assets/css/specs'
 import AeicoComponent from './AeicoComponent'
 
-/**
- * Base class with theme and i18n support
- */
-
 class Modal extends AeicoComponent {
   private overlay: HTMLElement | null = null
   private modalContainer: HTMLElement | null = null
   private titleElement: HTMLElement | null = null
   private closeBtn: HTMLElement | null = null
-
-  static tagName = 'modal'
 
   static properties: Props = {
     label: { type: String },
@@ -61,71 +55,53 @@ class Modal extends AeicoComponent {
     }
   }
 
-  render() {
+  connectedCallback() {
+    super.connectedCallback()
+    this.render()
+    this.setupEventListeners()
+  }
+
+  protected render() {
     if (this.overlay) return
 
-    this.shadowRoot!.innerHTML = ''
+    this.draw(() => {
+      const { div, h3, button, slot } = this.tags
 
-    const template = document.createElement('template')
-    template.innerHTML = `
-      <div class="modal-overlay">
-        <div class="modal-container">
-          <div class="modal-header">
-            <h3 class="modal-title"></h3>
-            <button class="modal-close-btn" title="">×</button>
-          </div>
-          <div class="modal-content">
-            <slot></slot>
-          </div>
-        </div>
-      </div>
-    `
+      this.overlay = div({ 
+        className: 'modal-overlay',
+        onclick: (e: Event) => {
+          if (e.target === this.overlay && this.closeOnOverlayClick !== false) {
+            this.close()
+          }
+        }
+      }, () => {
+        this.modalContainer = div({ className: 'modal-container' }, () => {
+          div({ className: 'modal-header' }, () => {
+            this.titleElement = h3({ className: 'modal-title' })
+            
+            this.closeBtn = button({
+              className: 'modal-close-btn',
+              textContent: '×',
+              onclick: () => this.close()
+            })
+          })
 
-    this.shadowRoot!.appendChild(template.content.cloneNode(true))
-    
-    this.overlay = this.shadowRoot!.querySelector('.modal-overlay')
-    this.modalContainer = this.shadowRoot!.querySelector('.modal-container')
-    this.titleElement = this.shadowRoot!.querySelector('.modal-title')
-    this.closeBtn = this.shadowRoot!.querySelector('.modal-close-btn')
+          div({ className: 'modal-content' }, () => {
+            slot()
+          })
+        })
+      })
+    })
 
-    // Apply initial property values
     if (this.label) this.onLabelChanged(this.label)
     if (this.width) this.onWidthChanged(this.width)
     if (this.height) this.onHeightChanged(this.height)
     if (this.showCloseButton !== undefined) this.onShowCloseButtonChanged(this.showCloseButton)
 
-    this.setupEventListeners()
-    this.updateCloseButtonTitle()
-  }
-
-  connectedCallback() {
-    super.connectedCallback()
-    this.render()
-  }
-
-  /**
-   * Handle language change from base class
-   */
-  public onLanguageChange() {
-    super.onLanguageChange()
     this.updateCloseButtonTitle()
   }
 
   setupEventListeners() {
-    if (this.overlay) {
-      this.overlay.addEventListener('click', (e) => {
-        if (e.target === this.overlay && this.closeOnOverlayClick !== false) {
-          this.close()
-        }
-      })
-    }
-    
-    if (this.closeBtn) {
-      this.closeBtn.addEventListener('click', () => {
-        this.close()
-      })
-    }
-    
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.isOpen()) {
         this.close()
@@ -139,22 +115,23 @@ class Modal extends AeicoComponent {
     }
   }
 
+  public onLanguageChange() {
+    super.onLanguageChange()
+    this.updateCloseButtonTitle()
+  }
+
   open() {
     this.style.display = 'block'
-    this.dispatchEvent(new CustomEvent('modal-open', { bubbles: true, composed: true }))
+    this.emit('open', { target: this })
   }
 
   close() {
     this.style.display = 'none'
-    this.dispatchEvent(new CustomEvent('modal-close', { bubbles: true, composed: true }))
+    this.emit('close', { target: this })
   }
 
   isOpen(): boolean {
     return this.style.display === 'block'
-  }
-
-  setLabel(label: string) {
-    this.label = label
   }
 }
 
