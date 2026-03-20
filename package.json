@@ -41,6 +41,8 @@
     "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist/types",
     "dev": "vite build --watch",
     "example": "vite serve --config vite.example.config.ts",
+    "benchmark": "vite --config vite.benchmark.config.ts",
+    "benchmark:build": "vite build --config vite.benchmark.config.ts",
     "type-check": "tsc --noEmit",
     "test": "web-test-runner --config web-test-runner.config.mjs",
     "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch"

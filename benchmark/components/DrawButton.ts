@@ -1,0 +1,62 @@
+import AeicoElement from '../../src/core/AeicoElement'
+import type { Props } from '../../src/core/types'
+import buttonStyle from '../../src/assets/css/common/button.css?inline'
+import variablesStyle from '../../src/assets/css/common/variables.css?inline'
+
+/**
+ * Button component using ElementBuilder.draw() for rendering
+ */
+class DrawButton extends AeicoElement {
+  static properties: Props = {
+    color: { type: String },
+    variant: { type: String },
+    size: { type: String },
+    disabled: { type: Boolean },
+    type: { type: String },
+  }
+
+  protected static stylesheets = [variablesStyle, buttonStyle]
+
+  declare color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
+  declare variant?: 'filled' | 'outlined' | 'ghost' | 'text'
+  declare size?: 'xs' | 'sm' | 'md' | 'lg'
+  declare disabled?: boolean
+  declare type?: 'button' | 'submit' | 'reset'
+
+  private buttonElement: HTMLButtonElement | null = null
+
+  connectedCallback() {
+    super.connectedCallback()
+    this.render()
+  }
+
+  protected onUpdated(changedProps: Map<string, any>) {
+    super.onUpdated(changedProps)
+    if (changedProps.has('disabled') || changedProps.has('type')) {
+      this.render()
+    }
+  }
+
+  protected render() {
+    this.draw(() => {
+      const { button, slot } = this.tags
+
+      button({
+        className: 'btn',
+        type: this.type || 'button',
+        disabled: this.disabled,
+        part: 'button',
+        key: 'main-button'
+      }, () => {
+        slot()
+      })
+    })
+
+    // Query button element if needed
+    if (!this.buttonElement) {
+      this.buttonElement = this.shadowRoot!.querySelector('button')
+    }
+  }
+}
+
+export { DrawButton }

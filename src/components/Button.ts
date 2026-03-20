@@ -39,11 +39,11 @@ class Button extends AeicoComponent {
   protected static useStyles = ['button']
   protected static stylesheets = [buttonStyle]
 
-  color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' = 'default'
-  variant?: 'filled' | 'outlined' | 'ghost' | 'text' = 'filled'
-  size?: 'xs' | 'sm' | 'md' | 'lg' = 'md'
-  disabled?: boolean = false
-  type?: 'button' | 'submit' | 'reset' = 'button'
+  declare color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
+  declare variant?: 'filled' | 'outlined' | 'ghost' | 'text'
+  declare size?: 'xs' | 'sm' | 'md' | 'lg'
+  declare disabled?: boolean
+  declare type?: 'button' | 'submit' | 'reset'
 
   private buttonElement: HTMLButtonElement | null = null
 
@@ -82,22 +82,20 @@ class Button extends AeicoComponent {
   }
 
   protected render() {
-    if (!this.shadowRoot) return
+    if (this.buttonElement) return
 
-    const type = this.type || 'button'
+    this.draw(() => {
+      const { button, slot } = this.tags
 
-    this.shadowRoot.innerHTML = `
-      <button 
-        class="btn" 
-        type="${type}"
-        ${this.disabled ? 'disabled' : ''}
-        part="button"
-      >
-        <slot></slot>
-      </button>
-    `
-
-    this.buttonElement = this.shadowRoot.querySelector('button')
+      button({
+        className: 'btn',
+        type: this.type || 'button',
+        disabled: this.disabled,
+        part: 'button'
+      }, () => {
+        slot()
+      })
+    })
   }
 
   /**
