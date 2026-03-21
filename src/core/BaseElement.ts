@@ -21,7 +21,6 @@ import ElementBuilder from './ElementBuilder'
  * External consumers should extend AeicoBase (no styles) or AeicoElement (with styles).
  */
 class BaseElement extends HTMLElement {
-  // Batch update system
   private updatePending = false
   private changedProperties = new Map<string, any>()
   private hasMounted = false
@@ -42,6 +41,7 @@ class BaseElement extends HTMLElement {
       const namespace = (this as any).eventNamespace
       this.staticEvents = createEventEmitter(new EventTarget(), this.eventPrefix, namespace).events
     }
+    
     return this.staticEvents
   }
 
@@ -53,6 +53,7 @@ class BaseElement extends HTMLElement {
       const namespace = (constructor as any).eventNamespace
       this.eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
     }
+
     return this.eventEmitter.events
   }
 
@@ -62,6 +63,7 @@ class BaseElement extends HTMLElement {
       const namespace = (constructor as any).eventNamespace
       this.eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
     }
+
     this.eventEmitter.emit(eventKey, detail)
   }
 
@@ -93,16 +95,52 @@ class BaseElement extends HTMLElement {
       .map(([key]) => this.toKebab(key))
   }
 
-  private static collectProperties(): Record<string, Prop> {
-    const collected: Record<string, Prop> = {}
-    let currentClass: any = this
+  private static _propertyCache?: Record<string, Prop>
+  private static _attrToPropMap?: Map<string, string>
 
-    while (currentClass && currentClass !== HTMLElement) {
-      if (currentClass.hasOwnProperty('properties') && currentClass.properties) {
-        Object.assign(collected, currentClass.properties)
-      }
-      currentClass = Object.getPrototypeOf(currentClass)
+  /**
+   * Collect properties from the entire inheritance chain, starting from the current class up to HTMLElement.
+   * Child class properties override parent class properties. Also builds a map of attribute names to property names for efficient lookup in attributeChangedCallback.
+   * Caches the result on the class to avoid recomputation and prevent infinite loops when accessing properties during initialization.
+   */
+  private static collectProperties(): Record<string, Prop> {
+    // is very important!
+    // to cache the result, otherwise it will cause infinite loop when accessing properties in attributeChangedCallback
+    if (Object.prototype.hasOwnProperty.call(this, '_propertyCache')) {
+      return this._propertyCache!
     }
+
+    const inheritanceStack: any[] = []
+    let current: any = this
+
+    // push classes in the prototype chain onto the stack until we reach HTMLElement
+    while (current && current !== HTMLElement) {
+      inheritanceStack.push(current);
+      current = Object.getPrototypeOf(current)
+    }
+
+    const collected: Record<string, Prop> = {}
+
+    // Pop classes from the stack and merge their properties (child class properties override parent class properties)
+    while (inheritanceStack.length > 0) {
+      const cls = inheritanceStack.pop()
+      if (Object.prototype.hasOwnProperty.call(cls, 'properties') && cls.properties) {
+        Object.assign(collected, cls.properties)
+      }
+    }
+
+    const attrMap = new Map<string, string>()
+    for (const [propName, decl] of Object.entries(collected)) {
+      if (decl.attribute === false) continue
+
+      const attrName = typeof decl.attribute === 'string' 
+        ? decl.attribute 
+        : this.toKebab(propName)
+      attrMap.set(attrName, propName)
+    }
+
+    this._propertyCache = collected
+    this._attrToPropMap = attrMap
 
     return collected
   }
@@ -349,12 +387,17 @@ class BaseElement extends HTMLElement {
     if (propDecl.converter?.toAttribute) {
       return propDecl.converter.toAttribute(value, propDecl.type) ?? ''
     }
+
     switch (propDecl.type) {
-      case Boolean: return value ? 'true' : 'false'
-      case Number:  return String(value)
+      case Boolean:
+        return value ? 'true' : 'false'
+      case Number:  
+        return String(value)
       case Array:
-      case Object:  return JSON.stringify(value)
-      default:      return String(value)
+      case Object:  
+        return JSON.stringify(value)
+      default:      
+        return String(value)
     }
   }
 
@@ -365,17 +408,37 @@ class BaseElement extends HTMLElement {
    * @param propDecl The property declaration (for type info and custom converter)
    * @returns The deserialized property value
    */
-  private deserializeAttribute(value: string, propDecl: Prop): any {
+  private deserializeAttribute(value: string | null, propDecl: Prop): any {
+    // if a custom fromAttribute converter is defined, use it
     if (propDecl.converter?.fromAttribute) {
       return propDecl.converter.fromAttribute(value, propDecl.type)
     }
+
+    // Handle basic types
+    if (value === null) {
+      return propDecl.type === Boolean ? false : undefined; 
+    }
+
     switch (propDecl.type) {
-      case Boolean: return value === 'true' || value === ''
-      case Number:  return Number(value)
+      case Boolean:
+        // The existence of a unique attribute (even if it's an empty string <my-el active>) is true in Web standards
+        // Only if it doesn't exist (null) is it false
+        return true
+
+      case Number:
+        return value === '' ? 0 : Number(value)
+
       case Array:
       case Object:
-        try { return JSON.parse(value) } catch { return propDecl.type === Array ? [] : {} }
-      default:      return value
+        try {
+          return JSON.parse(value);
+        } catch {
+          return propDecl.type === Array ? [] : {}
+        }
+
+      case String:
+      default:
+        return value
     }
   }
 
@@ -403,7 +466,34 @@ class BaseElement extends HTMLElement {
    */
   connectedCallback() {}
   disconnectedCallback() {}
-  attributeChangedCallback(_name: string, _oldValue: string | null, _newValue: string | null) {}
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) return
+
+    const constructor = this.constructor as typeof BaseElement
+    const entry = constructor.getPropertyForAttribute(name)
+    if (!entry) return
+
+    const { propName, propDecl } = entry
+    const internalKey = `_${propName}`
+    const prevValue = (this as any)[internalKey]
+    
+    ;(this as any)[internalKey] = this.deserializeAttribute(newValue, propDecl)
+    
+    this.requestUpdate(propName, prevValue)
+  }
+
+  private static getPropertyForAttribute(attrName: string): { propName: string; propDecl: Prop } | undefined {
+    // ensure properties are collected and cached before looking up the attribute map, since this may be called before the constructor runs
+    this.collectProperties()
+    
+    const map = this._attrToPropMap as Map<string, string>
+    const props = this._propertyCache as Record<string, Prop>
+    
+    const propName = map?.get(attrName)
+    if (!propName) return undefined
+
+    return { propName, propDecl: props[propName] }
+  }
 
   /**
    * Custom element registration helper. Automatically converts class name to kebab-case for the tag name.
