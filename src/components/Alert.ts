@@ -2,6 +2,9 @@ import type { InferProperties, Props } from '../core/types'
 import alertStyle from '../assets/css/common/alert.css?inline'
 import AeicoComponent from './AeicoComponent'
 
+export type AlertVariant = 'subtle' | 'filled' | 'outlined'
+export type AlertSize = 'sm' | 'md' | 'lg'
+export type AlertColor = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
 
 /**
  * Alert Component
@@ -25,7 +28,6 @@ import AeicoComponent from './AeicoComponent'
  * <!-- Using as Web Component -->
  * <ae-alert variant="info">Information message</ae-alert>
  * <ae-alert variant="success" dismissible>Operation successful!</ae-alert>
- * <ae-alert variant="danger" icon>Error occurred</ae-alert>
  * <ae-alert variant="warning" size="sm">Small warning</ae-alert>
  * ```
  */
@@ -34,8 +36,7 @@ class Alert extends AeicoComponent {
     color: { type: String },
     variant: { type: String },
     size: { type: String },
-    dismissible: { type: Boolean },
-    icon: { type: Boolean },
+    dismissible: { type: Boolean }
   }
 
   static readonly eventPrefix = 'alert'
@@ -43,33 +44,13 @@ class Alert extends AeicoComponent {
   protected static useStyles = ['alert']
   protected static stylesheets = [alertStyle]
 
-  declare color?: 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
-  declare variant?: 'subtle' | 'filled' | 'outlined'
-  declare size?: 'sm' | 'md' | 'lg'
+  declare color?: AlertColor
+  declare variant?: AlertVariant
+  declare size?: AlertSize
   declare dismissible?: boolean
-  declare icon?: boolean
 
   private isVisible: boolean = true
-
-  connectedCallback() {
-    super.connectedCallback()
-
-    this.render()
-  }
-
-  protected onUpdated(changedProps: Map<string, any>) {
-    // color/variant/size/icon are handled by :host([attr]) CSS — no re-render needed
-    // dismissible changes the DOM structure (adds/removes close button)
-    if (changedProps.has('dismissible')) {
-      this.render()
-    }
-  }
-
-  private handleClose() {
-    this.isVisible = false
-    this.emit('close', { target: this })
-    this.remove()
-  }
+  private isHidden: boolean = false
 
   protected render() {
     if (!this.isVisible) return
@@ -77,16 +58,18 @@ class Alert extends AeicoComponent {
     this.draw(() => {
       const { div, slot, button, span } = this.tags
 
-      div({ className: 'alert', role: 'alert', part: 'alert' }, () => {
+      div({ 
+        className: 'alert', 
+        role: 'alert', 
+        part: 'alert',
+        style: { display: this.isHidden ? 'none' : '' } 
+      }, () => {
         slot()
 
         if (this.dismissible) {
           button({
             className: 'alert-close',
-            type: 'button',
-            'aria-label': 'Close',
-            part: 'close-button',
-            onclick: () => this.handleClose()
+            onclick: () => this._handleClose()
           }, () => {
             span({ 'aria-hidden': 'true', textContent: '\u00d7' })
           })
@@ -95,31 +78,24 @@ class Alert extends AeicoComponent {
     })
   }
 
-  /**
-   * Programmatically close/dismiss the alert
-   */
-  close() {
-    this.handleClose()
-  }
-
-  /**
-   * Show the alert (if it was hidden)
-   */
   show() {
-    if (!this.isVisible) {
+    if (!this.isVisible || this.isHidden) {
       this.isVisible = true
-      this.render()
+      this.isHidden = false
+
+      this.requestUpdate()
     }
   }
 
-  /**
-   * Hide the alert (without removing from DOM)
-   */
   hide() {
-    const alertElement = this.queryElement<HTMLElement>('.alert')
-    if (alertElement) {
-      alertElement.style.display = 'none'
-    }
+    this.isHidden = true
+    this.requestUpdate()
+  }
+
+  private _handleClose() {
+    this.isVisible = false
+    this.emit('close', { target: this })
+    this.remove()
   }
 }
 

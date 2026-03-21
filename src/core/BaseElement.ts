@@ -184,17 +184,25 @@ class BaseElement extends HTMLElement {
       this.attachShadow(ctor.shadowOptions)
     }
 
-    this.initializeProperties()
-    this.initializeComputed()
+    this._initialize()
   }
 
+  private _initialize() {
+    this._initializeProperties()
+    this._initializeComputed()
+    
+    // Call onPrepare before the first render to allow subclasses to set up initial state or cancel rendering if needed
+    // no any properties or attributes are set yet, so it can be used to set default values or fetch initial data before the first render
+    // e.g.: <ae-component>content</ae-component>
+    this.requestUpdate()
+  }
 
   /**
    * Initialize reactive properties by defining getters/setters based on static `properties` declaration.
    * For each property, defines a getter/setter that reads/writes an internal value and reflects to attributes if configured.
    * Also captures pre-upgrade property values (set before the element was upgraded) and re-applies them after defining accessors.
    */
-  private initializeProperties() {
+  private _initializeProperties() {
     const constructor = this.constructor as typeof BaseElement
     const allProps = constructor.collectProperties()
 
@@ -271,7 +279,7 @@ class BaseElement extends HTMLElement {
    * The getter checks if the dependencies have changed since the last computation (using a cache key) and either returns the cached value or recomputes it.
    * Computed properties are automatically invalidated when their dependencies change (handled in invalidateComputed).
    */
-  private initializeComputed() {
+  private _initializeComputed() {
     const constructor = this.constructor as typeof BaseElement
     if (!constructor.computed) return
 
@@ -466,6 +474,7 @@ class BaseElement extends HTMLElement {
    */
   connectedCallback() {}
   disconnectedCallback() {}
+  
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) return
 
