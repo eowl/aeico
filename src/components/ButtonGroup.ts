@@ -1,4 +1,4 @@
-import type { InferProperties, Props } from '../core/types'
+import type { InferProps, Props } from '../core/types'
 import buttonGroupStyle from '../assets/css/common/button-group.css?inline'
 import AeicoComponent from './AeicoComponent'
 
@@ -33,7 +33,7 @@ import AeicoComponent from './AeicoComponent'
  * ```
  */
 class ButtonGroup extends AeicoComponent {
-  static properties: Props = {
+  static props: Props = {
     variant:  { type: String },
     color:    { type: String },
     size:     { type: String },
@@ -133,4 +133,4 @@ if (!customElements.get('ae-button-group')) {
 }
 
 export default ButtonGroup
-export type ButtonGroupProps = InferProperties<typeof ButtonGroup>
+export type ButtonGroupProps = InferProps<typeof ButtonGroup>

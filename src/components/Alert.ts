@@ -1,4 +1,4 @@
-import type { InferProperties, Props } from '../core/types'
+import type { InferProps, Props } from '../core/types'
 import alertStyle from '../assets/css/common/alert.css?inline'
 import AeicoComponent from './AeicoComponent'
 
@@ -32,7 +32,7 @@ export type AlertColor = 'primary' | 'secondary' | 'success' | 'danger' | 'warni
  * ```
  */
 class Alert extends AeicoComponent {
-  static properties: Props = {
+  static props: Props = {
     color: { type: String },
     variant: { type: String },
     size: { type: String },
@@ -105,4 +105,4 @@ if (!customElements.get('ae-alert')) {
 }
 
 export default Alert
-export type AlertProps = InferProperties<typeof Alert>
+export type AlertProps = InferProps<typeof Alert>

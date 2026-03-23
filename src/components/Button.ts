@@ -1,4 +1,4 @@
-import type { InferProperties, Props } from '../core/types'
+import type { InferProps, Props } from '../core/types'
 import buttonStyle from '../assets/css/common/button.css?inline'
 import AeicoComponent from './AeicoComponent'
 
@@ -26,7 +26,7 @@ import AeicoComponent from './AeicoComponent'
  * ```
  */
 class Button extends AeicoComponent {
-  static properties: Props = {
+  static props: Props = {
     color: { type: String },
     variant: { type: String },
     size: { type: String },
@@ -133,4 +133,4 @@ if (!customElements.get('ae-button')) {
 }
 
 export default Button
-export type ButtonProps = InferProperties<typeof Button>
+export type ButtonProps = InferProps<typeof Button>

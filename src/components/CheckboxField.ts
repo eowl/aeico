@@ -1,5 +1,5 @@
 import AeicoField from './AeicoField'
-import type { InferProperties, Props, Watchers } from '../core/types'
+import type { InferProps, Props, Watchers } from '../core/types'
 import { checkboxFieldSpec } from '../assets/css/specs'
 
 class CheckboxField extends AeicoField {
@@ -7,7 +7,7 @@ class CheckboxField extends AeicoField {
 
   static tagName = 'checkbox'
 
-  static properties: Props = {
+  static props: Props = {
     checked: { type: Boolean },
     defaultChecked: { type: Boolean },
     variant: { type: String }, // 'checkbox' | 'toggle'
@@ -168,4 +168,4 @@ class CheckboxField extends AeicoField {
 // Call CheckboxField.register() explicitly if needed
 
 export default CheckboxField
-export type CheckboxFieldProps = InferProperties<typeof CheckboxField>
+export type CheckboxFieldProps = InferProps<typeof CheckboxField>

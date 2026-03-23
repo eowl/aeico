@@ -183,7 +183,7 @@ export type StyleVariableGenerator = {
  * Style provider for components
  * Combines static stylesheet and dynamic variable generator
  * 
- * Components define stylesheet and/or styleGenerator as static properties,
+ * Components define stylesheet and/or styleGenerator as static props,
  * and AeicoElement automatically combines them into a complete style system
  */
 export type StyleProvider = {
@@ -321,17 +321,17 @@ type ExtractProperties<T> = {
 /**
  * Infer complete properties type from class (including inherited)
  * 
- * Usage: type MyProps = InferProperties<typeof MyClass>
+ * Usage: type MyProps = InferProps<typeof MyClass>
  * 
  * @example
  * class SelectField extends AeicoField {
- *   static properties = { options: { type: Array } }
+ *   static props = { options: { type: Array } }
  *   declare options?: any[]
  * }
  * 
- * type SelectFieldProps = InferProperties<typeof SelectField>
+ * type SelectFieldProps = InferProps<typeof SelectField>
  * // Result: { options?: any[], value?: string, defaultValue?: string, ... }
  */
-export type InferProperties<T extends new (...args: any[]) => any> = ExtractProperties<
+export type InferProps<T extends new (...args: any[]) => any> = ExtractProperties<
   Omit<InstanceType<T>, keyof HTMLElement>
 >

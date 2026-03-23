@@ -4,7 +4,7 @@ import type {
   StyleEntry,
   Props,
   StyleVariableGenerator,
-  InferProperties
+  InferProps
 } from './types'
 import { getComponentConfig } from './configProvider'
 import BaseElement from './BaseElement'
@@ -32,7 +32,7 @@ class AeicoElement extends BaseElement {
     theme: string
   }>
 
-  static properties: Props = {
+  static props: Props = {
     enableStylesheets: { type: Boolean },
     styleSheetText: { type: String },
     styleSheet: { type: Object },
@@ -161,4 +161,4 @@ class AeicoElement extends BaseElement {
 }
 
 export default AeicoElement
-export type AeicoElementProps = InferProperties<typeof AeicoElement>
+export type AeicoElementProps = InferProps<typeof AeicoElement>

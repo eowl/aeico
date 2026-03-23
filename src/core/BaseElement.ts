@@ -3,7 +3,7 @@ import type {
   Prop,
   ComputedDeclaration,
   Watchers,
-  InferProperties
+  InferProps
 } from './types'
 import { createEventEmitter, type ComponentEventEmitter } from './events'
 import ElementBuilder from './ElementBuilder'
@@ -12,7 +12,7 @@ import ElementBuilder from './ElementBuilder'
  * BaseElement — internal reactive foundation for all Aeico elements.
  *
  * Provides:
- * - Reactive property system (static properties / watchers / computed)
+ * - Reactive property system (static props / watchers / computed)
  * - Batched update lifecycle (onPrepare → render → onUpdated (+ onMounted*))
  * - Event system (emit / events)
  * - Custom element registration helpers (register / toKebab)
@@ -21,12 +21,10 @@ import ElementBuilder from './ElementBuilder'
  * External consumers should extend AeicoBase (no styles) or AeicoElement (with styles).
  */
 class BaseElement extends HTMLElement {
-  private updatePending = false
-  private changedProperties = new Map<string, any>()
-  private hasMounted = false
-
-  // Computed properties cache
-  private computedCache = new Map<string, { deps: string; value: any }>()
+  private _updatePending = false
+  private _changedProps = new Map<string, any>()
+  private _hasMounted = false
+  private _computedCache = new Map<string, { deps: string; value: any }>()
 
   /**
    * Event prefix for this component.
@@ -35,36 +33,36 @@ class BaseElement extends HTMLElement {
    */
   static readonly eventPrefix: string = ''
 
-  private static staticEvents?: any
+  private static _staticEvents?: any
   static get events() {
-    if (!this.staticEvents) {
+    if (!this._staticEvents) {
       const namespace = (this as any).eventNamespace
-      this.staticEvents = createEventEmitter(new EventTarget(), this.eventPrefix, namespace).events
+      this._staticEvents = createEventEmitter(new EventTarget(), this.eventPrefix, namespace).events
     }
     
-    return this.staticEvents
+    return this._staticEvents
   }
 
-  private eventEmitter?: ComponentEventEmitter
+  private _eventEmitter?: ComponentEventEmitter
 
   get events() {
-    if (!this.eventEmitter) {
+    if (!this._eventEmitter) {
       const constructor = this.constructor as typeof BaseElement
       const namespace = (constructor as any).eventNamespace
-      this.eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
+      this._eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
     }
 
-    return this.eventEmitter.events
+    return this._eventEmitter.events
   }
 
   protected emit(eventKey: string, detail?: any): void {
-    if (!this.eventEmitter) {
+    if (!this._eventEmitter) {
       const constructor = this.constructor as typeof BaseElement
       const namespace = (constructor as any).eventNamespace
-      this.eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
+      this._eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
     }
 
-    this.eventEmitter.emit(eventKey, detail)
+    this._eventEmitter.emit(eventKey, detail)
   }
 
   /**
@@ -78,8 +76,8 @@ class BaseElement extends HTMLElement {
     return cleaned.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
   }
 
-  /** Static property declarations. Subclasses override to define their properties. */
-  static properties: Props = {}
+  /** Static property declarations. Subclasses override to define their props. */
+  static props: Props = {}
 
   /** Computed property declarations. Automatically cached and invalidated. */
   static computed?: ComputedDeclaration
@@ -88,7 +86,7 @@ class BaseElement extends HTMLElement {
   static watchers?: Watchers
 
   static get observedAttributes(): string[] {
-    const allProps = this.collectProperties() as Props
+    const allProps = this._collectProps() as Props
 
     return Object.entries(allProps)
       .filter(([_, decl]) => decl.attribute !== false)
@@ -99,13 +97,13 @@ class BaseElement extends HTMLElement {
   private static _attrToPropMap?: Map<string, string>
 
   /**
-   * Collect properties from the entire inheritance chain, starting from the current class up to HTMLElement.
-   * Child class properties override parent class properties. Also builds a map of attribute names to property names for efficient lookup in attributeChangedCallback.
-   * Caches the result on the class to avoid recomputation and prevent infinite loops when accessing properties during initialization.
+   * Collect props from the entire inheritance chain, starting from the current class up to HTMLElement.
+   * Child class props override parent class props. Also builds a map of attribute names to property names for efficient lookup in attributeChangedCallback.
+   * Caches the result on the class to avoid recomputation and prevent infinite loops when accessing props during initialization.
    */
-  private static collectProperties(): Record<string, Prop> {
+  private static _collectProps(): Record<string, Prop> {
     // is very important!
-    // to cache the result, otherwise it will cause infinite loop when accessing properties in attributeChangedCallback
+    // to cache the result, otherwise it will cause infinite loop when accessing props in attributeChangedCallback
     if (Object.prototype.hasOwnProperty.call(this, '_propertyCache')) {
       return this._propertyCache!
     }
@@ -121,11 +119,11 @@ class BaseElement extends HTMLElement {
 
     const collected: Record<string, Prop> = {}
 
-    // Pop classes from the stack and merge their properties (child class properties override parent class properties)
+    // Pop classes from the stack and merge their props (child class props override parent class props)
     while (inheritanceStack.length > 0) {
       const cls = inheritanceStack.pop()
-      if (Object.prototype.hasOwnProperty.call(cls, 'properties') && cls.properties) {
-        Object.assign(collected, cls.properties)
+      if (Object.prototype.hasOwnProperty.call(cls, 'props') && cls.props) {
+        Object.assign(collected, cls.props)
       }
     }
 
@@ -148,10 +146,10 @@ class BaseElement extends HTMLElement {
   static useShadowDOM: boolean = true
   static shadowOptions: ShadowRootInit = { mode: 'open', delegatesFocus: true }
 
-  private _ElementBuilder?: ElementBuilder
+  private _elementBuilder?: ElementBuilder
 
   protected get tags(): ElementBuilder {
-    return this._ElementBuilder ??= new ElementBuilder()
+    return this._elementBuilder ??= new ElementBuilder()
   }
 
   private _building = false
@@ -200,23 +198,23 @@ class BaseElement extends HTMLElement {
   }
 
   private _initialize() {
-    this._initializeProperties()
+    this._initializeProps()
     this._initializeComputed()
     
     // Call onPrepare before the first render to allow subclasses to set up initial state or cancel rendering if needed
-    // no any properties or attributes are set yet, so it can be used to set default values or fetch initial data before the first render
+    // no any props or attributes are set yet, so it can be used to set default values or fetch initial data before the first render
     // e.g.: <ae-component>content</ae-component>
     this.requestUpdate()
   }
 
   /**
-   * Initialize reactive properties by defining getters/setters based on static `properties` declaration.
+   * Initialize reactive props by defining getters/setters based on static `props` declaration.
    * For each property, defines a getter/setter that reads/writes an internal value and reflects to attributes if configured.
    * Also captures pre-upgrade property values (set before the element was upgraded) and re-applies them after defining accessors.
    */
-  private _initializeProperties() {
+  private _initializeProps() {
     const constructor = this.constructor as typeof BaseElement
-    const allProps = constructor.collectProperties()
+    const allProps = constructor._collectProps()
 
     for (const [propName, propDecl] of Object.entries(allProps)) {
       const kebabName = constructor.toKebab(propName)
@@ -284,12 +282,12 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Initialize computed properties by defining getters that compute values based on dependencies and cache results.
-   * Computed properties are defined in the static `computed` object, where each key is a property name and the value is an object with:
+   * Initialize computed props by defining getters that compute values based on dependencies and cache results.
+   * Computed props are defined in the static `computed` object, where each key is a property name and the value is an object with:
    * - deps: array of dependent property names
    * - compute: function that takes the component instance and returns the computed value
    * The getter checks if the dependencies have changed since the last computation (using a cache key) and either returns the cached value or recomputes it.
-   * Computed properties are automatically invalidated when their dependencies change (handled in invalidateComputed).
+   * Computed props are automatically invalidated when their dependencies change (handled in invalidateComputed).
    */
   private _initializeComputed() {
     const constructor = this.constructor as typeof BaseElement
@@ -299,10 +297,10 @@ class BaseElement extends HTMLElement {
       Object.defineProperty(this, computedName, {
         get: () => {
           const depsKey = config.deps.map(dep => String((this as any)[dep])).join('|')
-          const cached = this.computedCache.get(computedName)
+          const cached = this._computedCache.get(computedName)
           if (cached && cached.deps === depsKey) return cached.value
           const value = config.compute(this)
-          this.computedCache.set(computedName, { deps: depsKey, value })
+          this._computedCache.set(computedName, { deps: depsKey, value })
 
           return value
         },
@@ -319,11 +317,11 @@ class BaseElement extends HTMLElement {
    */
   protected requestUpdate(name?: string, oldValue?: any): void {
     if (name !== undefined) {
-      this.changedProperties.set(name, oldValue)
+      this._changedProps.set(name, oldValue)
     }
     
-    if (!this.updatePending) {
-      this.updatePending = true
+    if (!this._updatePending) {
+      this._updatePending = true
       queueMicrotask(() => this.executeUpdate())
     }
   }
@@ -333,10 +331,10 @@ class BaseElement extends HTMLElement {
    * Called automatically after requestUpdate is triggered.
    * Can be overridden to customize update behavior, but should call super.executeUpdate() if so.
    */
-  private async executeUpdate(): Promise<void> {
-    const changedProps = this.changedProperties
-    this.changedProperties = new Map()
-    this.updatePending = false
+  protected async executeUpdate(): Promise<void> {
+    const changedProps = this._changedProps
+    this._changedProps = new Map()
+    this._updatePending = false
 
     const shouldUpdate = this.onPrepare(changedProps)
     if (shouldUpdate === false) return
@@ -350,14 +348,14 @@ class BaseElement extends HTMLElement {
 
     this.onUpdated(changedProps)
 
-    if (!this.hasMounted) {
+    if (!this._hasMounted) {
       this.onMounted(changedProps)
-      this.hasMounted = true
+      this._hasMounted = true
     }
   }
 
   /**
-   * Trigger property watchers based on changed properties. Called during the update cycle.
+   * Trigger property watchers based on changed props. Called during the update cycle.
    * For each changed property that has a watcher, calls the corresponding method with (newValue, oldValue).
    * @param changedProps Map of changed property names to their old values
    */
@@ -375,7 +373,7 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Invalidate cached computed properties if their dependencies have changed. Called during the update cycle.
+   * Invalidate cached computed props if their dependencies have changed. Called during the update cycle.
    * For each computed property, checks if any of its dependencies are in the changedProps map. If so, deletes it from the cache.
    * @param changedProps Map of changed property names to their old values
    */
@@ -385,7 +383,7 @@ class BaseElement extends HTMLElement {
     const changedNames = Array.from(changedProps.keys())
     for (const [computedName, config] of Object.entries(constructor.computed)) {
       if (config.deps.some(dep => changedNames.includes(dep))) {
-        this.computedCache.delete(computedName)
+        this._computedCache.delete(computedName)
       }
     }
   }
@@ -464,19 +462,19 @@ class BaseElement extends HTMLElement {
 
   /**
    * Render method to override in subclasses. Called during the update cycle after onPrepare and before onUpdated.
-   * Should contain the logic to update the component's DOM based on its properties/state.
+   * Should contain the logic to update the component's DOM based on its props/state.
    */
   protected render(): void {}
 
   /**
    * Lifecycle methods to override in subclasses:
-   * - onPrepare(changedProperties): called before update, can return false to skip update
-   * - onUpdated(changedProperties): called after update
-   * - onMounted(changedProperties): called after the first update
+   * - onPrepare(changedProps): called before update, can return false to skip update
+   * - onUpdated(changedProps): called after update
+   * - onMounted(changedProps): called after the first update
    */
-  protected onPrepare(_changedProperties: Map<string, any>): boolean | void {}
-  protected onUpdated(_changedProperties: Map<string, any>): void {}
-  protected onMounted(_changedProperties: Map<string, any>): void {}
+  protected onPrepare(_changedProps: Map<string, any>): boolean | void {}
+  protected onUpdated(_changedProps: Map<string, any>): void {}
+  protected onMounted(_changedProps: Map<string, any>): void {}
 
   /**
    * Standard custom element lifecycle callbacks (optional to implement):
@@ -491,7 +489,7 @@ class BaseElement extends HTMLElement {
     if (oldValue === newValue) return
 
     const constructor = this.constructor as typeof BaseElement
-    const entry = constructor.getPropertyForAttribute(name)
+    const entry = constructor._getPropertyForAttribute(name)
     if (!entry) return
 
     const { propName, propDecl } = entry
@@ -503,9 +501,9 @@ class BaseElement extends HTMLElement {
     this.requestUpdate(propName, prevValue)
   }
 
-  private static getPropertyForAttribute(attrName: string): { propName: string; propDecl: Prop } | undefined {
-    // ensure properties are collected and cached before looking up the attribute map, since this may be called before the constructor runs
-    this.collectProperties()
+  private static _getPropertyForAttribute(attrName: string): { propName: string; propDecl: Prop } | undefined {
+    // ensure props are collected and cached before looking up the attribute map, since this may be called before the constructor runs
+    this._collectProps()
     
     const map = this._attrToPropMap as Map<string, string>
     const props = this._propertyCache as Record<string, Prop>
@@ -545,4 +543,4 @@ class BaseElement extends HTMLElement {
 }
 
 export default BaseElement
-export type BaseElementProps = InferProperties<typeof BaseElement>
+export type BaseElementProps = InferProps<typeof BaseElement>

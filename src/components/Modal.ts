@@ -1,9 +1,9 @@
-import type { InferProperties, Props } from '../core/types'
+import type { InferProps, Props } from '../core/types'
 import { modalSpec } from '../assets/css/specs'
 import AeicoComponent from './AeicoComponent'
 
 class Modal extends AeicoComponent {
-  static properties: Props = {
+  static props: Props = {
     label: { type: String },
     width: { type: String },
     height: { type: String },
@@ -102,4 +102,4 @@ class Modal extends AeicoComponent {
 Modal.register()
 
 export default Modal
-export type ModalProps = InferProperties<typeof Modal>
+export type ModalProps = InferProps<typeof Modal>

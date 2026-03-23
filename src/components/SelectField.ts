@@ -1,6 +1,6 @@
 import AeicoField from './AeicoField'
 import { isSelectOption } from '../core/types'
-import type { InferProperties, Props, Watchers } from '../core/types'
+import type { InferProps, Props, Watchers } from '../core/types'
 import { getI18nService, hasI18nService } from '../core/i18n'
 import { selectFieldSpec } from '../assets/css/specs'
 
@@ -191,4 +191,4 @@ class SelectField extends AeicoField {
 
 export default SelectField
 
-export type SelectFieldProps = InferProperties<typeof SelectField>
+export type SelectFieldProps = InferProps<typeof SelectField>

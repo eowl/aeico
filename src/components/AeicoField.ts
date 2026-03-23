@@ -1,4 +1,4 @@
-import type { FieldI18nKeys, InferProperties, Props, Watchers } from '../core/types'
+import type { FieldI18nKeys, InferProps, Props, Watchers } from '../core/types'
 import AeicoComponent from './AeicoComponent'
 
 export type FieldAction = 'clear' | 'reset' | 'change'
@@ -18,7 +18,7 @@ class AeicoField extends AeicoComponent {
   /**
    * Define base field properties (extends AeicoElement properties)
    */
-  static properties: Props = {
+  static props: Props = {
     value: { type: String },
     defaultValue: { type: String },
     resettable: { type: Boolean },
@@ -341,4 +341,4 @@ class AeicoField extends AeicoComponent {
 }
 
 export default AeicoField
-export type AeicoFieldProps = InferProperties<typeof AeicoField>
+export type AeicoFieldProps = InferProps<typeof AeicoField>

@@ -1,6 +1,6 @@
 import AeicoField from './AeicoField'
 import { isSelectOption } from '../core/types'
-import type { InferProperties, Props, Watchers } from '../core/types'
+import type { InferProps, Props, Watchers } from '../core/types'
 import { rangeFieldSpec } from '../assets/css/specs'
 
 class RangeField extends AeicoField {
@@ -11,7 +11,7 @@ class RangeField extends AeicoField {
 
   static tagName = 'range'
 
-  static properties: Props = {
+  static props: Props = {
     options: { type: Array },
     percentage: { type: Boolean },
     min: { type: Number },
@@ -194,4 +194,4 @@ class RangeField extends AeicoField {
 // Call RangeField.register() explicitly if needed
 
 export default RangeField
-export type RangeFieldProps = InferProperties<typeof RangeField>
+export type RangeFieldProps = InferProps<typeof RangeField>

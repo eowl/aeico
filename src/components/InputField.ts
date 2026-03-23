@@ -1,5 +1,5 @@
 import AeicoField from './AeicoField'
-import type { InferProperties, Props, Watchers } from '../core/types'
+import type { InferProps, Props, Watchers } from '../core/types'
 import { inputFieldSpec } from '../assets/css/specs'
 
 class InputField extends AeicoField {
@@ -7,7 +7,7 @@ class InputField extends AeicoField {
 
   static tagName = 'input'
 
-  static properties: Props = {
+  static props: Props = {
     placeholder: { type: String },
     type: { type: String },
   }
@@ -103,4 +103,4 @@ class InputField extends AeicoField {
 // Call InputField.register() explicitly if needed
 
 export default InputField
-export type InputFieldProps = InferProperties<typeof InputField>
+export type InputFieldProps = InferProps<typeof InputField>

@@ -1,6 +1,6 @@
 import AeicoField from './AeicoField'
 import { isSelectOption } from '../core/types'
-import type { InferProperties, Props, Watchers } from '../core/types'
+import type { InferProps, Props, Watchers } from '../core/types'
 import { radioFieldSpec } from '../assets/css/specs'
 
 export type RadioFieldType = 'radio' | 'button' | 'button-group' | 'segmented'
@@ -19,7 +19,7 @@ class RadioField extends AeicoField {
 
   static tagName = 'radio'
 
-  static properties: Props = {
+  static props: Props = {
     options: { type: Array },
     type: { type: String },
   }
@@ -209,4 +209,4 @@ class RadioField extends AeicoField {
 // Call RadioField.register() explicitly if needed
 export default RadioField
 
-export type RadioFieldProps = InferProperties<typeof RadioField>
+export type RadioFieldProps = InferProps<typeof RadioField>

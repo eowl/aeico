@@ -33,9 +33,9 @@ function createTestElement(Base = BaseElement) {
 }
 
 describe('BaseElement', () => {
-  it('should have a static properties object', () => {
-    expect(BaseElement).to.have.property('properties')
-    expect(BaseElement.properties).to.be.an('object')
+  it('should have a static props object', () => {
+    expect(BaseElement).to.have.property('props')
+    expect(BaseElement.props).to.be.an('object')
   })
 
   describe('build()', () => {

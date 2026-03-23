@@ -7,7 +7,7 @@ import variablesStyle from '../../src/assets/css/common/variables.css?inline'
  * Button component using ElementBuilder.draw() for rendering
  */
 class DrawButton extends AeicoElement {
-  static properties: Props = {
+  static props: Props = {
     color: { type: String },
     variant: { type: String },
     size: { type: String },

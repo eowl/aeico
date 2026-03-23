@@ -1,12 +1,12 @@
 import BaseElement from './BaseElement'
-import type { Props, InferProperties } from './types'
+import type { Props, InferProps } from './types'
 
 /**
  * AeicoBase — public lightweight base class for building Web Components
  * without the Aeico style system.
  *
  * Provides:
- * - Reactive property system (static properties / watchers / computed)
+ * - Reactive property system (static props / watchers / computed)
  * - Batched update lifecycle (onPrepare → render → onUpdated (+ onMounted*))
  * - Event system (emit / events)
  * - Custom element registration (register / toKebab)
@@ -23,7 +23,7 @@ import type { Props, InferProperties } from './types'
  * import { AeicoBase } from 'aeico/core'
  *
  * class MyCounter extends AeicoBase {
- *   static properties: Props = {
+ *   static props: Props = {
  *     count: { type: Number }
  *   }
  *   declare count?: number
@@ -36,7 +36,7 @@ import type { Props, InferProperties } from './types'
  * ```
  */
 class AeicoBase extends BaseElement {
-  static properties: Props = {
+  static props: Props = {
     disabled: { type: Boolean },
   }
 
@@ -44,4 +44,4 @@ class AeicoBase extends BaseElement {
 }
 
 export default AeicoBase
-export type AeicoBaseProps = InferProperties<typeof AeicoBase>
+export type AeicoBaseProps = InferProps<typeof AeicoBase>
