@@ -39,7 +39,7 @@ import type { Props } from '../core/types'
 export function Themeable<T extends Constructor>(Base: T) {
   return class extends Base {
     static props: Props = {
-      ...(Base as any).properties,
+      ...(Base as unknown as { properties?: Props }).properties,
       theme: { type: String },
     }
 

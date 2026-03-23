@@ -33,17 +33,17 @@ import { getComponentConfig } from '../core/configProvider'
 export function Localizable<T extends Constructor>(Base: T) {
   return class extends Base {
     declare enableI18n?: boolean
-    declare i18n?: Record<string, any>
+    declare i18n?: Record<string, unknown>
 
     /**
      * Unsubscribe function for i18n language change listener
      */
-    public i18nUnsubscribe: (() => void) | null = null
+    i18nUnsubscribe: (() => void) | null = null
 
     /**
      * Get effective i18n configuration (global + instance overrides)
      */
-    public get effectiveI18nConfig() {
+    get effectiveI18nConfig() {
       const globalConfig = getComponentConfig()
       return {
         enableI18n: this.enableI18n ?? globalConfig?.enableI18n ?? false,
@@ -54,7 +54,7 @@ export function Localizable<T extends Constructor>(Base: T) {
     /**
      * Check if i18n is enabled for this component
      */
-    public get i18nEnabled(): boolean {
+    get i18nEnabled(): boolean {
       return this.effectiveI18nConfig.enableI18n
     }
 
@@ -63,10 +63,7 @@ export function Localizable<T extends Constructor>(Base: T) {
      * Automatically subscribes to i18n language changes if enabled
      */
     connectedCallback() {
-      // Call parent connectedCallback if exists
-      if (super.connectedCallback) {
-        (super.connectedCallback as any)()
-      }
+      super.connectedCallback?.()
 
       if (this.i18nEnabled) {
         this.subscribeToI18n()
@@ -78,18 +75,14 @@ export function Localizable<T extends Constructor>(Base: T) {
      * Automatically unsubscribes from i18n language changes
      */
     disconnectedCallback() {
-      // Call parent disconnectedCallback if exists
-      if (super.disconnectedCallback) {
-        (super.disconnectedCallback as any)()
-      }
-
+      super.disconnectedCallback?.()
       this.unsubscribeFromI18n()
     }
 
     /**
      * Subscribe to i18n language changes
      */
-    public subscribeToI18n() {
+    subscribeToI18n() {
       const i18nService = this.effectiveI18nConfig?.i18nService
       if (i18nService) {
         this.i18nUnsubscribe = i18nService.subscribe(() => {
@@ -101,7 +94,7 @@ export function Localizable<T extends Constructor>(Base: T) {
     /**
      * Unsubscribe from i18n language changes
      */
-    public unsubscribeFromI18n() {
+    unsubscribeFromI18n() {
       if (this.i18nUnsubscribe) {
         this.i18nUnsubscribe()
         this.i18nUnsubscribe = null
@@ -116,13 +109,13 @@ export function Localizable<T extends Constructor>(Base: T) {
      * 
      * @example
      * ```typescript
-     * public onLanguageChange() {
+     * protected onLanguageChange() {
      *   super.onLanguageChange()
      *   this.render() // Re-render with new translations
      * }
      * ```
      */
-    public onLanguageChange() {
+    onLanguageChange() {
       // Base implementation - subclasses can override
     }
 
@@ -138,7 +131,7 @@ export function Localizable<T extends Constructor>(Base: T) {
      * const text = this.t('buttons.save', 'Save')
      * ```
      */
-    public t(key: string, fallback?: string): string {
+    t(key: string, fallback?: string): string {
       const i18nService = this.effectiveI18nConfig?.i18nService
       if (i18nService) {
         return i18nService.t(key)
@@ -154,7 +147,7 @@ export function Localizable<T extends Constructor>(Base: T) {
  */
 export type LocalizableProps = {
   enableI18n?: boolean
-  i18n?: Record<string, any>
+  i18n?: Record<string, unknown>
   i18nEnabled: boolean
   t(key: string, fallback?: string): string
   onLanguageChange(): void
