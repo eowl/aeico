@@ -154,8 +154,20 @@ class BaseElement extends HTMLElement {
     return this._ElementBuilder ??= new ElementBuilder()
   }
 
+  private _building = false
+
   protected build(cb: () => void) {
-    this.tags.build(this.container, cb)
+    if (this._building) {
+      throw new Error('Already building. Nested build calls are not allowed.')
+    }
+
+    this._building = true
+
+    try {
+      this.tags.build(this.container, cb)
+    } finally {
+      this._building = false
+    }
   }
 
   protected get container(): ShadowRoot | HTMLElement {
