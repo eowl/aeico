@@ -45,7 +45,11 @@
     "benchmark:build": "vite build --config vite.benchmark.config.ts",
     "type-check": "tsc --noEmit",
     "test": "web-test-runner --config web-test-runner.config.mjs",
-    "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch"
+    "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch",
+    "lint": "eslint src/ test/",
+    "lint:fix": "eslint src/ test/ --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\""
   },
   "keywords": [
     "web-components",
@@ -56,12 +60,18 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@open-wc/testing": "^4.0.0",
     "@types/mocha": "^10.0.10",
     "@web/dev-server-esbuild": "^1.0.5",
     "@web/test-runner": "^0.20.2",
     "@web/test-runner-playwright": "^0.11.1",
+    "eslint": "^10.1.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1",
     "typescript": "^5.7.3",
+    "typescript-eslint": "^8.57.1",
     "vite": "^6.2.0"
   }
 }
