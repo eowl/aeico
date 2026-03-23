@@ -56,8 +56,8 @@ export function buildTestRunnerHtml(testRunnerImport, timeoutMs = 3000) {
           return options !== undefined ? _origCreate(tagName, options) : _origCreate(tagName)
         }
       })(${timeoutMs})
-    <\/script>
-    <script type="module" src="${testRunnerImport}"><\/script>
+    </script>
+    <script type="module" src="${testRunnerImport}"></script>
   </body>
 </html>`
 }

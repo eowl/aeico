@@ -41,7 +41,7 @@ export function compose(...mixins: Mixin[]) {
 /**
  * Constructor type for mixin composition with Web Component lifecycle methods
  */
-export type Constructor<T = {}> = new (...args: any[]) => T & {
+export type Constructor<T = object> = new (...args: any[]) => T & {
   connectedCallback?(): void
   disconnectedCallback?(): void
 }
@@ -49,4 +49,4 @@ export type Constructor<T = {}> = new (...args: any[]) => T & {
 /**
  * Mixin function type
  */
-export type Mixin<T = {}> = <U extends Constructor>(Base: U) => Constructor<T> & U
+export type Mixin<T = object> = <U extends Constructor>(Base: U) => Constructor<T> & U

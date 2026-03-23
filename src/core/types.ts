@@ -311,7 +311,7 @@ export type PropertyTypeToTS<T extends PropertyType | undefined> =
  * Helper to exclude function properties and internal properties
  */
 type ExtractProperties<T> = {
-  [K in keyof T as T[K] extends Function 
+  [K in keyof T as T[K] extends (...args: any[]) => unknown
     ? never 
     : K extends 'events' | 'effectiveI18nConfig' | 'i18nEnabled' | 'i18nUnsubscribe'
     ? never 

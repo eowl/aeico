@@ -108,20 +108,20 @@ class BaseElement extends HTMLElement {
       return this._propertyCache!
     }
 
-    const inheritanceStack: any[] = []
-    let current: any = this
+    const inheritanceStack: (typeof HTMLElement)[] = []
+    let current: typeof HTMLElement | null = this as typeof HTMLElement
 
     // push classes in the prototype chain onto the stack until we reach HTMLElement
     while (current && current !== HTMLElement) {
-      inheritanceStack.push(current);
-      current = Object.getPrototypeOf(current)
+      inheritanceStack.push(current)
+      current = Object.getPrototypeOf(current) as typeof HTMLElement | null
     }
 
     const collected: Record<string, Prop> = {}
 
     // Pop classes from the stack and merge their props (child class props override parent class props)
     while (inheritanceStack.length > 0) {
-      const cls = inheritanceStack.pop()
+      const cls = inheritanceStack.pop() as typeof BaseElement
       if (Object.prototype.hasOwnProperty.call(cls, 'props') && cls.props) {
         Object.assign(collected, cls.props)
       }
@@ -223,7 +223,7 @@ class BaseElement extends HTMLElement {
       // Capture pre-upgrade property value (set before element was upgraded)
       let preUpgradeValue: any = undefined
       let hasPreUpgrade = false
-      if (this.hasOwnProperty(propName)) {
+      if (Object.prototype.hasOwnProperty.call(this, propName)) {
         preUpgradeValue = (this as any)[propName]
         hasPreUpgrade = true
         delete (this as any)[propName]
@@ -366,7 +366,7 @@ class BaseElement extends HTMLElement {
     for (const [propName, oldValue] of changedProps) {
       const methodName = constructor.watchers[propName]
       if (methodName && typeof (this as any)[methodName] === 'function') {
-        const newValue = (this as any)[propName] as any
+        const newValue = (this as any)[propName]
         ;(this as any)[methodName](newValue, oldValue)
       }
     }
@@ -439,9 +439,10 @@ class BaseElement extends HTMLElement {
 
     switch (propDecl.type) {
       case Boolean:
-        // The existence of a unique attribute (even if it's an empty string <my-el active>) is true in Web standards
-        // Only if it doesn't exist (null) is it false
-        return true
+        // Presence of the attribute is true in Web standards (e.g. <my-el active>).
+        // Explicitly setting the string "false" is treated as false for ergonomics
+        // (e.g. <my-el checked="false"> → false).
+        return value !== 'false'
 
       case Number:
         return value === '' ? 0 : Number(value)

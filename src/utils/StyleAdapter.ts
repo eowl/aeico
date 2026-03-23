@@ -1,5 +1,5 @@
 import styleStore from './styleStore'
-import type { StyleProps, StyleEntry, StyleSpec } from '../core/types'
+import type { StyleProps, StyleEntry } from '../core/types'
 
 /**
  * Options passed to StyleAdapter.initialize() on first connectedCallback.
@@ -98,7 +98,7 @@ export class StyleAdapter {
             this.adopt(styleStore.normalizeSheet(entry))
           } else {
             // StyleSpec — resolve deps recursively, route by scope
-            const { documentSheets, shadowSheets } = styleStore.resolveSpec(entry as StyleSpec)
+            const { documentSheets, shadowSheets } = styleStore.resolveSpec(entry)
             StyleAdapter.applyToDocument(documentSheets)
             for (const sheet of shadowSheets) {
               this.adopt(sheet)

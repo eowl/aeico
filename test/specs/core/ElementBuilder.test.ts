@@ -429,7 +429,7 @@ describe('ElementBuilder', () => {
 
     it('returns the appended node', () => {
       const existingNode = document.createElement('p')
-      const parent = builder.div({}, () => {
+      builder.div({}, () => {
         const returned = builder.node(existingNode)
         expect(returned).to.equal(existingNode)
       })
