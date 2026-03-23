@@ -21,6 +21,8 @@ class SelectField extends AeicoField {
     return {
       value: 'onValueChanged',
       options: 'onOptionsChanged',
+      resettable: 'onResettableChanged',
+      clearable: 'onClearableChanged',
     }
   }
 

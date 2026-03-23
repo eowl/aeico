@@ -1,5 +1,5 @@
 import AeicoField from './AeicoField'
-import type { InferProps, Props, Watchers } from '../core/types'
+import type { InferProps, Props } from '../core/types'
 import { inputFieldSpec } from '../assets/css/specs'
 
 class InputField extends AeicoField {
@@ -12,57 +12,30 @@ class InputField extends AeicoField {
     type: { type: String },
   }
 
-  static watchers: Watchers = {
-    value: 'onValueChanged',
-    placeholder: 'onPlaceholderChanged',
-    type: 'onTypeChanged',
-  }
-
   declare placeholder?: string
   declare type?: string
 
   protected static stylesheets = [inputFieldSpec]
 
-  protected onValueChanged(value: string): void {
-    this.writeValue(value || '')
-  }
-
-  protected onPlaceholderChanged(placeholder: string): void {
-    if (this.fieldElement) {
-      this.fieldElement.placeholder = placeholder || ''
-    }
-  }
-
-  protected onTypeChanged(type: string): void {
-    if (this.fieldElement) {
-      this.fieldElement.type = type || 'text'
-    }
-  }
-
   render() {
-    if (this.fieldElement) return
+    this.build(() => {
+      const { div, input } = this.tags
 
-    this.shadowRoot!.innerHTML = ''
+      div({ className: 'input-container' }, () => {
+        this.fieldElement = input({
+          type: this.type || 'text',
+          placeholder: this.placeholder || '',
+          onInput: this.boundOnChange,
+        })
 
-    const container = document.createElement('div')
-    container.className = 'input-container'
+        this.renderActionButtonsTags()
+      })
+    })
 
-    this.fieldElement = document.createElement('input')
-    this.fieldElement.type = (this.type as string) || 'text'
-    this.fieldElement.placeholder = (this.placeholder as string) || ''
-
-    const currentValue = this.value
-    if (currentValue !== undefined && currentValue !== null) {
-      this.fieldElement.value = String(currentValue)
+    if (this.fieldElement && this.value != null) {
+      this.fieldElement.value = String(this.value)
     }
-
-    this.fieldElement.addEventListener('input', this.boundOnChange)
-
-    container.appendChild(this.fieldElement)
-
-    this.renderActionButtons(container)
-
-    this.shadowRoot!.appendChild(container)
+    this.updateClearButtonVisibility()
   }
 
   /**

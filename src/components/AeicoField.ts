@@ -32,8 +32,6 @@ class AeicoField extends AeicoComponent {
    * Property watchers
    */
   static watchers: Watchers = {
-    resettable: 'onResettableChanged',
-    clearable: 'onClearableChanged',
     disabled: 'onDisabledChanged',
   }
 
@@ -197,17 +195,29 @@ class AeicoField extends AeicoComponent {
   }
 
   /**
-   * Watcher for resettable property
+   * Render action buttons (clear/reset) using this.tags.
+   * Must be called from within a build() callback.
    */
-  protected onResettableChanged() {
-    this.render()
-  }
+  protected renderActionButtonsTags() {
+    const { button } = this.tags
 
-  /**
-   * Watcher for clearable property
-   */
-  protected onClearableChanged() {
-    this.render()
+    if (this.clearable) {
+      this.clearBtn = button({
+        className: 'clear-btn',
+        textContent: this.clearText || '×',
+        title: this.t(this.i18nKeys.clearButton || 'buttons.clear', '×'),
+        onClick: this.boundOnClear,
+      })
+    }
+
+    if (this.resettable) {
+      this.resetBtn = button({
+        className: 'reset-btn',
+        textContent: this.resetText || '↺',
+        title: this.t(this.i18nKeys.resetButton || 'buttons.reset', '↺'),
+        onClick: this.boundOnReset,
+      })
+    }
   }
 
   /**

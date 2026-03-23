@@ -26,6 +26,8 @@ class RangeField extends AeicoField {
     max: 'onMaxChanged',
     step: 'onStepChanged',
     percentage: 'onPercentageChanged',
+    resettable: 'onResettableChanged',
+    clearable: 'onClearableChanged',
   }
 
   declare options?: any[]

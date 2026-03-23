@@ -28,6 +28,8 @@ class RadioField extends AeicoField {
     value: 'onValueChanged',
     options: 'onOptionsChanged',
     type: 'onTypeChanged',
+    resettable: 'onResettableChanged',
+    clearable: 'onClearableChanged',
   }
 
   declare options?: RadioOptions

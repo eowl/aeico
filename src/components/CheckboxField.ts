@@ -16,6 +16,8 @@ class CheckboxField extends AeicoField {
   static watchers: Watchers = {
     checked: 'onCheckedChanged',
     variant: 'onVariantChanged',
+    resettable: 'onResettableChanged',
+    clearable: 'onClearableChanged',
   }
 
   declare checked?: boolean
