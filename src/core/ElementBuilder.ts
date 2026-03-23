@@ -1,13 +1,14 @@
-type TagProps = {
+type _Props = {
   className?: string | Record<string, boolean>
   textContent?: string
   id?: string
   part?: string
   role?: string
   style?: Partial<CSSStyleDeclaration>
-  [key: string]: any
   key?: string
 }
+
+type TagProps = _Props & Record<string, unknown>
 
 type TagFunction<K extends keyof HTMLElementTagNameMap> = 
   (props?: TagProps, cb?: () => void) => HTMLElementTagNameMap[K]
@@ -28,28 +29,28 @@ const SVG_NS = 'http://www.w3.org/2000/svg'
 interface ElementBuilder extends HTMLTags, SVGOnlyTags {}
 
 class ElementBuilder {
-  private stack: Node[] = []
-  private cursorStack: number[] = []
-  private propsCache = new WeakMap<Element, Record<string, any>>()
+  private _stack: Node[] = []
+  private _cursorStack: number[] = []
+  private _propsCache = new WeakMap<Element, Record<string, unknown>>()
 
   constructor() {
     return new Proxy(this, {
       get(target, prop: string) {
-        if (prop in target) return (target as any)[prop]
+        if (prop in target) return Reflect.get(target, prop) as unknown
         
-        return (p?: any, cb?: any) => (target as any)._create(prop, p, cb)
+        return (p?: TagProps, cb?: () => void) => target._create(prop, p, cb)
       }
     })
   }
 
   private _create(tagName: string, props?: TagProps, cb?: () => void): Element {
-    const parent = this.stack[this.stack.length - 1]
+    const parent = this._stack[this._stack.length - 1]
 
-    if (!parent || this.cursorStack.length === 0 || this._isBareFragment(parent)) {
+    if (!parent || this._cursorStack.length === 0 || this._isBareFragment(parent)) {
       return this._createFresh(tagName, props, cb)
     }
 
-    const currentIndex = this.cursorStack[this.cursorStack.length - 1]
+    const currentIndex = this._cursorStack[this._cursorStack.length - 1]
     const key = props?.key
     let el: Element | null = null
 
@@ -86,23 +87,23 @@ class ElementBuilder {
 
     if (cb) {
       if (props) this._applyProps(el, props, true)
-      this.stack.push(el)
-      this.cursorStack.push(0)
+      this._stack.push(el)
+      this._cursorStack.push(0)
       cb()
-      this._cleanup(el, this.cursorStack[this.cursorStack.length - 1])
-      this.cursorStack.pop()
-      this.stack.pop()
+      this._cleanup(el, this._cursorStack[this._cursorStack.length - 1])
+      this._cursorStack.pop()
+      this._stack.pop()
     } else {
       if (props) this._applyProps(el, props)
     }
 
-    this.cursorStack[this.cursorStack.length - 1]++
+    this._cursorStack[this._cursorStack.length - 1]++
 
     return el
   }
 
   private _createFresh(tagName: string, props?: TagProps, cb?: () => void): Element {
-    const parent = this.stack[this.stack.length - 1]
+    const parent = this._stack[this._stack.length - 1]
     const isSVG = tagName === 'svg'
       || (parent instanceof Element && parent.namespaceURI === SVG_NS)
     const el = isSVG
@@ -112,11 +113,11 @@ class ElementBuilder {
     if (cb) {
       if (props) this._applyProps(el, props, true)
       if (parent) parent.appendChild(el)
-      this.stack.push(el)
-      this.cursorStack.push(0)
+      this._stack.push(el)
+      this._cursorStack.push(0)
       cb()
-      this.cursorStack.pop()
-      this.stack.pop()
+      this._cursorStack.pop()
+      this._stack.pop()
     } else {
       if (props) this._applyProps(el, props)
       if (parent) parent.appendChild(el)
@@ -141,15 +142,15 @@ class ElementBuilder {
   }
 
   public build(root: Node, block: () => void): void {
-    this.stack = [root]
-    this.cursorStack = [0]
+    this._stack = [root]
+    this._cursorStack = [0]
 
     block()
 
-    this._cleanup(root, this.cursorStack[0])
+    this._cleanup(root, this._cursorStack[0])
 
-    this.stack = []
-    this.cursorStack = []
+    this._stack = []
+    this._cursorStack = []
   }
 
   private _cleanup(parent: Node, activeCount: number) {
@@ -159,18 +160,25 @@ class ElementBuilder {
   }
 
   private _applyProps(el: Element, props: TagProps, skipTextContent: boolean = false) {
-    const oldCache = this.propsCache.get(el)
-    const newCache: Record<string, any> = {}
+    const oldCache = this._propsCache.get(el)
+    const newCache: Record<string, unknown> = {}
 
     for (const [key, value] of Object.entries(props)) {
       if (key === 'key') continue
       if (key === 'textContent' && skipTextContent) continue
 
       if (key === 'className' || key === 'class') {
-        newCache['class'] = (value == null || value === false) ? null
-          : typeof value === 'object'
-            ? Object.entries(value).filter(([_, a]) => a).map(([n]) => n).join(' ')
-            : String(value)
+        if (value == null || value === false) {
+          newCache['class'] = null
+        } else if (typeof value === 'object') {
+          newCache['class'] = Object.entries(value as Record<string, boolean>)
+            .filter(([_, a]) => a)
+            .map(([n]) => n)
+            .join(' ')
+        } else {
+          newCache['class'] = String(value as string | number | boolean | bigint)
+        }
+
         continue
       }
 
@@ -193,19 +201,19 @@ class ElementBuilder {
       }
 
       if (ck === 'class') {
-        el.setAttribute('class', value)
+        el.setAttribute('class', value as string)
       } else if (ck === 'textContent') {
-        el.textContent = String(value)
+        el.textContent = value as string
       } else if (ck === 'style') {
         if (typeof value === 'object' && 'style' in el) Object.assign((el as HTMLElement).style, value)
       } else if (ck.startsWith('on:')) {
         const eventName = ck.slice(3)
-        if (oldCache?.[ck]) el.removeEventListener(eventName, oldCache[ck])
-        el.addEventListener(eventName, value)
+        if (oldCache?.[ck]) el.removeEventListener(eventName, oldCache[ck] as EventListener)
+        el.addEventListener(eventName, value as EventListener)
       } else if (typeof value === 'boolean') {
         el.setAttribute(ck, '')
       } else {
-        el.setAttribute(ck, String(value))
+        el.setAttribute(ck, String(value as string | number | bigint))
       }
     }
 
@@ -215,12 +223,12 @@ class ElementBuilder {
         if (ck === 'class') el.removeAttribute('class')
         else if (ck === 'textContent') { if (!skipTextContent) el.textContent = '' }
         else if (ck === 'style' && 'style' in el) (el as HTMLElement).style.cssText = ''
-        else if (ck.startsWith('on:') && typeof oldValue === 'function') el.removeEventListener(ck.slice(3), oldValue)
+        else if (ck.startsWith('on:') && typeof oldValue === 'function') el.removeEventListener(ck.slice(3), oldValue as EventListener)
         else el.removeAttribute(ck)
       }
     }
 
-    this.propsCache.set(el, newCache)
+    this._propsCache.set(el, newCache)
   }
 
   el = <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
@@ -230,15 +238,15 @@ class ElementBuilder {
   ): T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T]
     : T extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[T]
     : Element => {
-    return this._create(tagName, props, cb) as any
+    return this._create(tagName, props, cb) as unknown as T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : T extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[T] : Element
   }
 
   text = (content: string): Text => {
-    const parent = this.stack[this.stack.length - 1]
-    const inBuildContext = parent && this.cursorStack.length > 0 && !this._isBareFragment(parent)
+    const parent = this._stack[this._stack.length - 1]
+    const inBuildContext = parent && this._cursorStack.length > 0 && !this._isBareFragment(parent)
 
     if (inBuildContext) {
-      const cursor = this.cursorStack[this.cursorStack.length - 1]
+      const cursor = this._cursorStack[this._cursorStack.length - 1]
       const nodeAtCursor = parent.childNodes[cursor]
       let textNode: Text
 
@@ -250,7 +258,7 @@ class ElementBuilder {
         parent.insertBefore(textNode, nodeAtCursor || null)
       }
 
-      this.cursorStack[this.cursorStack.length - 1]++
+      this._cursorStack[this._cursorStack.length - 1]++
 
       return textNode
     }
@@ -262,13 +270,13 @@ class ElementBuilder {
   }
 
   node = (existingNode: Node): Node => {
-    const parent = this.stack[this.stack.length - 1]
+    const parent = this._stack[this._stack.length - 1]
     if (!parent) return existingNode
 
-    const inBuildContext = this.cursorStack.length > 0 && !this._isBareFragment(parent)
+    const inBuildContext = this._cursorStack.length > 0 && !this._isBareFragment(parent)
 
     if (inBuildContext) {
-      const cursor = this.cursorStack[this.cursorStack.length - 1]
+      const cursor = this._cursorStack[this._cursorStack.length - 1]
       const ref = parent.childNodes[cursor] || null
       const count = existingNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE
         ? existingNode.childNodes.length
@@ -277,7 +285,7 @@ class ElementBuilder {
       if (ref !== existingNode) {
         parent.insertBefore(existingNode, ref)
       }
-      this.cursorStack[this.cursorStack.length - 1] += count
+      this._cursorStack[this._cursorStack.length - 1] += count
     } else {
       parent.appendChild(existingNode)
     }
@@ -287,9 +295,9 @@ class ElementBuilder {
 
   fragment = (cb: () => void): DocumentFragment => {
     const fragment = document.createDocumentFragment()
-    this.stack.push(fragment)
+    this._stack.push(fragment)
     cb()
-    this.stack.pop()
+    this._stack.pop()
 
     return fragment
   }
