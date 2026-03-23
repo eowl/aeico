@@ -2,6 +2,10 @@ import type { InferProps, Props } from '../core/types'
 import buttonStyle from '../assets/css/common/button.css?inline'
 import AeicoComponent from './AeicoComponent'
 
+export type ButtonColor = 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
+export type ButtonVariant = 'filled' | 'outlined' | 'ghost' | 'text'
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg'
+
 /**
  * Button Component
  * 
@@ -39,9 +43,9 @@ class Button extends AeicoComponent {
   protected static useStyles = ['button']
   protected static stylesheets = [buttonStyle]
 
-  declare color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
-  declare variant?: 'filled' | 'outlined' | 'ghost' | 'text'
-  declare size?: 'xs' | 'sm' | 'md' | 'lg'
+  declare color?: ButtonColor
+  declare variant?: ButtonVariant
+  declare size?: ButtonSize
   declare disabled?: boolean
   declare type?: 'button' | 'submit' | 'reset'
 
@@ -49,29 +53,14 @@ class Button extends AeicoComponent {
 
   constructor() {
     super()
-    this.addEventListener('click', this.handleClick.bind(this))
+    this.addEventListener('click', this._handleClick)
   }
 
-  connectedCallback() {
-    super.connectedCallback()
-    this.render()
-  }
-
-  protected onUpdated(changedProps: Map<string, any>) {
-    super.onUpdated(changedProps)
-    // color/variant/size are handled by :host([attr]) CSS — no re-render needed
-    if (changedProps.has('disabled') && this.buttonElement) {
-      this.buttonElement.toggleAttribute('disabled', !!this.disabled)
-    }
-    if (changedProps.has('type') && this.buttonElement) {
-      this.buttonElement.type = this.type || 'button'
-    }
-  }
-
-  private handleClick(event: Event) {
+  private _handleClick = (event: Event) => {
     if (this.disabled) {
       event.preventDefault()
       event.stopPropagation()
+
       return
     }
 

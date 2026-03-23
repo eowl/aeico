@@ -1,6 +1,8 @@
 import type { InferProps, Props } from '../core/types'
 import buttonGroupStyle from '../assets/css/common/button-group.css?inline'
 import AeicoComponent from './AeicoComponent'
+import type { ButtonColor, ButtonVariant, ButtonSize } from './Button'
+import Button from './Button'
 
 /**
  * ButtonGroup Component
@@ -46,9 +48,9 @@ class ButtonGroup extends AeicoComponent {
 
   protected static stylesheets = [buttonGroupStyle]
 
-  declare variant?:  'filled' | 'outlined' | 'ghost' | 'text'
-  declare color?:    'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
-  declare size?:     'xs' | 'sm' | 'md' | 'lg'
+  declare variant?:  ButtonVariant
+  declare color?:    ButtonColor
+  declare size?:     ButtonSize
   declare compact?:  boolean
   declare block?:    boolean
   declare disabled?: boolean
@@ -60,45 +62,39 @@ class ButtonGroup extends AeicoComponent {
 
     if (this.variant === undefined) this.variant = 'filled'
     if (this.color === undefined) this.color = 'default'
-
-    this.render()
-  }
-
-  protected onUpdated(changedProps: Map<string, any>) {
-    super.onUpdated(changedProps)
-    if (['variant', 'color', 'size', 'compact', 'disabled'].some(k => changedProps.has(k))) {
-      this.syncChildren()
-    }
+    if (this.size === undefined) this.size = 'md'
   }
 
   protected render() {
-    if (!this.shadowRoot) return
-    this.shadowRoot.innerHTML = `<slot></slot>`
-    this.slotEl = this.shadowRoot.querySelector('slot')
-    this.slotEl?.addEventListener('slotchange', () => this.syncChildren())
-    this.syncChildren()
+    this.build(() => {
+      const { slot } = this.tags
+      
+      this.slotEl = slot()
+      this.slotEl.addEventListener('slotchange', () => this._syncChildren())
+      this._syncChildren()
+    })
   }
 
-  private getButtons(): HTMLElement[] {
+  private _getButtons(): Button[] {
     if (!this.slotEl) return []
-    return (this.slotEl.assignedElements({ flatten: true }) as HTMLElement[])
+
+    return (this.slotEl.assignedElements({ flatten: true }) as Button[])
       .filter(el => el.tagName.toLowerCase() === 'ae-button')
   }
 
-  private syncChildren() {
-    const buttons  = this.getButtons()
-    const variant  = this.variant  ?? 'filled'
-    const color    = this.color    ?? 'default'
-    const size     = this.size     ?? 'md'
-    const r        = size === 'xs' || size === 'sm' ? 3 : 4
+  private _syncChildren() {
+    const buttons  = this._getButtons()
+    const r        = this.size === 'xs' || this.size === 'sm' ? 3 : 4
 
-    buttons.forEach((btn, i) => {
-      btn.setAttribute('variant', variant)
-      btn.setAttribute('color',   color)
-      btn.setAttribute('size',    size)
+    buttons.forEach((btn: Button, i) => {
+      btn.variant = this.variant
+      btn.color = this.color
+      btn.size = this.size
 
       if (this.disabled) {
-        btn.setAttribute('disabled', '')
+        btn.disabled = true
+      } else {
+        btn.disabled = false
       }
 
       if (this.compact) {
@@ -115,12 +111,12 @@ class ButtonGroup extends AeicoComponent {
         btn.style.setProperty('--_btn-r-br', isLast   ? `${r}px` : '0')
       } else {
         btn.style.marginLeft = ''
-        this.clearRadius(btn)
+        this._clearRadius(btn)
       }
     })
   }
 
-  private clearRadius(btn: HTMLElement) {
+  private _clearRadius(btn: HTMLElement) {
     btn.style.removeProperty('--_btn-r-tl')
     btn.style.removeProperty('--_btn-r-tr')
     btn.style.removeProperty('--_btn-r-br')
