@@ -27,7 +27,7 @@ function createEventProxy(
   namespace?: string
 ): Record<string, string> {
   return new Proxy({} as Record<string, string>, {
-    get(_target, prop: string) {
+    get(_target, prop: string | symbol) {
       // Build event name: namespace:prefix-key or prefix-key or key
       const parts: string[] = []
       if (namespace) {
@@ -36,7 +36,7 @@ function createEventProxy(
       if (prefix) {
         parts.push(prefix, '-')
       }
-      parts.push(prop)
+      parts.push(String(prop))
       return parts.join('')
     }
   })
@@ -45,7 +45,7 @@ function createEventProxy(
 /**
  * Event emitter interface for components
  */
-export interface ComponentEventEmitter {
+export type ComponentEventEmitter ={
   /**
    * Dynamic event name map
    * Access any property to get the corresponding event name
@@ -61,7 +61,7 @@ export interface ComponentEventEmitter {
    * @example
    * this.emit('change', { value: 'new value' })
    */
-  emit(eventKey: string, detail?: any): void
+  emit(eventKey: string, detail?: Record<string, string>): void
 }
 
 /**
@@ -115,7 +115,7 @@ export function createEventEmitter(
   
   return {
     events,
-    emit(eventKey: string, detail?: any): void {
+    emit(eventKey: string, detail?: Record<string, string>): void {
       const eventName = events[eventKey]
       target.dispatchEvent(new CustomEvent(eventName, {
         bubbles: true,
