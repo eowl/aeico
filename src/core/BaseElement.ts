@@ -154,8 +154,8 @@ class BaseElement extends HTMLElement {
     return this._ElementBuilder ??= new ElementBuilder()
   }
 
-  protected draw(block: () => void) {
-    this.tags.build(this.container, block)
+  protected build(cb: () => void) {
+    this.tags.build(this.container, cb)
   }
 
   protected get container(): ShadowRoot | HTMLElement {
@@ -474,7 +474,7 @@ class BaseElement extends HTMLElement {
    */
   connectedCallback() {}
   disconnectedCallback() {}
-  
+
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) return
 

@@ -38,7 +38,7 @@ class DrawButton extends AeicoElement {
   }
 
   protected render() {
-    this.draw(() => {
+    this.build(() => {
       const { button, slot } = this.tags
 
       button({

@@ -32,7 +32,7 @@ class Modal extends AeicoComponent {
   }
 
   protected render() {
-    this.draw(() => {
+    this.build(() => {
       const { div, h3, button, slot } = this.tags
 
       div({ 

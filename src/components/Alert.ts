@@ -55,7 +55,7 @@ class Alert extends AeicoComponent {
   protected render() {
     if (!this.isVisible) return
 
-    this.draw(() => {
+    this.build(() => {
       const { div, slot, button, span } = this.tags
 
       div({ 
