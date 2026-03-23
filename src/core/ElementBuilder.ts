@@ -231,6 +231,20 @@ class ElementBuilder {
     this._propsCache.set(el, newCache)
   }
 
+  detached<T>(fn: () => T): T {
+    const savedStack = this._stack
+    const savedCursor = this._cursorStack
+    this._stack = []
+    this._cursorStack = []
+    
+    try {
+      return fn()
+    } finally {
+      this._stack = savedStack
+      this._cursorStack = savedCursor
+    }
+  }
+
   el = <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
     tagName: T,
     props?: TagProps,
