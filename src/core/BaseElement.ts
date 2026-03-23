@@ -402,8 +402,8 @@ class BaseElement extends HTMLElement {
    * ```
     */
   private serializeAttribute(value: any, propDecl: Prop): string {
-    if (propDecl.converter?.toAttribute) {
-      return propDecl.converter.toAttribute(value, propDecl.type) ?? ''
+    if (propDecl?.formatter) {
+      return propDecl.formatter(value, propDecl.type) ?? ''
     }
 
     switch (propDecl.type) {
@@ -427,9 +427,9 @@ class BaseElement extends HTMLElement {
    * @returns The deserialized property value
    */
   private deserializeAttribute(value: string | null, propDecl: Prop): any {
-    // if a custom fromAttribute converter is defined, use it
-    if (propDecl.converter?.fromAttribute) {
-      return propDecl.converter.fromAttribute(value, propDecl.type)
+    // if a custom parser is defined, use it
+    if (propDecl?.parser) {
+      return propDecl.parser(value, propDecl.type)
     }
 
     // Handle basic types

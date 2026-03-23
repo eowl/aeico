@@ -264,11 +264,11 @@ export interface Prop<T = any> {
   /** Custom attribute name (default: kebab-case of property name) */
   attribute?: string | false
   
-  /** Custom converter for serialization/deserialization */
-  converter?: {
-    fromAttribute?: (value: string | null, type?: PropertyType) => T
-    toAttribute?: (value: T, type?: PropertyType) => string | null
-  }
+  /** Custom parser for deserialization (from attribute) */
+  parser?: (value: string | null, type?: PropertyType) => T
+  
+  /** Custom formatter for serialization (to attribute) */
+  formatter?: (value: T, type?: PropertyType) => string | null
 }
 
 /**
