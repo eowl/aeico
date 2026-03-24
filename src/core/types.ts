@@ -261,7 +261,10 @@ export interface Prop<T = any> {
   /** Whether to reflect property to attribute (default: true) */
   reflect?: boolean
 
-  /** Whether to observe attribute changes to property (default: true) */
+  /** Whether to observe attribute changes to property (default: true) 
+   * If false, this property will not exist in observedAttributes and attribute changes won't update the property value.
+   * change property still triggers render and watchers
+  */
   observe?: boolean
 
   /** Custom attribute name (default: kebab-case of property name) */

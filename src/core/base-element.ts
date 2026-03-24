@@ -90,7 +90,7 @@ class BaseElement extends HTMLElement {
 
     return Object.entries(allProps)
       .filter(([_, decl]) => decl.observe !== false)
-      .map(([key]) => this.toKebab(key))
+      .map(([key, decl]) => decl.attr ?? this.toKebab(key))
   }
 
   private static _propertyCache?: Record<string, Prop>

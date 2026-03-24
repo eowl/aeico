@@ -36,7 +36,8 @@ class Alert extends AeicoComponent {
     color: { type: String },
     variant: { type: String },
     size: { type: String },
-    dismissible: { type: Boolean }
+    dismissible: { type: Boolean },
+    invisible: { type: Boolean }
   }
 
   static readonly eventPrefix = 'alert'
@@ -48,21 +49,16 @@ class Alert extends AeicoComponent {
   declare variant?: AlertVariant
   declare size?: AlertSize
   declare dismissible?: boolean
-
-  private isVisible: boolean = true
-  private isHidden: boolean = false
+  declare invisible?: boolean
 
   protected render() {
-    if (!this.isVisible) return
-
     this.build(() => {
       const { div, slot, button, span } = this.builder
-
       div({ 
         className: 'alert', 
         role: 'alert', 
         part: 'alert',
-        style: { display: this.isHidden ? 'none' : '' } 
+        style: { display: this.invisible ? 'none' : '' } 
       }, () => {
         slot()
 
@@ -79,21 +75,16 @@ class Alert extends AeicoComponent {
   }
 
   show() {
-    if (!this.isVisible || this.isHidden) {
-      this.isVisible = true
-      this.isHidden = false
-
-      this.requestUpdate()
+    if (this.invisible) {
+      this.invisible = false
     }
   }
 
   hide() {
-    this.isHidden = true
-    this.requestUpdate()
+    this.invisible = true
   }
 
-  private _handleClose() {
-    this.isVisible = false
+  private _handleClose = () => {
     this.emit('close', { target: this })
     this.remove()
   }

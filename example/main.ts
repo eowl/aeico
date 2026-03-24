@@ -1,4 +1,4 @@
-import { setComponentConfig } from '../src/core/configProvider'
+import { setComponentConfig } from '../src/core/config-provider'
 import {
   InputField,
   CheckboxField,
