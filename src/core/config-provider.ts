@@ -1,5 +1,5 @@
 import type { I18nService } from './types'
-import styleStore, { type PresetStyleName } from '../utils/styleStore'
+import styleStore, { type PresetStyleName } from '../utils/style-store'
 
 export type preloadStyleEntry = PresetStyleName | Record<string, string>
 export type preloadStyles = preloadStyleEntry[]

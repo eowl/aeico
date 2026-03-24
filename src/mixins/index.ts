@@ -21,8 +21,8 @@
 export { compose } from './compose'
 export type { Constructor, Mixin } from './compose'
 
-export { Themeable } from './Themeable'
-export type { ThemeableProps } from './Themeable'
+export { Themeable } from './themeable'
+export type { ThemeableProps } from './themeable'
 
-export { Localizable } from './Localizable'
-export type { LocalizableProps } from './Localizable'
+export { Localizable } from './localizable'
+export type { LocalizableProps } from './localizable'

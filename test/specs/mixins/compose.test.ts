@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai'
 import { compose } from '../../../src/mixins/compose.js'
 import type { Constructor } from '../../../src/mixins/compose.js'
-import AeicoElement from '../../../src/core/AeicoElement.js'
+import AeicoElement from '../../../src/core/aeico-element.js'
 import { mount, unmountAll } from '../../helpers/mount.js'
 
 describe('compose', () => {

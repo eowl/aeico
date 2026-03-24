@@ -211,7 +211,7 @@ export type StyleGenerationConfig = {
 /**
  * Re-export ComponentConfig from configProvider for convenience
  */
-export type { ComponentConfig } from './configProvider'
+export type { ComponentConfig } from './config-provider'
 
 /**
  * Select option type for SelectField and related components

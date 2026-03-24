@@ -1,4 +1,4 @@
-import { StyleAdapter } from '../utils/StyleAdapter'
+import { StyleAdapter } from '../utils/style-adapter'
 import type {
   StyleProps,
   StyleEntry,
@@ -6,8 +6,8 @@ import type {
   StyleVariableGenerator,
   InferProps
 } from './types'
-import { getComponentConfig } from './configProvider'
-import BaseElement from './BaseElement'
+import { getComponentConfig } from './config-provider'
+import BaseElement from './base-element'
 
 /**
  * AeicoElement — styled base class for Aeico's built-in components.

@@ -1,6 +1,6 @@
 import type { InferProps, Props } from '../core/types'
 import alertStyle from '../assets/css/common/alert.css?inline'
-import AeicoComponent from './AeicoComponent'
+import AeicoComponent from './aeico-component'
 
 export type AlertVariant = 'subtle' | 'filled' | 'outlined'
 export type AlertSize = 'sm' | 'md' | 'lg'

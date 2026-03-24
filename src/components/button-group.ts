@@ -1,8 +1,8 @@
 import type { InferProps, Props } from '../core/types'
 import buttonGroupStyle from '../assets/css/common/button-group.css?inline'
-import AeicoComponent from './AeicoComponent'
-import type { ButtonColor, ButtonVariant, ButtonSize } from './Button'
-import Button from './Button'
+import AeicoComponent from './aeico-component'
+import type { ButtonColor, ButtonVariant, ButtonSize } from './button'
+import Button from './button'
 
 /**
  * ButtonGroup Component

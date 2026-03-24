@@ -1,4 +1,4 @@
-import AeicoField from './AeicoField'
+import AeicoField from './aeico-field'
 import { isSelectOption } from '../core/types'
 import type { InferProps, Props, Watchers } from '../core/types'
 import { getI18nService, hasI18nService } from '../core/i18n'

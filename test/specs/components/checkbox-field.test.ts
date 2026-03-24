@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll, updated, whenDefined } from '../../helpers/mount.js'
 import { randomItem } from '../../helpers/utils.js'
-import CheckboxField from '../../../src/components/CheckboxField.js'
+import CheckboxField from '../../../src/components/checkbox-field.js'
 
 const TAG_NAME = 'ae-checkbox'
 

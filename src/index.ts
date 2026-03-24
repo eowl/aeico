@@ -12,20 +12,20 @@
  */
 
 // Base classes
-export { default as AeicoBase } from './core/AeicoBase'
-export { default as AeicoElement } from './core/AeicoElement'
-export { default as AeicoField } from './components/AeicoField'
-export type { AeicoBaseProps } from './core/AeicoBase'
-export type { AeicoElementProps } from './core/AeicoElement'
-export type { AeicoFieldProps, FieldAction, FieldElement } from './components/AeicoField'
+export { default as AeicoBase } from './core/aeico-base'
+export { default as AeicoElement } from './core/aeico-element'
+export { default as AeicoField } from './components/aeico-field'
+export type { AeicoBaseProps } from './core/aeico-base'
+export type { AeicoElementProps } from './core/aeico-element'
+export type { AeicoFieldProps, FieldAction, FieldElement } from './components/aeico-field'
 
 // Mixins
 export { compose } from './mixins/compose'
 export type { Constructor, Mixin } from './mixins/compose'
-export { Themeable } from './mixins/Themeable'
-export type { ThemeableProps } from './mixins/Themeable'
-export { Localizable } from './mixins/Localizable'
-export type { LocalizableProps } from './mixins/Localizable'
+export { Themeable } from './mixins/themeable'
+export type { ThemeableProps } from './mixins/themeable'
+export { Localizable } from './mixins/localizable'
+export type { LocalizableProps } from './mixins/localizable'
 
 // Configuration & Services
 export {
@@ -33,8 +33,8 @@ export {
   getComponentConfig,
   hasComponentConfig,
   getConfigValue
-} from './core/configProvider'
-export type { ComponentConfig } from './core/configProvider'
+} from './core/config-provider'
+export type { ComponentConfig } from './core/config-provider'
 
 export { 
   setI18nService,
@@ -69,9 +69,9 @@ export type {
 } from './core/types'
 
 // ElementBuilder
-export { default as ElementBuilder } from './core/ElementBuilder'
-export type { BuilderProps } from './core/ElementBuilder'
+export { default as ElementBuilder } from './core/element-builder'
+export type { BuilderProps } from './core/element-builder'
 
 // Utilities
-export { default as styleStore } from './utils/styleStore'
+export { default as styleStore } from './utils/style-store'
 

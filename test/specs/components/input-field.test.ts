@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll, updated, whenDefined } from '../../helpers/mount.js'
-import InputField from '../../../src/components/InputField.js'
+import InputField from '../../../src/components/input-field.js'
 
 const TAG_NAME = 'ae-input'
 

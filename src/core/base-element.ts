@@ -6,7 +6,7 @@ import type {
   InferProps
 } from './types'
 import { createEventEmitter, type ComponentEventEmitter } from './events'
-import ElementBuilder from './ElementBuilder'
+import ElementBuilder from './element-builder'
 
 /**
  * BaseElement — internal reactive foundation for all Aeico elements.

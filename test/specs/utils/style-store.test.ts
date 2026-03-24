@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai'
-import styleStore from '../../../src/utils/styleStore.js'
+import styleStore from '../../../src/utils/style-store.js'
 
 describe('styleStore', () => {
   describe('getSheet()', () => {

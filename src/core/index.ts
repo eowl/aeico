@@ -19,14 +19,14 @@
  */
 
 // Base classes
-export { default as AeicoBase } from './AeicoBase'
-export { default as AeicoElement } from './AeicoElement'
+export { default as AeicoBase } from './aeico-base'
+export { default as AeicoElement } from './aeico-element'
 
 // Composer (DOM Builder)
-export { default as Composer } from './ElementBuilder'
-export type { BuilderProps } from './ElementBuilder'
+export { default as Composer } from './element-builder'
+export type { BuilderProps } from './element-builder'
 
 // Types
-export type { AeicoBaseProps } from './AeicoBase'
-export type { AeicoElementProps } from './AeicoElement'
-export type { AeicoFieldProps, FieldAction, FieldElement } from '../components/AeicoField'
+export type { AeicoBaseProps } from './aeico-base'
+export type { AeicoElementProps } from './aeico-element'
+export type { AeicoFieldProps, FieldAction, FieldElement } from '../components/aeico-field'

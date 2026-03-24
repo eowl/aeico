@@ -1,6 +1,6 @@
 import type { InferProps, Props } from '../core/types'
 import buttonStyle from '../assets/css/common/button.css?inline'
-import AeicoComponent from './AeicoComponent'
+import AeicoComponent from './aeico-component'
 
 export type ButtonColor = 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
 export type ButtonVariant = 'filled' | 'outlined' | 'ghost' | 'text'

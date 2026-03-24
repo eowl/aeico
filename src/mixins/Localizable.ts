@@ -1,5 +1,5 @@
 import type { Constructor } from './compose'
-import { getComponentConfig } from '../core/configProvider'
+import { getComponentConfig } from '../core/config-provider'
 
 /**
  * Localizable Mixin

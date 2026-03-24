@@ -1,4 +1,4 @@
-import AeicoField from './AeicoField'
+import AeicoField from './aeico-field'
 import type { InferProps, Props, Watchers } from '../core/types'
 import { checkboxFieldSpec } from '../assets/css/specs'
 

@@ -1,4 +1,4 @@
-import { getComponentConfig, setComponentConfig, hasComponentConfig } from './configProvider'
+import { getComponentConfig, setComponentConfig, hasComponentConfig } from './config-provider'
 import type { I18nService } from './types'
 
 /**

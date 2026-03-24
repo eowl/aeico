@@ -32,25 +32,25 @@
  */
 
 // Field components
-export { default as SelectField } from './SelectField'
-export { default as RangeField } from './RangeField'
-export { default as InputField } from './InputField'
-export { default as CheckboxField } from './CheckboxField'
-export { default as RadioField } from './RadioField'
+export { default as SelectField } from './select-field'
+export { default as RangeField } from './range-field'
+export { default as InputField } from './input-field'
+export { default as CheckboxField } from './checkbox-field'
+export { default as RadioField } from './radio-field'
 
 // UI components
-export { default as Button } from './Button'
-export { default as ButtonGroup } from './ButtonGroup'
-export { default as Alert } from './Alert'
-export { default as Modal } from './Modal'
+export { default as Button } from './button'
+export { default as ButtonGroup } from './button-group'
+export { default as Alert } from './alert'
+export { default as Modal } from './modal'
 
 // Component types
-export type { SelectFieldProps } from './SelectField'
-export type { RangeFieldProps } from './RangeField'
-export type { InputFieldProps } from './InputField'
-export type { CheckboxFieldProps } from './CheckboxField'
-export type { RadioFieldProps, RadioFieldType, RadioOption, RadioOptions } from './RadioField'
-export type { ButtonProps } from './Button'
-export type { ButtonGroupProps } from './ButtonGroup'
-export type { AlertProps } from './Alert'
-export type { ModalProps } from './Modal'
+export type { SelectFieldProps } from './select-field'
+export type { RangeFieldProps } from './range-field'
+export type { InputFieldProps } from './input-field'
+export type { CheckboxFieldProps } from './checkbox-field'
+export type { RadioFieldProps, RadioFieldType, RadioOption, RadioOptions } from './radio-field'
+export type { ButtonProps } from './button'
+export type { ButtonGroupProps } from './button-group'
+export type { AlertProps } from './alert'
+export type { ModalProps } from './modal'

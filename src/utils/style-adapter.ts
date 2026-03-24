@@ -1,4 +1,4 @@
-import styleStore from './styleStore'
+import styleStore from './style-store'
 import type { StyleProps, StyleEntry } from '../core/types'
 
 /**

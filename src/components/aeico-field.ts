@@ -1,5 +1,5 @@
 import type { FieldI18nKeys, InferProps, Props, Watchers } from '../core/types'
-import AeicoComponent from './AeicoComponent'
+import AeicoComponent from './aeico-component'
 
 export type FieldAction = 'clear' | 'reset' | 'change'
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement

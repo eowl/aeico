@@ -1,4 +1,4 @@
-import BaseElement from './BaseElement'
+import BaseElement from './base-element'
 import type { Props, InferProps } from './types'
 
 /**

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai'
-import { StyleAdapter } from '../../../src/utils/StyleAdapter.js'
-import styleStore from '../../../src/utils/styleStore.js'
+import { StyleAdapter } from '../../../src/utils/style-adapter.js'
+import styleStore from '../../../src/utils/style-store.js'
 
 /** Create a detached shadow root to use as the test host */
 function makeShadowRoot(): { shadowRoot: ShadowRoot; style: CSSStyleDeclaration } {

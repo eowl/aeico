@@ -1,7 +1,7 @@
 import { playwrightLauncher } from '@web/test-runner-playwright'
 import { esbuildPlugin } from '@web/dev-server-esbuild'
-import { cssInlinePlugin } from './test/plugins/cssInlinePlugin.mjs'
-import { buildTestRunnerHtml } from './test/helpers/testRunnerHtml.mjs'
+import { cssInlinePlugin } from './test/plugins/cssInline-plugin.mjs'
+import { buildTestRunnerHtml } from './test/helpers/test-runner-html.mjs'
 
 const TIMEOUT_MS = 3000
 

@@ -1,6 +1,6 @@
-import AeicoElement from '../core/AeicoElement'
-import { Themeable, type ThemeableProps } from '../mixins/Themeable'
-import { Localizable, type LocalizableProps } from '../mixins/Localizable'
+import AeicoElement from '../core/aeico-element'
+import { Themeable, type ThemeableProps } from '../mixins/themeable'
+import { Localizable, type LocalizableProps } from '../mixins/localizable'
 import { compose, Constructor } from '../mixins/compose'
 
 const BaseComponent = compose(Themeable, Localizable)(AeicoElement) as typeof AeicoElement & Constructor<ThemeableProps & LocalizableProps>

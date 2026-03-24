@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll } from '../../helpers/mount.js'
-import AeicoComponent from '../../../src/components/AeicoComponent.js'
+import AeicoComponent from '../../../src/components/aeico-component.js'
 
 afterEach(() => {
   unmountAll()

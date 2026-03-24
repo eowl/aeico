@@ -1,4 +1,4 @@
-import AeicoField from './AeicoField'
+import AeicoField from './aeico-field'
 import type { InferProps, Props } from '../core/types'
 import { inputFieldSpec } from '../assets/css/specs'
 

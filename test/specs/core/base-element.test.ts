@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll, updated } from '../../helpers/mount.js'
-import BaseElement from '../../../src/core/BaseElement.js'
+import BaseElement from '../../../src/core/base-element.js'
 import type { Props } from '../../../src/core/types.js'
 
 afterEach(() => {
@@ -36,7 +36,7 @@ function createTestElement(Base = BaseElement) {
 
 function defineEl(props: Props, setup?: (El: typeof BaseElement) => void): string {
   const tag = `test-el-${++_counter}`
-  
+
   class El extends BaseElement {
     static props = props
   }

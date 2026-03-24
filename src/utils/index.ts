@@ -13,7 +13,7 @@
  */
 
 // Style utilities
-export { default as styleStore } from './styleStore'
+export { default as styleStore } from './style-store'
 
 // Type guards
 export { isSelectOption } from '../core/types'
