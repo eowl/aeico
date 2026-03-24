@@ -56,7 +56,7 @@ class Alert extends AeicoComponent {
     if (!this.isVisible) return
 
     this.build(() => {
-      const { div, slot, button, span } = this.tags
+      const { div, slot, button, span } = this.builder
 
       div({ 
         className: 'alert', 

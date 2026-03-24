@@ -148,7 +148,7 @@ class BaseElement extends HTMLElement {
 
   private _elementBuilder?: ElementBuilder
 
-  protected get tags(): ElementBuilder {
+  protected get builder(): ElementBuilder {
     return this._elementBuilder ??= new ElementBuilder()
   }
 
@@ -162,7 +162,7 @@ class BaseElement extends HTMLElement {
     this._building = true
 
     try {
-      this.tags.build(this.container, cb)
+      this.builder.build(this.container, cb)
     } finally {
       this._building = false
     }

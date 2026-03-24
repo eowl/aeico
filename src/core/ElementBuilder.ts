@@ -8,17 +8,17 @@ type _Props = {
   key?: string
 }
 
-type TagProps = _Props & Record<string, unknown>
+type BuilderProps = _Props & Record<string, unknown>
 
 type TagFunction<K extends keyof HTMLElementTagNameMap> = 
-  (props?: TagProps, cb?: () => void) => HTMLElementTagNameMap[K]
+  (props?: BuilderProps, cb?: () => void) => HTMLElementTagNameMap[K]
 
 type HTMLTags = {
   readonly [K in keyof HTMLElementTagNameMap]: TagFunction<K>
 }
 
 type SVGTagFunction<K extends keyof SVGElementTagNameMap> = 
-  (props?: TagProps, cb?: () => void) => SVGElementTagNameMap[K]
+  (props?: BuilderProps, cb?: () => void) => SVGElementTagNameMap[K]
 
 type SVGOnlyTags = {
   readonly [K in Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap | 'text'>]: SVGTagFunction<K>
@@ -38,12 +38,12 @@ class ElementBuilder {
       get(target, prop: string) {
         if (prop in target) return Reflect.get(target, prop) as unknown
         
-        return (p?: TagProps, cb?: () => void) => target._create(prop, p, cb)
+        return (p?: BuilderProps, cb?: () => void) => target._create(prop, p, cb)
       }
     })
   }
 
-  private _create(tagName: string, props?: TagProps, cb?: () => void): Element {
+  private _create(tagName: string, props?: BuilderProps, cb?: () => void): Element {
     const parent = this._stack[this._stack.length - 1]
 
     if (!parent || this._cursorStack.length === 0 || this._isBareFragment(parent)) {
@@ -102,7 +102,7 @@ class ElementBuilder {
     return el
   }
 
-  private _createFresh(tagName: string, props?: TagProps, cb?: () => void): Element {
+  private _createFresh(tagName: string, props?: BuilderProps, cb?: () => void): Element {
     const parent = this._stack[this._stack.length - 1]
     const isSVG = tagName === 'svg'
       || (parent instanceof Element && parent.namespaceURI === SVG_NS)
@@ -159,7 +159,7 @@ class ElementBuilder {
     }
   }
 
-  private _applyProps(el: Element, props: TagProps, skipTextContent: boolean = false) {
+  private _applyProps(el: Element, props: BuilderProps, skipTextContent: boolean = false) {
     const oldCache = this._propsCache.get(el)
     const newCache: Record<string, unknown> = {}
 
@@ -236,7 +236,7 @@ class ElementBuilder {
     const savedCursor = this._cursorStack
     this._stack = []
     this._cursorStack = []
-    
+
     try {
       return fn()
     } finally {
@@ -247,7 +247,7 @@ class ElementBuilder {
 
   el = <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
     tagName: T,
-    props?: TagProps,
+    props?: BuilderProps,
     cb?: () => void
   ): T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T]
     : T extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[T]
@@ -318,4 +318,4 @@ class ElementBuilder {
 }
 
 export default ElementBuilder
-export type { TagProps, HTMLTags, SVGOnlyTags }
+export type { BuilderProps, HTMLTags, SVGOnlyTags }

@@ -33,7 +33,7 @@ class Modal extends AeicoComponent {
 
   protected render() {
     this.build(() => {
-      const { div, h3, button, slot } = this.tags
+      const { div, h3, button, slot } = this.builder
 
       div({ 
         className: 'modal-overlay',

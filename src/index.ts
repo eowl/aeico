@@ -70,7 +70,7 @@ export type {
 
 // ElementBuilder
 export { default as ElementBuilder } from './core/ElementBuilder'
-export type { TagProps } from './core/ElementBuilder'
+export type { BuilderProps } from './core/ElementBuilder'
 
 // Utilities
 export { default as styleStore } from './utils/styleStore'

@@ -39,7 +39,7 @@ class DrawButton extends AeicoElement {
 
   protected render() {
     this.build(() => {
-      const { button, slot } = this.tags
+      const { button, slot } = this.builder
 
       button({
         className: 'btn',

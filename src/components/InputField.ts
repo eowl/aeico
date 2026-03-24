@@ -19,7 +19,7 @@ class InputField extends AeicoField {
 
   render() {
     this.build(() => {
-      const { div, input } = this.tags
+      const { div, input } = this.builder
 
       div({ className: 'input-container' }, () => {
         this.fieldElement = input({

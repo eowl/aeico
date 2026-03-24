@@ -195,11 +195,11 @@ class AeicoField extends AeicoComponent {
   }
 
   /**
-   * Render action buttons (clear/reset) using this.tags.
+   * Render action buttons (clear/reset) using this.builder.
    * Must be called from within a build() callback.
    */
   protected renderActionButtonsTags() {
-    const { button } = this.tags
+    const { button } = this.builder
 
     if (this.clearable) {
       this.clearBtn = button({

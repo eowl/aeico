@@ -74,7 +74,7 @@ class Button extends AeicoComponent {
     if (this.buttonElement) return
 
     this.build(() => {
-      const { button, slot } = this.tags
+      const { button, slot } = this.builder
 
       button({
         className: 'btn',

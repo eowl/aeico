@@ -24,7 +24,7 @@ export { default as AeicoElement } from './AeicoElement'
 
 // Composer (DOM Builder)
 export { default as Composer } from './ElementBuilder'
-export type { TagProps } from './ElementBuilder'
+export type { BuilderProps } from './ElementBuilder'
 
 // Types
 export type { AeicoBaseProps } from './AeicoBase'
