@@ -1,4 +1,4 @@
-import AeicoElement from '../../src/core/AeicoElement'
+import AeicoElement from '../../src/core/aeico-element'
 import type { Props } from '../../src/core/types'
 import buttonStyle from '../../src/assets/css/common/button.css?inline'
 import variablesStyle from '../../src/assets/css/common/variables.css?inline'
@@ -30,7 +30,7 @@ class InnerHTMLButton extends AeicoElement {
     this.render()
   }
 
-  protected onUpdated(changedProps: Map<string, any>) {
+  protected onUpdated(changedProps: Map<string, unknown>) {
     super.onUpdated(changedProps)
     if (changedProps.has('disabled') || changedProps.has('type')) {
       this.render()

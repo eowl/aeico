@@ -22,9 +22,9 @@ import ElementBuilder from './element-builder'
  */
 class BaseElement extends HTMLElement {
   private _updatePending = false
-  private _changedProps = new Map<string, any>()
+  private _changedProps = new Map<string, unknown>()
   private _hasMounted = false
-  private _computedCache = new Map<string, { deps: string; value: any }>()
+  private _computedCache = new Map<string, { deps: string; value: unknown }>()
 
   /**
    * Event prefix for this component.
@@ -32,11 +32,12 @@ class BaseElement extends HTMLElement {
    * static readonly eventPrefix = 'field'  // emits 'field-change', 'field-reset'
    */
   static readonly eventPrefix: string = ''
+  static readonly eventNamespace?: string
 
-  private static _staticEvents?: any
+  private static _staticEvents?: Record<string, string>
   static get events() {
     if (!this._staticEvents) {
-      const namespace = (this as any).eventNamespace
+      const namespace = this.eventNamespace
       this._staticEvents = createEventEmitter(new EventTarget(), this.eventPrefix, namespace).events
     }
     
@@ -48,17 +49,17 @@ class BaseElement extends HTMLElement {
   get events() {
     if (!this._eventEmitter) {
       const constructor = this.constructor as typeof BaseElement
-      const namespace = (constructor as any).eventNamespace
+      const namespace = constructor.eventNamespace
       this._eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
     }
 
     return this._eventEmitter.events
   }
 
-  protected emit(eventKey: string, detail?: any): void {
+  protected emit(eventKey: string, detail?: Record<string, unknown>): void {
     if (!this._eventEmitter) {
       const constructor = this.constructor as typeof BaseElement
-      const namespace = (constructor as any).eventNamespace
+      const namespace = constructor.eventNamespace
       this._eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
     }
 
@@ -217,43 +218,44 @@ class BaseElement extends HTMLElement {
     for (const [propName, propDecl] of Object.entries(allProps)) {
       const kebabName = constructor.toKebab(propName)
       const internalKey = `_${String(propName)}`
+      const self = this as Record<string, unknown>
 
       // Capture pre-upgrade property value (set before element was upgraded)
-      let preUpgradeValue: any = undefined
+      let preUpgradeValue: unknown
       let hasPreUpgrade = false
       if (Object.prototype.hasOwnProperty.call(this, propName)) {
-        preUpgradeValue = (this as any)[propName]
+        preUpgradeValue = self[propName]
         hasPreUpgrade = true
-        delete (this as any)[propName]
+        Reflect.deleteProperty(this, propName)
       }
 
-      ;(this as any)[internalKey] = undefined
+      self[internalKey] = undefined
 
       Object.defineProperty(this, propName, {
         get: () => {
           if (propDecl.observe === false) { // if observe is disabled, just return the internal value without trying to read from attribute
-            return (this as any)[internalKey]
+            return self[internalKey]
           }
 
           const attrName = propDecl.attr ?? kebabName
           const attrValue = this.getAttribute(attrName)
           if (attrValue === null) {
-            return (this as any)[internalKey]
+            return self[internalKey]
           }
 
           return this.deserializeAttribute(attrValue, propDecl)
         },
-        set: (value: any) => {
-          const oldValue = (this as any)[propName]
+        set: (value: unknown) => {
+          const oldValue = self[propName]
 
           if (propDecl.observe === false) { // if observe is disabled, just update the internal value without reflecting to attribute
-            ;(this as any)[internalKey] = value
+            self[internalKey] = value
             this.requestUpdate(propName, oldValue)
 
             return
           }
 
-          ;(this as any)[internalKey] = value
+          self[internalKey] = value
 
           const shouldReflect = propDecl.reflect !== false
           const attrName = propDecl.attr ?? kebabName
@@ -274,7 +276,7 @@ class BaseElement extends HTMLElement {
       })
 
       if (hasPreUpgrade && preUpgradeValue !== undefined) {
-        ;(this as any)[propName] = preUpgradeValue
+        self[propName] = preUpgradeValue
       }
     }
   }
@@ -294,7 +296,8 @@ class BaseElement extends HTMLElement {
     for (const [computedName, config] of Object.entries(constructor.computed)) {
       Object.defineProperty(this, computedName, {
         get: () => {
-          const depsKey = config.deps.map(dep => String((this as any)[dep])).join('|')
+          const self = this as Record<string, unknown>
+          const depsKey = config.deps.map(dep => String(self[dep])).join('|')
           const cached = this._computedCache.get(computedName)
           if (cached && cached.deps === depsKey) return cached.value
           const value = config.compute(this)
@@ -313,7 +316,7 @@ class BaseElement extends HTMLElement {
    * @param name The name of the property that changed (optional, for manual calls)
    * @param oldValue The previous value of the property (optional, for manual calls)
    */
-  protected requestUpdate(name?: string, oldValue?: any): void {
+  protected requestUpdate(name?: string, oldValue?: unknown): void {
     if (name !== undefined) {
       this._changedProps.set(name, oldValue)
     }
@@ -331,7 +334,7 @@ class BaseElement extends HTMLElement {
    */
   protected async executeUpdate(): Promise<void> {
     const changedProps = this._changedProps
-    this._changedProps = new Map()
+    this._changedProps = new Map<string, unknown>()
     this._updatePending = false
 
     const shouldUpdate = this.onPrepare(changedProps)
@@ -340,7 +343,7 @@ class BaseElement extends HTMLElement {
     this.triggerWatchers(changedProps)
     this.invalidateComputed(changedProps)
 
-    if (typeof (this as any).render === 'function') {
+    if (typeof (this as Record<string, unknown>)['render'] === 'function') {
       this.render()
     }
 
@@ -357,15 +360,16 @@ class BaseElement extends HTMLElement {
    * For each changed property that has a watcher, calls the corresponding method with (newValue, oldValue).
    * @param changedProps Map of changed property names to their old values
    */
-  private triggerWatchers(changedProps: Map<string, any>): void {
+  private triggerWatchers(changedProps: Map<string, unknown>): void {
     const constructor = this.constructor as typeof BaseElement
     if (!constructor.watchers) return
 
     for (const [propName, oldValue] of changedProps) {
       const methodName = constructor.watchers[propName]
-      if (methodName && typeof (this as any)[methodName] === 'function') {
-        const newValue = (this as any)[propName]
-        ;(this as any)[methodName](newValue, oldValue)
+      const self = this as Record<string, unknown>
+      if (methodName && typeof self[methodName] === 'function') {
+        const newValue = self[propName]
+        ;(self[methodName] as (n: unknown, o: unknown) => void)(newValue, oldValue)
       }
     }
   }
@@ -375,7 +379,7 @@ class BaseElement extends HTMLElement {
    * For each computed property, checks if any of its dependencies are in the changedProps map. If so, deletes it from the cache.
    * @param changedProps Map of changed property names to their old values
    */
-  private invalidateComputed(changedProps: Map<string, any>): void {
+  private invalidateComputed(changedProps: Map<string, unknown>): void {
     const constructor = this.constructor as typeof BaseElement
     if (!constructor.computed) return
     const changedNames = Array.from(changedProps.keys())
@@ -399,7 +403,7 @@ class BaseElement extends HTMLElement {
    * serializeAttribute('hello', { type: String }) // => 'hello'
    * ```
     */
-  private serializeAttribute(value: any, propDecl: Prop): string {
+  private serializeAttribute(value: unknown, propDecl: Prop): string {
     if (propDecl?.formatter) {
       return propDecl.formatter(value, propDecl.type) ?? ''
     }
@@ -424,7 +428,7 @@ class BaseElement extends HTMLElement {
    * @param propDecl The property declaration (for type info and custom converter)
    * @returns The deserialized property value
    */
-  private deserializeAttribute(value: string | null, propDecl: Prop): any {
+  private deserializeAttribute(value: string | null, propDecl: Prop): unknown {
     // if a custom parser is defined, use it
     if (propDecl?.parser) {
       return propDecl.parser(value, propDecl.type)
@@ -471,9 +475,9 @@ class BaseElement extends HTMLElement {
    * - onUpdated(changedProps): called after update
    * - onMounted(changedProps): called after the first update
    */
-  protected onPrepare(_changedProps: Map<string, any>): boolean | void {}
-  protected onUpdated(_changedProps: Map<string, any>): void {}
-  protected onMounted(_changedProps: Map<string, any>): void {}
+  protected onPrepare(_changedProps: Map<string, unknown>): boolean | void {}
+  protected onUpdated(_changedProps: Map<string, unknown>): void {}
+  protected onMounted(_changedProps: Map<string, unknown>): void {}
 
   /**
    * Standard custom element lifecycle callbacks (optional to implement):
@@ -493,9 +497,10 @@ class BaseElement extends HTMLElement {
 
     const { propName, propDecl } = entry
     const internalKey = `_${propName}`
-    const prevValue = (this as any)[internalKey]
+    const self = this as Record<string, unknown>
+    const prevValue = self[internalKey]
     
-    ;(this as any)[internalKey] = this.deserializeAttribute(newValue, propDecl)
+    self[internalKey] = this.deserializeAttribute(newValue, propDecl)
     
     this.requestUpdate(propName, prevValue)
   }

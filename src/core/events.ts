@@ -61,7 +61,7 @@ export type ComponentEventEmitter ={
    * @example
    * this.emit('change', { value: 'new value' })
    */
-  emit(eventKey: string, detail?: Record<string, string>): void
+  emit(eventKey: string, detail?: Record<string, unknown>): void
 }
 
 /**
@@ -115,7 +115,7 @@ export function createEventEmitter(
   
   return {
     events,
-    emit(eventKey: string, detail?: Record<string, string>): void {
+    emit(eventKey: string, detail?: Record<string, unknown>): void {
       const eventName = events[eventKey]
       target.dispatchEvent(new CustomEvent(eventName, {
         bubbles: true,
