@@ -89,7 +89,7 @@ class BaseElement extends HTMLElement {
     const allProps = this._collectProps() as Props
 
     return Object.entries(allProps)
-      .filter(([_, decl]) => decl.attribute !== false)
+      .filter(([_, decl]) => decl.observe !== false)
       .map(([key]) => this.toKebab(key))
   }
 
@@ -129,11 +129,9 @@ class BaseElement extends HTMLElement {
 
     const attrMap = new Map<string, string>()
     for (const [propName, decl] of Object.entries(collected)) {
-      if (decl.attribute === false) continue
+      if (decl.observe === false) continue
 
-      const attrName = typeof decl.attribute === 'string' 
-        ? decl.attribute 
-        : this.toKebab(propName)
+      const attrName = decl.attr ?? this.toKebab(propName)
       attrMap.set(attrName, propName)
     }
 
@@ -233,11 +231,11 @@ class BaseElement extends HTMLElement {
 
       Object.defineProperty(this, propName, {
         get: () => {
-          if (propDecl.attribute === false) {
+          if (propDecl.observe === false) { // if observe is disabled, just return the internal value without trying to read from attribute
             return (this as any)[internalKey]
           }
 
-          const attrName = typeof propDecl.attribute === 'string' ? propDecl.attribute : kebabName
+          const attrName = propDecl.attr ?? kebabName
           const attrValue = this.getAttribute(attrName)
           if (attrValue === null) {
             return (this as any)[internalKey]
@@ -248,7 +246,7 @@ class BaseElement extends HTMLElement {
         set: (value: any) => {
           const oldValue = (this as any)[propName]
 
-          if (propDecl.attribute === false) {
+          if (propDecl.observe === false) { // if observe is disabled, just update the internal value without reflecting to attribute
             ;(this as any)[internalKey] = value
             this.requestUpdate(propName, oldValue)
 
@@ -258,7 +256,7 @@ class BaseElement extends HTMLElement {
           ;(this as any)[internalKey] = value
 
           const shouldReflect = propDecl.reflect !== false
-          const attrName = typeof propDecl.attribute === 'string' ? propDecl.attribute : kebabName
+          const attrName = propDecl.attr ?? kebabName
 
           if (shouldReflect) {
             if (value === null || value === undefined) {

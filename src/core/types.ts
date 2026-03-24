@@ -260,9 +260,12 @@ export interface Prop<T = any> {
   
   /** Whether to reflect property to attribute (default: true) */
   reflect?: boolean
-  
+
+  /** Whether to observe attribute changes to property (default: true) */
+  observe?: boolean
+
   /** Custom attribute name (default: kebab-case of property name) */
-  attribute?: string | false
+  attr?: string
   
   /** Custom parser for deserialization (from attribute) */
   parser?: (value: string | null, type?: PropertyType) => T
