@@ -38,15 +38,17 @@ export function compose(...mixins: Mixin[]) {
   }
 }
 
+type _Component = {
+  connectedCallback?(): void;
+  disconnectedCallback?(): void;
+}
+
 /**
  * Constructor type for mixin composition with Web Component lifecycle methods
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- TypeScript mixin pattern requires any[] for constructor args
 export type Constructor<T = object, Args extends any[] = any[]> = 
-  new (...args: Args) => T & {
-    connectedCallback?(): void;
-    disconnectedCallback?(): void;
-  };
+  new (...args: Args) => T & _Component
 
 /**
  * Mixin function type

@@ -24,8 +24,9 @@ export { compose } from './mixins/compose'
 export type { Constructor, Mixin } from './mixins/compose'
 export { Themeable } from './mixins/themeable'
 export type { ThemeableProps } from './mixins/themeable'
-export { Localizable } from './mixins/localizable'
-export type { LocalizableProps } from './mixins/localizable'
+export { Localizable } from './mixins/localize/localizable'
+export { LocaleProvider, LocaleRegistry, localeRegistry } from './mixins/localize/registry'
+export type { LocalizableProps } from './mixins/localize/localizable'
 
 // Configuration & Services
 export {
