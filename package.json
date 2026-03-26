@@ -27,6 +27,11 @@
       "import": "./dist/mixins.js",
       "require": "./dist/mixins.cjs"
     },
+    "./localize": {
+      "types": "./dist/types/localize/index.d.ts",
+      "import": "./dist/localize.js",
+      "require": "./dist/localize.cjs"
+    },
     "./utils": {
       "types": "./dist/types/utils/index.d.ts",
       "import": "./dist/utils.js",

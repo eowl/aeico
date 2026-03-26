@@ -79,11 +79,6 @@ class Modal extends AeicoComponent {
     }
   }
 
-  public onLanguageChange() {
-    super.onLanguageChange()
-    this.requestUpdate()
-  }
-
   open() {
     this.style.display = 'block'
     this.emit('open', { target: this })

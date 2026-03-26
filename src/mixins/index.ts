@@ -23,6 +23,3 @@ export type { Constructor, Mixin } from './compose'
 
 export { Themeable } from './themeable'
 export type { ThemeableProps } from './themeable'
-
-export { Localizable } from './localize/localizable'
-export type { LocalizableProps } from './localize/localizable'

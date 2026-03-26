@@ -40,8 +40,8 @@ class RadioField extends AeicoField {
     this._groupName = `radio-field-${++RadioField._instanceCount}`
   }
 
-  public onLanguageChange() {
-    super.onLanguageChange()
+  public onLocaleChange() {
+    super.onLocaleChange()
     this.render()
   }
 

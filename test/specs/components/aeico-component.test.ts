@@ -37,7 +37,7 @@ describe('AeicoComponent', () => {
       
       // Check Localizable methods exist
       expect(el.t).to.be.a('function')
-      expect(el.onLanguageChange).to.be.a('function')
+      expect(el.onLocaleChange).to.be.a('function')
       
       // Check that element is properly instantiated
       expect(el).to.be.instanceOf(TestComponent)

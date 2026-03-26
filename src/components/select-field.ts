@@ -30,8 +30,8 @@ class SelectField extends AeicoField {
 
   protected static stylesheets = [selectFieldSpec]
 
-  public onLanguageChange() {
-    super.onLanguageChange()
+  public onLocaleChange() {
+    super.onLocaleChange()
     this.updateOptions()
   }
 

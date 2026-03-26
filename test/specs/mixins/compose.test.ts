@@ -214,7 +214,7 @@ describe('compose', () => {
   it('should work with actual Themeable and Localizable mixins', async () => {
     // Import real mixins
     const { Themeable } = await import('../../../src/mixins/themeable.js')
-    const { Localizable } = await import('../../../src/mixins/localize/localizable.js')
+    const { Localizable } = await import('../../../src/localize/localizable.js')
     
     const ComposedClass = compose(Themeable, Localizable)(AeicoElement)
     customElements.define('test-real-mixins', ComposedClass)

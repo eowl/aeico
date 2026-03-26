@@ -101,8 +101,8 @@ class AeicoField extends AeicoComponent {
    * Handle language change event
    * Updates reset button label and allows subclasses to add custom behavior
    */
-  public onLanguageChange() {
-    super.onLanguageChange()
+  public onLocaleChange() {
+    super.onLocaleChange()
     this.updateResetButtonLabel()
     this.updateClearButtonLabel()
   }
