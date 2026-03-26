@@ -19,7 +19,7 @@ export function Localizable<T extends Constructor>(Base: T) {
 
     _localeUnsubscribe: (() => void) | null = null;
 
-    onLocaleChange?(): void;
+    onLocaleChange(): void {}
 
     connectedCallback() {
       super.connectedCallback?.();
