@@ -10,6 +10,46 @@ import {
   Alert,
   Modal,
 } from '../src/components/index'
+import { locale } from '../src/localize'
+
+// --- Localization setup ---
+
+type LocaleData = { [key: string]: string | LocaleData }
+
+const LOCALES: Record<string, LocaleData> = {
+  en: {
+    buttons: {
+      reset: 'Reset',
+      clear: 'Clear',
+      cancel: 'Cancel',
+    },
+    alert: {
+      close: 'Close alert',
+    },
+  },
+  zh: {
+    buttons: {
+      reset: '重置',
+      clear: '清除',
+      cancel: '取消',
+    },
+    alert: {
+      close: '关闭提示',
+    },
+  },
+}
+
+const SUPPORTED_LANGS = ['en', 'zh'] as const
+type SupportedLang = typeof SUPPORTED_LANGS[number]
+
+function detectLang(): SupportedLang {
+  const sysLang = navigator.language || ''
+  if (sysLang.startsWith('zh')) return 'zh'
+  return 'en'
+}
+
+let currentLang = detectLang()
+locale.update(currentLang, LOCALES[currentLang])
 
 // Global config
 setComponentConfig({
@@ -97,3 +137,26 @@ events.forEach(eventName => {
     appendLog(`${tag} → ${eventName}${detail ? ' ' + detail : ''}`)
   }) as EventListener)
 })
+
+// --- Language switching ---
+
+function syncLangButtons() {
+  const enBtn = document.getElementById('lang-en')
+  const zhBtn = document.getElementById('lang-zh')
+  if (enBtn) enBtn.setAttribute('color', currentLang === 'en' ? 'primary' : 'default')
+  if (zhBtn) zhBtn.setAttribute('color', currentLang === 'zh' ? 'primary' : 'default')
+}
+
+function switchLang(lang: SupportedLang) {
+  if (lang === currentLang) return
+  currentLang = lang
+  locale.update(lang, LOCALES[lang])
+  syncLangButtons()
+  appendLog(`language switched → ${lang}`)
+}
+
+document.getElementById('lang-en')?.addEventListener('click', () => switchLang('en'))
+document.getElementById('lang-zh')?.addEventListener('click', () => switchLang('zh'))
+
+// Init button states after DOM is ready
+syncLangButtons()

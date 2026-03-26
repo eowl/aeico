@@ -25,6 +25,13 @@
       padding: 2rem;
     }
 
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+
     h1 {
       font-size: 1.75rem;
       margin-bottom: 0.25rem;
@@ -32,7 +39,6 @@
 
     .subtitle {
       color: var(--text-secondary);
-      margin-bottom: 2rem;
       font-size: 0.9rem;
     }
 
@@ -106,8 +112,16 @@
   </style>
 </head>
 <body>
-  <h1>Aeico Components</h1>
-  <p class="subtitle">Interactive showcase of all components</p>
+  <div class="page-header">
+    <div>
+      <h1>Aeico Components</h1>
+      <p class="subtitle">Interactive showcase of all components</p>
+    </div>
+    <ae-button-group compact>
+      <ae-button id="lang-en" color="primary">EN</ae-button>
+      <ae-button id="lang-zh">中文</ae-button>
+    </ae-button-group>
+  </div>
 
   <!-- InputField -->
   <div class="section">
