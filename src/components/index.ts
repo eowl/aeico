@@ -33,11 +33,13 @@
 
 // Field components
 export { default as SelectField } from './select-field'
-export { default as Select } from './select'
 export { default as RangeField } from './range-field'
 export { default as InputField } from './input-field'
 export { default as CheckboxField } from './checkbox-field'
 export { default as RadioField } from './radio-field'
+
+export { default as Select } from './select'
+export { default as Slider } from './slider'
 
 // UI components
 export { default as Button } from './button'
@@ -48,6 +50,7 @@ export { default as Modal } from './modal'
 // Component types
 export type { SelectFieldProps } from './select-field'
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
+export type { SliderProps, SliderOption, SliderOptions, SliderOptionValue } from './slider'
 export type { RangeFieldProps } from './range-field'
 export type { InputFieldProps } from './input-field'
 export type { CheckboxFieldProps } from './checkbox-field'

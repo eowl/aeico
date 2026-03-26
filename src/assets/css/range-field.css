@@ -138,12 +138,34 @@ input[type="range"]:disabled::-moz-range-thumb {
   color: var(--action-btn-color-hover);
 }
 
+.clear-btn {
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--action-btn-bg);
+  color: var(--action-btn-color);
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+
+.clear-btn:hover {
+  background: var(--clear-btn-bg-hover);
+  color: var(--clear-btn-color-hover);
+}
+
 /* Size Variants */
 :host([size="sm"]) {
   --range-height: 3px;
   --range-thumb-size: 11px;
   --value-label-font: 11px;
   --reset-btn-size: 14px;
+  --clear-btn-size: 14px;
 }
 
 :host([size="lg"]) {
@@ -151,6 +173,7 @@ input[type="range"]:disabled::-moz-range-thumb {
   --range-thumb-size: 17px;
   --value-label-font: 14px;
   --reset-btn-size: 18px;
+  --clear-btn-size: 18px;
 }
 
 .input-range,
@@ -180,4 +203,27 @@ input[type="range"]::-moz-range-thumb {
 .reset-btn {
   width: var(--reset-btn-size, 16px);
   height: var(--reset-btn-size, 16px);
+}
+
+.value-input {
+  width: 56px;
+  padding: 0 4px;
+  height: 22px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 12px;
+  text-align: center;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.value-input:focus {
+  border-color: var(--color-primary);
+}
+
+.value-input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

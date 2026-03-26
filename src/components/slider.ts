@@ -1,0 +1,254 @@
+import AeicoField from './aeico-field'
+import type { InferProps, Props } from '../core/types'
+import { rangeFieldSpec } from '../assets/css/specs'
+
+export type SliderOptionValue = string | number
+
+export type SliderOption = {
+  label: string
+  value: SliderOptionValue
+}
+
+export type SliderOptions = SliderOptionValue[] | SliderOption[]
+
+interface NormalizedOption {
+  label: string
+  value: string      // stored as string for consistency with this.value
+  rangeValue: number // numeric value used by the range input
+}
+
+class Slider extends AeicoField {
+  protected fieldElement: HTMLInputElement | null = null
+  private _valueLabel: HTMLSpanElement | null = null
+  private _numberInput: HTMLInputElement | null = null
+
+  private _boundOnRangeInput: () => void
+  private _boundOnNumberInput: () => void
+
+  static tagName = 'slider'
+
+  static props: Props = {
+    options: { type: Array },
+    percentage: { type: Boolean },
+    min: { type: Number },
+    max: { type: Number },
+    step: { type: Number },
+    inputValue: { type: Boolean },
+  }
+
+  declare options?: SliderOptions
+  declare percentage?: boolean
+  declare min?: number
+  declare max?: number
+  declare step?: number
+  declare inputValue?: boolean
+
+  protected static stylesheets = [rangeFieldSpec]
+
+  constructor() {
+    super()
+    this._boundOnRangeInput = this._onRangeInput.bind(this)
+    this._boundOnNumberInput = this._onNumberInput.bind(this)
+  }
+
+  private _normalizeOptions(): NormalizedOption[] | null {
+    if (!Array.isArray(this.options) || this.options.length === 0) return null
+
+    const opts = this.options.map(opt =>
+      this._isSliderOption(opt)
+        ? { label: opt.label, value: String(opt.value) }
+        : { label: String(opt), value: String(opt) }
+    )
+
+    // Sort by numeric value if all values are numeric; otherwise keep original order
+    const allNumeric = opts.every(o => o.value !== '' && !isNaN(Number(o.value)))
+
+    if (allNumeric) {
+      return [...opts]
+        .sort((a, b) => Number(a.value) - Number(b.value))
+        .map(o => ({ ...o, rangeValue: Number(o.value) }))
+    } else {
+      return opts.map((o, i) => ({ ...o, rangeValue: i }))
+    }
+  }
+
+  private _getRangeAttrs(normalized: NormalizedOption[] | null): {
+    min: string; max: string; step: string; inOptionsMode: boolean
+  } {
+    if (normalized && normalized.length >= 1) {
+      const vals = normalized.map(o => o.rangeValue)
+      const min = Math.min(...vals)
+      const max = Math.max(...vals)
+
+      // Compute step from minimum gap between adjacent sorted values
+      const sorted = [...vals].sort((a, b) => a - b)
+      let minGap = Infinity
+      for (let i = 1; i < sorted.length; i++) {
+        const d = sorted[i] - sorted[i - 1]
+        if (d > 0 && d < minGap) minGap = d
+      }
+
+      return {
+        min: String(min),
+        max: String(max),
+        step: minGap === Infinity ? '1' : String(minGap),
+        inOptionsMode: true,
+      }
+    }
+
+    return {
+      min: this.min !== undefined ? String(this.min) : '0',
+      max: this.max !== undefined ? String(this.max) : '100',
+      step: this.step !== undefined ? String(this.step) : '1',
+      inOptionsMode: false,
+    }
+  }
+
+  private _toRangeValue(value: string | undefined, normalized: NormalizedOption[] | null): string {
+    if (value == null || value === '') return ''
+    if (normalized) {
+      const found = normalized.find(o => o.value === value)
+
+      return found !== undefined ? String(found.rangeValue) : ''
+    }
+
+    return value
+  }
+
+  private _fromRangeValue(rv: string, normalized: NormalizedOption[] | null): string {
+    if (normalized) {
+      const n = Number(rv)
+      return normalized.find(o => o.rangeValue === n)?.value ?? normalized[0]?.value ?? rv
+    }
+    return rv
+  }
+
+  private _displayLabel(value: string | undefined, normalized: NormalizedOption[] | null): string {
+    if (value == null || value === '') return ''
+    const label = normalized
+      ? (normalized.find(o => o.value === value)?.label ?? value)
+      : value
+
+    return this.percentage ? `${label}%` : label
+  }
+
+
+  protected writeValue(value: string): void {
+    const normalized = this._normalizeOptions()
+    const rv = this._toRangeValue(value, normalized)
+
+    if (this.fieldElement && rv !== '' && this.fieldElement.value !== rv) {
+      this.fieldElement.value = rv
+    }
+
+    if (this._valueLabel) {
+      this._valueLabel.textContent = this._displayLabel(value, normalized)
+    }
+
+    // Sync number input only in free mode (options mode disables it)
+    if (this._numberInput && !normalized && this._numberInput.value !== rv) {
+      this._numberInput.value = rv
+    }
+  }
+
+  protected getValue(): string {
+    if (!this.fieldElement) return ''
+
+    return this._fromRangeValue(this.fieldElement.value, this._normalizeOptions())
+  }
+
+  render() {
+    const normalized = this._normalizeOptions()
+    const attrs = this._getRangeAttrs(normalized)
+    const { div, input, span } = this.builder
+
+    this.build(() => {
+      div({ className: 'range-container' }, () => {
+        this.fieldElement = input({
+          key: 'range',
+          type: 'range',
+          min: attrs.min,
+          max: attrs.max,
+          step: attrs.step,
+          onInput: this._boundOnRangeInput,
+          onChange: this.boundOnChange,
+        }) as HTMLInputElement
+
+        this._valueLabel = span({
+          key: 'label',
+          className: 'value-label',
+          textContent: this._displayLabel(this.value, normalized),
+        }) as HTMLSpanElement
+
+        // Action buttons first so the number input can be toggled without disrupting button reuse
+        this.renderActionButtonsTags()
+
+        if (this.inputValue) {
+          this._numberInput = input({
+            key: 'number',
+            type: 'number',
+            className: 'value-input',
+            min: attrs.min,
+            max: attrs.max,
+            step: attrs.step,
+            // Disabled in options mode: valid values are discrete, free text makes no sense
+            disabled: attrs.inOptionsMode,
+            onInput: this._boundOnNumberInput,
+          }) as HTMLInputElement
+        } else {
+          this._numberInput = null
+        }
+      })
+    })
+
+    if (this.value != null) this.writeValue(this.value)
+  }
+
+  private _onRangeInput(): void {
+    if (!this.fieldElement) return
+
+    const normalized = this._normalizeOptions()
+    const actualValue = this._fromRangeValue(this.fieldElement.value, normalized)
+
+    if (this._valueLabel) {
+      this._valueLabel.textContent = this._displayLabel(actualValue, normalized)
+    }
+    // Keep number input in sync during drag
+    if (this._numberInput && !normalized) {
+      this._numberInput.value = this.fieldElement.value
+    }
+  }
+
+  private _onNumberInput(): void {
+    if (!this._numberInput || !this.fieldElement) return
+    const v = this._numberInput.value
+    
+    if (this.fieldElement.value === v) return
+
+    this.fieldElement.value = v
+    if (this._valueLabel) {
+      this._valueLabel.textContent = this._displayLabel(v, null)
+    }
+  }
+
+  public change(value: SliderOptionValue, options?: { silent?: boolean }): void {
+    this.setValue(String(value), { ...options, action: 'change' })
+  }
+
+  public clear(options?: { silent?: boolean }): void {
+    const normalized = this._normalizeOptions()
+    const attrs = this._getRangeAttrs(normalized)
+    // Reset to the option whose rangeValue === min, or to attrs.min in free mode
+    const clearTo = normalized
+      ? (normalized.find(o => String(o.rangeValue) === attrs.min)?.value ?? normalized[0]?.value ?? attrs.min)
+      : attrs.min
+    this.setValue(clearTo, { ...options, action: 'clear' })
+  }
+
+  private _isSliderOption(opt: unknown): opt is SliderOption {
+    return opt !== null && typeof opt === 'object' && 'label' in (opt as object) && 'value' in (opt as object)
+  }
+}
+
+export default Slider
+export type SliderProps = InferProps<typeof Slider>

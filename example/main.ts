@@ -6,6 +6,7 @@ import {
   RangeField,
   SelectField,
   Select,
+  Slider,
   Button,
   ButtonGroup,
   Alert,
@@ -65,6 +66,7 @@ RadioField.register()
 RangeField.register()
 SelectField.register()
 Select.register()
+Slider.register('ae-slider')
 // Button, Alert, Modal auto-register on import
 
 // --- Set up dynamic data ---
@@ -100,6 +102,31 @@ if (selectEl) {
     { label: 'Grape', value: 'grape' },
   ]
   selectEl.value = 'banana'
+}
+
+// Slider — options mode demos
+const sliderOptsNumeric = document.querySelector<any>('#slider-opts-numeric')
+if (sliderOptsNumeric) {
+  sliderOptsNumeric.options = [0, 25, 50, 75, 100]
+  sliderOptsNumeric.value = '50'
+}
+
+const sliderOptsLabeled = document.querySelector<any>('#slider-opts-labeled')
+if (sliderOptsLabeled) {
+  sliderOptsLabeled.options = [
+    { label: 'XS', value: 'xs' },
+    { label: 'SM', value: 'sm' },
+    { label: 'MD', value: 'md' },
+    { label: 'LG', value: 'lg' },
+    { label: 'XL', value: 'xl' },
+  ]
+  sliderOptsLabeled.value = 'md'
+}
+
+const sliderOptsInput = document.querySelector<any>('#slider-opts-input')
+if (sliderOptsInput) {
+  sliderOptsInput.options = [10, 20, 30, 40, 50]
+  sliderOptsInput.value = '20'
 }
 
 // Modal interaction

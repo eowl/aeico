@@ -175,6 +175,31 @@
     </div>
   </div>
 
+  <!-- Slider -->
+  <div class="section">
+    <h2>Slider</h2>
+    <span class="tag">&lt;ae-slider&gt;</span>
+    <div class="demo-group">
+      <label>Free mode — default (0–100, step 1) with reset</label>
+      <ae-slider value="40" resettable default-value="40"></ae-slider>
+
+      <label>Free mode — percentage (step 5) with reset + clear</label>
+      <ae-slider value="60" min="0" max="100" step="5" percentage resettable clearable default-value="60"></ae-slider>
+
+      <label>Free mode — with inputValue number box</label>
+      <ae-slider id="slider-input-value" value="30" min="0" max="100" step="10" input-value resettable></ae-slider>
+
+      <label>Options mode — numeric values (sorted automatically)</label>
+      <ae-slider id="slider-opts-numeric" resettable></ae-slider>
+
+      <label>Options mode — labeled steps (non-numeric, preserves order)</label>
+      <ae-slider id="slider-opts-labeled" resettable></ae-slider>
+
+      <label>Options mode — inputValue disabled (options override free input)</label>
+      <ae-slider id="slider-opts-input" input-value resettable></ae-slider>
+    </div>
+  </div>
+
   <!-- SelectField -->
   <div class="section">
     <h2>SelectField</h2>
