@@ -16,6 +16,7 @@ describe('ElementBuilder - build()', () => {
   })
 
   describe('Basic reconciliation', () => {
+    // DIFF UPDATE: nodes with the same tag are reused, not cleared or recreated
     it('reuses existing elements with matching tags', () => {
       container.innerHTML = '<div id="test">Initial</div>'
       const originalDiv = container.firstElementChild
@@ -67,6 +68,7 @@ describe('ElementBuilder - build()', () => {
   })
 
   describe('Key-based reconciliation', () => {
+    // DIFF UPDATE: nodes are precisely located and reused by key, not cleared or recreated
     it('finds and reuses element by key', () => {
       container.innerHTML = '<div data-key="item-1">Item 1</div>'
       const original = container.firstElementChild
@@ -79,6 +81,7 @@ describe('ElementBuilder - build()', () => {
       expect(container.firstElementChild!.textContent).to.equal('Updated Item 1')
     })
 
+    // DIFF UPDATE: nodes are moved and reused (insertBefore), not deleted and recreated
     it('reorders elements based on keys', () => {
       container.innerHTML = `
         <div data-key="a">A</div>
@@ -159,6 +162,7 @@ describe('ElementBuilder - build()', () => {
   })
 
   describe('Nested updates', () => {
+    // DIFF UPDATE: nested nodes are also reused, only attributes/content are updated
     it('updates nested elements', () => {
       container.innerHTML = `
         <div id="outer">
@@ -213,6 +217,7 @@ describe('ElementBuilder - build()', () => {
       expect(div.tagName).to.equal('DIV')
     })
 
+    // DIFF UPDATE: when parent has textContent prop, children are still reused instead of being cleared by textContent
     it('does not break textContent with children (skipTextContent)', () => {
       // First render
       builder.build(container, () => {
@@ -336,6 +341,7 @@ describe('ElementBuilder - build()', () => {
   })
 
   describe('Event listeners', () => {
+    // DIFF UPDATE: elements are reused (not recreated), so event listeners bound before build remain effective
     it('event listeners work on reused elements', (done) => {
       container.innerHTML = '<button>Old</button>'
 
@@ -379,6 +385,7 @@ describe('ElementBuilder - build()', () => {
       expect(container.children.length).to.equal(0)
     })
 
+    // DIFF UPDATE: multiple consecutive builds always reuse the same set of nodes, not recreated
     it('multiple consecutive builds reconcile correctly', () => {
       // Render 1
       builder.build(container, () => {
@@ -402,6 +409,7 @@ describe('ElementBuilder - build()', () => {
   })
 
   describe('Event listener dedup', () => {
+    // DIFF UPDATE: when nodes are reused, old event listeners are replaced instead of accumulated, proving nodes are not recreated
     it('does not accumulate duplicate listeners on reused elements', () => {
       let callCount = 0
 
@@ -535,6 +543,7 @@ describe('ElementBuilder - build()', () => {
       expect(input.hasAttribute('required')).to.be.true
     })
 
+    // DIFF UPDATE: _propsCache persists across renders, and when props are unchanged, all DOM writes are skipped
     it('skips DOM writes when props are identical across renders', () => {
       builder.build(container, () => {
         builder.div({ id: 'stable', title: 'same' })
