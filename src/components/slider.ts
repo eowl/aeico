@@ -34,6 +34,7 @@ class Slider extends AeicoField {
     max: { type: Number },
     step: { type: Number },
     inputValue: { type: Boolean },
+    marks: { type: Boolean },
   }
 
   declare options?: SliderOptions
@@ -42,6 +43,7 @@ class Slider extends AeicoField {
   declare max?: number
   declare step?: number
   declare inputValue?: boolean
+  declare marks?: boolean
 
   protected static stylesheets = [rangeFieldSpec]
 
@@ -133,6 +135,29 @@ class Slider extends AeicoField {
   }
 
 
+  private _getMarksData(
+    normalized: NormalizedOption[] | null,
+    attrs: { min: string; max: string; inOptionsMode: boolean },
+  ): Array<{ value: string; label: string; pct: number }> {
+    const minVal = Number(attrs.min)
+    const maxVal = Number(attrs.max)
+    const range = maxVal - minVal || 1
+
+    if (normalized) {
+      return normalized.map(o => ({
+        value: o.value,
+        label: this.percentage ? `${o.label}%` : o.label,
+        pct: ((o.rangeValue - minVal) / range) * 100,
+      }))
+    }
+
+    // Free mode — show min and max endpoints only
+    return [
+      { value: attrs.min, label: this.percentage ? `${minVal}%` : String(minVal), pct: 0 },
+      { value: attrs.max, label: this.percentage ? `${maxVal}%` : String(maxVal), pct: 100 },
+    ]
+  }
+
   protected writeValue(value: string): void {
     const normalized = this._normalizeOptions()
     const rv = this._toRangeValue(value, normalized)
@@ -164,15 +189,33 @@ class Slider extends AeicoField {
 
     this.build(() => {
       div({ className: 'range-container' }, () => {
-        this.fieldElement = input({
-          key: 'range',
-          type: 'range',
-          min: attrs.min,
-          max: attrs.max,
-          step: attrs.step,
-          onInput: this._boundOnRangeInput,
-          onChange: this.boundOnChange,
-        }) as HTMLInputElement
+        // Wrap range + optional marks in a column so marks don't push siblings
+        div({ key: 'range-wrapper', className: 'range-wrapper' }, () => {
+          this.fieldElement = input({
+            key: 'range',
+            type: 'range',
+            min: attrs.min,
+            max: attrs.max,
+            step: attrs.step,
+            onInput: this._boundOnRangeInput,
+            onChange: this.boundOnChange,
+          }) as HTMLInputElement
+
+          if (this.marks) {
+            const marksData = this._getMarksData(normalized, attrs)
+            div({ key: 'marks', className: 'marks-container' }, () => {
+              for (const m of marksData) {
+                this.builder.span({
+                  key: `mark-${m.value}`,
+                  className: 'mark',
+                  style: { left: `${m.pct}%` },
+                }, () => {
+                  this.builder.span({ className: 'mark-label', textContent: m.label })
+                })
+              }
+            })
+          }
+        })
 
         this._valueLabel = span({
           key: 'label',
@@ -222,7 +265,7 @@ class Slider extends AeicoField {
   private _onNumberInput(): void {
     if (!this._numberInput || !this.fieldElement) return
     const v = this._numberInput.value
-    
+
     if (this.fieldElement.value === v) return
 
     this.fieldElement.value = v

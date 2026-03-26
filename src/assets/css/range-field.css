@@ -227,3 +227,58 @@ input[type="range"]::-moz-range-thumb {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ── Marks (ruler) ─────────────────────────────────────────── */
+
+.range-wrapper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.range-wrapper input[type="range"] {
+  width: 100%;
+  flex: none;
+}
+
+/* Container inset by half-thumb so left:0% / left:100% align with track ends */
+.marks-container {
+  position: relative;
+  height: 18px;
+  margin: 2px 7px 0;
+  overflow: visible;
+}
+
+.mark {
+  position: absolute;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.mark::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 4px;
+  background: var(--border-default, var(--border-subtle));
+  border-radius: 1px;
+}
+
+.mark-label {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* When marks are active, allow the host to grow and align items to start */
+:host([marks]) .range-container {
+  align-items: flex-start;
+  height: auto;
+  padding-bottom: 2px;
+}

@@ -129,6 +129,24 @@ if (sliderOptsInput) {
   sliderOptsInput.value = '20'
 }
 
+const sliderMarksLabeled = document.querySelector<any>('#slider-marks-labeled')
+if (sliderMarksLabeled) {
+  sliderMarksLabeled.options = [
+    { label: 'XS', value: 'xs' },
+    { label: 'SM', value: 'sm' },
+    { label: 'MD', value: 'md' },
+    { label: 'LG', value: 'lg' },
+    { label: 'XL', value: 'xl' },
+  ]
+  sliderMarksLabeled.value = 'md'
+}
+
+const sliderMarksNumeric = document.querySelector<any>('#slider-marks-numeric')
+if (sliderMarksNumeric) {
+  sliderMarksNumeric.options = [0, 25, 50, 75, 100]
+  sliderMarksNumeric.value = '50'
+}
+
 // Modal interaction
 const openBtn = document.getElementById('open-modal-btn')
 const modal = document.querySelector<any>('#demo-modal')
