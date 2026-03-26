@@ -5,6 +5,7 @@ import {
   RadioField,
   RangeField,
   SelectField,
+  Select,
   Button,
   ButtonGroup,
   Alert,
@@ -63,6 +64,7 @@ CheckboxField.register()
 RadioField.register()
 RangeField.register()
 SelectField.register()
+Select.register()
 // Button, Alert, Modal auto-register on import
 
 // --- Set up dynamic data ---

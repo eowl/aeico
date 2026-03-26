@@ -33,6 +33,7 @@
 
 // Field components
 export { default as SelectField } from './select-field'
+export { default as Select } from './select'
 export { default as RangeField } from './range-field'
 export { default as InputField } from './input-field'
 export { default as CheckboxField } from './checkbox-field'
@@ -46,6 +47,7 @@ export { default as Modal } from './modal'
 
 // Component types
 export type { SelectFieldProps } from './select-field'
+export type { SelectProps } from './select'
 export type { RangeFieldProps } from './range-field'
 export type { InputFieldProps } from './input-field'
 export type { CheckboxFieldProps } from './checkbox-field'
