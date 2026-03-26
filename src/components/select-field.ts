@@ -9,7 +9,7 @@ class SelectField extends AeicoField {
   private slotEl: HTMLSlotElement | null = null
   private isSlotMode = false
 
-  static tagName = 'select'
+  static tagName = 'select-deprecated'
 
   static get properties(): Props {
     return {

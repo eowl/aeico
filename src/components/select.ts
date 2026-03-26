@@ -16,7 +16,7 @@ class Select extends AeicoField {
   private _slotEl: HTMLSlotElement | null = null
   private _slotOptions: HTMLOptionElement[] = []
 
-  static tagName = 'select2'
+  static tagName = 'select'
 
   static props: Props = {
     options: { type: Array },
