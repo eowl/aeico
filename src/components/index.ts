@@ -47,7 +47,7 @@ export { default as Modal } from './modal'
 
 // Component types
 export type { SelectFieldProps } from './select-field'
-export type { SelectProps } from './select'
+export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
 export type { RangeFieldProps } from './range-field'
 export type { InputFieldProps } from './input-field'
 export type { CheckboxFieldProps } from './checkbox-field'

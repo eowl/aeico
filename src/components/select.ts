@@ -2,10 +2,14 @@ import AeicoField from './aeico-field'
 import type { InferProps, Props } from '../core/types'
 import { selectFieldSpec } from '../assets/css/specs'
 
+export type SelectOptionValue = string | number
+
 export type SelectOption = {
   label: string
-  value: string
+  value: SelectOptionValue
 }
+
+export type SelectOptions = SelectOptionValue[] | SelectOption[]
 
 class Select extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null
@@ -18,11 +22,11 @@ class Select extends AeicoField {
     options: { type: Array },
   }
 
-  declare options?: SelectOption[]
+  declare options?: SelectOptions
 
   protected static stylesheets = [selectFieldSpec]
 
-  protected writeValue(value: string): void {
+  protected writeValue(value: SelectOptionValue): void {
     if (this.fieldElement) {
       this.fieldElement.value = String(value || '')
     }
@@ -30,6 +34,7 @@ class Select extends AeicoField {
 
   private _onSlotChange(): void {
     if (!this._slotEl) return
+    
     this._slotOptions = (this._slotEl.assignedElements({ flatten: true }) as HTMLElement[])
       .filter(el => el.tagName.toLowerCase() === 'option') as HTMLOptionElement[]
     this.requestUpdate()
@@ -61,9 +66,12 @@ class Select extends AeicoField {
       for (const opt of this.options) {
         if (this._isSelectOption(opt)) {
           option({ key: `opt-${opt.value}`, value: opt.value, textContent: this.t(opt.label, opt.label) })
+        } else {
+          option({ key: `opt-${opt}`, value: opt, textContent: String(opt) })
         }
       }
     }
+
     for (const optEl of this._slotOptions) {
       option({ key: `slot-${optEl.value}`, value: optEl.value, textContent: optEl.text })
     }
@@ -74,11 +82,11 @@ class Select extends AeicoField {
       option !== null &&
       typeof option === 'object' &&
       typeof (option as SelectOption).label === 'string' &&
-      typeof (option as SelectOption).value === 'string'
+      (typeof (option as SelectOption).value === 'string' || typeof (option as SelectOption).value === 'number')
     )
   }
 
-  public change(value: string, options?: { silent?: boolean }): void {
+  public change(value: SelectOptionValue, options?: { silent?: boolean }): void {
     this.setValue(value, { ...options, action: 'change' })
   }
 }
