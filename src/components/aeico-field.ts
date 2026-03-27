@@ -44,9 +44,11 @@ class AeicoField extends AeicoComponent {
   protected resetBtn: HTMLButtonElement | null = null
   protected clearBtn: HTMLButtonElement | null = null
 
-  protected boundOnChange: () => void
-  protected boundOnReset: () => void
-  protected boundOnClear: () => void
+  protected readonly boundOnChange = () =>
+    this.setValue(this.getValue(), { silent: false, action: 'change' })
+
+  protected readonly boundOnReset = () => this.onReset()
+  protected readonly boundOnClear = () => this.onClear()
 
   /**
    * Event prefix for field components
@@ -68,14 +70,6 @@ class AeicoField extends AeicoComponent {
   declare clearText?: string
   declare size?: string
   declare disabled?: boolean
-
-  constructor() {
-    super()
-
-    this.boundOnReset = this.onReset.bind(this)
-    this.boundOnClear = this.onClear.bind(this)
-    this.boundOnChange = this.onChange.bind(this)
-  }
 
   /**
    * i18n keys configuration for this field
@@ -296,16 +290,6 @@ class AeicoField extends AeicoComponent {
   }
 
   /**
-   * Change field value programmatically
-   * 
-   * @param value New value
-   * @param options.silent If false, will emit change event (default: true)
-   */
-  public change(value: any, options?: { silent?: boolean }): void {
-    this.setValue(value, { ...options, action: 'change' })
-  }
-
-  /**
    * Reset field to specified value or default value
    * 
    * @param value Value to reset to, defaults to defaultValue prop
@@ -323,14 +307,6 @@ class AeicoField extends AeicoComponent {
    */
   public clear(options?: { silent?: boolean }): void {
     this.setValue('', { ...options, action: 'clear' })
-  }
-
-  /**
-   * Handle change event from user interaction
-   * Default implementation reads value from UI and emits change event
-   */
-  protected onChange(): void {
-    this.change(this.getValue(), { silent: false })
   }
 
   /**

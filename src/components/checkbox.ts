@@ -44,10 +44,6 @@ class Checkbox extends AeicoField {
     }
   }
 
-  public change(checked: boolean, options?: { silent?: boolean }): void {
-    this.setValue(checked, { ...options, action: 'change' })
-  }
-
   public reset(checked?: boolean, options?: { silent?: boolean }): void {
     this.setValue(checked !== undefined ? checked : (this.defaultChecked ?? false), { ...options, action: 'reset' })
   }

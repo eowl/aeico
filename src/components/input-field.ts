@@ -60,16 +60,6 @@ class InputField extends AeicoField {
     
     this.updateClearButtonVisibility()
   }
-
-  /**
-   * Change input value programmatically
-   * 
-   * @param value New value
-   * @param options.silent If false, will emit change event (default: true)
-   */
-  public change(value: string, options?: { silent?: boolean }): void {
-    this.setValue(value, { ...options, action: 'change' })
-  }
 }
 
 // Component is no longer auto-registered

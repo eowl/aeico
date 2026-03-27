@@ -274,10 +274,6 @@ class Slider extends AeicoField {
     }
   }
 
-  public change(value: SliderOptionValue, options?: { silent?: boolean }): void {
-    this.setValue(String(value), { ...options, action: 'change' })
-  }
-
   public clear(options?: { silent?: boolean }): void {
     const normalized = this._normalizeOptions()
     const attrs = this._getRangeAttrs(normalized)

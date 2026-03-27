@@ -85,10 +85,6 @@ class Select extends AeicoField {
       (typeof (option as SelectOption).value === 'string' || typeof (option as SelectOption).value === 'number')
     )
   }
-
-  public change(value: SelectOptionValue, options?: { silent?: boolean }): void {
-    this.setValue(value, { ...options, action: 'change' })
-  }
 }
 
 export default Select
