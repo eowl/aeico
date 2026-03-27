@@ -40,6 +40,7 @@ export { default as RadioField } from './radio-field'
 
 export { default as Select } from './select'
 export { default as Slider } from './slider'
+export { default as Checkbox } from './checkbox'
 
 // UI components
 export { default as Button } from './button'
@@ -51,6 +52,7 @@ export { default as Modal } from './modal'
 export type { SelectFieldProps } from './select-field'
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
 export type { SliderProps, SliderOption, SliderOptions, SliderOptionValue } from './slider'
+export type { CheckboxProps, CheckboxVariant } from './checkbox'
 export type { RangeFieldProps } from './range-field'
 export type { InputFieldProps } from './input-field'
 export type { CheckboxFieldProps } from './checkbox-field'

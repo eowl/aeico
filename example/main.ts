@@ -7,6 +7,7 @@ import {
   SelectField,
   Select,
   Slider,
+  Checkbox,
   Button,
   ButtonGroup,
   Alert,
@@ -67,6 +68,7 @@ RangeField.register()
 SelectField.register()
 Select.register()
 Slider.register('ae-slider')
+Checkbox.register('ae-cb')
 // Button, Alert, Modal auto-register on import
 
 // --- Set up dynamic data ---

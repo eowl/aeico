@@ -18,6 +18,7 @@ import radioFieldCss from './radio-field.css?inline'
 import selectFieldCss from './select-field.css?inline'
 import inputFieldCss from './input-field.css?inline'
 import checkboxFieldCss from './checkbox-field.css?inline'
+import checkboxCss from './components/checkbox.css?inline'
 import modalCss from './modal.css?inline'
 
 import type { StyleSpec } from '../../core/types'
@@ -60,6 +61,13 @@ export const inputFieldSpec: StyleSpec = {
 export const checkboxFieldSpec: StyleSpec = {
   id: 'aeico:checkbox-field',
   code: checkboxFieldCss,
+  scope: 'shadow',
+  deps: [variablesSpec]
+}
+
+export const checkboxSpec: StyleSpec = {
+  id: 'aeico:checkbox',
+  code: checkboxCss,
   scope: 'shadow',
   deps: [variablesSpec]
 }
