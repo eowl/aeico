@@ -33,7 +33,7 @@ class Slider extends AeicoField {
     min: { type: Number },
     max: { type: Number },
     step: { type: Number },
-    inputValue: { type: Boolean },
+    editable: { type: Boolean },
     marks: { type: Boolean },
   }
 
@@ -42,7 +42,7 @@ class Slider extends AeicoField {
   declare min?: number
   declare max?: number
   declare step?: number
-  declare inputValue?: boolean
+  declare editable?: boolean
   declare marks?: boolean
 
   protected static stylesheets = [rangeFieldSpec]
@@ -226,7 +226,7 @@ class Slider extends AeicoField {
         // Action buttons first so the number input can be toggled without disrupting button reuse
         this.renderActionButtonsTags()
 
-        if (this.inputValue) {
+        if (this.editable) {
           this._numberInput = input({
             key: 'number',
             type: 'number',
