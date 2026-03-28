@@ -28,6 +28,8 @@
   --rg-min-width:    64px;
   --rg-radius:       4px;
   --rg-font-weight:  400;
+
+  --color-unselected: var(--color-gray-dark, #1e1e1e);
 }
 
 /* ── Color variants ─────────────────────────────────────────────────────── */
@@ -204,7 +206,7 @@ slot {
   border-radius: var(--rg-radius);
 
   /* Filled (default variant): neutral dark bg, always contrasts with accent selected */
-  background:   var(--color-gray, #333);
+  background:   var(--color-unselected, #333);
   border:       1px solid var(--color-gray-light, #444);
   color:        var(--color-text-muted);
 }
