@@ -1,0 +1,499 @@
+/* ============================================================================
+ * RadioGroup — color tokens (mirrors button.css pattern)
+ * Per-color blocks set --rg-* vars; mode/variant rules consume them.
+ * ========================================================================== */
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rg-gap, 4px);
+
+  /* Color tokens — default */
+  --rg-solid-bg:          var(--color-gray);
+  --rg-solid-bg-hover:    var(--color-gray-light);
+  --rg-solid-bg-active:   var(--color-gray-dark);
+  --rg-solid-color:       var(--color-text-main);
+  --rg-solid-color-hover: var(--color-text-main);
+  --rg-border:            var(--color-gray-light);
+  --rg-border-hover:      var(--color-gray-lighter);
+  --rg-accent:            var(--color-text-muted);
+  --rg-accent-hover:      var(--color-text-main);
+  --rg-subtle-bg:         rgba(255, 255, 255, 0.04);
+  --rg-subtle-bg-hover:   rgba(255, 255, 255, 0.08);
+
+  /* Size tokens — md (default) */
+  --rg-font-size:    14px;
+  --rg-height:       32px;
+  --rg-padding:      6px 15px;
+  --rg-min-width:    64px;
+  --rg-radius:       4px;
+  --rg-font-weight:  400;
+}
+
+/* ── Color variants ─────────────────────────────────────────────────────── */
+
+:host([color="primary"]) {
+  --rg-solid-bg:          var(--color-primary);
+  --rg-solid-bg-hover:    var(--color-primary-hover);
+  --rg-solid-bg-active:   var(--color-primary-active);
+  --rg-solid-color:       var(--color-text-main);
+  --rg-border:            var(--color-primary);
+  --rg-border-hover:      var(--color-primary-hover);
+  --rg-accent:            var(--color-text-link);
+  --rg-accent-hover:      var(--color-text-link-hover);
+  --rg-subtle-bg:         var(--color-primary-bg-subtle);
+  --rg-subtle-bg-hover:   rgba(17, 119, 187, 0.15);
+}
+
+:host([color="secondary"]) {
+  --rg-solid-bg:          var(--color-gray-light);
+  --rg-solid-bg-hover:    var(--color-gray-lighter);
+  --rg-solid-color:       var(--color-text-muted);
+  --rg-border:            var(--color-gray-lighter);
+  --rg-border-hover:      var(--color-gray-lightest);
+  --rg-accent:            var(--color-text-muted);
+  --rg-accent-hover:      var(--color-text-main);
+}
+
+:host([color="success"]) {
+  --rg-solid-bg:          var(--color-success);
+  --rg-solid-bg-hover:    var(--color-success-hover);
+  --rg-solid-bg-active:   var(--color-success-active);
+  --rg-solid-color:       var(--color-text-main);
+  --rg-border:            var(--color-success);
+  --rg-border-hover:      var(--color-success-hover);
+  --rg-accent:            var(--color-success-text-emphasis, var(--color-success));
+  --rg-accent-hover:      var(--color-success-hover);
+  --rg-subtle-bg:         var(--color-success-bg-subtle);
+  --rg-subtle-bg-hover:   rgba(34, 197, 94, 0.15);
+}
+
+:host([color="danger"]) {
+  --rg-solid-bg:          var(--color-danger);
+  --rg-solid-bg-hover:    var(--color-danger-hover);
+  --rg-solid-bg-active:   var(--color-danger-active);
+  --rg-solid-color:       var(--color-text-main);
+  --rg-border:            var(--color-danger);
+  --rg-border-hover:      var(--color-danger-hover);
+  --rg-accent:            var(--color-danger);
+  --rg-accent-hover:      #ff5566;
+  --rg-subtle-bg:         var(--color-danger-bg-subtle);
+  --rg-subtle-bg-hover:   rgba(239, 68, 68, 0.15);
+}
+
+:host([color="warning"]) {
+  --rg-solid-bg:          var(--color-warning);
+  --rg-solid-bg-hover:    var(--color-warning-hover);
+  --rg-solid-bg-active:   var(--color-warning-active);
+  --rg-solid-color:       #1e1e1e;
+  --rg-border:            var(--color-warning);
+  --rg-border-hover:      var(--color-warning-hover);
+  --rg-accent:            var(--color-warning-text-emphasis, var(--color-warning));
+  --rg-accent-hover:      var(--color-warning-hover);
+  --rg-subtle-bg:         var(--color-warning-bg-subtle);
+  --rg-subtle-bg-hover:   rgba(234, 179, 8, 0.15);
+}
+
+:host([color="info"]) {
+  --rg-solid-bg:          var(--color-info);
+  --rg-solid-bg-hover:    var(--color-info-hover);
+  --rg-solid-bg-active:   var(--color-info-active);
+  --rg-solid-color:       var(--color-text-main);
+  --rg-border:            var(--color-info);
+  --rg-border-hover:      var(--color-info-hover);
+  --rg-accent:            var(--color-info-text-emphasis, var(--color-info));
+  --rg-accent-hover:      var(--color-info-hover);
+  --rg-subtle-bg:         var(--color-info-bg-subtle);
+  --rg-subtle-bg-hover:   rgba(6, 182, 212, 0.15);
+}
+
+/* ── Size variants ──────────────────────────────────────────────────────── */
+
+:host([size="xs"]) {
+  --rg-font-size:  12px;
+  --rg-height:     22px;
+  --rg-padding:    2px 8px;
+  --rg-min-width:  48px;
+  --rg-radius:     3px;
+}
+
+:host([size="sm"]) {
+  --rg-font-size:  13px;
+  --rg-height:     28px;
+  --rg-padding:    4px 12px;
+  --rg-min-width:  56px;
+  --rg-radius:     3px;
+}
+
+:host([size="lg"]) {
+  --rg-font-size:  16px;
+  --rg-height:     40px;
+  --rg-padding:    8px 20px;
+  --rg-min-width:  80px;
+  --rg-radius:     4px;
+}
+
+/* ============================================================================
+ * Structure
+ * ========================================================================== */
+
+/* ============================================================================
+ * Structure
+ * ========================================================================== */
+
+.rg-container {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+slot {
+  display: none;
+}
+
+/* ============================================================================
+ * mode="default"  — native radio inputs
+ * ========================================================================== */
+
+.rg-radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: var(--rg-font-size);
+  color: var(--color-text-main);
+  user-select: none;
+}
+
+.rg-radio-input {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--rg-solid-bg, var(--color-primary));
+  cursor: pointer;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.rg-radio-label {
+  line-height: 1.5;
+}
+
+/* ============================================================================
+ * mode="button" & mode="button-group"  — toggle button base
+ *
+ * Design: unselected = ghost/outline, selected = solid fill.
+ * This provides a universally clear visual distinction between states.
+ * ========================================================================== */
+
+.rg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: var(--rg-font-size);
+  font-weight: 400;
+  height: var(--rg-height);
+  padding: var(--rg-padding);
+  min-width: var(--rg-min-width);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  border-radius: var(--rg-radius);
+
+  /* Filled (default variant): neutral dark bg, always contrasts with accent selected */
+  background:   var(--color-gray, #333);
+  border:       1px solid var(--color-gray-light, #444);
+  color:        var(--color-text-muted);
+}
+
+.rg-btn:hover:not(:disabled):not(.selected) {
+  background:   var(--color-gray-light, #444);
+  border-color: var(--color-gray-lighter, #555);
+  color:        var(--color-text-main);
+}
+
+/* Selected: solid color fill — clearly different from neutral unselected */
+.rg-btn.selected {
+  background:   var(--rg-solid-bg);
+  border-color: var(--rg-solid-bg);
+  color:        #fff;
+  font-weight:  500;
+  box-shadow:   0 1px 4px rgba(0,0,0,0.22);
+}
+
+.rg-btn.selected:hover:not(:disabled) {
+  background:   var(--rg-solid-bg-hover);
+  border-color: var(--rg-solid-bg-hover);
+}
+
+.rg-btn:active:not(:disabled):not(.selected) {
+  background: var(--rg-subtle-bg-hover);
+  transform: translateY(1px);
+}
+
+.rg-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* outlined variant — transparent bg, colored border */
+:host([variant="outlined"]) .rg-btn {
+  background:   transparent;
+  border-color: var(--rg-border);
+  color:        var(--rg-accent);
+}
+:host([variant="outlined"]) .rg-btn:hover:not(:disabled):not(.selected) {
+  background:   var(--rg-subtle-bg);
+  border-color: var(--rg-accent);
+  color:        var(--rg-accent-hover);
+}
+:host([variant="outlined"]) .rg-btn.selected {
+  background:   var(--rg-solid-bg);
+  border-color: var(--rg-solid-bg);
+  color:        #fff;
+}
+
+/* ghost variant — no border, ultra-subtle */
+:host([variant="ghost"]) .rg-btn {
+  background:   transparent;
+  border-color: transparent;
+  color:        var(--rg-accent);
+}
+:host([variant="ghost"]) .rg-btn:hover:not(:disabled):not(.selected) {
+  background:   var(--rg-subtle-bg);
+  border-color: transparent;
+  color:        var(--rg-accent-hover);
+}
+:host([variant="ghost"]) .rg-btn.selected {
+  background:   var(--rg-subtle-bg-hover);
+  border-color: transparent;
+  color:        var(--rg-accent-hover);
+  font-weight:  600;
+  box-shadow:   none;
+}
+
+/* ============================================================================
+ * mode="button"  — independent buttons with gap
+ * ========================================================================== */
+
+:host([mode="button"]) .rg-container {
+  gap: 6px;
+}
+
+/* ============================================================================
+ * mode="button-group"  — compact connected strip
+ * ========================================================================== */
+
+:host([mode="button-group"]) .rg-container {
+  gap: 0;
+}
+
+/* Collapse shared borders */
+:host([mode="button-group"]) .rg-btn:not(.first):not(.only) {
+  margin-left: -1px;
+}
+
+/* Position-based border radius */
+:host([mode="button-group"]) .rg-btn.first {
+  border-radius: var(--rg-radius) 0 0 var(--rg-radius);
+}
+:host([mode="button-group"]) .rg-btn.inner {
+  border-radius: 0;
+}
+:host([mode="button-group"]) .rg-btn.last {
+  border-radius: 0 var(--rg-radius) var(--rg-radius) 0;
+}
+:host([mode="button-group"]) .rg-btn.only {
+  border-radius: var(--rg-radius);
+}
+
+/* Raise hovered/selected button so its border shows above neighbours */
+:host([mode="button-group"]) .rg-btn:hover:not(:disabled),
+:host([mode="button-group"]) .rg-btn.selected {
+  position: relative;
+  z-index: 1;
+}
+
+:host([mode="segmented"]) .rg-container {
+  gap: 2px;
+  background:    var(--surface-raised);
+  border:        1px solid var(--border-subtle);
+  border-radius: calc(var(--rg-radius) + 2px);
+  padding:       2px;
+  flex-wrap:     nowrap;
+}
+
+:host([mode="segmented"]) .rg-btn {
+  background:    transparent;
+  border-color:  transparent;
+  color:         var(--color-text-muted);
+  border-radius: var(--rg-radius);
+  min-width:     var(--rg-min-width);
+  box-shadow:    none;
+  font-weight:   400;
+}
+
+:host([mode="segmented"]) .rg-btn:hover:not(:disabled):not(.selected) {
+  background:   var(--rg-subtle-bg);
+  border-color: transparent;
+  color:        var(--color-text-secondary, var(--color-text-main));
+}
+
+:host([mode="segmented"]) .rg-btn.selected {
+  background:   var(--rg-solid-bg);
+  border-color: transparent;
+  color:        #fff;
+  font-weight:  500;
+  box-shadow:   0 1px 4px rgba(0,0,0,0.35);
+}
+
+:host([mode="segmented"]) .rg-btn.selected:hover:not(:disabled) {
+  background: var(--rg-solid-bg-hover);
+}
+
+/* Default/no-color segmented: use a higher-contrast surface for selected */
+:host([mode="segmented"]:not([color])) .rg-btn.selected {
+  background: var(--color-gray-lighter, rgba(255,255,255,0.18));
+  color:      var(--color-text-main);
+}
+
+/* outlined variant in segmented: track shows accent border */
+:host([mode="segmented"][variant="outlined"]) .rg-container {
+  border-color: var(--rg-border);
+}
+:host([mode="segmented"][variant="outlined"]) .rg-btn.selected {
+  background:   var(--rg-solid-bg);
+  border-color: transparent;
+  color:        #fff;
+}
+
+/* Base (mode="default" + fallback) */
+.reset-btn,
+.clear-btn {
+  display:        inline-flex;
+  align-items:    center;
+  justify-content: center;
+  cursor:         pointer;
+  transition:     background 0.12s, color 0.12s, border-color 0.12s;
+  flex-shrink:    0;
+  line-height:    1;
+
+  width:          18px;
+  height:         18px;
+  border-radius:  3px;
+  border:         none;
+  font-size:      12px;
+  background:     var(--action-btn-bg);
+  color:          var(--action-btn-color);
+}
+
+.reset-btn:hover { background: var(--action-btn-bg-hover); color: var(--action-btn-color-hover); }
+.clear-btn:hover  { background: var(--clear-btn-bg-hover);  color: var(--clear-btn-color-hover); }
+
+/* mode="button" & mode="button-group": sizing */
+:host([mode="button"]) .reset-btn,
+:host([mode="button"]) .clear-btn,
+:host([mode="button-group"]) .reset-btn,
+:host([mode="button-group"]) .clear-btn {
+  height:        var(--rg-height);
+  width:         var(--rg-height);
+  border-radius: var(--rg-radius);
+  font-size:     calc(var(--rg-font-size) * 1.1);
+}
+
+/* mode="segmented": sizing to match track */
+:host([mode="segmented"]) .reset-btn,
+:host([mode="segmented"]) .clear-btn {
+  height:        calc(var(--rg-height) + 4px);
+  width:         calc(var(--rg-height) + 4px);
+  border-radius: calc(var(--rg-radius) + 2px);
+  font-size:     var(--rg-font-size);
+}
+
+/* ── Filled (default variant) — all 3 modes: neutral gray ── */
+:host([mode="button"]) .reset-btn,
+:host([mode="button"]) .clear-btn,
+:host([mode="button-group"]) .reset-btn,
+:host([mode="button-group"]) .clear-btn,
+:host([mode="segmented"]) .reset-btn,
+:host([mode="segmented"]) .clear-btn {
+  background:   transparent;
+  border:       1px solid var(--color-gray-light, #444);
+  color:        var(--color-text-muted);
+}
+
+:host([mode="button"]) .reset-btn:hover,
+:host([mode="button-group"]) .reset-btn:hover,
+:host([mode="segmented"]) .reset-btn:hover {
+  background:   rgba(255, 255, 255, 0.08);
+  border-color: var(--color-gray-lighter, #555);
+  color:        var(--color-text-main);
+}
+
+:host([mode="button"]) .clear-btn:hover,
+:host([mode="button-group"]) .clear-btn:hover,
+:host([mode="segmented"]) .clear-btn:hover {
+  background:   rgba(239, 68, 68, 0.1);
+  border-color: var(--color-gray-lighter, #555);
+  color:        var(--color-danger);
+}
+
+/* ── Outlined variant — all 3 modes: color-themed border ── */
+:host([variant="outlined"][mode="button"]) .reset-btn,
+:host([variant="outlined"][mode="button"]) .clear-btn,
+:host([variant="outlined"][mode="button-group"]) .reset-btn,
+:host([variant="outlined"][mode="button-group"]) .clear-btn,
+:host([variant="outlined"][mode="segmented"]) .reset-btn,
+:host([variant="outlined"][mode="segmented"]) .clear-btn {
+  background:   transparent;
+  border-color: var(--rg-border);
+  color:        var(--rg-accent);
+}
+
+:host([variant="outlined"][mode="button"]) .reset-btn:hover,
+:host([variant="outlined"][mode="button-group"]) .reset-btn:hover,
+:host([variant="outlined"][mode="segmented"]) .reset-btn:hover {
+  background:   rgba(255, 255, 255, 0.08);
+  border-color: var(--rg-border-hover);
+  color:        var(--rg-accent-hover);
+}
+
+:host([variant="outlined"][mode="button"]) .clear-btn:hover,
+:host([variant="outlined"][mode="button-group"]) .clear-btn:hover,
+:host([variant="outlined"][mode="segmented"]) .clear-btn:hover {
+  background:   rgba(239, 68, 68, 0.1);
+  border-color: var(--rg-border-hover);
+  color:        var(--color-danger);
+}
+
+/* ── Ghost variant — all 3 modes: no border ── */
+:host([variant="ghost"][mode="button"]) .reset-btn,
+:host([variant="ghost"][mode="button"]) .clear-btn,
+:host([variant="ghost"][mode="button-group"]) .reset-btn,
+:host([variant="ghost"][mode="button-group"]) .clear-btn,
+:host([variant="ghost"][mode="segmented"]) .reset-btn,
+:host([variant="ghost"][mode="segmented"]) .clear-btn {
+  background:   transparent;
+  border-color: transparent;
+  color:        var(--rg-accent);
+}
+
+:host([variant="ghost"][mode="button"]) .reset-btn:hover,
+:host([variant="ghost"][mode="button-group"]) .reset-btn:hover,
+:host([variant="ghost"][mode="segmented"]) .reset-btn:hover {
+  background:   rgba(255, 255, 255, 0.08);
+  border-color: transparent;
+  color:        var(--rg-accent-hover);
+}
+
+:host([variant="ghost"][mode="button"]) .clear-btn:hover,
+:host([variant="ghost"][mode="button-group"]) .clear-btn:hover,
+:host([variant="ghost"][mode="segmented"]) .clear-btn:hover {
+  background:   rgba(239, 68, 68, 0.1);
+  border-color: transparent;
+  color:        var(--color-danger);
+}

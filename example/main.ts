@@ -8,6 +8,7 @@ import {
   Select,
   Slider,
   Checkbox,
+  RadioGroup,
   Button,
   ButtonGroup,
   Alert,
@@ -69,6 +70,7 @@ SelectField.register()
 Select.register()
 Slider.register('ae-slider')
 Checkbox.register('ae-cb')
+RadioGroup.register('ae-radio-group')
 // Button, Alert, Modal auto-register on import
 
 // --- Set up dynamic data ---
@@ -105,6 +107,26 @@ if (selectEl) {
   ]
   selectEl.value = 'banana'
 }
+
+// Slider — options mode demos
+
+// RadioGroup demos
+const rgDemoOptions = [
+  { label: 'Option A', value: 'a' },
+  { label: 'Option B', value: 'b' },
+  { label: 'Option C', value: 'c' },
+]
+document.querySelectorAll<any>('.rg-opts-demo').forEach(el => {
+  el.options = rgDemoOptions
+})
+const rgDefaultOpts = document.querySelector<any>('#rg-default-opts')
+if (rgDefaultOpts) rgDefaultOpts.options = rgDemoOptions
+const rgButtonOpts = document.querySelector<any>('#rg-button-opts')
+if (rgButtonOpts) rgButtonOpts.options = rgDemoOptions
+const rgButtonGroupOpts = document.querySelector<any>('#rg-button-group-opts')
+if (rgButtonGroupOpts) rgButtonGroupOpts.options = rgDemoOptions
+const rgSegmentedOpts = document.querySelector<any>('#rg-segmented-opts')
+if (rgSegmentedOpts) rgSegmentedOpts.options = rgDemoOptions
 
 // Slider — options mode demos
 const sliderOptsNumeric = document.querySelector<any>('#slider-opts-numeric')
