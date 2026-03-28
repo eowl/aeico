@@ -99,13 +99,13 @@
   --gray-950: #cccccc;
 
 
-  /* ==========================================================================
+  /* 
    * § 2  Semantic Tokens  — reference § 1 scales
    *
    * Use these in component styles; never use raw hex values directly.
    * State values (hover/active/disabled) are hand-tuned for dark-theme
    * vibrancy rather than strict scale steps.
-   * ========================================================================== */
+   **/
 
   /* Primary (Blue) */
   --color-primary:          var(--blue-500);
