@@ -26,6 +26,7 @@ class RadioGroup extends AeicoField {
     color:    { type: String },
     variant:  { type: String },
     size:     { type: String },
+    allowEmpty: { type: Boolean },
   }
 
   declare options?:  RadioGroupOptions
@@ -33,6 +34,7 @@ class RadioGroup extends AeicoField {
   declare color?:    ButtonColor
   declare variant?:  ButtonVariant
   declare size?:     ButtonSize
+  declare allowEmpty?: boolean
 
   protected static stylesheets = [radioGroupSpec]
 
@@ -75,8 +77,6 @@ class RadioGroup extends AeicoField {
     this.requestUpdate()
   }
 
-  // ── stable event handlers (arrow fields → stable refs for builder diff) ───
-
   // Single handler for radio inputs — handles both select and deselect.
   // Only uses `click` (not `change`) because `change` fires before `click`;
   // if we set value in `change`, the `click` handler would see the updated
@@ -85,11 +85,12 @@ class RadioGroup extends AeicoField {
     const input = e.target as HTMLInputElement
     const current = this.value ?? ''
     if (input.value === current) {
-      // Already selected → deselect (allow empty selection)
-      input.checked = false
-      this.setValue('', { silent: false, action: 'change' })
+      if (this.allowEmpty) {
+        input.checked = false
+        this.setValue('', { silent: false, action: 'change' })
+      }
+      // !allowEmpty: do nothing
     } else {
-      // Select new value
       this.setValue(input.value, { silent: false, action: 'change' })
     }
   }
@@ -99,7 +100,14 @@ class RadioGroup extends AeicoField {
     const val = btn.dataset.value ?? ''
     const current = this.value ?? ''
     // Toggle off if clicking already-selected option
-    this.setValue(val === current ? '' : val, { silent: false, action: 'change' })
+    if (val === current) {
+      if (this.allowEmpty) {
+        this.setValue('', { silent: false, action: 'change' })
+      }
+      // !allowEmpty: already selected, do nothing
+    } else {
+      this.setValue(val, { silent: false, action: 'change' })
+    }
   }
 
   protected getValue(): string {
