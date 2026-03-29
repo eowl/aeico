@@ -5,7 +5,7 @@ import { iconButtonSpec } from '../../assets/css/specs'
 import type { IconColor } from '../icon/defines'
 import IconRegistry from '../icon/registry'
 
-export type IconButtonVariant = 'filled' | 'outlined' | 'ghost'
+export type IconButtonVariant = 'filled' | 'outlined' | 'subtle' | 'text'
 export type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg'
 
 class IconButton extends AeicoComponent {

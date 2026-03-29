@@ -164,20 +164,37 @@
   background: var(--btn-subtle-bg-hover);
 }
 
-/* ── Variant: ghost ───────────────────────────────────────────────────────── */
+/* ── Variant: subtle ───────────────────────────────────────────────────────── */
 
-:host([variant="ghost"]) .icon-btn {
+:host([variant="subtle"]) .icon-btn {
+  background:   var(--btn-subtle-bg);
+  border-color: transparent;
+  color:        var(--btn-accent);
+}
+
+:host([variant="subtle"]) .icon-btn:hover:not(:disabled) {
+  background: var(--btn-subtle-bg-hover);
+  color:      var(--btn-accent-hover);
+}
+
+:host([variant="subtle"]) .icon-btn:active:not(:disabled) {
+  background: var(--btn-subtle-bg-hover);
+}
+
+/* ── Variant: text ────────────────────────────────────────────────────────── */
+
+:host([variant="text"]) .icon-btn {
   background:   transparent;
   border-color: transparent;
   color:        var(--btn-accent);
 }
 
-:host([variant="ghost"]) .icon-btn:hover:not(:disabled) {
+:host([variant="text"]) .icon-btn:hover:not(:disabled) {
   background: var(--btn-subtle-bg);
   color:      var(--btn-accent-hover);
 }
 
-:host([variant="ghost"]) .icon-btn:active:not(:disabled) {
+:host([variant="text"]) .icon-btn:active:not(:disabled) {
   background: var(--btn-subtle-bg-hover);
 }
 

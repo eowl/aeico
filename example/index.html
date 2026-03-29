@@ -315,18 +315,20 @@
       <ae-button variant="outlined" color="secondary">Secondary</ae-button>
       <ae-button variant="outlined" color="primary">Primary</ae-button>
       <ae-button variant="outlined" color="success">Success</ae-button>
+      <ae-button variant="outlined" color="success">
+        <ae-icon name="check"></ae-icon>
+      </ae-button>
       <ae-button variant="outlined" color="danger">Danger</ae-button>
       <ae-button variant="outlined" color="warning">Warning</ae-button>
     </div>
     <div class="demo-row">
-      <ae-button variant="ghost">Default</ae-button>
-      <ae-button variant="ghost" color="secondary">Secondary</ae-button>
-      <ae-button variant="ghost" color="primary">Primary</ae-button>
-      <ae-button variant="ghost" color="info">
+      <ae-button variant="subtle">Default</ae-button>
+      <ae-button variant="subtle" color="secondary">Secondary</ae-button>
+      <ae-button variant="subtle" color="primary">Primary</ae-button>
+      <ae-button variant="subtle" color="info">
         <ae-icon name="check" size="sm"></ae-icon>
       </ae-button>
-      <ae-button variant="ghost" color="danger">Danger</ae-button>
-      <ae-button variant="text" color="primary">Text</ae-button>
+      <ae-button variant="subtle" color="danger">Danger</ae-button>
       <ae-button disabled>Disabled</ae-button>
     </div>
     <div class="demo-row">
@@ -334,6 +336,15 @@
       <ae-button size="sm" color="primary">SM</ae-button>
       <ae-button size="md" color="primary">MD</ae-button>
       <ae-button size="lg" color="primary">LG</ae-button>
+    </div>
+    <div class="demo-group">
+      <label>Button Variant text</label>
+      <div class="demo-row">
+        <ae-button variant="text" color="primary">Text</ae-button>
+        <ae-button variant="text" color="primary">
+          <ae-icon name="home" size="sm"></ae-icon>
+        </ae-button>
+      </div>
     </div>
   </div>
 
@@ -509,10 +520,10 @@
         <option value="b">Outlined</option>
         <option value="c">Option C</option>
       </ae-radio-group>
-      <ae-radio-group mode="button" color="primary" variant="ghost" value="c">
+      <ae-radio-group mode="button" color="primary" variant="subtle" value="c">
         <option value="a">Option A</option>
         <option value="b">Option B</option>
-        <option value="c">Ghost</option>
+        <option value="c">Subtle</option>
       </ae-radio-group>
     </div>
 
@@ -705,10 +716,12 @@
       <div class="demo-row">
         <ae-icon-button icon="star"     color="primary"></ae-icon-button>
         <ae-icon-button icon="star"     color="primary" variant="outlined"></ae-icon-button>
-        <ae-icon-button icon="star"     color="primary" variant="ghost"></ae-icon-button>
+        <ae-icon-button icon="star"     color="primary" variant="subtle"></ae-icon-button>
+        <ae-icon-button icon="star"     color="primary" variant="text"></ae-icon-button>
         <ae-icon-button icon="settings" color="danger"></ae-icon-button>
         <ae-icon-button icon="settings" color="danger"  variant="outlined"></ae-icon-button>
-        <ae-icon-button icon="settings" color="danger"  variant="ghost"></ae-icon-button>
+        <ae-icon-button icon="settings" color="danger"  variant="subtle"></ae-icon-button>
+        <ae-icon-button icon="settings" color="danger"  variant="text"></ae-icon-button>
       </div>
     </div>
 
@@ -718,7 +731,8 @@
         <ae-icon-button icon="home"  disabled></ae-icon-button>
         <ae-icon-button icon="home"  color="primary" disabled></ae-icon-button>
         <ae-icon-button icon="heart" color="danger"  variant="outlined" disabled></ae-icon-button>
-        <ae-icon-button icon="heart" color="danger"  variant="ghost"    disabled></ae-icon-button>
+        <ae-icon-button icon="heart" color="danger"  variant="subtle"   disabled></ae-icon-button>
+        <ae-icon-button icon="heart" color="danger"  variant="text"     disabled></ae-icon-button>
       </div>
     </div>
   </div>

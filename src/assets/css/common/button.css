@@ -187,19 +187,19 @@
   background:   var(--btn-subtle-bg-hover);
 }
 
-/* ghost: no border, accent text, subtle hover */
-:host([variant="ghost"]) .btn {
-  background:   transparent;
+/* subtle: subtle bg, accent text, stronger bg on hover */
+:host([variant="subtle"]) .btn {
+  background:   var(--btn-subtle-bg);
   border-color: transparent;
   color:        var(--btn-accent);
 }
 
-:host([variant="ghost"]) .btn:hover:not(:disabled) {
-  background:   var(--btn-subtle-bg);
+:host([variant="subtle"]) .btn:hover:not(:disabled) {
+  background:   var(--btn-subtle-bg-hover);
   color:        var(--btn-accent-hover);
 }
 
-:host([variant="ghost"]) .btn:active:not(:disabled) {
+:host([variant="subtle"]) .btn:active:not(:disabled) {
   background:   var(--btn-subtle-bg-hover);
 }
 

@@ -184,7 +184,7 @@ slot {
 /* ============================================================================
  * mode="button" & mode="button-group"  — toggle button base
  *
- * Design: unselected = ghost/outline, selected = solid fill.
+ * Design: unselected = subtle/outline, selected = solid fill.
  * This provides a universally clear visual distinction between states.
  * ========================================================================== */
 
@@ -259,18 +259,18 @@ slot {
   color:        #fff;
 }
 
-/* ghost variant — no border, ultra-subtle */
-:host([variant="ghost"]) .rg-btn {
+/* subtle variant — no border, ultra-subtle */
+:host([variant="subtle"]) .rg-btn {
   background:   transparent;
   border-color: transparent;
   color:        var(--rg-accent);
 }
-:host([variant="ghost"]) .rg-btn:hover:not(:disabled):not(.selected) {
+:host([variant="subtle"]) .rg-btn:hover:not(:disabled):not(.selected) {
   background:   var(--rg-subtle-bg);
   border-color: transparent;
   color:        var(--rg-accent-hover);
 }
-:host([variant="ghost"]) .rg-btn.selected {
+:host([variant="subtle"]) .rg-btn.selected {
   background:   var(--rg-subtle-bg-hover);
   border-color: transparent;
   color:        var(--rg-accent-hover);
@@ -472,29 +472,29 @@ slot {
   color:        var(--color-danger);
 }
 
-/* ── Ghost variant — all 3 modes: no border ── */
-:host([variant="ghost"][mode="button"]) .reset-btn,
-:host([variant="ghost"][mode="button"]) .clear-btn,
-:host([variant="ghost"][mode="button-group"]) .reset-btn,
-:host([variant="ghost"][mode="button-group"]) .clear-btn,
-:host([variant="ghost"][mode="segmented"]) .reset-btn,
-:host([variant="ghost"][mode="segmented"]) .clear-btn {
+/* ── subtle variant — all 3 modes: no border ── */
+:host([variant="subtle"][mode="button"]) .reset-btn,
+:host([variant="subtle"][mode="button"]) .clear-btn,
+:host([variant="subtle"][mode="button-group"]) .reset-btn,
+:host([variant="subtle"][mode="button-group"]) .clear-btn,
+:host([variant="subtle"][mode="segmented"]) .reset-btn,
+:host([variant="subtle"][mode="segmented"]) .clear-btn {
   background:   transparent;
   border-color: transparent;
   color:        var(--rg-accent);
 }
 
-:host([variant="ghost"][mode="button"]) .reset-btn:hover,
-:host([variant="ghost"][mode="button-group"]) .reset-btn:hover,
-:host([variant="ghost"][mode="segmented"]) .reset-btn:hover {
+:host([variant="subtle"][mode="button"]) .reset-btn:hover,
+:host([variant="subtle"][mode="button-group"]) .reset-btn:hover,
+:host([variant="subtle"][mode="segmented"]) .reset-btn:hover {
   background:   rgba(255, 255, 255, 0.08);
   border-color: transparent;
   color:        var(--rg-accent-hover);
 }
 
-:host([variant="ghost"][mode="button"]) .clear-btn:hover,
-:host([variant="ghost"][mode="button-group"]) .clear-btn:hover,
-:host([variant="ghost"][mode="segmented"]) .clear-btn:hover {
+:host([variant="subtle"][mode="button"]) .clear-btn:hover,
+:host([variant="subtle"][mode="button-group"]) .clear-btn:hover,
+:host([variant="subtle"][mode="segmented"]) .clear-btn:hover {
   background:   rgba(239, 68, 68, 0.1);
   border-color: transparent;
   color:        var(--color-danger);

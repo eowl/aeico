@@ -18,7 +18,7 @@ class DrawButton extends AeicoElement {
   protected static stylesheets = [variablesStyle, buttonStyle]
 
   declare color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
-  declare variant?: 'filled' | 'outlined' | 'ghost' | 'text'
+  declare variant?: 'filled' | 'outlined' | 'subtle' | 'text'
   declare size?: 'xs' | 'sm' | 'md' | 'lg'
   declare disabled?: boolean
   declare type?: 'button' | 'submit' | 'reset'

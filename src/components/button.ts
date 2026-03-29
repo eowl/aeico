@@ -3,7 +3,7 @@ import buttonStyle from '../assets/css/common/button.css?inline'
 import AeicoComponent from './aeico-component'
 
 export type ButtonColor = 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
-export type ButtonVariant = 'filled' | 'outlined' | 'ghost' | 'text'
+export type ButtonVariant = 'filled' | 'outlined' | 'subtle' | 'text'
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg'
 
 /**
@@ -26,7 +26,7 @@ export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg'
  * <!-- Using as Web Component -->
  * <ae-button variant="primary" size="md">Save</ae-button>
  * <ae-button variant="danger" size="sm">Delete</ae-button>
- * <ae-button variant="ghost">Cancel</ae-button>
+ * <ae-button variant="subtle">Cancel</ae-button>
  * ```
  */
 class Button extends AeicoComponent {
