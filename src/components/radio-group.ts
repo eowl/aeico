@@ -143,8 +143,8 @@ class RadioGroup extends AeicoField {
         }
       })
 
-      // Action buttons are siblings of .rg-container — laid out by :host inline-flex
-      this.renderActionButtonsTags()
+      if (this.allowEmpty) this.renderClearButtonTag()
+      this.renderResetButtonTag()
 
       // Hidden slot — captures <option> light DOM children
       const slotEl = slot({ style: { display: 'none' } }) as HTMLSlotElement

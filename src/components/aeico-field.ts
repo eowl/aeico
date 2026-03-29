@@ -192,24 +192,33 @@ class AeicoField extends AeicoComponent {
    * Render action buttons (clear/reset) using this.builder.
    * Must be called from within a build() callback.
    */
-  protected renderActionButtonsTags() {
+  protected renderActionButtonsTags(force: boolean = false) {
+    this.renderClearButtonTag(force)
+    this.renderResetButtonTag(force)
+  }
+
+  protected renderResetButtonTag(force: boolean = false) {
     const { button } = this.builder
 
-    if (this.clearable) {
-      this.clearBtn = button({
-        className: 'clear-btn',
-        textContent: this.clearText || '×',
-        title: this.t(this.i18nKeys.clearButton || 'buttons.clear', '×'),
-        onClick: this.boundOnClear,
-      })
-    }
-
-    if (this.resettable) {
+    if (force || this.resettable) {
       this.resetBtn = button({
         className: 'reset-btn',
         textContent: this.resetText || '↺',
         title: this.t(this.i18nKeys.resetButton || 'buttons.reset', '↺'),
         onClick: this.boundOnReset,
+      })
+    }
+  }
+
+  protected renderClearButtonTag(force: boolean = false) {
+    const { button } = this.builder
+
+    if (force || this.clearable) {
+      this.clearBtn = button({
+        className: 'clear-btn',
+        textContent: this.clearText || '✕',
+        title: this.t(this.i18nKeys.clearButton || 'buttons.clear', '✕'),
+        onClick: this.boundOnClear,
       })
     }
   }

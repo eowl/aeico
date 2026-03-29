@@ -408,7 +408,7 @@
 
     <div class="demo-group">
       <label>Default mode — slot options</label>
-      <ae-radio-group resettable clearable value="b">
+      <ae-radio-group resettable value="b">
         <option value="a">Option A</option>
         <option value="b">Option B</option>
         <option value="c">Option C</option>
@@ -419,10 +419,24 @@
       <label>Default mode — JS options</label>
       <ae-radio-group id="rg-default-opts" resettable></ae-radio-group>
     </div>
+    
+    <div class="demo-group">
+      <label>Default mode — slot allow-empty with clearable</label>
+      <ae-radio-group resettable clearable allow-empty value="b">
+        <option value="a">Option A</option>
+        <option value="b">Option B</option>
+        <option value="c">Option C</option>
+      </ae-radio-group>
+    </div>
 
     <div class="demo-group">
       <label>Button mode — colors</label>
       <ae-radio-group mode="button" value="a">
+        <option value="a">Option A</option>
+        <option value="b">Option B</option>
+        <option value="c">Option C</option>
+      </ae-radio-group>
+      <ae-radio-group mode="button" color="primary" value="b" default-value="b" resettable clearable allow-empty>
         <option value="a">Option A</option>
         <option value="b">Option B</option>
         <option value="c">Option C</option>
