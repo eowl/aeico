@@ -341,3 +341,5 @@ type ExtractProperties<T> = {
 export type InferProps<T extends new (...args: any[]) => any> = ExtractProperties<
   Omit<InstanceType<T>, keyof HTMLElement>
 >
+
+export const SVG_NS = 'http://www.w3.org/2000/svg'
