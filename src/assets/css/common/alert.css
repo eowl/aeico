@@ -36,12 +36,12 @@
 }
 
 :host([color="secondary"]) {
-  --alert-solid-bg:     var(--color-gray-light);
-  --alert-solid-color:  var(--color-text-muted);
-  --alert-border:       var(--color-gray-lighter);
-  --alert-subtle-bg:    var(--color-secondary-bg-subtle, rgba(255, 255, 255, 0.05));
-  --alert-subtle-color: var(--color-secondary-text-emphasis, var(--color-text-muted));
-  --alert-subtle-border:var(--color-secondary-border-subtle, var(--color-gray-lighter));
+  --alert-solid-bg:     var(--color-secondary);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-secondary-hover);
+  --alert-subtle-bg:    var(--color-secondary-bg-subtle);
+  --alert-subtle-color: var(--color-secondary-text-emphasis);
+  --alert-subtle-border:var(--color-secondary-border-subtle);
 }
 
 :host([color="success"]) {

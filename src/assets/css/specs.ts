@@ -21,6 +21,7 @@ import checkboxFieldCss from './checkbox-field.css?inline'
 import checkboxCss from './components/checkbox.css?inline'
 import radioGroupCss from './components/radio-group.css?inline'
 import iconCss from './components/icon.css?inline'
+import iconButtonCss from './components/icon-button.css?inline'
 import modalCss from './modal.css?inline'
 
 import type { StyleSpec } from '../../core/types'
@@ -84,6 +85,13 @@ export const radioGroupSpec: StyleSpec = {
 export const iconSpec: StyleSpec = {
   id: 'aeico:icon',
   code: iconCss,
+  scope: 'shadow',
+  deps: [variablesSpec]
+}
+
+export const iconButtonSpec: StyleSpec = {
+  id: 'aeico:icon-button',
+  code: iconButtonCss,
   scope: 'shadow',
   deps: [variablesSpec]
 }

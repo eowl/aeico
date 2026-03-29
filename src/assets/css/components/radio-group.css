@@ -48,13 +48,13 @@
 }
 
 :host([color="secondary"]) {
-  --rg-solid-bg:          var(--color-gray-light);
-  --rg-solid-bg-hover:    var(--color-gray-lighter);
-  --rg-solid-color:       var(--color-text-muted);
-  --rg-border:            var(--color-gray-lighter);
-  --rg-border-hover:      var(--color-gray-lightest);
-  --rg-accent:            var(--color-text-muted);
-  --rg-accent-hover:      var(--color-text-main);
+  --rg-solid-bg:          var(--color-secondary);
+  --rg-solid-bg-hover:    var(--color-secondary-hover);
+  --rg-solid-color:       var(--color-text-main);
+  --rg-border:            var(--color-secondary-hover);
+  --rg-border-hover:      var(--slate-600);
+  --rg-accent:            var(--slate-700);
+  --rg-accent-hover:      var(--slate-800);
 }
 
 :host([color="success"]) {

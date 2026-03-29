@@ -50,6 +50,7 @@ export { default as Alert } from './alert'
 export { default as Modal } from './modal'
 export { default as Icon } from './icon/icon'
 export { default as IconRegistry } from './icon/registry'
+export { default as IconButton } from './icon-button/icon-button'
 
 // Component types
 export type { SelectFieldProps } from './select-field'
@@ -66,3 +67,4 @@ export type { ButtonGroupProps } from './button-group'
 export type { AlertProps } from './alert'
 export type { ModalProps } from './modal'
 export type { IconProps, IconSize, IconColor, IconDefinition, IconRegistryData } from './icon'
+export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './icon-button'

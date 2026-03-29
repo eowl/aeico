@@ -15,6 +15,7 @@ import {
   Modal,
   Icon,
   IconRegistry,
+  IconButton,
 } from '../src/components/index'
 import { locale } from '../src/localize'
 
@@ -76,6 +77,7 @@ IconRegistry.add({
 })
 
 Icon.register('ae-icon')
+IconButton.register('ae-icon-button')
 
 // Register all components
 InputField.register()

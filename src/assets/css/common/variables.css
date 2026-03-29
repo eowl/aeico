@@ -98,6 +98,13 @@
   --gray-900: #909090;
   --gray-950: #cccccc;
 
+  /* Slate (blue-gray) — used for 'secondary' color to distinguish from pure gray */
+  --slate-400: #3d4555;
+  --slate-500: #4a5568;
+  --slate-600: #64748b;
+  --slate-700: #94a3b8;
+  --slate-800: #cbd5e1;
+
 
   /* 
    * § 2  Semantic Tokens  — reference § 1 scales
@@ -144,6 +151,12 @@
   --color-gray-lighter:  var(--gray-700);
   --color-gray-lightest: var(--gray-800);
 
+  /* Secondary (Slate) — blue-gray to distinguish from neutral gray */
+  --color-secondary:        var(--slate-400);
+  --color-secondary-hover:  var(--slate-500);
+  --color-secondary-active: #334155;
+  --color-secondary-text:   var(--slate-700);
+
   /* Text */
   --color-text-main:       #ffffff;
   --color-text-muted:      var(--gray-950);
@@ -173,9 +186,9 @@
   --color-info-border-subtle:      rgba( 23, 162, 184, 0.30);
   --color-info-text-emphasis:      #8bd3e8;
 
-  --color-secondary-bg-subtle:     rgba(108, 117, 125, 0.10);
-  --color-secondary-border-subtle: rgba(108, 117, 125, 0.30);
-  --color-secondary-text-emphasis: #b0b0b0;
+  --color-secondary-bg-subtle:     rgba(100, 116, 139, 0.10);
+  --color-secondary-border-subtle: rgba(100, 116, 139, 0.30);
+  --color-secondary-text-emphasis:  var(--slate-700);
 
   --color-light-bg-subtle:         rgba(248, 249, 250, 0.05);
   --color-light-border-subtle:     rgba(248, 249, 250, 0.20);
@@ -310,7 +323,7 @@
   --color-danger-bg-subtle:        rgba(220, 53, 69, 0.08);
   --color-warning-bg-subtle:       rgba(255, 193, 7, 0.08);
   --color-info-bg-subtle:          rgba(23, 162, 184, 0.08);
-  --color-secondary-bg-subtle:     rgba(108, 117, 125, 0.08);
+  --color-secondary-bg-subtle:     rgba(100, 116, 139, 0.08);
   --color-light-bg-subtle:         rgba(248, 249, 250, 0.10);
   --color-dark-bg-subtle:          rgba(52, 58, 64, 0.08);
 
@@ -321,7 +334,7 @@
   --color-danger-text-emphasis:    #7d2027;
   --color-warning-text-emphasis:   #7d6104;
   --color-info-text-emphasis:      #115968;
-  --color-secondary-text-emphasis: #3c4146;
+  --color-secondary-text-emphasis: #475569;
 
 
   /* § 7i  Border Emphasis Variants — higher opacity for visibility */
@@ -330,7 +343,7 @@
   --color-danger-border-subtle:    rgba(220, 53, 69, 0.40);
   --color-warning-border-subtle:   rgba(255, 193, 7, 0.40);
   --color-info-border-subtle:      rgba(23, 162, 184, 0.40);
-  --color-secondary-border-subtle: rgba(108, 117, 125, 0.40);
+  --color-secondary-border-subtle: rgba(100, 116, 139, 0.40);
   --color-light-border-subtle:     rgba(248, 249, 250, 0.30);
   --color-dark-border-subtle:      rgba(52, 58, 64, 0.40);
 }

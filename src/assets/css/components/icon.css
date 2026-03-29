@@ -8,7 +8,7 @@
   justify-content: center;
   width:  var(--icon-size, 20px);
   height: var(--icon-size, 20px);
-  color: var(--color-text-muted);
+  color: inherit;
   flex-shrink: 0;
   line-height: 0;
   vertical-align: middle;
@@ -24,7 +24,7 @@
 /* ── Color variants ──────────────────────────────────────────────────────── */
 
 :host([color="primary"])   { color: var(--color-primary); }
-:host([color="secondary"]) { color: var(--color-text-muted); }
+:host([color="secondary"]) { color: var(--color-secondary-text, var(--slate-700)); }
 :host([color="success"])   { color: var(--color-success); }
 :host([color="danger"])    { color: var(--color-danger); }
 :host([color="warning"])   { color: var(--color-warning); }

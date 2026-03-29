@@ -279,15 +279,40 @@
     <span class="tag">&lt;ae-button&gt;</span>
     <div class="demo-row">
       <ae-button>Default</ae-button>
-      <ae-button color="primary">Primary</ae-button>
       <ae-button color="secondary">Secondary</ae-button>
+      <ae-button color="primary">Primary</ae-button>
       <ae-button color="success">Success</ae-button>
       <ae-button color="danger">Danger</ae-button>
       <ae-button color="warning">Warning</ae-button>
       <ae-button color="info">Info</ae-button>
     </div>
+    <div class="demo-group">
+      <label>Button + Icon slot (icon inherits button color)</label>
+      <div class="demo-row">
+        <ae-button>
+          <ae-icon name="home" size="sm"></ae-icon>
+        </ae-button>
+        <ae-button color="primary">
+          <ae-icon name="home" size="sm"></ae-icon>
+          Primary
+        </ae-button>
+        <ae-button color="success">
+          <ae-icon name="check" size="sm"></ae-icon>
+          Success
+        </ae-button>
+        <ae-button color="danger">
+          <ae-icon name="close" size="sm"></ae-icon>
+          Danger
+        </ae-button>
+        <ae-button color="primary">
+          <ae-icon name="home" size="sm" color="danger"></ae-icon>
+          Icon override
+        </ae-button>
+      </div>
+    </div>
     <div class="demo-row">
       <ae-button variant="outlined">Default</ae-button>
+      <ae-button variant="outlined" color="secondary">Secondary</ae-button>
       <ae-button variant="outlined" color="primary">Primary</ae-button>
       <ae-button variant="outlined" color="success">Success</ae-button>
       <ae-button variant="outlined" color="danger">Danger</ae-button>
@@ -295,7 +320,11 @@
     </div>
     <div class="demo-row">
       <ae-button variant="ghost">Default</ae-button>
+      <ae-button variant="ghost" color="secondary">Secondary</ae-button>
       <ae-button variant="ghost" color="primary">Primary</ae-button>
+      <ae-button variant="ghost" color="info">
+        <ae-icon name="check" size="sm"></ae-icon>
+      </ae-button>
       <ae-button variant="ghost" color="danger">Danger</ae-button>
       <ae-button variant="text" color="primary">Text</ae-button>
       <ae-button disabled>Disabled</ae-button>
@@ -583,6 +612,7 @@
     <div class="demo-group">
       <label>Subtle (default)</label>
       <ae-alert>Primary</ae-alert>
+      <ae-alert color="secondary">Secondary</ae-alert>
       <ae-alert color="success">Success</ae-alert>
       <ae-alert color="warning">Warning</ae-alert>
       <ae-alert color="danger">Danger</ae-alert>
@@ -638,6 +668,57 @@
         <ae-icon name="star"     size="md" color="warning"></ae-icon>
         <ae-icon name="settings" size="md"></ae-icon>
         <ae-icon name="heart"    size="md" color="danger"></ae-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- IconButton -->
+  <div class="section">
+    <h2>IconButton</h2>
+    <span class="tag">&lt;ae-icon-button&gt;</span>
+
+    <div class="demo-group">
+      <label>Sizes</label>
+      <div class="demo-row">
+        <ae-icon-button icon="star" size="xs"></ae-icon-button>
+        <ae-icon-button icon="star" size="sm"></ae-icon-button>
+        <ae-icon-button icon="star" size="md"></ae-icon-button>
+        <ae-icon-button icon="star" size="lg"></ae-icon-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Colors (filled)</label>
+      <div class="demo-row">
+        <ae-icon-button icon="home"></ae-icon-button>
+        <ae-icon-button icon="home"    color="secondary"></ae-icon-button>
+        <ae-icon-button icon="check"   color="primary"></ae-icon-button>
+        <ae-icon-button icon="check"   color="success"></ae-icon-button>
+        <ae-icon-button icon="close"   color="danger"></ae-icon-button>
+        <ae-icon-button icon="warning" color="warning"></ae-icon-button>
+        <ae-icon-button icon="info"    color="info"></ae-icon-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Variants</label>
+      <div class="demo-row">
+        <ae-icon-button icon="star"     color="primary"></ae-icon-button>
+        <ae-icon-button icon="star"     color="primary" variant="outlined"></ae-icon-button>
+        <ae-icon-button icon="star"     color="primary" variant="ghost"></ae-icon-button>
+        <ae-icon-button icon="settings" color="danger"></ae-icon-button>
+        <ae-icon-button icon="settings" color="danger"  variant="outlined"></ae-icon-button>
+        <ae-icon-button icon="settings" color="danger"  variant="ghost"></ae-icon-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Disabled</label>
+      <div class="demo-row">
+        <ae-icon-button icon="home"  disabled></ae-icon-button>
+        <ae-icon-button icon="home"  color="primary" disabled></ae-icon-button>
+        <ae-icon-button icon="heart" color="danger"  variant="outlined" disabled></ae-icon-button>
+        <ae-icon-button icon="heart" color="danger"  variant="ghost"    disabled></ae-icon-button>
       </div>
     </div>
   </div>
