@@ -5,12 +5,13 @@
  * 
  * @example
  * ```typescript
- * import { Localizable, locale } from 'aeico/localize'
- * import { AeicoElement } from 'aeico'
+ * import { t, locale } from 'aeico/localize'
  * 
- * class MyComponent extends Localizable(AeicoElement) {
+ * class MyComponent extends AeicoElement {
  *   render() {
- *     return this.t('buttons.save', 'Save')
+ *     this.build(() => {
+ *       this.builder.button({ textContent: t('buttons.save', 'Save') })
+ *     })
  *   }
  * }
  * 
@@ -19,8 +20,11 @@
  * ```
  */
 
+export { t } from './locale'
+
+/** @deprecated Use standalone `t()` function instead */
 export { Localizable } from './localizable'
 export type { LocalizableProps } from './localizable'
 
-export { locale, LocaleStore, localeRegistry } from './store'
-export type { LocaleProvider, LocaleRegistry } from './store'
+export { locale, LocaleStore, localeRegistry } from './locale'
+export type { LocaleProvider, LocaleRegistry } from './locale'

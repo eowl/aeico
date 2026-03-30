@@ -1,5 +1,5 @@
 import type { Constructor } from '../mixins/compose'
-import { locale } from './store'
+import { locale } from './locale'
 
 /**
  * Localizable Mixin

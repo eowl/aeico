@@ -25,7 +25,7 @@ describe('AeicoComponent', () => {
   })
 
   describe('instance with mixin methods', () => {
-    it('should create instances with Themeable and Localizable methods', async () => {
+    it('should create instances with Themeable methods', async () => {
       class TestComponent extends AeicoComponent {
         static register() {
           customElements.define('test-aeico-component', TestComponent)
@@ -34,10 +34,6 @@ describe('AeicoComponent', () => {
       
       TestComponent.register()
       const el = await mount<InstanceType<typeof TestComponent>>('<test-aeico-component></test-aeico-component>')
-      
-      // Check Localizable methods exist
-      expect(el.t).to.be.a('function')
-      expect(el.onLocaleChange).to.be.a('function')
       
       // Check that element is properly instantiated
       expect(el).to.be.instanceOf(TestComponent)

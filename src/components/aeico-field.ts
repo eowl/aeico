@@ -1,5 +1,6 @@
 import type { FieldI18nKeys, InferProps, Props, Watchers } from '../core/types'
 import AeicoComponent from './aeico-component'
+import { t } from '../localize'
 
 export type FieldAction = 'clear' | 'reset' | 'change'
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -92,36 +93,6 @@ class AeicoField extends AeicoComponent {
   }
 
   /**
-   * Handle language change event
-   * Updates reset button label and allows subclasses to add custom behavior
-   */
-  public onLocaleChange() {
-    super.onLocaleChange()
-    this.updateResetButtonLabel()
-    this.updateClearButtonLabel()
-  }
-
-  /**
-   * Update reset button label with current language
-   */
-  protected updateResetButtonLabel() {
-    if (this.resetBtn) {
-      const resetKey = this.i18nKeys.resetButton || 'buttons.reset'
-      this.resetBtn.title = this.t(resetKey, '↺')
-    }
-  }
-
-  /**
-   * Update clear button label with current language
-   */
-  protected updateClearButtonLabel() {
-    if (this.clearBtn) {
-      const clearKey = this.i18nKeys.clearButton || 'buttons.clear'
-      this.clearBtn.title = this.t(clearKey, '×')
-    }
-  }
-
-  /**
    * Create reset button element with common styling and behavior
    * 
    * @param onReset Callback function to execute when reset button is clicked
@@ -135,7 +106,7 @@ class AeicoField extends AeicoComponent {
 
     resetBtn.className = 'reset-btn'
     resetBtn.textContent = resetText
-    resetBtn.title = this.t(resetKey, resetText)
+    resetBtn.title = t(resetKey, resetText)
     
     resetBtn.addEventListener('click', (e) => {
       e.stopPropagation()
@@ -159,7 +130,7 @@ class AeicoField extends AeicoComponent {
 
     clearBtn.className = 'clear-btn'
     clearBtn.textContent = clearText
-    clearBtn.title = this.t(clearKey, clearText)
+    clearBtn.title = t(clearKey, clearText)
     
     clearBtn.addEventListener('click', (e) => {
       e.stopPropagation()
@@ -204,7 +175,7 @@ class AeicoField extends AeicoComponent {
       this.resetBtn = button({
         className: 'reset-btn',
         textContent: this.resetText || '↺',
-        title: this.t(this.i18nKeys.resetButton || 'buttons.reset', '↺'),
+        title: t(this.i18nKeys.resetButton || 'buttons.reset', '↺'),
         onClick: this.boundOnReset,
       })
     }
@@ -217,7 +188,7 @@ class AeicoField extends AeicoComponent {
       this.clearBtn = button({
         className: 'clear-btn',
         textContent: this.clearText || '✕',
-        title: this.t(this.i18nKeys.clearButton || 'buttons.clear', '✕'),
+        title: t(this.i18nKeys.clearButton || 'buttons.clear', '✕'),
         onClick: this.boundOnClear,
       })
     }

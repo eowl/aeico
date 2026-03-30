@@ -2,6 +2,7 @@ import AeicoField from './aeico-field'
 import { isSelectOption } from '../core/types'
 import type { InferProps, Props, Watchers } from '../core/types'
 import { radioFieldSpec } from '../assets/css/specs'
+import { t } from '../localize'
 
 export type RadioFieldType = 'radio' | 'button' | 'button-group' | 'segmented'
 export type RadioOption = string | { label?: string; value: any }
@@ -38,11 +39,6 @@ class RadioField extends AeicoField {
   constructor() {
     super()
     this._groupName = `radio-field-${++RadioField._instanceCount}`
-  }
-
-  public onLocaleChange() {
-    super.onLocaleChange()
-    this.render()
   }
 
   protected onValueChanged(value: string): void {
@@ -91,7 +87,7 @@ class RadioField extends AeicoField {
   private _getLabel(option: any): string {
     if (!isSelectOption(option)) return String(option)
 
-    return option.label ? this.t(option.label, option.label) : String(option.value)
+    return option.label ? t(option.label, option.label) : String(option.value)
   }
 
   private _getValue(option: any): string {

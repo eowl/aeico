@@ -1,8 +1,8 @@
 import AeicoField from './aeico-field'
 import { isSelectOption } from '../core/types'
 import type { InferProps, Props, Watchers } from '../core/types'
-import { getI18nService, hasI18nService } from '../core/i18n'
 import { selectFieldSpec } from '../assets/css/specs'
+import { t } from '../localize'
 
 class SelectField extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null
@@ -29,11 +29,6 @@ class SelectField extends AeicoField {
   declare options?: any[]
 
   protected static stylesheets = [selectFieldSpec]
-
-  public onLocaleChange() {
-    super.onLocaleChange()
-    this.updateOptions()
-  }
 
   /**
    * Write value to the select element (DOM only)
@@ -162,7 +157,7 @@ class SelectField extends AeicoField {
         const optionElement = document.createElement('option')
         if (isSelectOption(option)) {
           optionElement.value = String(option.value)
-          const labelText = option.label && hasI18nService() ? getI18nService().t(option.label) : String(option.value)
+          const labelText = option.label ? t(option.label, String(option.value)) : String(option.value)
           optionElement.text = labelText
         } else {
           optionElement.value = String(option)

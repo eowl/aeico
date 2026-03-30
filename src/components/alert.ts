@@ -1,6 +1,7 @@
 import type { InferProps, Props } from '../core/types'
 import alertStyle from '../assets/css/common/alert.css?inline'
 import AeicoComponent from './aeico-component'
+import { t } from '../localize'
 
 export type AlertVariant = 'subtle' | 'filled' | 'outlined'
 export type AlertSize = 'sm' | 'md' | 'lg'
@@ -66,7 +67,7 @@ class Alert extends AeicoComponent {
           button({
             className: 'alert-close',
             onclick: () => this._handleClose(),
-            title: this.t('alert.close', 'Close alert'),
+            title: t('alert.close', 'Close alert'),
           }, () => {
             span({ 'aria-hidden': 'true', textContent: '\u00d7' })
           })

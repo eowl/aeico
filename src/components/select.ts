@@ -1,6 +1,7 @@
 import AeicoField from './aeico-field'
 import type { InferProps, Props } from '../core/types'
 import { selectFieldSpec } from '../assets/css/specs'
+import { t } from '../localize'
 
 export type SelectOptionValue = string | number
 
@@ -65,7 +66,7 @@ class Select extends AeicoField {
     if (Array.isArray(this.options)) {
       for (const opt of this.options) {
         if (this._isSelectOption(opt)) {
-          option({ key: `opt-${opt.value}`, value: opt.value, textContent: this.t(opt.label, opt.label) })
+          option({ key: `opt-${opt.value}`, value: opt.value, textContent: t(opt.label, opt.label) })
         } else {
           option({ key: `opt-${opt}`, value: opt, textContent: String(opt) })
         }

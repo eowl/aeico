@@ -1,6 +1,7 @@
 import type { InferProps, Props } from '../core/types'
 import { modalSpec } from '../assets/css/specs'
 import AeicoComponent from './aeico-component'
+import { t } from '../localize'
 
 class Modal extends AeicoComponent {
   static props: Props = {
@@ -53,7 +54,7 @@ class Modal extends AeicoComponent {
               button({
                 className: 'modal-close-btn',
                 textContent: '×',
-                title: this.t('buttons.cancel', 'Cancel'),
+                title: t('buttons.cancel', 'Cancel'),
                 onclick: () => this.close()
               })
             }

@@ -1,9 +1,8 @@
 import AeicoElement from '../core/aeico-element'
 import { Themeable, type ThemeableProps } from '../mixins/themeable'
-import { Localizable, type LocalizableProps } from '../localize/localizable'
 import { compose, Constructor } from '../mixins/compose'
 
-const BaseComponent = compose(Themeable, Localizable)(AeicoElement) as typeof AeicoElement & Constructor<ThemeableProps & LocalizableProps>
+const BaseComponent = compose(Themeable)(AeicoElement) as typeof AeicoElement & Constructor<ThemeableProps>
 
 const TAG_NAME_PREFIX = 'ae'
 

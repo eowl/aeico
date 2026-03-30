@@ -2,6 +2,7 @@ import AeicoField from './aeico-field'
 import type { InferProps, Props } from '../core/types'
 import { radioGroupSpec } from '../assets/css/specs'
 import type { ButtonColor, ButtonVariant, ButtonSize } from './button'
+import { t } from '../localize'
 
 export type RadioGroupMode = 'default' | 'button' | 'button-group' | 'segmented'
 
@@ -45,7 +46,7 @@ class RadioGroup extends AeicoField {
 
   private _optLabel(opt: RadioGroupOption): string {
     if (opt !== null && typeof opt === 'object') {
-      return this.t(String(opt.label), String(opt.label))
+      return t(String(opt.label), String(opt.label))
     }
     return String(opt)
   }

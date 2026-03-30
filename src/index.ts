@@ -19,13 +19,21 @@ export type { AeicoBaseProps } from './core/aeico-base'
 export type { AeicoElementProps } from './core/aeico-element'
 export type { AeicoFieldProps, FieldAction, FieldElement } from './components/aeico-field'
 
+// Render context
+export { getCurrentContext } from './core/render-context'
+export type { Updatable } from './core/render-context'
+
 // Mixins
 export { compose } from './mixins/compose'
 export type { Constructor, Mixin } from './mixins/compose'
 export { Themeable } from './mixins/themeable'
 export type { ThemeableProps } from './mixins/themeable'
-export { Localizable, locale, LocaleStore, localeRegistry } from './localize/index'
-export type { LocalizableProps, LocaleProvider, LocaleRegistry } from './localize/index'
+export { t, locale, LocaleStore, localeRegistry } from './localize/index'
+export type { LocaleProvider, LocaleRegistry } from './localize/index'
+/** @deprecated Use standalone `t()` function instead */
+export { Localizable } from './localize/index'
+/** @deprecated Use standalone `t()` function instead */
+export type { LocalizableProps } from './localize/index'
 
 // Configuration & Services
 export {
@@ -36,6 +44,7 @@ export {
 } from './core/config-provider'
 export type { ComponentConfig } from './core/config-provider'
 
+/** @deprecated Use `t()` from 'aeico/localize' instead */
 export { 
   setI18nService,
   getI18nService,

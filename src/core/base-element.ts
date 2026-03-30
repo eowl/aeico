@@ -7,6 +7,8 @@ import type {
 } from './types'
 import { createEventEmitter, type ComponentEventEmitter } from './events'
 import ElementBuilder from './element-builder'
+import { setRenderContext, clearRenderContext } from './render-context'
+import type { Updatable } from './render-context'
 
 /**
  * BaseElement — internal reactive foundation for all Aeico elements.
@@ -316,7 +318,7 @@ class BaseElement extends HTMLElement {
    * @param name The name of the property that changed (optional, for manual calls)
    * @param oldValue The previous value of the property (optional, for manual calls)
    */
-  protected requestUpdate(name?: string, oldValue?: unknown): void {
+  requestUpdate(name?: string, oldValue?: unknown): void {
     if (name !== undefined) {
       this._changedProps.set(name, oldValue)
     }
@@ -344,7 +346,12 @@ class BaseElement extends HTMLElement {
     this.invalidateComputed(changedProps)
 
     if (typeof (this as Record<string, unknown>)['render'] === 'function') {
-      this.render()
+      setRenderContext(this as unknown as Updatable)
+      try {
+        this.render()
+      } finally {
+        clearRenderContext()
+      }
     }
 
     this.onUpdated(changedProps)
