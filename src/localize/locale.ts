@@ -81,7 +81,7 @@ export class LocaleStore implements LocaleProvider {
   private _updateComponents() {
     for (const comp of this._components) {
       if (comp.isConnected) {
-        comp.requestUpdate();
+        comp.update();
       } else {
         this._components.delete(comp);
       }

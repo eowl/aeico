@@ -14,7 +14,7 @@
  * Minimal contract for a component that can be scheduled for re-render.
  */
 export interface Updatable {
-  requestUpdate(): void
+  update(): void
   isConnected: boolean
 }
 

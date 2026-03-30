@@ -75,7 +75,7 @@ class RadioGroup extends AeicoField {
 
     this._slotOptions = (this._slotEl.assignedElements({ flatten: true }) as HTMLElement[])
       .filter(el => el.tagName.toLowerCase() === 'option') as HTMLOptionElement[]
-    this.requestUpdate()
+    this.update()
   }
 
   // Single handler for radio inputs — handles both select and deselect.
@@ -118,7 +118,7 @@ class RadioGroup extends AeicoField {
   protected writeValue(_value: any): void {
     // All visual state is driven by builder diff on next render;
     // for native radio inputs we need to sync checked immediately.
-    // The render() reads this.value, so requestUpdate handles the rest.
+    // The render() reads this.value, so update handles the rest.
   }
 
   protected onReset(): void {

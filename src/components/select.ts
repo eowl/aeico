@@ -38,7 +38,7 @@ class Select extends AeicoField {
     
     this._slotOptions = (this._slotEl.assignedElements({ flatten: true }) as HTMLElement[])
       .filter(el => el.tagName.toLowerCase() === 'option') as HTMLOptionElement[]
-    this.requestUpdate()
+    this.update()
   }
 
   render() {

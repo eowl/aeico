@@ -205,7 +205,7 @@ class BaseElement extends HTMLElement {
     // Call onPrepare before the first render to allow subclasses to set up initial state or cancel rendering if needed
     // no any props or attributes are set yet, so it can be used to set default values or fetch initial data before the first render
     // e.g.: <ae-component>content</ae-component>
-    this.requestUpdate()
+    this.update()
   }
 
   /**
@@ -252,7 +252,7 @@ class BaseElement extends HTMLElement {
 
           if (propDecl.observe === false) { // if observe is disabled, just update the internal value without reflecting to attribute
             self[internalKey] = value
-            this.requestUpdate(propName, oldValue)
+            this.update(propName, oldValue)
 
             return
           }
@@ -271,7 +271,7 @@ class BaseElement extends HTMLElement {
             }
           }
 
-          this.requestUpdate(propName, oldValue)
+          this.update(propName, oldValue)
         },
         enumerable: true,
         configurable: true,
@@ -318,7 +318,7 @@ class BaseElement extends HTMLElement {
    * @param name The name of the property that changed (optional, for manual calls)
    * @param oldValue The previous value of the property (optional, for manual calls)
    */
-  requestUpdate(name?: string, oldValue?: unknown): void {
+  update(name?: string, oldValue?: unknown): void {
     if (name !== undefined) {
       this._changedProps.set(name, oldValue)
     }
@@ -331,7 +331,7 @@ class BaseElement extends HTMLElement {
 
   /**
    * Execute the update cycle: onPrepare → render → onUpdated → onMounted.
-   * Called automatically after requestUpdate is triggered.
+   * Called automatically after update is triggered.
    * Can be overridden to customize update behavior, but should call super.executeUpdate() if so.
    */
   protected async executeUpdate(): Promise<void> {
@@ -509,7 +509,7 @@ class BaseElement extends HTMLElement {
     
     self[internalKey] = this.deserializeAttribute(newValue, propDecl)
     
-    this.requestUpdate(propName, prevValue)
+    this.update(propName, prevValue)
   }
 
   private static _getPropertyForAttribute(attrName: string): { propName: string; propDecl: Prop } | undefined {
