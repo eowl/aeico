@@ -1,5 +1,6 @@
 type _Props = {
   className?: string | Record<string, boolean>
+  text?: string
   textContent?: string
   id?: string
   part?: string
@@ -43,24 +44,53 @@ class ElementBuilder {
     })
   }
 
+  private get _parent(): Node | undefined {
+    return this._stack[this._stack.length - 1]
+  }
+
+  private get _cursor(): number {
+    return this._cursorStack[this._cursorStack.length - 1]
+  }
+
+  private set _cursor(value: number) {
+    this._cursorStack[this._cursorStack.length - 1] = value
+  }
+
+  private get _inBuildContext(): boolean {
+    return !!this._parent && this._cursorStack.length > 0 && !this._isBareFragment(this._parent)
+  }
+
   private _create(tagName: string, props?: BuilderProps, cb?: () => void): Element {
-    const parent = this._stack[this._stack.length - 1]
+    const parent = this._parent
 
-    if (!parent || this._cursorStack.length === 0 || this._isBareFragment(parent)) {
-      return this._createFresh(tagName, props, cb)
-    }
+    const el = this._inBuildContext
+      ? this._resolveElement(parent!, tagName, props?.key)
+      : this._createElement(tagName, parent)
 
-    const currentIndex = this._cursorStack[this._cursorStack.length - 1]
-    const key = props?.key
+    this._mountChildren(el, parent, props, cb)
+
+    if (this._inBuildContext) this._cursor++
+
+    return el
+  }
+
+  private _createElement(tagName: string, parent?: Node): Element {
+    const isSVG = tagName === 'svg'
+      || (parent instanceof Element && parent.namespaceURI === SVG_NS)
+    return isSVG
+      ? document.createElementNS(SVG_NS, tagName)
+      : document.createElement(tagName)
+  }
+
+  private _resolveElement(parent: Node, tagName: string, key?: string): Element {
+    const cursor = this._cursor
     let el: Element | null = null
 
     if (key) {
-      el = this._findChildByKey(parent, key, currentIndex)
+      el = this._findChildByKey(parent, key, cursor)
       if (el) {
-        // insertBefore moves el to currentIndex; the displaced node shifts right
-        // and will be matched or cleaned up in subsequent iterations
-        if (parent.childNodes[currentIndex] !== el) {
-          parent.insertBefore(el, parent.childNodes[currentIndex])
+        if (parent.childNodes[cursor] !== el) {
+          parent.insertBefore(el, parent.childNodes[cursor])
         }
         if (el.tagName.toLowerCase() !== tagName.toLowerCase()) {
           el.remove()
@@ -68,7 +98,7 @@ class ElementBuilder {
         }
       }
     } else {
-      const nodeAtCursor = parent.childNodes[currentIndex] as Element
+      const nodeAtCursor = parent.childNodes[cursor] as Element
       if (
         nodeAtCursor &&
         nodeAtCursor.tagName?.toLowerCase() === tagName.toLowerCase() &&
@@ -79,51 +109,28 @@ class ElementBuilder {
     }
 
     if (!el) {
-      const isSVG = tagName === 'svg' || (parent instanceof Element && parent.namespaceURI === SVG_NS)
-      el = isSVG ? document.createElementNS(SVG_NS, tagName) : document.createElement(tagName)
+      el = this._createElement(tagName, parent)
       if (key) el.setAttribute('data-key', key)
-      parent.insertBefore(el, parent.childNodes[currentIndex] || null)
+      parent.insertBefore(el, parent.childNodes[cursor] || null)
     }
-
-    if (cb) {
-      if (props) this._applyProps(el, props, true)
-      this._stack.push(el)
-      this._cursorStack.push(0)
-      cb()
-      this._cleanup(el, this._cursorStack[this._cursorStack.length - 1])
-      this._cursorStack.pop()
-      this._stack.pop()
-    } else {
-      if (props) this._applyProps(el, props)
-    }
-
-    this._cursorStack[this._cursorStack.length - 1]++
 
     return el
   }
 
-  private _createFresh(tagName: string, props?: BuilderProps, cb?: () => void): Element {
-    const parent = this._stack[this._stack.length - 1]
-    const isSVG = tagName === 'svg'
-      || (parent instanceof Element && parent.namespaceURI === SVG_NS)
-    const el = isSVG
-      ? document.createElementNS(SVG_NS, tagName)
-      : document.createElement(tagName)
-
+  private _mountChildren(el: Element, parent: Node | undefined, props?: BuilderProps, cb?: () => void): void {
     if (cb) {
       if (props) this._applyProps(el, props, true)
-      if (parent) parent.appendChild(el)
+      if (parent && !el.parentNode) parent.appendChild(el)
       this._stack.push(el)
       this._cursorStack.push(0)
       cb()
+      this._cleanup(el, this._cursor)
       this._cursorStack.pop()
       this._stack.pop()
     } else {
       if (props) this._applyProps(el, props)
-      if (parent) parent.appendChild(el)
+      if (parent && !el.parentNode) parent.appendChild(el)
     }
-
-    return el
   }
 
   private _findChildByKey(parent: Node, key: string, start: number): Element | null {
@@ -161,42 +168,14 @@ class ElementBuilder {
 
   private _applyProps(el: Element, props: BuilderProps, skipTextContent: boolean = false) {
     const oldCache = this._propsCache.get(el)
-    const newCache: Record<string, unknown> = {}
+    const newCache = this._normalizeProps(props, skipTextContent)
 
-    for (const [key, value] of Object.entries(props)) {
-      if (key === 'key') continue
-      if (key === 'textContent' && skipTextContent) continue
-
-      if (key === 'className' || key === 'class') {
-        if (value == null || value === false) {
-          newCache['class'] = null
-        } else if (typeof value === 'object') {
-          newCache['class'] = Object.entries(value as Record<string, boolean>)
-            .filter(([_, a]) => a)
-            .map(([n]) => n)
-            .join(' ')
-        } else {
-          newCache['class'] = String(value as string | number | boolean | bigint)
-        }
-
-        continue
-      }
-
-      if (key.startsWith('on') && typeof value === 'function') {
-        newCache[`on:${key.slice(2).toLowerCase()}`] = value
-        continue
-      }
-
-      newCache[key] = value
-    }
-
+    // Apply changed props
     for (const [ck, value] of Object.entries(newCache)) {
       if (oldCache && oldCache[ck] === value) continue
 
       if (value == null || value === false) {
-        if (ck === 'class') el.removeAttribute('class')
-        else if (ck === 'textContent') el.textContent = ''
-        else if (!ck.startsWith('on:')) el.removeAttribute(ck)
+        this._removeProp(el, ck)
         continue
       }
 
@@ -217,18 +196,66 @@ class ElementBuilder {
       }
     }
 
+    // Remove stale props
     if (oldCache) {
       for (const [ck, oldValue] of Object.entries(oldCache)) {
         if (ck in newCache) continue
-        if (ck === 'class') el.removeAttribute('class')
-        else if (ck === 'textContent') { if (!skipTextContent) el.textContent = '' }
-        else if (ck === 'style' && 'style' in el) (el as HTMLElement).style.cssText = ''
-        else if (ck.startsWith('on:') && typeof oldValue === 'function') el.removeEventListener(ck.slice(3), oldValue as EventListener)
-        else el.removeAttribute(ck)
+        if (ck === 'textContent' && skipTextContent) continue
+        if (ck.startsWith('on:') && typeof oldValue === 'function') {
+          el.removeEventListener(ck.slice(3), oldValue as EventListener)
+        } else {
+          this._removeProp(el, ck)
+        }
       }
     }
 
     this._propsCache.set(el, newCache)
+  }
+
+  private _normalizeProps(props: BuilderProps, skipTextContent: boolean): Record<string, unknown> {
+    const cache: Record<string, unknown> = {}
+
+    for (const [key, value] of Object.entries(props)) {
+      if (key === 'key') continue
+
+      // text → textContent shorthand
+      if (key === 'text' || key === 'textContent') {
+        if (!skipTextContent) cache['textContent'] = value
+        continue
+      }
+
+      // className / class → normalized 'class'
+      if (key === 'className' || key === 'class') {
+        if (value == null || value === false) {
+          cache['class'] = null
+        } else if (typeof value === 'object') {
+          cache['class'] = Object.entries(value as Record<string, boolean>)
+            .filter(([_, a]) => a)
+            .map(([n]) => n)
+            .join(' ')
+        } else {
+          cache['class'] = String(value as string | number | boolean | bigint)
+        }
+        continue
+      }
+
+      // on* event handlers → on:eventname
+      if (key.startsWith('on') && typeof value === 'function') {
+        cache[`on:${key.slice(2).toLowerCase()}`] = value
+        continue
+      }
+
+      cache[key] = value
+    }
+
+    return cache
+  }
+
+  private _removeProp(el: Element, key: string): void {
+    if (key === 'class') el.removeAttribute('class')
+    else if (key === 'textContent') el.textContent = ''
+    else if (key === 'style' && 'style' in el) (el as HTMLElement).style.cssText = ''
+    else if (!key.startsWith('on:')) el.removeAttribute(key)
   }
 
   detached<T>(fn: () => T): T {
@@ -256,12 +283,10 @@ class ElementBuilder {
   }
 
   text = (content: string): Text => {
-    const parent = this._stack[this._stack.length - 1]
-    const inBuildContext = parent && this._cursorStack.length > 0 && !this._isBareFragment(parent)
+    const parent = this._parent
 
-    if (inBuildContext) {
-      const cursor = this._cursorStack[this._cursorStack.length - 1]
-      const nodeAtCursor = parent.childNodes[cursor]
+    if (this._inBuildContext) {
+      const nodeAtCursor = parent!.childNodes[this._cursor]
       let textNode: Text
 
       if (nodeAtCursor?.nodeType === Node.TEXT_NODE) {
@@ -269,11 +294,10 @@ class ElementBuilder {
         if (textNode.textContent !== content) textNode.textContent = content
       } else {
         textNode = document.createTextNode(content)
-        parent.insertBefore(textNode, nodeAtCursor || null)
+        parent!.insertBefore(textNode, nodeAtCursor || null)
       }
 
-      this._cursorStack[this._cursorStack.length - 1]++
-
+      this._cursor++
       return textNode
     }
 
@@ -284,14 +308,11 @@ class ElementBuilder {
   }
 
   node = (existingNode: Node): Node => {
-    const parent = this._stack[this._stack.length - 1]
+    const parent = this._parent
     if (!parent) return existingNode
 
-    const inBuildContext = this._cursorStack.length > 0 && !this._isBareFragment(parent)
-
-    if (inBuildContext) {
-      const cursor = this._cursorStack[this._cursorStack.length - 1]
-      const ref = parent.childNodes[cursor] || null
+    if (this._inBuildContext) {
+      const ref = parent.childNodes[this._cursor] || null
       const count = existingNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE
         ? existingNode.childNodes.length
         : 1
@@ -299,7 +320,7 @@ class ElementBuilder {
       if (ref !== existingNode) {
         parent.insertBefore(existingNode, ref)
       }
-      this._cursorStack[this._cursorStack.length - 1] += count
+      this._cursor += count
     } else {
       parent.appendChild(existingNode)
     }
