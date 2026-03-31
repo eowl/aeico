@@ -1,4 +1,4 @@
-import type { FieldI18nKeys, InferProps, Props, Watchers } from '../core/types'
+import type { InferProps, Props, Watchers } from '../core/types'
 import AeicoComponent from './aeico-component'
 import { t } from '../localize'
 
@@ -73,11 +73,6 @@ class AeicoField extends AeicoComponent {
   declare disabled?: boolean
 
   /**
-   * i18n keys configuration for this field
-   */
-  protected i18nKeys: FieldI18nKeys = {}
-
-  /**
    * Lifecycle: Component connected to DOM
    */
   connectedCallback() {
@@ -100,7 +95,7 @@ class AeicoField extends AeicoComponent {
    */
   protected createResetButton(onReset: () => void): HTMLButtonElement {
     const resetText = this.resetText || '↺'
-    const resetKey = this.i18nKeys.resetButton || 'buttons.reset'
+    const resetKey = 'buttons.reset'
 
     const resetBtn = document.createElement('button')
 
@@ -124,7 +119,7 @@ class AeicoField extends AeicoComponent {
    */
   protected createClearButton(onClear: () => void): HTMLButtonElement {
     const clearText = this.clearText || '×'
-    const clearKey = this.i18nKeys.clearButton || 'buttons.clear'
+    const clearKey = 'buttons.clear'
 
     const clearBtn = document.createElement('button')
 
@@ -175,7 +170,7 @@ class AeicoField extends AeicoComponent {
       this.resetBtn = button({
         className: 'reset-btn',
         textContent: this.resetText || '↺',
-        title: t(this.i18nKeys.resetButton || 'buttons.reset', '↺'),
+        title: t('buttons.reset', '↺'),
         onClick: this.boundOnReset,
       })
     }
@@ -188,7 +183,7 @@ class AeicoField extends AeicoComponent {
       this.clearBtn = button({
         className: 'clear-btn',
         textContent: this.clearText || '✕',
-        title: t(this.i18nKeys.clearButton || 'buttons.clear', '✕'),
+        title: t('buttons.clear', '✕'),
         onClick: this.boundOnClear,
       })
     }

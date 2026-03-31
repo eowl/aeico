@@ -1,37 +1,4 @@
 /**
- * Base i18n keys configuration for any component
- * Extend this type to add component-specific i18n keys
- */
-export type I18nKeys = Record<string, string | undefined>
-
-/**
- * i18n Service Interface
- * 
- * The framework interacts with the multilingual system via this interface. 
- * The actual implementation is provided by the application layer.
- */
-export type I18nService = {
-  /**
-   * Translate text
-   * @param key Translation key
-   * @returns Translated text
-   */
-  t(key: string): string
-
-  /**
-   * Subscribe to language changes
-   * @param callback Callback function when language changes
-   * @returns Unsubscribe function
-   */
-  subscribe(callback: () => void): () => void
-}
-
-/**
- * Theme types for components
- */
-export type ThemeType = 'dark' | 'light'
-
-/**
  * Size types for field components
  */
 export type SizeType = 'sm' | 'md' | 'lg'
@@ -46,55 +13,6 @@ export type StyleProps = {
   styleSheet?: CSSStyleSheet
   styleSheetNames?: string[]
   cssVars?: Record<string, string>
-  
-  /** Component theme, defaults to 'dark' */
-  theme?: ThemeType
-}
-
-/**
- * Base configuration for all components
- * Provides common styling and behavior options
- */
-export type BaseProps<TI18nKeys extends I18nKeys = I18nKeys> = StyleProps & {
-  /** Whether to enable i18n support for this component instance. If undefined, uses AeicoElement.enableI18n */
-  enableI18n?: boolean
-  disabled?: boolean
-  
-  /** i18n keys for translatable UI elements */
-  i18n?: TI18nKeys
-}
-
-/**
- * i18n keys configuration for field components
- */
-export type FieldI18nKeys = I18nKeys & {
-  /** i18n key for reset button tooltip, defaults to 'buttons.reset' */
-  resetButton?: string
-  /** i18n key for clear button tooltip */
-  clearButton?: string
-}
-
-/**
- * Configuration for form field components
- */
-export type FieldConfig = BaseProps<FieldI18nKeys> & {
-  value?: string | number
-  defaultValue?: string | number
-  resettable?: boolean
-  clearable?: boolean
-}
-
-/**
- * i18n keys configuration for date-time field
- */
-export type DateTimeFieldI18nKeys = FieldI18nKeys & {
-  /** i18n key for clear button tooltip */
-  clearButton?: string
-}
-
-export type DateTimeFieldConfig = FieldConfig & {
-  options?: string[]
-  clearable?: boolean
 }
 
 /**
@@ -157,55 +75,6 @@ export function asDocument(css: string | CSSStyleSheet): StyleSpec {
     ? css
     : Array.from(css.cssRules).map(r => r.cssText).join('\n')
   return { id: `doc:${code.slice(0, 64)}`, code, scope: 'document', deps: [] }
-}
-
-/**
- * Style variable generator type
- * Components can implement this to provide automatic style generation based on props
- */
-export type StyleVariableGenerator = {
-  /**
-   * Generate CSS variables based on component configuration
-   * 
-   * @param config Configuration object containing size, theme, and other properties
-   * @returns CSS variables object (keys start with '--')
-   * 
-   * @example
-   * ```typescript
-   * generate({ size: 'md', theme: 'dark' })
-   * // Returns: { '--input-font-size': '12px', '--input-bg': '#1e1e1e', ... }
-   * ```
-   */
-  generate(config: Record<string, any>): Record<string, string>
-}
-
-/**
- * Style provider for components
- * Combines static stylesheet and dynamic variable generator
- * 
- * Components define stylesheet and/or styleGenerator as static props,
- * and AeicoElement automatically combines them into a complete style system
- */
-export type StyleProvider = {
-  /** Static CSS stylesheet content */
-  stylesheet?: string
-  
-  /** Dynamic CSS variable generator */
-  generator?: StyleVariableGenerator
-}
-
-/**
- * Configuration for style generation
- */
-export type StyleGenerationConfig = {
-  /** Component theme (e.g., 'dark', 'light') */
-  theme?: string
-  
-  /** Component size (e.g., 'sm', 'md', 'lg') */
-  size?: string
-  
-  /** Additional custom properties */
-  [key: string]: any
 }
 
 /**

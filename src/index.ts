@@ -53,19 +53,8 @@ export {
   isSelectOption
 } from './core/types'
 export type {
-  ThemeType,
   SizeType,
-  I18nKeys,
-  I18nService,
   StyleProps,
-  BaseProps,
-  FieldI18nKeys,
-  FieldConfig,
-  DateTimeFieldI18nKeys,
-  DateTimeFieldConfig,
-  StyleVariableGenerator,
-  StyleProvider,
-  StyleGenerationConfig,
   SelectOption,
   SelectOptions
 } from './core/types'
