@@ -44,13 +44,6 @@ export {
 } from './core/config-provider'
 export type { ComponentConfig } from './core/config-provider'
 
-/** @deprecated Use `t()` from 'aeico/localize' instead */
-export { 
-  setI18nService,
-  getI18nService,
-  hasI18nService
-} from './core/i18n'
-
 // Event system
 export { createEventEmitter } from './core/events'
 export type { ComponentEventEmitter } from './core/events'
