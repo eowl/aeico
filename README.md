@@ -19,7 +19,7 @@ pnpm add aeico
 ## Quick Start
 
 ```typescript
-import { setComponentConfig, SelectField, InputField } from 'aeico'
+import { setComponentConfig, SelectField, TextInput } from 'aeico'
 
 // Configure global settings
 setComponentConfig({
@@ -59,7 +59,7 @@ Base class for form field components. Extends `AeicoElement` with:
 ### Form Fields
 
 - **SelectField**: Dropdown select with options
-- **InputField**: Text input with placeholder
+- **TextInput**: Text input with placeholder
 - **RangeField**: Range slider with value display
 - **CheckboxField**: Checkbox/toggle with variants
 

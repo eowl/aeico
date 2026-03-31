@@ -1,11 +1,11 @@
-import AeicoField from './aeico-field'
-import type { InferProps, Props } from '../core/types'
-import { inputFieldSpec } from '../assets/css/specs'
+import AeicoField from '../aeico-field'
+import type { InferProps, Props } from '../../core/types'
+import { inputFieldSpec } from '../../assets/css/specs'
 
-class InputField extends AeicoField {
+class TextInput extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
 
-  static tagName = 'input'
+  static tagName = 'text-input'
 
   static props: Props = {
     placeholder: { type: String },
@@ -63,7 +63,7 @@ class InputField extends AeicoField {
 }
 
 // Component is no longer auto-registered
-// Call InputField.register() explicitly if needed
+// Call TextInput.register() explicitly if needed
 
-export default InputField
-export type InputFieldProps = InferProps<typeof InputField>
+export default TextInput
+export type TextInputProps = InferProps<typeof TextInput>

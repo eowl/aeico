@@ -1,4 +1,3 @@
-import type { I18nService } from './types'
 import styleStore, { type PresetStyleName } from '../utils/style-store'
 
 export type preloadStyleEntry = PresetStyleName | Record<string, string>
@@ -11,11 +10,6 @@ type BaseConfig = {
    */
   enableI18n?: boolean
 
-  /**
-   * i18n service implementation
-   * Required if enableI18n is true
-   */
-  i18nService?: I18nService
 }
 
 /**
@@ -68,10 +62,6 @@ export type ResultConfig = BaseConfig & {
 
 const DEFAULT_CONFIG: ResultConfig = {
   enableI18n: true,
-  i18nService: {
-    t: (key: string) => key,
-    subscribe: () => () => {}
-  }
 }
 
 /**
@@ -136,13 +126,6 @@ class ConfigProvider {
     }
 
     this.enableComponentStylesheets = config.enableComponentStylesheets
-
-    if (this.config.enableI18n && !this.config.i18nService) {
-      console.warn(
-        'ComponentConfig: enableI18n is true but i18nService is not provided. ' +
-        'i18n features will not work correctly.'
-      )
-    }
   }
 
   /** Registers styles from the preloadStyles configuration */
@@ -208,7 +191,6 @@ class ConfigProvider {
 
     return {
       enableI18n: this.config.enableI18n ?? DEFAULT_CONFIG.enableI18n,
-      i18nService: this.config.i18nService ?? DEFAULT_CONFIG.i18nService,
       preloadedStyleNames: this.preloadedStyleNames.size ? Array.from(this.preloadedStyleNames) : undefined,
       enableComponentStylesheets: this.enableComponentStylesheets
     }

@@ -1,6 +1,6 @@
 import { setComponentConfig } from '../src/core/config-provider'
 import {
-  InputField,
+  TextInput,
   CheckboxField,
   RadioField,
   RangeField,
@@ -80,7 +80,7 @@ Icon.register('ae-icon')
 IconButton.register('ae-icon-button')
 
 // Register all components
-InputField.register()
+TextInput.register()
 CheckboxField.register()
 RadioField.register()
 RangeField.register()
