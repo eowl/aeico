@@ -1,0 +1,161 @@
+.alert {
+  position: relative;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.6;
+
+  /* subtle (default variant): uses token vars set on :host */
+  background-color: var(--alert-subtle-bg);
+  color:            var(--alert-subtle-color);
+  border: 1px solid var(--alert-subtle-border);
+}
+
+.alert:last-child {
+  margin-bottom: 0;
+}
+
+/* 'primary' color is the :host base — any [color="..."] rule overrides via higher specificity */
+:host {
+  --alert-solid-bg:     var(--color-primary);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-primary);
+  --alert-subtle-bg:    var(--color-primary-bg-subtle);
+  --alert-subtle-color: var(--color-primary-text-emphasis);
+  --alert-subtle-border:var(--color-primary-border-subtle);
+}
+
+:host([color="primary"]) {
+  --alert-solid-bg:     var(--color-primary);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-primary);
+  --alert-subtle-bg:    var(--color-primary-bg-subtle);
+  --alert-subtle-color: var(--color-primary-text-emphasis);
+  --alert-subtle-border:var(--color-primary-border-subtle);
+}
+
+:host([color="secondary"]) {
+  --alert-solid-bg:     var(--color-secondary);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-secondary-hover);
+  --alert-subtle-bg:    var(--color-secondary-bg-subtle);
+  --alert-subtle-color: var(--color-secondary-text-emphasis);
+  --alert-subtle-border:var(--color-secondary-border-subtle);
+}
+
+:host([color="success"]) {
+  --alert-solid-bg:     var(--color-success);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-success);
+  --alert-subtle-bg:    var(--color-success-bg-subtle);
+  --alert-subtle-color: var(--color-success-text-emphasis);
+  --alert-subtle-border:var(--color-success-border-subtle);
+}
+
+:host([color="danger"]) {
+  --alert-solid-bg:     var(--color-danger);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-danger);
+  --alert-subtle-bg:    var(--color-danger-bg-subtle);
+  --alert-subtle-color: var(--color-danger-text-emphasis);
+  --alert-subtle-border:var(--color-danger-border-subtle);
+}
+
+:host([color="warning"]) {
+  --alert-solid-bg:     var(--color-warning);
+  --alert-solid-color:  #1e1e1e;
+  --alert-border:       var(--color-warning);
+  --alert-subtle-bg:    var(--color-warning-bg-subtle);
+  --alert-subtle-color: var(--color-warning-text-emphasis);
+  --alert-subtle-border:var(--color-warning-border-subtle);
+}
+
+:host([color="info"]) {
+  --alert-solid-bg:     var(--color-info);
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       var(--color-info);
+  --alert-subtle-bg:    var(--color-info-bg-subtle);
+  --alert-subtle-color: var(--color-info-text-emphasis);
+  --alert-subtle-border:var(--color-info-border-subtle);
+}
+
+:host([color="light"]) {
+  --alert-solid-bg:     var(--color-gray-lighter);
+  --alert-solid-color:  #1e1e1e;
+  --alert-border:       var(--color-gray-light);
+  --alert-subtle-bg:    var(--color-light-bg-subtle);
+  --alert-subtle-color: var(--color-text-muted);
+  --alert-subtle-border:var(--color-light-border-subtle);
+}
+
+:host([color="dark"]) {
+  --alert-solid-bg:     #333;
+  --alert-solid-color:  var(--color-text-main);
+  --alert-border:       #444;
+  --alert-subtle-bg:    var(--color-dark-bg-subtle);
+  --alert-subtle-color: var(--gray-950);
+  --alert-subtle-border:var(--color-dark-border-subtle);
+}
+
+/* subtle: default variant (base .alert already covers it) */
+
+:host([variant="filled"]) .alert {
+  background-color: var(--alert-solid-bg);
+  color:            var(--alert-solid-color);
+  border-color:     var(--alert-border);
+}
+
+:host([variant="outlined"]) .alert {
+  background-color: transparent;
+  color:            var(--alert-subtle-color);
+  border-color:     var(--alert-border);
+}
+
+:host([dismissible]) .alert {
+  padding-right: 40px;
+}
+
+:host([icon]) .alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+:host([icon]) .alert::before {
+  content: '';
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+
+.alert-close {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 18px;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+
+.alert-close:hover {
+  opacity: 1;
+}
+
+:host([size="sm"]) .alert {
+  padding: 8px 12px;
+  font-size: 11px;
+}
+
+:host([size="lg"]) .alert {
+  padding: 16px 20px;
+  font-size: 13px;
+}

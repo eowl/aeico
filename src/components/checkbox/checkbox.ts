@@ -1,8 +1,7 @@
-import AeicoField from './aeico-field'
-import type { InferProps, Props } from '../core/types'
-import { checkboxSpec } from '../assets/css/specs'
-
-export type CheckboxVariant = 'checkbox' | 'toggle'
+import AeicoField from '../aeico-field'
+import type { InferProps, Props } from '../../core/types'
+import { checkboxSpec } from '../../assets/css/specs'
+import { CheckboxVariant } from './defines'
 
 class Checkbox extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null

@@ -1,7 +1,7 @@
-import type { InferProps, Props } from '../core/types'
-import { modalSpec } from '../assets/css/specs'
-import AeicoComponent from './aeico-component'
-import { t } from '../localize'
+import type { InferProps, Props } from '../../core/types'
+import { modalSpec } from '../../assets/css/specs'
+import AeicoComponent from '../aeico-component'
+import { t } from '../../localize'
 
 class Modal extends AeicoComponent {
   static props: Props = {

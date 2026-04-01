@@ -1,10 +1,7 @@
-import type { InferProps, Props } from '../core/types'
-import buttonStyle from '../assets/css/common/button.css?inline'
-import AeicoComponent from './aeico-component'
-
-export type ButtonColor = 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
-export type ButtonVariant = 'filled' | 'outlined' | 'subtle' | 'text'
-export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg'
+import type { InferProps, Props } from '../../core/types'
+import buttonStyle from '../../styles/components/button.css?inline'
+import AeicoComponent from '../aeico-component'
+import { ButtonColor, ButtonSize, ButtonVariant } from './defines'
 
 /**
  * Button Component

@@ -1,8 +1,6 @@
 import { setComponentConfig } from '../src/core/config-provider'
 import {
   TextInput,
-  CheckboxField,
-  RadioField,
   Select,
   Slider,
   Checkbox,
@@ -79,8 +77,6 @@ IconButton.register('ae-icon-button')
 
 // Register all components
 TextInput.register()
-CheckboxField.register()
-RadioField.register()
 Select.register()
 Slider.register('ae-slider')
 Checkbox.register('ae-cb')

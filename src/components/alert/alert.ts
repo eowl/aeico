@@ -1,11 +1,8 @@
-import type { InferProps, Props } from '../core/types'
-import alertStyle from '../assets/css/common/alert.css?inline'
-import AeicoComponent from './aeico-component'
-import { t } from '../localize'
-
-export type AlertVariant = 'subtle' | 'filled' | 'outlined'
-export type AlertSize = 'sm' | 'md' | 'lg'
-export type AlertColor = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark'
+import type { InferProps, Props } from '../../core/types'
+import alertStyle from '../../styles/components/alert.css?inline'
+import AeicoComponent from '../aeico-component'
+import { t } from '../../localize'
+import type { AlertColor, AlertSize, AlertVariant } from './defines'
 
 /**
  * Alert Component

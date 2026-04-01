@@ -1,14 +1,9 @@
-import AeicoField from './aeico-field'
-import type { InferProps, Props } from '../core/types'
-import { radioGroupSpec } from '../assets/css/specs'
-import type { ButtonColor, ButtonVariant, ButtonSize } from './button'
-import { t } from '../localize'
-
-export type RadioGroupMode = 'default' | 'button' | 'button-group' | 'segmented'
-
-export type RadioGroupOption = string | number | { label: string; value: string | number }
-
-export type RadioGroupOptions = RadioGroupOption[]
+import AeicoField from '../aeico-field'
+import type { InferProps, Props } from '../../core/types'
+import { radioGroupSpec } from '../../assets/css/specs'
+import type { ButtonColor, ButtonVariant, ButtonSize } from '../button/button'
+import { t } from '../../localize'
+import type { RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './defines'
 
 class RadioGroup extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null

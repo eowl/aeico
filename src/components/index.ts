@@ -33,9 +33,6 @@
 
 // Field components
 export { default as TextInput } from './text-input'
-export { default as CheckboxField } from './checkbox-field'
-export { default as RadioField } from './radio-field'
-
 export { default as Select } from './select'
 export { default as Slider } from './slider'
 export { default as Checkbox } from './checkbox'
@@ -48,7 +45,7 @@ export { default as Alert } from './alert'
 export { default as Modal } from './modal'
 export { default as Icon } from './icon/icon'
 export { default as IconRegistry } from './icon/registry'
-export { default as IconButton } from './icon-button/icon-button'
+export { default as IconButton } from './icon-button'
 
 // Component types
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
@@ -56,11 +53,9 @@ export type { SliderProps, SliderOption, SliderOptions, SliderOptionValue } from
 export type { CheckboxProps, CheckboxVariant } from './checkbox'
 export type { RadioGroupProps, RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './radio-group'
 export type { TextInputProps } from './text-input'
-export type { CheckboxFieldProps } from './checkbox-field'
-export type { RadioFieldProps, RadioFieldType, RadioOption, RadioOptions } from './radio-field'
-export type { ButtonProps } from './button'
+export type { ButtonProps, ButtonColor, ButtonSize, ButtonVariant } from './button'
 export type { ButtonGroupProps } from './button-group'
-export type { AlertProps } from './alert'
+export type { AlertProps, AlertColor, AlertSize, AlertVariant } from './alert'
 export type { ModalProps } from './modal'
 export type { IconProps, IconSize, IconColor, IconDefinition, IconRegistryData } from './icon'
 export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './icon-button'
