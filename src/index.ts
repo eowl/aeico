@@ -30,10 +30,6 @@ export { Themeable } from './mixins/themeable'
 export type { ThemeableProps } from './mixins/themeable'
 export { t, locale, LocaleStore, localeRegistry } from './localize/index'
 export type { LocaleProvider, LocaleRegistry } from './localize/index'
-/** @deprecated Use standalone `t()` function instead */
-export { Localizable } from './localize/index'
-/** @deprecated Use standalone `t()` function instead */
-export type { LocalizableProps } from './localize/index'
 
 // Configuration & Services
 export {

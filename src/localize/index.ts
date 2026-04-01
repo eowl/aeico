@@ -22,9 +22,5 @@
 
 export { t } from './locale'
 
-/** @deprecated Use standalone `t()` function instead */
-export { Localizable } from './localizable'
-export type { LocalizableProps } from './localizable'
-
 export { locale, LocaleStore, localeRegistry } from './locale'
 export type { LocaleProvider, LocaleRegistry } from './locale'
