@@ -32,7 +32,6 @@
  */
 
 // Field components
-export { default as RangeField } from './range-field'
 export { default as TextInput } from './text-input'
 export { default as CheckboxField } from './checkbox-field'
 export { default as RadioField } from './radio-field'
@@ -56,7 +55,6 @@ export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from
 export type { SliderProps, SliderOption, SliderOptions, SliderOptionValue } from './slider'
 export type { CheckboxProps, CheckboxVariant } from './checkbox'
 export type { RadioGroupProps, RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './radio-group'
-export type { RangeFieldProps } from './range-field'
 export type { TextInputProps } from './text-input'
 export type { CheckboxFieldProps } from './checkbox-field'
 export type { RadioFieldProps, RadioFieldType, RadioOption, RadioOptions } from './radio-field'

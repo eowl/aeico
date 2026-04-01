@@ -1,21 +1,8 @@
-import AeicoField from './aeico-field'
-import type { InferProps, Props } from '../core/types'
-import { rangeFieldSpec } from '../assets/css/specs'
+import AeicoField from '../aeico-field'
+import type { InferProps, Props } from '../../core/types'
+import { rangeFieldSpec } from '../../assets/css/specs'
+import type { NormalizedOption, SliderOption, SliderOptions } from './defines'
 
-export type SliderOptionValue = string | number
-
-export type SliderOption = {
-  label: string
-  value: SliderOptionValue
-}
-
-export type SliderOptions = SliderOptionValue[] | SliderOption[]
-
-interface NormalizedOption {
-  label: string
-  value: string      // stored as string for consistency with this.value
-  rangeValue: number // numeric value used by the range input
-}
 
 class Slider extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
