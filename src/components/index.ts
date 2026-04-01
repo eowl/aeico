@@ -32,7 +32,6 @@
  */
 
 // Field components
-export { default as SelectField } from './select-field'
 export { default as RangeField } from './range-field'
 export { default as TextInput } from './text-input'
 export { default as CheckboxField } from './checkbox-field'
@@ -53,7 +52,6 @@ export { default as IconRegistry } from './icon/registry'
 export { default as IconButton } from './icon-button/icon-button'
 
 // Component types
-export type { SelectFieldProps } from './select-field'
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
 export type { SliderProps, SliderOption, SliderOptions, SliderOptionValue } from './slider'
 export type { CheckboxProps, CheckboxVariant } from './checkbox'

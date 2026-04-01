@@ -1,16 +1,8 @@
-import AeicoField from './aeico-field'
-import type { InferProps, Props } from '../core/types'
-import { selectFieldSpec } from '../assets/css/specs'
-import { t } from '../localize'
-
-export type SelectOptionValue = string | number
-
-export type SelectOption = {
-  label: string
-  value: SelectOptionValue
-}
-
-export type SelectOptions = SelectOptionValue[] | SelectOption[]
+import AeicoField from '../aeico-field'
+import type { InferProps, Props } from '../../core/types'
+import { selectFieldSpec } from '../../assets/css/specs'
+import { t } from '../../localize'
+import type { SelectOptionValue, SelectOption, SelectOptions } from './defines'
 
 class Select extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null

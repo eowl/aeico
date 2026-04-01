@@ -4,7 +4,6 @@ import {
   CheckboxField,
   RadioField,
   RangeField,
-  SelectField,
   Select,
   Slider,
   Checkbox,
@@ -84,7 +83,6 @@ TextInput.register()
 CheckboxField.register()
 RadioField.register()
 RangeField.register()
-SelectField.register()
 Select.register()
 Slider.register('ae-slider')
 Checkbox.register('ae-cb')
