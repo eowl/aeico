@@ -3,7 +3,6 @@ import type {
   StyleProps,
   StyleEntry,
   Props,
-  StyleVariableGenerator,
   InferProps
 } from './types'
 import { getComponentConfig } from './config-provider'
@@ -54,6 +53,8 @@ class AeicoElement extends BaseElement {
    */
   protected static stylesheets?: StyleEntry[]
 
+  protected static styles?: string[]
+
   /**
    * Named styles to load from the shared style registry before applying this
    * component's own stylesheets.
@@ -72,8 +73,6 @@ class AeicoElement extends BaseElement {
    * Subclasses can override to provide custom CSS variable generation.
    * For theme-based generation, use the Themeable mixin.
    */
-  protected static styleGenerator?: StyleVariableGenerator
-
   declare enableStylesheets?: boolean
   declare styleSheetText?: string
   declare styleSheet?: CSSStyleSheet
@@ -96,12 +95,6 @@ class AeicoElement extends BaseElement {
     this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style)
   }
 
-  /** Generate CSS custom property values for this component instance. */
-  public generateStyleVars(): Record<string, string> {
-    const constructor = this.constructor as typeof AeicoElement
-    if (!constructor.styleGenerator) return {}
-    return constructor.styleGenerator.generate({})
-  }
 
   connectedCallback() {
     super.connectedCallback()
@@ -127,8 +120,7 @@ class AeicoElement extends BaseElement {
       constructorName: constructor.name,
       useStyles: constructor.useStyles,
       stylesheets: constructor.stylesheets,
-      pendingStyleProps: this.pendingStyleProps,
-      generateStyleVars: () => this.generateStyleVars(),
+      pendingStyleProps: this.pendingStyleProps
     })
 
     this.pendingStyleProps = undefined

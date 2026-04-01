@@ -33,7 +33,7 @@ export type StyleAdapterInitOptions = {
    * Delegated back to the element so that subclass overrides of generateStyleVars()
    * are honoured without coupling StyleAdapter to the element class hierarchy.
    */
-  generateStyleVars: () => Record<string, string>
+  // generateStyleVars: () => Record<string, string>
 }
 
 /**
@@ -110,7 +110,7 @@ export class StyleAdapter {
 
     // Layer 3: Instance explicit style props — always applied, highest priority
     if (options.pendingStyleProps) {
-      this.applyProps(options.pendingStyleProps, options.generateStyleVars)
+      this.applyProps(options.pendingStyleProps)
     }
 
     this.initialized = true
@@ -156,7 +156,7 @@ export class StyleAdapter {
    */
   applyProps(
     props: StyleProps,
-    generateStyleVars?: () => Record<string, string>
+    // generateStyleVars?: () => Record<string, string>
   ): void {
     if (props.styleSheetNames?.length) {
       this.adoptShared(props.styleSheetNames)
@@ -170,12 +170,12 @@ export class StyleAdapter {
       this.adopt(styleStore.normalizeSheet(props.styleSheet))
     }
 
-    if (generateStyleVars) {
-      const generated = generateStyleVars()
-      if (Object.keys(generated).length > 0) {
-        this.setCssVars(generated)
-      }
-    }
+    // if (generateStyleVars) {
+    //   const generated = generateStyleVars()
+    //   if (Object.keys(generated).length > 0) {
+    //     this.setCssVars(generated)
+    //   }
+    // }
 
     if (props.cssVars) {
       this.setCssVars(props.cssVars)
