@@ -1,0 +1,211 @@
+/* ============================================================================
+ * IconButton — square icon-only button
+ * Color tokens mirror button.css so the same [color] attributes work.
+ * ========================================================================== */
+
+/* ── Color tokens ─────────────────────────────────────────────────────────── */
+
+:host {
+  display: inline-flex;
+  --btn-solid-bg:          var(--color-gray);
+  --btn-solid-bg-hover:    var(--color-gray-light);
+  --btn-solid-bg-active:   var(--color-gray-dark);
+  --btn-solid-color:       var(--color-text-muted);
+  --btn-solid-color-hover: var(--color-text-main);
+  --btn-border:            var(--color-gray-light);
+  --btn-border-hover:      var(--color-gray-lighter);
+  --btn-accent:            var(--color-text-muted);
+  --btn-accent-hover:      var(--color-text-main);
+  --btn-subtle-bg:         rgba(255, 255, 255, 0.04);
+  --btn-subtle-bg-hover:   rgba(255, 255, 255, 0.08);
+}
+
+:host([color="primary"]) {
+  --btn-solid-bg:          var(--color-primary);
+  --btn-solid-bg-hover:    var(--color-primary-hover);
+  --btn-solid-bg-active:   var(--color-primary-active);
+  --btn-solid-color:       var(--color-text-main);
+  --btn-border:            var(--color-primary);
+  --btn-border-hover:      var(--color-primary-hover);
+  --btn-accent:            var(--color-text-link);
+  --btn-accent-hover:      var(--color-text-link-hover);
+  --btn-subtle-bg:         var(--color-primary-bg-subtle);
+  --btn-subtle-bg-hover:   rgba(17, 119, 187, 0.15);
+}
+
+:host([color="secondary"]) {
+  --btn-solid-bg:          var(--color-secondary);
+  --btn-solid-bg-hover:    var(--color-secondary-hover);
+  --btn-solid-bg-active:   var(--color-secondary-active);
+  --btn-solid-color:       var(--color-text-main);
+  --btn-solid-color-hover: var(--color-text-main);
+  --btn-border:            var(--color-secondary-hover);
+  --btn-border-hover:      var(--slate-600);
+  --btn-accent:            var(--slate-700);
+  --btn-accent-hover:      var(--slate-800);
+  --btn-subtle-bg:         rgba(148, 163, 184, 0.06);
+  --btn-subtle-bg-hover:   rgba(148, 163, 184, 0.12);
+}
+
+:host([color="success"]) {
+  --btn-solid-bg:          var(--color-success);
+  --btn-solid-bg-hover:    var(--color-success-hover);
+  --btn-solid-bg-active:   var(--color-success-active);
+  --btn-solid-color:       var(--color-text-main);
+  --btn-border:            var(--color-success);
+  --btn-border-hover:      var(--color-success-hover);
+  --btn-accent:            var(--color-success-text-emphasis, var(--color-success));
+  --btn-accent-hover:      var(--color-success-hover);
+  --btn-subtle-bg:         var(--color-success-bg-subtle);
+  --btn-subtle-bg-hover:   rgba(34, 197, 94, 0.15);
+}
+
+:host([color="danger"]) {
+  --btn-solid-bg:          var(--color-danger);
+  --btn-solid-bg-hover:    var(--color-danger-hover);
+  --btn-solid-bg-active:   var(--color-danger-active);
+  --btn-solid-color:       var(--color-text-main);
+  --btn-border:            var(--color-danger);
+  --btn-border-hover:      var(--color-danger-hover);
+  --btn-accent:            var(--color-danger);
+  --btn-accent-hover:      #ff5566;
+  --btn-subtle-bg:         var(--color-danger-bg-subtle);
+  --btn-subtle-bg-hover:   rgba(239, 68, 68, 0.15);
+}
+
+:host([color="warning"]) {
+  --btn-solid-bg:          var(--color-warning);
+  --btn-solid-bg-hover:    var(--color-warning-hover);
+  --btn-solid-bg-active:   var(--color-warning-active);
+  --btn-solid-color:       #1e1e1e;
+  --btn-border:            var(--color-warning);
+  --btn-border-hover:      var(--color-warning-hover);
+  --btn-accent:            var(--color-warning-text-emphasis, var(--color-warning));
+  --btn-accent-hover:      var(--color-warning-hover);
+  --btn-subtle-bg:         var(--color-warning-bg-subtle);
+  --btn-subtle-bg-hover:   rgba(234, 179, 8, 0.15);
+}
+
+:host([color="info"]) {
+  --btn-solid-bg:          var(--color-info);
+  --btn-solid-bg-hover:    var(--color-info-hover);
+  --btn-solid-bg-active:   var(--color-info-active);
+  --btn-solid-color:       var(--color-text-main);
+  --btn-border:            var(--color-info);
+  --btn-border-hover:      var(--color-info-hover);
+  --btn-accent:            var(--color-info-text-emphasis, var(--color-info));
+  --btn-accent-hover:      var(--color-info-hover);
+  --btn-subtle-bg:         var(--color-info-bg-subtle);
+  --btn-subtle-bg-hover:   rgba(6, 182, 212, 0.15);
+}
+
+/* ── Base button ──────────────────────────────────────────────────────────── */
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  outline: none;
+  user-select: none;
+  flex-shrink: 0;
+
+  /* default: md */
+  width:  32px;
+  height: 32px;
+  --ib-icon-size: 18px;
+
+  /* filled (default) */
+  background:  var(--btn-solid-bg);
+  border: 1px solid var(--btn-border);
+  color:       var(--btn-solid-color);
+}
+
+.icon-btn:focus  { outline: none; }
+.icon-btn:active { transform: translateY(1px); }
+
+.icon-btn:hover:not(:disabled) {
+  background:   var(--btn-solid-bg-hover);
+  border-color: var(--btn-border-hover);
+  color:        var(--btn-solid-color-hover, var(--btn-solid-color));
+}
+
+.icon-btn:active:not(:disabled) { background: var(--btn-solid-bg-active); }
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Size variants ────────────────────────────────────────────────────────── */
+
+:host([size="xs"]) .icon-btn { width: 22px; height: 22px; --ib-icon-size: 13px; border-radius: 3px; }
+:host([size="sm"]) .icon-btn { width: 28px; height: 28px; --ib-icon-size: 15px; border-radius: 3px; }
+:host([size="lg"]) .icon-btn { width: 40px; height: 40px; --ib-icon-size: 22px; }
+
+/* ── Variant: outlined ────────────────────────────────────────────────────── */
+
+:host([variant="outlined"]) .icon-btn {
+  background:   transparent;
+  border-color: var(--btn-border);
+  color:        var(--btn-accent);
+}
+
+:host([variant="outlined"]) .icon-btn:hover:not(:disabled) {
+  background:   var(--btn-subtle-bg);
+  border-color: var(--btn-border-hover);
+  color:        var(--btn-accent-hover);
+}
+
+:host([variant="outlined"]) .icon-btn:active:not(:disabled) {
+  background: var(--btn-subtle-bg-hover);
+}
+
+/* ── Variant: subtle ───────────────────────────────────────────────────────── */
+
+:host([variant="subtle"]) .icon-btn {
+  background:   var(--btn-subtle-bg);
+  border-color: transparent;
+  color:        var(--btn-accent);
+}
+
+:host([variant="subtle"]) .icon-btn:hover:not(:disabled) {
+  background: var(--btn-subtle-bg-hover);
+  color:      var(--btn-accent-hover);
+}
+
+:host([variant="subtle"]) .icon-btn:active:not(:disabled) {
+  background: var(--btn-subtle-bg-hover);
+}
+
+/* ── Variant: text ────────────────────────────────────────────────────────── */
+
+:host([variant="text"]) .icon-btn {
+  background:   transparent;
+  border-color: transparent;
+  color:        var(--btn-accent);
+}
+
+:host([variant="text"]) .icon-btn:hover:not(:disabled) {
+  background: var(--btn-subtle-bg);
+  color:      var(--btn-accent-hover);
+}
+
+:host([variant="text"]) .icon-btn:active:not(:disabled) {
+  background: var(--btn-subtle-bg-hover);
+}
+
+/* ── SVG icon ─────────────────────────────────────────────────────────────── */
+
+.icon-svg {
+  display: block;
+  width:  var(--ib-icon-size);
+  height: var(--ib-icon-size);
+  fill: currentColor;
+  pointer-events: none;
+  overflow: visible;
+  flex-shrink: 0;
+}

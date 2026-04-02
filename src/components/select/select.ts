@@ -17,7 +17,7 @@ class Select extends AeicoField {
 
   declare options?: SelectOptions
 
-  protected static stylesheets = [selectFieldSpec]
+  protected static styles = [selectFieldSpec]
 
   protected writeValue(value: SelectOptionValue): void {
     if (this.fieldElement) {

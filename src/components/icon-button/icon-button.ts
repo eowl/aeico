@@ -1,7 +1,8 @@
 import type { InferProps, Props } from '../../core/types'
 import { SVG_NS } from '../../core/types'
 import AeicoComponent from '../aeico-component'
-import { iconButtonSpec } from '../../assets/css/specs'
+import styleVariables from '../styles/variables.css?inline'
+import style from '../styles/components/icon-button.css?inline'
 import type { IconColor } from '../icon/defines'
 import IconRegistry from '../icon/registry'
 
@@ -25,7 +26,7 @@ class IconButton extends AeicoComponent {
   declare variant?: IconButtonVariant
   declare disabled?: boolean
 
-  protected static stylesheets = [iconButtonSpec]
+  protected static styles = [styleVariables, style]
 
   constructor() {
     super()

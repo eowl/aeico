@@ -1,7 +1,8 @@
 import type { InferProps, Props } from '../../core/types'
 import { SVG_NS } from '../../core/types'
 import AeicoComponent from '../aeico-component'
-import { iconSpec } from '../../assets/css/specs'
+import styleVariables from '../styles/variables.css?inline'
+import style from '../styles/components/icon.css?inline'
 import type { IconSize, IconColor } from './defines'
 import IconRegistry from './registry'
 
@@ -19,7 +20,7 @@ class Icon extends AeicoComponent {
   declare size?: IconSize
   declare color?: IconColor
 
-  protected static stylesheets = [iconSpec]
+  protected static styles = [styleVariables, style]
 
   protected render() {
     if (typeof this.size === 'number' && this.size > 0) {

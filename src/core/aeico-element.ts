@@ -1,11 +1,9 @@
 import { StyleAdapter } from '../utils/style-adapter'
 import type {
-  StyleProps,
+  StyleOptions,
   StyleEntry,
-  Props,
   InferProps
 } from './types'
-import { getComponentConfig } from './config-provider'
 import BaseElement from './base-element'
 
 /**
@@ -13,80 +11,16 @@ import BaseElement from './base-element'
  *
  * Extends BaseElement with the full Aeico style system:
  * - StyleAdapter integration (adoptedStyleSheets)
- * - Component stylesheets (static stylesheets / useStyles)
+ * - Component stylesheets (static styles / useStyles)
  * - CSS variable generation (styleGenerator)
  * - Global component config (setComponentConfig)
  *
  * For components that don't need Aeico styles, use AeicoBase instead.
  */
 class AeicoElement extends BaseElement {
-  private pendingStyleProps?: StyleProps
+  private styleOptions?: StyleOptions
 
-  // Static global config (shared across all instances)
-  private static globalConfig: ReturnType<typeof getComponentConfig>
-
-  // Instance-level config overrides
-  private instanceConfig?: Partial<{
-    enableI18n: boolean
-    theme: string
-  }>
-
-  static props: Props = {
-    enableStylesheets: { type: Boolean },
-    styleSheetText: { type: String },
-    styleSheet: { type: Object },
-    loadStyleSheets: { type: Array },
-    cssVars: { type: Object },
-    disabled: { type: Boolean },
-  }
-
-  /**
-   * CSS stylesheets for this component (loaded via `?inline` imports).
-   * Applied in order after `useStyles`.
-   *
-   * @example
-   * ```typescript
-   * class MyComponent extends AeicoElement {
-   *   protected static stylesheets = [myComponentStyles]
-   * }
-   * ```
-   */
-  protected static stylesheets?: StyleEntry[]
-
-  protected static styles?: string[]
-
-  /**
-   * Named styles to load from the shared style registry before applying this
-   * component's own stylesheets.
-   *
-   * @example
-   * ```typescript
-   * class RangeField extends AeicoField {
-   *   protected static useStyles = ['form-controls']
-   * }
-   * ```
-   */
-  protected static useStyles?: string[]
-
-  /**
-   * Style variable generator for this component.
-   * Subclasses can override to provide custom CSS variable generation.
-   * For theme-based generation, use the Themeable mixin.
-   */
-  declare enableStylesheets?: boolean
-  declare styleSheetText?: string
-  declare styleSheet?: CSSStyleSheet
-  declare loadStyleSheets?: string[]
-  declare cssVars?: Record<string, any>
-  declare disabled?: boolean
-
-  /** Get effective configuration (global + instance overrides) */
-  protected get effectiveConfig() {
-    return {
-      ...AeicoElement.globalConfig,
-      ...this.instanceConfig
-    }
-  }
+  protected static styles?: StyleEntry[]
 
   protected styleAdapter!: StyleAdapter
 
@@ -95,35 +29,25 @@ class AeicoElement extends BaseElement {
     this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style)
   }
 
-
   connectedCallback() {
     super.connectedCallback()
-    // Cache global config on first connection — connectedCallback fires after
-    // all top-level synchronous module code, so setComponentConfig is guaranteed.
-    if (!AeicoElement.globalConfig) {
-      AeicoElement.globalConfig = getComponentConfig()
-    }
-    this.adaptStylesheet()
+    this._adaptStyles()
   }
 
   /**
    * Apply stylesheets to the shadow root.
    * Called on first connection and whenever style-related properties change.
    */
-  adaptStylesheet() {
+  private _adaptStyles() {
     const constructor = this.constructor as typeof AeicoElement
-    const config = AeicoElement.globalConfig
 
     this.styleAdapter.initialize({
-      enableStylesheets: this.enableStylesheets,
-      globalEnableComponentStylesheets: config?.enableComponentStylesheets,
       constructorName: constructor.name,
-      useStyles: constructor.useStyles,
-      stylesheets: constructor.stylesheets,
-      pendingStyleProps: this.pendingStyleProps
+      styles: constructor.styles,
+      options: this.styleOptions
     })
 
-    this.pendingStyleProps = undefined
+    this.styleOptions = undefined
   }
 
   /**
@@ -145,7 +69,7 @@ class AeicoElement extends BaseElement {
         }
       })
       // Style props are applied when the element connects to the DOM
-      instance.pendingStyleProps = config as StyleProps
+      instance.styleOptions = config as StyleOptions
     }
 
     return instance

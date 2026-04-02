@@ -1,5 +1,6 @@
 import type { InferProps, Props } from '../../core/types'
-import { modalSpec } from '../../assets/css/specs'
+import styleVariables from '../styles/variables.css?inline'
+import style from '../styles/components/modal.css?inline'
 import AeicoComponent from '../aeico-component'
 import { t } from '../../localize'
 
@@ -18,7 +19,7 @@ class Modal extends AeicoComponent {
   declare closeOnOverlayClick?: boolean
   declare showCloseButton?: boolean
 
-  protected static stylesheets = [modalSpec]
+  protected static styles = [styleVariables, style]
 
   connectedCallback() {
     super.connectedCallback()

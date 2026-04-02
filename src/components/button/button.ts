@@ -1,5 +1,6 @@
 import type { InferProps, Props } from '../../core/types'
-import buttonStyle from '../../styles/components/button.css?inline'
+import styleVariables from '../styles/variables.css?inline'
+import buttonStyle from '../styles/components/button.css?inline'
 import AeicoComponent from '../aeico-component'
 import { ButtonColor, ButtonSize, ButtonVariant } from './defines'
 
@@ -38,7 +39,7 @@ class Button extends AeicoComponent {
   static readonly eventPrefix = 'button'
 
   protected static useStyles = ['button']
-  protected static stylesheets = [buttonStyle]
+  protected static styles = [styleVariables, buttonStyle]
 
   declare color?: ButtonColor
   declare variant?: ButtonVariant

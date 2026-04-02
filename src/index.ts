@@ -31,29 +31,18 @@ export type { ThemeableProps } from './mixins/themeable'
 export { t, locale, LocaleStore, localeRegistry } from './localize/index'
 export type { LocaleProvider, LocaleRegistry } from './localize/index'
 
-// Configuration & Services
-export {
-  setComponentConfig,
-  getComponentConfig,
-  hasComponentConfig,
-  getConfigValue
-} from './core/config-provider'
-export type { ComponentConfig } from './core/config-provider'
+// // Configuration & Services
+// export {
+//   setComponentConfig,
+//   getComponentConfig,
+//   hasComponentConfig,
+//   getConfigValue
+// } from './core/config-provider'
+// export type { ComponentConfig } from './core/config-provider'
 
 // Event system
 export { createEventEmitter } from './core/events'
 export type { ComponentEventEmitter } from './core/events'
-
-// Types
-export {
-  isSelectOption
-} from './core/types'
-export type {
-  SizeType,
-  StyleProps,
-  SelectOption,
-  SelectOptions
-} from './core/types'
 
 // ElementBuilder
 export { default as ElementBuilder } from './core/element-builder'

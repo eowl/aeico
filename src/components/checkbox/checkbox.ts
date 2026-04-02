@@ -1,6 +1,7 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { checkboxSpec } from '../../assets/css/specs'
+import styleVariables from '../styles/variables.css?inline'
+import styles from '../styles/components/checkbox.css?inline'
 import { CheckboxVariant } from './defines'
 
 class Checkbox extends AeicoField {
@@ -18,7 +19,7 @@ class Checkbox extends AeicoField {
   declare defaultChecked?: boolean
   declare variant?: CheckboxVariant
 
-  protected static stylesheets = [checkboxSpec]
+  protected static styles = [styleVariables, styles]
 
   protected getValue(): boolean {
     return this.fieldElement?.checked ?? false

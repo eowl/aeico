@@ -1,4 +1,3 @@
-import { setComponentConfig } from '../src/core/config-provider'
 import {
   TextInput,
   Select,
@@ -55,10 +54,10 @@ let currentLang = detectLang()
 locale.update(currentLang, LOCALES[currentLang])
 
 // Global config
-setComponentConfig({
-  enableComponentStylesheets: true,
-  preloadStyles: ['variables', 'base', 'form-controls', 'button', 'dialog', 'alert'],
-})
+// setComponentConfig({
+//   enableComponentStylesheets: true,
+//   preloadStyles: ['variables', 'base', 'form-controls', 'button', 'dialog', 'alert'],
+// })
 
 // Register icons
 IconRegistry.add({

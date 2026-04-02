@@ -1,5 +1,6 @@
 import type { InferProps, Props } from '../../core/types'
-import buttonGroupStyle from '../../styles/components/button-group.css?inline'
+import styleVariables from '../styles/variables.css?inline'
+import buttonGroupStyle from '../styles/components/button-group.css?inline'
 import AeicoComponent from '../aeico-component'
 import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import Button from '../button/button'
@@ -46,7 +47,7 @@ class ButtonGroup extends AeicoComponent {
 
   static readonly eventPrefix = 'button-group'
 
-  protected static stylesheets = [buttonGroupStyle]
+  protected static styles = [styleVariables, buttonGroupStyle]
 
   declare variant?:  ButtonVariant
   declare color?:    ButtonColor

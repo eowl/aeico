@@ -32,7 +32,7 @@ class Slider extends AeicoField {
   declare editable?: boolean
   declare marks?: boolean
 
-  protected static stylesheets = [rangeFieldSpec]
+  protected static styles = [rangeFieldSpec]
 
   constructor() {
     super()

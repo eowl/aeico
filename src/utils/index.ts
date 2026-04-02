@@ -13,10 +13,7 @@
  */
 
 // Style utilities
-export { default as styleStore } from './style-store'
-
-// Type guards
-export { isSelectOption } from '../core/types'
+export { default as styleStore, css } from './style-store'
 
 // Event utilities are re-exported from main index
 // Style adapter is internal, not exported

@@ -32,7 +32,7 @@ class RadioGroup extends AeicoField {
   declare size?:     ButtonSize
   declare allowEmpty?: boolean
 
-  protected static stylesheets = [radioGroupSpec]
+  protected static styles = [radioGroupSpec]
 
   constructor() {
     super()

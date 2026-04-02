@@ -15,7 +15,7 @@ class TextInput extends AeicoField {
   declare placeholder?: string
   declare type?: string
 
-  protected static stylesheets = [inputFieldSpec]
+  protected static styles = [inputFieldSpec]
 
   render() {
     this.build(() => {

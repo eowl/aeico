@@ -15,7 +15,7 @@ class InnerHTMLButton extends AeicoElement {
     type: { type: String },
   }
 
-  protected static stylesheets = [variablesStyle, buttonStyle]
+  protected static styles = [variablesStyle, buttonStyle]
 
   declare color?: 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
   declare variant?: 'filled' | 'outlined' | 'subtle' | 'text'
