@@ -1,7 +1,6 @@
-import { StyleAdapter } from '../utils/style-adapter'
+import { StyleAdapter } from './styles'
+import type { StyleEntry, StyleOptions } from './styles'
 import type {
-  StyleOptions,
-  StyleEntry,
   InferProps
 } from './types'
 import BaseElement from './base-element'
@@ -36,14 +35,14 @@ class AeicoElement extends BaseElement {
 
   /**
    * Apply stylesheets to the shadow root.
-   * Called on first connection and whenever style-related properties change.
+   * StyleAdapter internally caches resolved sheets per styles array reference.
    */
   private _adaptStyles() {
-    const constructor = this.constructor as typeof AeicoElement
+    const ctor = this.constructor as typeof AeicoElement
 
     this.styleAdapter.initialize({
-      constructorName: constructor.name,
-      styles: constructor.styles,
+      constructorName: ctor.name,
+      styles: ctor.styles,
       options: this.styleOptions
     })
 

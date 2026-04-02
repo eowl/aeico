@@ -1,38 +1,3 @@
-enum StyleMode {
-  Add = 'additive',
-  R = 'replace'
-}
-
-/**
- * Style configuration for components
- */
-export type StyleOptions = {
-  enable?: boolean
-  mode?: StyleMode
-  styles?: StyleEntry[]
-  cssVars?: Record<string, string>
-}
-
-/**
- * Scope of a stylesheet — where it should be applied.
- * 'document' → document.adoptedStyleSheets (CSS custom properties, global tokens)
- * 'shadow'   → component's shadow root (selectors, class rules)
- */
-export type StyleScope = 'document' | 'shadow'
-
-/**
- * Polymorphic stylesheet entry for `static styles`.
- * - StyleSpec: full descriptor with scope and deps
- * - string: raw CSS text, defaults to shadow scope
- * - CSSStyleSheet: prebuilt sheet, defaults to shadow scope
- */
-export type StyleEntry = string | CSSStyleSheet
-
-/**
- * Re-export ComponentConfig from configProvider for convenience
- */
-export type { ComponentConfig } from './config-provider'
-
 /**
  * Property type constructors (similar to Lit)
  */
