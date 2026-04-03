@@ -6,13 +6,15 @@ enum StyleMode {
 export type StyleOptions = {
   enable?: boolean
   mode?: StyleMode
-  styles?: StyleEntry[]
+  styles?: StyleItems
   cssVars?: Record<string, string>
 }
 
 export type StyleScope = 'document' | 'shadow'
 
-export type StyleEntry = string | CSSStyleSheet | StyleResult
+export type StyleItem = string | CSSStyleSheet | StyleResult
+export type StyleItems = Array<StyleItem | StyleItems>
+export type StyleEntry = StyleItem | StyleItems
 
 export const supportAdoptStyle: boolean =
   globalThis.ShadowRoot !== undefined &&

@@ -1,5 +1,5 @@
 import { StyleAdapter } from './styles'
-import type { StyleEntry, StyleOptions } from './styles'
+import type { StyleEntry, StyleItems, StyleOptions } from './styles'
 import type {
   InferProps
 } from './types'
@@ -19,13 +19,17 @@ import BaseElement from './base-element'
 class AeicoElement extends BaseElement {
   private styleOptions?: StyleOptions
 
-  protected static styles?: StyleEntry[]
+  protected static styles?: StyleEntry
 
   protected styleAdapter!: StyleAdapter
 
   constructor() {
     super()
     this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style)
+  }
+
+  static get styleEntries(): StyleItems {
+    return Array.isArray(this.styles) ? this.styles : this.styles ? [this.styles] : []
   }
 
   connectedCallback() {
@@ -42,7 +46,7 @@ class AeicoElement extends BaseElement {
 
     this.styleAdapter.initialize({
       constructorName: ctor.name,
-      styles: ctor.styles,
+      styles: ctor.styleEntries,
       options: this.styleOptions
     })
 
