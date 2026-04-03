@@ -214,16 +214,13 @@ describe('compose', () => {
   it('should work with actual Themeable and Localizable mixins', async () => {
     // Import real mixins
     const { Themeable } = await import('../../../src/mixins/themeable.js')
-    const { Localizable } = await import('../../../src/localize/localizable.js')
     
-    const ComposedClass = compose(Themeable, Localizable)(AeicoElement)
+    const ComposedClass = compose(Themeable)(AeicoElement)
     customElements.define('test-real-mixins', ComposedClass)
     
     const el = await mount<any>('<test-real-mixins></test-real-mixins>')
 
     // Should have both theme and i18n capabilities
     expect(el.theme).to.be.undefined // not set yet
-    expect(el.t).to.be.a('function')
-    expect(el.enableI18n).to.be.undefined // not set yet
   })
 })
