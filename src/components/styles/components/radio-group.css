@@ -3,19 +3,17 @@
   align-items: center;
   gap: var(--rg-gap, 0.286em);
   font-size: var(--size-m);
-
-  /* Color tokens — default */
-  --rg-solid-bg:          var(--color-gray);
-  --rg-solid-bg-hover:    var(--color-gray-light);
-  --rg-solid-bg-active:   var(--color-gray-dark);
-  --rg-solid-color:       var(--color-text-main);
-  --rg-solid-color-hover: var(--color-text-main);
-  --rg-border:            var(--color-gray-light);
-  --rg-border-hover:      var(--color-gray-lighter);
-  --rg-accent:            var(--color-text-muted);
-  --rg-accent-hover:      var(--color-text-main);
-  --rg-subtle-bg:         rgba(255, 255, 255, 0.04);
-  --rg-subtle-bg-hover:   rgba(255, 255, 255, 0.08);
+  --rg-solid-bg:          var(--color-solid);
+  --rg-solid-bg-hover:    var(--color-solid-hover);
+  --rg-solid-bg-active:   var(--color-solid-active);
+  --rg-solid-color:       var(--color-on-solid);
+  --rg-solid-color-hover: var(--color-on-solid-hover, var(--color-on-solid));
+  --rg-border:            var(--color-border);
+  --rg-border-hover:      var(--color-border-hover);
+  --rg-accent:            var(--color-accent);
+  --rg-accent-hover:      var(--color-accent-hover);
+  --rg-subtle-bg:         var(--color-subtle);
+  --rg-subtle-bg-hover:   var(--color-subtle-hover);
 
   --rg-font-size:    1em;
   --rg-height:       2.286em;
@@ -25,81 +23,6 @@
   --rg-font-weight:  400;
 
   --color-unselected: var(--color-gray-dark, #1e1e1e);
-}
-
-:host([color="primary"]) {
-  --rg-solid-bg:          var(--color-primary);
-  --rg-solid-bg-hover:    var(--color-primary-hover);
-  --rg-solid-bg-active:   var(--color-primary-active);
-  --rg-solid-color:       var(--color-text-main);
-  --rg-border:            var(--color-primary);
-  --rg-border-hover:      var(--color-primary-hover);
-  --rg-accent:            var(--color-text-link);
-  --rg-accent-hover:      var(--color-text-link-hover);
-  --rg-subtle-bg:         var(--color-primary-bg-subtle);
-  --rg-subtle-bg-hover:   rgba(17, 119, 187, 0.15);
-}
-
-:host([color="secondary"]) {
-  --rg-solid-bg:          var(--color-secondary);
-  --rg-solid-bg-hover:    var(--color-secondary-hover);
-  --rg-solid-color:       var(--color-text-main);
-  --rg-border:            var(--color-secondary-hover);
-  --rg-border-hover:      var(--slate-600);
-  --rg-accent:            var(--slate-700);
-  --rg-accent-hover:      var(--slate-800);
-}
-
-:host([color="success"]) {
-  --rg-solid-bg:          var(--color-success);
-  --rg-solid-bg-hover:    var(--color-success-hover);
-  --rg-solid-bg-active:   var(--color-success-active);
-  --rg-solid-color:       var(--color-text-main);
-  --rg-border:            var(--color-success);
-  --rg-border-hover:      var(--color-success-hover);
-  --rg-accent:            var(--color-success-text-emphasis, var(--color-success));
-  --rg-accent-hover:      var(--color-success-hover);
-  --rg-subtle-bg:         var(--color-success-bg-subtle);
-  --rg-subtle-bg-hover:   rgba(34, 197, 94, 0.15);
-}
-
-:host([color="danger"]) {
-  --rg-solid-bg:          var(--color-danger);
-  --rg-solid-bg-hover:    var(--color-danger-hover);
-  --rg-solid-bg-active:   var(--color-danger-active);
-  --rg-solid-color:       var(--color-text-main);
-  --rg-border:            var(--color-danger);
-  --rg-border-hover:      var(--color-danger-hover);
-  --rg-accent:            var(--color-danger);
-  --rg-accent-hover:      #ff5566;
-  --rg-subtle-bg:         var(--color-danger-bg-subtle);
-  --rg-subtle-bg-hover:   rgba(239, 68, 68, 0.15);
-}
-
-:host([color="warning"]) {
-  --rg-solid-bg:          var(--color-warning);
-  --rg-solid-bg-hover:    var(--color-warning-hover);
-  --rg-solid-bg-active:   var(--color-warning-active);
-  --rg-solid-color:       #1e1e1e;
-  --rg-border:            var(--color-warning);
-  --rg-border-hover:      var(--color-warning-hover);
-  --rg-accent:            var(--color-warning-text-emphasis, var(--color-warning));
-  --rg-accent-hover:      var(--color-warning-hover);
-  --rg-subtle-bg:         var(--color-warning-bg-subtle);
-  --rg-subtle-bg-hover:   rgba(234, 179, 8, 0.15);
-}
-
-:host([color="info"]) {
-  --rg-solid-bg:          var(--color-info);
-  --rg-solid-bg-hover:    var(--color-info-hover);
-  --rg-solid-bg-active:   var(--color-info-active);
-  --rg-solid-color:       var(--color-text-main);
-  --rg-border:            var(--color-info);
-  --rg-border-hover:      var(--color-info-hover);
-  --rg-accent:            var(--color-info-text-emphasis, var(--color-info));
-  --rg-accent-hover:      var(--color-info-hover);
-  --rg-subtle-bg:         var(--color-info-bg-subtle);
-  --rg-subtle-bg-hover:   rgba(6, 182, 212, 0.15);
 }
 
 :host([size="xs"]) { --rg-radius: 3px; }
@@ -139,13 +62,6 @@ slot {
   line-height: 1.5;
 }
 
-/* ============================================================================
- * mode="button" & mode="button-group"  — toggle button base
- *
- * Design: unselected = subtle/outline, selected = solid fill.
- * This provides a universally clear visual distinction between states.
- * ========================================================================== */
-
 .rg-btn {
   display: inline-flex;
   align-items: center;
@@ -163,7 +79,6 @@ slot {
   outline: none;
   border-radius: var(--rg-radius);
 
-  /* Filled (default variant): neutral dark bg, always contrasts with accent selected */
   background:   var(--color-unselected, #333);
   border:       1px solid var(--color-gray-light, #444);
   color:        var(--color-text-muted);
@@ -175,7 +90,6 @@ slot {
   color:        var(--color-text-main);
 }
 
-/* Selected: solid color fill — clearly different from neutral unselected */
 .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: var(--rg-solid-bg);
@@ -200,7 +114,6 @@ slot {
   pointer-events: none;
 }
 
-/* outlined variant — transparent bg, colored border */
 :host([variant="outlined"]) .rg-btn {
   background:   transparent;
   border-color: var(--rg-border);
@@ -217,7 +130,6 @@ slot {
   color:        #fff;
 }
 
-/* subtle variant — no border, ultra-subtle */
 :host([variant="subtle"]) .rg-btn {
   background:   transparent;
   border-color: transparent;
@@ -236,28 +148,18 @@ slot {
   box-shadow:   none;
 }
 
-/* ============================================================================
- * mode="button"  — independent buttons with gap
- * ========================================================================== */
-
 :host([mode="button"]) .rg-container {
   gap: 6px;
 }
-
-/* ============================================================================
- * mode="button-group"  — compact connected strip
- * ========================================================================== */
 
 :host([mode="button-group"]) .rg-container {
   gap: 0;
 }
 
-/* Collapse shared borders */
 :host([mode="button-group"]) .rg-btn:not(.first):not(.only) {
   margin-left: -1px;
 }
 
-/* Position-based border radius */
 :host([mode="button-group"]) .rg-btn.first {
   border-radius: var(--rg-radius) 0 0 var(--rg-radius);
 }
@@ -271,7 +173,6 @@ slot {
   border-radius: var(--rg-radius);
 }
 
-/* Raise hovered/selected button so its border shows above neighbours */
 :host([mode="button-group"]) .rg-btn:hover:not(:disabled),
 :host([mode="button-group"]) .rg-btn.selected {
   position: relative;
@@ -315,13 +216,11 @@ slot {
   background: var(--rg-solid-bg-hover);
 }
 
-/* Default/no-color segmented: use a higher-contrast surface for selected */
 :host([mode="segmented"]:not([color])) .rg-btn.selected {
   background: var(--color-gray-lighter, rgba(255,255,255,0.18));
   color:      var(--color-text-main);
 }
 
-/* outlined variant in segmented: track shows accent border */
 :host([mode="segmented"][variant="outlined"]) .rg-container {
   border-color: var(--rg-border);
 }
@@ -331,7 +230,6 @@ slot {
   color:        #fff;
 }
 
-/* Base (mode="default" + fallback) */
 .reset-btn,
 .clear-btn {
   display:        inline-flex;
@@ -353,7 +251,6 @@ slot {
 .reset-btn:hover { background: var(--reset-btn-bg-hover); color: var(--reset-btn-color-hover); }
 .clear-btn:hover  { background: var(--clear-btn-bg-hover);  color: var(--clear-btn-color-hover); }
 
-/* mode="button" & mode="button-group": sizing */
 :host([mode="button"]) .reset-btn,
 :host([mode="button"]) .clear-btn,
 :host([mode="button-group"]) .reset-btn,
@@ -364,7 +261,6 @@ slot {
   font-size:     calc(var(--rg-font-size) * 1.1);
 }
 
-/* mode="segmented": sizing to match track */
 :host([mode="segmented"]) .reset-btn,
 :host([mode="segmented"]) .clear-btn {
   height:        calc(var(--rg-height) + 4px);
@@ -373,7 +269,6 @@ slot {
   font-size:     var(--rg-font-size);
 }
 
-/* ── Filled (default variant) — all 3 modes: neutral gray ── */
 :host([mode="button"]) .reset-btn,
 :host([mode="button"]) .clear-btn,
 :host([mode="button-group"]) .reset-btn,
@@ -401,7 +296,6 @@ slot {
   color:        var(--color-danger);
 }
 
-/* ── Outlined variant — all 3 modes: color-themed border ── */
 :host([variant="outlined"][mode="button"]) .reset-btn,
 :host([variant="outlined"][mode="button"]) .clear-btn,
 :host([variant="outlined"][mode="button-group"]) .reset-btn,
@@ -429,7 +323,6 @@ slot {
   color:        var(--color-danger);
 }
 
-/* ── subtle variant — all 3 modes: no border ── */
 :host([variant="subtle"][mode="button"]) .reset-btn,
 :host([variant="subtle"][mode="button"]) .clear-btn,
 :host([variant="subtle"][mode="button-group"]) .reset-btn,

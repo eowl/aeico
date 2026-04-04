@@ -1,106 +1,18 @@
-/* ── Color tokens (per-color, sets CSS vars on :host) ────────────────────── */
-/* 'default' color is the :host base — any [color="..."] rule overrides via higher specificity */
-
 :host {
   display: inline-block;
-  --btn-solid-bg:          var(--color-gray);
-  --btn-solid-bg-hover:    var(--color-gray-light);
-  --btn-solid-bg-active:   var(--color-gray-dark);
-  --btn-solid-color:       var(--color-text-muted);
-  --btn-solid-color-hover: var(--color-text-main);
-  --btn-border:            var(--color-gray-light);
-  --btn-border-hover:      var(--color-gray-lighter);
-  --btn-accent:            var(--color-text-muted);
-  --btn-accent-hover:      var(--color-text-main);
-  --btn-subtle-bg:         rgba(255, 255, 255, 0.04);
-  --btn-subtle-bg-hover:   rgba(255, 255, 255, 0.08);
+  --btn-solid-bg:          var(--color-solid);
+  --btn-solid-bg-hover:    var(--color-solid-hover);
+  --btn-solid-bg-active:   var(--color-solid-active);
+  --btn-solid-color:       var(--color-on-solid);
+  --btn-solid-color-hover: var(--color-on-solid-hover);
+  --btn-border:            var(--color-border);
+  --btn-border-hover:      var(--color-border-hover);
+  --btn-accent:            var(--color-accent);
+  --btn-accent-hover:      var(--color-accent-hover);
+  --btn-subtle-bg:         var(--color-subtle);
+  --btn-subtle-bg-hover:   var(--color-subtle-hover);
 }
 
-:host([color="primary"]) {
-  --btn-solid-bg:          var(--color-primary);
-  --btn-solid-bg-hover:    var(--color-primary-hover);
-  --btn-solid-bg-active:   var(--color-primary-active);
-  --btn-solid-color:       var(--color-text-main);
-  --btn-border:            var(--color-primary);
-  --btn-border-hover:      var(--color-primary-hover);
-  --btn-accent:            var(--color-text-link);
-  --btn-accent-hover:      var(--color-text-link-hover);
-  --btn-subtle-bg:         var(--color-primary-bg-subtle);
-  --btn-subtle-bg-hover:   rgba(17, 119, 187, 0.15);
-}
-
-:host([color="secondary"]) {
-  --btn-solid-bg:          var(--color-secondary);
-  --btn-solid-bg-hover:    var(--color-secondary-hover);
-  --btn-solid-bg-active:   var(--color-secondary-active);
-  --btn-solid-color:       var(--color-text-main);
-  --btn-solid-color-hover: var(--color-text-main);
-  --btn-border:            var(--color-secondary-hover);
-  --btn-border-hover:      var(--slate-600);
-  --btn-accent:            var(--slate-700);
-  --btn-accent-hover:      var(--slate-800);
-  --btn-subtle-bg:         rgba(148, 163, 184, 0.06);
-  --btn-subtle-bg-hover:   rgba(148, 163, 184, 0.12);
-}
-
-:host([color="success"]) {
-  --btn-solid-bg:          var(--color-success);
-  --btn-solid-bg-hover:    var(--color-success-hover);
-  --btn-solid-bg-active:   var(--color-success-active);
-  --btn-solid-color:       var(--color-text-main);
-  --btn-border:            var(--color-success);
-  --btn-border-hover:      var(--color-success-hover);
-  --btn-accent:            var(--color-success-text-emphasis, var(--color-success));
-  --btn-accent-hover:      var(--color-success-hover);
-  --btn-subtle-bg:         var(--color-success-bg-subtle);
-  --btn-subtle-bg-hover:   rgba(34, 197, 94, 0.15);
-}
-
-:host([color="danger"]) {
-  --btn-solid-bg:          var(--color-danger);
-  --btn-solid-bg-hover:    var(--color-danger-hover);
-  --btn-solid-bg-active:   var(--color-danger-active);
-  --btn-solid-color:       var(--color-text-main);
-  --btn-border:            var(--color-danger);
-  --btn-border-hover:      var(--color-danger-hover);
-  --btn-accent:            var(--color-danger);
-  --btn-accent-hover:      #ff5566;
-  --btn-subtle-bg:         var(--color-danger-bg-subtle);
-  --btn-subtle-bg-hover:   rgba(239, 68, 68, 0.15);
-}
-
-:host([color="warning"]) {
-  --btn-solid-bg:          var(--color-warning);
-  --btn-solid-bg-hover:    var(--color-warning-hover);
-  --btn-solid-bg-active:   var(--color-warning-active);
-  --btn-solid-color:       #1e1e1e;
-  --btn-border:            var(--color-warning);
-  --btn-border-hover:      var(--color-warning-hover);
-  --btn-accent:            var(--color-warning-text-emphasis, var(--color-warning));
-  --btn-accent-hover:      var(--color-warning-hover);
-  --btn-subtle-bg:         var(--color-warning-bg-subtle);
-  --btn-subtle-bg-hover:   rgba(234, 179, 8, 0.15);
-}
-
-:host([color="info"]) {
-  --btn-solid-bg:          var(--color-info);
-  --btn-solid-bg-hover:    var(--color-info-hover);
-  --btn-solid-bg-active:   var(--color-info-active);
-  --btn-solid-color:       var(--color-text-main);
-  --btn-border:            var(--color-info);
-  --btn-border-hover:      var(--color-info-hover);
-  --btn-accent:            var(--color-info-text-emphasis, var(--color-info));
-  --btn-accent-hover:      var(--color-info-hover);
-  --btn-subtle-bg:         var(--color-info-bg-subtle);
-  --btn-subtle-bg-hover:   rgba(6, 182, 212, 0.15);
-}
-
-:host {
-  display: inline-block;
-}
-
-/* 'filled' is the default variant — rules live in button so they apply when no [variant] attr is present.
-   Other variants override these below. */
 button {
   display: inline-flex;
   align-items: center;
@@ -116,8 +28,6 @@ button {
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
   outline: none;
   position: relative;
-  
-  /* default medium size */
   padding: 0.429em 1.071em;
   font-size: 1em;
   line-height: 1.5;
@@ -125,7 +35,6 @@ button {
   min-width: 4.571em;
   height: 2.286em;
 
-  /* filled (default variant) */
   background:   var(--btn-solid-bg);
   border: 1px solid var(--btn-border);
   color:        var(--btn-solid-color);
@@ -142,14 +51,9 @@ button:hover:not(:disabled) {
 
 button:active:not(:disabled) { background: var(--btn-solid-bg-active); }
 
-/* md is the default, built into button base styles above */
-
 :host([size="xs"]) button { border-radius: var(--_btn-r-tl, 3px) var(--_btn-r-tr, 3px) var(--_btn-r-br, 3px) var(--_btn-r-bl, 3px); }
 :host([size="sm"]) button { border-radius: var(--_btn-r-tl, 3px) var(--_btn-r-tr, 3px) var(--_btn-r-br, 3px) var(--_btn-r-bl, 3px); }
 
-/* filled: default variant (base button styles already cover it) */
-
-/* outlined: transparent bg + themed border */
 :host([variant="outlined"]) button {
   background:   transparent;
   border-color: var(--btn-border);
@@ -166,7 +70,6 @@ button:active:not(:disabled) { background: var(--btn-solid-bg-active); }
   background:   var(--btn-subtle-bg-hover);
 }
 
-/* subtle: subtle bg, accent text, stronger bg on hover */
 :host([variant="subtle"]) button {
   background:   var(--btn-subtle-bg);
   border-color: transparent;
@@ -182,7 +85,6 @@ button:active:not(:disabled) { background: var(--btn-solid-bg-active); }
   background:   var(--btn-subtle-bg-hover);
 }
 
-/* text: minimal flat button */
 :host([variant="text"]) button {
   background:    transparent;
   border-color:  transparent;
@@ -201,13 +103,11 @@ button:active:not(:disabled) { background: var(--btn-solid-bg-active); }
   background: var(--btn-subtle-bg-hover);
 }
 
-/* Disabled — consolidated for all variants */
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Button types - Icon */
 .btn-icon {
   padding: 0;
   min-width: auto;
@@ -219,25 +119,20 @@ button:disabled {
   border-radius: 4px;
 }
 
-/* md is the base .btn-icon size */
-
 .btn-icon.btn-lg {
   width: 2.857em;
   height: 2.857em;
 }
 
-/* Button types - Circle */
 .btn-circle {
   border-radius: 50%;
 }
 
-/* Button types - Block */
 .btn-block {
   display: flex;
   width: 100%;
 }
 
-/* Button types - Loading */
 button.btn-loading {
   position: relative;
   pointer-events: none;
@@ -263,7 +158,6 @@ button.btn-loading::before {
   }
 }
 
-/* Button types - Icon inside */
 .btn-icon-left {
   margin-right: -2px;
 }

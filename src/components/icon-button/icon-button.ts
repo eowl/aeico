@@ -3,6 +3,7 @@ import { SVG_NS } from '../../core/types'
 import AeicoComponent from '../aeico-component'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
+import colorCSS from '../styles/color.css?inline'
 import style from '../styles/components/icon-button.css?inline'
 import type { IconColor } from '../icon/defines'
 import IconRegistry from '../icon/registry'
@@ -27,7 +28,7 @@ class IconButton extends AeicoComponent {
   declare variant?: IconButtonVariant
   declare disabled?: boolean
 
-  protected static styles = [styleVariables, sizeCSS, style]
+  protected static styles = [styleVariables, sizeCSS, colorCSS, style]
 
   constructor() {
     super()

@@ -1,5 +1,6 @@
 import type { InferProps, Props } from '../../core/types'
 import styleVariables from '../styles/variables.css?inline'
+import colorCSS from '../styles/color.css?inline'
 import alertStyle from '../styles/components/alert.css?inline'
 import AeicoComponent from '../aeico-component'
 import { t } from '../../localize'
@@ -42,7 +43,7 @@ class Alert extends AeicoComponent {
   static readonly eventPrefix = 'alert'
 
   protected static useStyles = ['alert']
-  protected static styles = [styleVariables, alertStyle]
+  protected static styles = [styleVariables, colorCSS, alertStyle]
 
   declare color?: AlertColor
   declare variant?: AlertVariant

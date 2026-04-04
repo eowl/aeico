@@ -1,32 +1,10 @@
 :root,
 :host {
-  /* ==========================================================================
-   * § 1a  Base Hues  — single source of truth for each color
-   *
-   * Change one value here; the entire derived scale and all semantic tokens
-   * update automatically via color-mix() in § 1b.
-   * ========================================================================== */
-
   --blue:   #0e639c;
   --green:  #28a745;
   --red:    #dc3545;
   --yellow: #ffc107;
   --cyan:   #17a2b8;
-
-
-  /* ==========================================================================
-   * § 1b  Color Scales  — derived from base hues via color-mix()
-   *
-   *   -100  lightest  color-mix(base 20%, white)
-   *   -200            color-mix(base 40%, white)
-   *   -300            color-mix(base 60%, white)
-   *   -400            color-mix(base 80%, white)
-   *   -500  base      alias for the base hue
-   *   -600            color-mix(base 80%, black)
-   *   -700            color-mix(base 60%, black)
-   *   -800            color-mix(base 40%, black)
-   *   -900  darkest   color-mix(base 20%, black)
-   * ========================================================================== */
 
   /* Blue */
   --blue-100: color-mix(in srgb, var(--blue) 20%, white);
@@ -106,14 +84,6 @@
   --slate-800: #cbd5e1;
 
 
-  /* 
-   * § 2  Semantic Tokens  — reference § 1 scales
-   *
-   * Use these in component styles; never use raw hex values directly.
-   * State values (hover/active/disabled) are hand-tuned for dark-theme
-   * vibrancy rather than strict scale steps.
-   **/
-
   /* Primary (Blue) */
   --color-primary:          var(--blue-500);
   --color-primary-hover:    color-mix(in srgb, var(--blue) 80%, white);
@@ -164,8 +134,6 @@
   --color-text-link:       var(--color-primary-hover);
   --color-text-link-hover: #1890ff;
 
-  /* Subtle background / border / text — for contextual components
-   * (alerts, badges, tags…). Mirrors Bootstrap 5.3's naming pattern.         */
   --color-primary-bg-subtle:       rgba( 14,  99, 156, 0.10);
   --color-primary-border-subtle:   rgba( 14,  99, 156, 0.30);
   --color-primary-text-emphasis:   #8bb8e8;
@@ -196,20 +164,10 @@
   --color-dark-bg-subtle:          rgba( 52,  58,  64, 0.30);
   --color-dark-border-subtle:      rgba( 52,  58,  64, 0.50);
 
-
-  /* ==========================================================================
-   * § 3  Surface Tokens
-   * ========================================================================== */
-
   --surface-sunken:  var(--gray-100);   /* #161616 — inset / disabled bg */
   --surface-base:    var(--gray-200);   /* #1e1e1e — main background */
   --surface-raised:  var(--gray-300);   /* #252525 — cards, hover bg */
   --surface-overlay: var(--gray-400);   /* #2a2a2a — popovers, menus */
-
-
-  /* ==========================================================================
-   * § 4  Border Tokens
-   * ========================================================================== */
 
   --border-subtle:   rgba(255, 255, 255, 0.08);
   --border-default:  rgba(255, 255, 255, 0.12);
@@ -217,22 +175,8 @@
   --border-focus:    var(--color-primary);
   --border-disabled: rgba(255, 255, 255, 0.06);
 
-
-  /* ==========================================================================
-   * § 5  Focus / Interaction Tokens
-   * ========================================================================== */
-
   --focus-ring:    rgba(14, 99, 156, 0.25);
   --focus-ring-sm: rgba(14, 99, 156, 0.10);
-
-
-  /* ==========================================================================
-   * § 6  Shared Component Tokens
-   *
-   * Action buttons (reset / clear) are reused across all field components.
-   * Each field's :host block references these as defaults; they can be
-   * overridden per-component by redefining the variable in :host.
-   * ========================================================================== */
 
   --action-btn-bg:              var(--color-gray);   /* #3a3a3a */
   --action-btn-bg-hover:        #1a3a4a;
@@ -257,39 +201,6 @@
   --clear-btn-transition:       all 0.12s;
 }
 
-
-/* ============================================================================
- * § 7  Light Theme Overrides
- *
- * Applied when:
- *   - :root has [data-theme="light"] attribute (global theme)
- *   - :host has [theme="light"] attribute (component-level theme)
- *
- * Usage:
- *   // Global light theme
- *   document.documentElement.setAttribute('data-theme', 'light')
- *
- *   // Component light theme
- *   <select-field theme="light"></select-field>
- *   SelectField.create({ theme: 'light' })
- * ========================================================================== */
-
-/* ============================================================================
- * § 8  Size Scale
- *
- * A geometric ratio scale (×1.125) anchored at 1rem.
- * --size-scale lets you resize the entire UI: :root { --size-scale: 1.2 }
- *
- *   --size-3xs  ≈ 10px
- *   --size-2xs  ≈ 11px
- *   --size-xs   ≈ 12px
- *   --size-s    ≈ 14px
- *   --size-m    = 16px  (= --size-base)
- *   --size-base = 16px  — 1rem anchor
- *   --size-l    ≈ 20px
- *   --size-xl   ≈ 23px
- * ========================================================================== */
-
 :root,
 :host {
   --size-scale: 1;
@@ -307,10 +218,7 @@
 :root[theme="light"],
 :host([theme="light"]) {
 
-  /* § 7a  Gray Scale — inverted for light backgrounds
-   *   100–400 : light surface layers (inverted from dark)
-   *   500–800 : medium tones for borders and less prominent elements
-   *   900–950 : dark text colors                                             */
+
   --gray-100: #f8f9fa;
   --gray-200: #e9ecef;
   --gray-300: #dee2e6;
@@ -323,22 +231,17 @@
   --gray-950: #000000;
 
 
-  /* § 7b  Surface Tokens */
   --surface-sunken:  #f8f9fa;   /* inset areas, disabled backgrounds */
   --surface-base:    #ffffff;   /* main background */
   --surface-raised:  #f8f9fa;   /* cards, elevated elements */
   --surface-overlay: #ffffff;   /* dropdowns, popovers, modals */
 
-
-  /* § 7c  Border Tokens */
   --border-subtle:   rgba(0, 0, 0, 0.08);
   --border-default:  rgba(0, 0, 0, 0.15);
   --border-hover:    rgba(0, 0, 0, 0.25);
   --border-focus:    var(--color-primary);
   --border-disabled: rgba(0, 0, 0, 0.06);
 
-
-  /* § 7d  Text Colors */
   --color-text-main:     #212529;
   --color-text-muted:    #6c757d;
   --color-text-disabled: #adb5bd;
@@ -346,12 +249,9 @@
   --color-text-link-hover: #084273;
 
 
-  /* § 7e  Focus / Interaction Tokens */
   --focus-ring:    rgba(14, 99, 156, 0.30);
   --focus-ring-sm: rgba(14, 99, 156, 0.15);
 
-
-  /* § 7f  Action Button Tokens (light theme specific) */
   --action-btn-bg:           #e9ecef;
   --action-btn-bg-hover:     #0e639c;
   --action-btn-color:        #6c757d;
@@ -360,8 +260,6 @@
   --clear-btn-bg-hover:      #dc3545;
   --clear-btn-color-hover:   #ffffff;
 
-
-  /* § 7g  Subtle Background Variants — lower opacity for light backgrounds */
   --color-primary-bg-subtle:       rgba(14, 99, 156, 0.08);
   --color-success-bg-subtle:       rgba(40, 167, 69, 0.08);
   --color-danger-bg-subtle:        rgba(220, 53, 69, 0.08);
@@ -371,8 +269,6 @@
   --color-light-bg-subtle:         rgba(248, 249, 250, 0.10);
   --color-dark-bg-subtle:          rgba(52, 58, 64, 0.08);
 
-
-  /* § 7h  Text Emphasis Variants — darker for readability on light bg */
   --color-primary-text-emphasis:   #084273;
   --color-success-text-emphasis:   #1a5c2e;
   --color-danger-text-emphasis:    #7d2027;
@@ -380,8 +276,6 @@
   --color-info-text-emphasis:      #115968;
   --color-secondary-text-emphasis: #475569;
 
-
-  /* § 7i  Border Emphasis Variants — higher opacity for visibility */
   --color-primary-border-subtle:   rgba(14, 99, 156, 0.40);
   --color-success-border-subtle:   rgba(40, 167, 69, 0.40);
   --color-danger-border-subtle:    rgba(220, 53, 69, 0.40);

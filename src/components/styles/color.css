@@ -1,0 +1,130 @@
+:host {
+  --color-solid:           var(--color-gray);
+  --color-solid-hover:     var(--color-gray-light);
+  --color-solid-active:    var(--color-gray-dark);
+  --color-on-solid:        var(--color-text-main);
+  --color-border:          var(--color-gray-light);
+  --color-border-hover:    var(--color-gray-lighter);
+  --color-accent:          var(--color-text-muted);
+  --color-accent-hover:    var(--color-text-main);
+  --color-subtle:          rgba(255, 255, 255, 0.04);
+  --color-subtle-hover:    rgba(255, 255, 255, 0.08);
+  --color-bg-subtle:       rgba(255, 255, 255, 0.04);
+  --color-text-subtle:     var(--color-text-muted);
+  --color-border-subtle:   rgba(255, 255, 255, 0.08);
+}
+
+:host([color="primary"]) {
+  --color-solid:           var(--color-primary);
+  --color-solid-hover:     var(--color-primary-hover);
+  --color-solid-active:    var(--color-primary-active);
+  --color-on-solid:        var(--color-text-main);
+  --color-border:          var(--color-primary);
+  --color-border-hover:    var(--color-primary-hover);
+  --color-accent:          var(--color-text-link);
+  --color-accent-hover:    var(--color-text-link-hover);
+  --color-subtle:          var(--color-primary-bg-subtle);
+  --color-subtle-hover:    rgba(17, 119, 187, 0.15);
+  --color-bg-subtle:       var(--color-primary-bg-subtle);
+  --color-text-subtle:     var(--color-primary-text-emphasis);
+  --color-border-subtle:   var(--color-primary-border-subtle);
+}
+
+:host([color="secondary"]) {
+  --color-solid:           var(--color-secondary);
+  --color-solid-hover:     var(--color-secondary-hover);
+  --color-solid-active:    var(--color-secondary-active);
+  --color-on-solid:        var(--color-text-main);
+  --color-on-solid-hover:  var(--color-text-main);
+  --color-border:          var(--color-secondary-hover);
+  --color-border-hover:    var(--slate-600);
+  --color-accent:          var(--slate-700);
+  --color-accent-hover:    var(--slate-800);
+  --color-subtle:          rgba(148, 163, 184, 0.06);
+  --color-subtle-hover:    rgba(148, 163, 184, 0.12);
+  --color-bg-subtle:       var(--color-secondary-bg-subtle);
+  --color-text-subtle:     var(--color-secondary-text-emphasis);
+  --color-border-subtle:   var(--color-secondary-border-subtle);
+}
+
+:host([color="success"]) {
+  --color-solid:           var(--color-success);
+  --color-solid-hover:     var(--color-success-hover);
+  --color-solid-active:    var(--color-success-active);
+  --color-on-solid:        var(--color-text-main);
+  --color-border:          var(--color-success);
+  --color-border-hover:    var(--color-success-hover);
+  --color-accent:          var(--color-success-text-emphasis, var(--color-success));
+  --color-accent-hover:    var(--color-success-hover);
+  --color-subtle:          var(--color-success-bg-subtle);
+  --color-subtle-hover:    rgba(34, 197, 94, 0.15);
+  --color-bg-subtle:       var(--color-success-bg-subtle);
+  --color-text-subtle:     var(--color-success-text-emphasis);
+  --color-border-subtle:   var(--color-success-border-subtle);
+}
+
+:host([color="danger"]) {
+  --color-solid:           var(--color-danger);
+  --color-solid-hover:     var(--color-danger-hover);
+  --color-solid-active:    var(--color-danger-active);
+  --color-on-solid:        var(--color-text-main);
+  --color-border:          var(--color-danger);
+  --color-border-hover:    var(--color-danger-hover);
+  --color-accent:          var(--color-danger);
+  --color-accent-hover:    #ff5566;
+  --color-subtle:          var(--color-danger-bg-subtle);
+  --color-subtle-hover:    rgba(239, 68, 68, 0.15);
+  --color-bg-subtle:       var(--color-danger-bg-subtle);
+  --color-text-subtle:     var(--color-danger-text-emphasis);
+  --color-border-subtle:   var(--color-danger-border-subtle);
+}
+
+:host([color="warning"]) {
+  --color-solid:           var(--color-warning);
+  --color-solid-hover:     var(--color-warning-hover);
+  --color-solid-active:    var(--color-warning-active);
+  --color-on-solid:        #1e1e1e;
+  --color-border:          var(--color-warning);
+  --color-border-hover:    var(--color-warning-hover);
+  --color-accent:          var(--color-warning-text-emphasis, var(--color-warning));
+  --color-accent-hover:    var(--color-warning-hover);
+  --color-subtle:          var(--color-warning-bg-subtle);
+  --color-subtle-hover:    rgba(234, 179, 8, 0.15);
+  --color-bg-subtle:       var(--color-warning-bg-subtle);
+  --color-text-subtle:     var(--color-warning-text-emphasis);
+  --color-border-subtle:   var(--color-warning-border-subtle);
+}
+
+:host([color="info"]) {
+  --color-solid:           var(--color-info);
+  --color-solid-hover:     var(--color-info-hover);
+  --color-solid-active:    var(--color-info-active);
+  --color-on-solid:        var(--color-text-main);
+  --color-border:          var(--color-info);
+  --color-border-hover:    var(--color-info-hover);
+  --color-accent:          var(--color-info-text-emphasis, var(--color-info));
+  --color-accent-hover:    var(--color-info-hover);
+  --color-subtle:          var(--color-info-bg-subtle);
+  --color-subtle-hover:    rgba(6, 182, 212, 0.15);
+  --color-bg-subtle:       var(--color-info-bg-subtle);
+  --color-text-subtle:     var(--color-info-text-emphasis);
+  --color-border-subtle:   var(--color-info-border-subtle);
+}
+
+:host([color="light"]) {
+  --color-solid:           var(--color-gray-lighter);
+  --color-on-solid:        #1e1e1e;
+  --color-border:          var(--color-gray-light);
+  --color-bg-subtle:       var(--color-light-bg-subtle);
+  --color-text-subtle:     var(--color-text-muted);
+  --color-border-subtle:   var(--color-light-border-subtle);
+}
+
+:host([color="dark"]) {
+  --color-solid:           #333;
+  --color-on-solid:        var(--color-text-main);
+  --color-border:          #444;
+  --color-bg-subtle:       var(--color-dark-bg-subtle);
+  --color-text-subtle:     var(--gray-950);
+  --color-border-subtle:   var(--color-dark-border-subtle);
+}
