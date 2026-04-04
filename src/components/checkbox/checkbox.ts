@@ -55,7 +55,7 @@ class Checkbox extends AeicoField {
   render() {
     const { div, input, span } = this.builder
     this.build(() => {
-      div({ className: 'checkbox-container' }, () => {
+      div({ className: 'checkbox-container', variant: this.variant }, () => {
         div({ className: 'checkbox-wrapper' }, () => {
           this.fieldElement = input({
             type: 'checkbox',

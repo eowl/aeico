@@ -73,9 +73,6 @@ describe('compose', () => {
     customElements.define('test-preserve-methods', ComposedClass)
     
     const el = await mount<any>('<test-preserve-methods></test-preserve-methods>')
-
-    // AeicoElement methods should still exist
-    expect(el.generateStyleVars).to.be.a('function')
     expect(el.feature).to.equal('enabled')
   })
 

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai'
-import { mount, unmountAll, whenDefined, updated } from '../../helpers/mount.js'
-import Alert from '../../../src/components/alert.js'
+import { mount, unmountAll, whenDefined, updated } from '../../helpers/mount'
+import Alert from '../../../src/components/alert'
 
 const TAG_NAME = 'ae-alert'
 

@@ -57,7 +57,7 @@ describe('Checkbox', () => {
 
       const container = el.shadowRoot!.querySelector('.checkbox-container')
       expect(container).to.exist
-      expect(container!.classList.contains(`variant-${variant}`)).to.be.true
+      expect(container!.getAttribute('variant')).to.equal(variant)
     })
 
     it('renders a toggle slider when variant is "toggle"', async () => {
