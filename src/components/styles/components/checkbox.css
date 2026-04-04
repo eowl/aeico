@@ -24,10 +24,6 @@
   --toggle-slider-bg: #ffffff;
   --toggle-transition: 0.2s;
 
-  /* Action buttons */
-  --action-btn-size-field: 16px;
-  --action-btn-font-size-field: 11px;
-  --action-btn-border-radius: 2px;
 }
 
 .checkbox-container {
@@ -124,26 +120,30 @@
 /* action buttons */
 .reset-btn,
 .clear-btn {
-  width: var(--action-btn-size-field);
-  height: var(--action-btn-size-field);
+  width: var(--reset-btn-size);
+  height: var(--reset-btn-size);
   border: none;
-  border-radius: var(--action-btn-border-radius);
+  border-radius: var(--reset-btn-border-radius);
   cursor: pointer;
-  font-size: var(--action-btn-font-size-field);
+  font-size: var(--reset-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--action-btn-bg);
-  color: var(--action-btn-color);
-  transition: all 0.12s;
+  background: var(--reset-btn-bg);
+  color: var(--reset-btn-color);
+  transition: var(--reset-btn-transition);
   flex-shrink: 0;
   line-height: 1;
 }
 
-.reset-btn:hover,
+.reset-btn:hover {
+  background: var(--reset-btn-bg-hover);
+  color: var(--reset-btn-color-hover);
+}
+
 .clear-btn:hover {
-  background: var(--action-btn-bg-hover);
-  color: var(--action-btn-color-hover);
+  background: var(--clear-btn-bg-hover);
+  color: var(--clear-btn-color-hover);
 }
 
 
@@ -152,8 +152,10 @@
   --toggle-width: 24px;
   --toggle-height: 12px;
   --toggle-slider-size: 8px;
-  --action-btn-size-field: 14px;
-  --action-btn-font-size-field: 10px;
+  --reset-btn-size: 14px;
+  --reset-btn-font-size: 10px;
+  --clear-btn-size: 14px;
+  --clear-btn-font-size: 10px;
 }
 
 :host([size="lg"]) {
@@ -161,6 +163,8 @@
   --toggle-width: 40px;
   --toggle-height: 20px;
   --toggle-slider-size: 16px;
-  --action-btn-size-field: 18px;
-  --action-btn-font-size-field: 12px;
+  --reset-btn-size: 18px;
+  --reset-btn-font-size: 12px;
+  --clear-btn-size: 18px;
+  --clear-btn-font-size: 12px;
 }

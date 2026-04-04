@@ -118,39 +118,39 @@ input[type="range"]:disabled::-moz-range-thumb {
 }
 
 .reset-btn {
-  width: 16px;
-  height: 16px;
+  width: var(--reset-btn-size);
+  height: var(--reset-btn-size);
   border: none;
-  border-radius: 2px;
+  border-radius: var(--reset-btn-border-radius);
   cursor: pointer;
-  font-size: 11px;
+  font-size: var(--reset-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--action-btn-bg);
-  color: var(--action-btn-color);
-  transition: all 0.12s;
+  background: var(--reset-btn-bg);
+  color: var(--reset-btn-color);
+  transition: var(--reset-btn-transition);
   flex-shrink: 0;
 }
 
 .reset-btn:hover {
-  background: var(--action-btn-bg-hover);
-  color: var(--action-btn-color-hover);
+  background: var(--reset-btn-bg-hover);
+  color: var(--reset-btn-color-hover);
 }
 
 .clear-btn {
-  width: 16px;
-  height: 16px;
+  width: var(--clear-btn-size);
+  height: var(--clear-btn-size);
   border: none;
-  border-radius: 2px;
+  border-radius: var(--clear-btn-border-radius);
   cursor: pointer;
-  font-size: 11px;
+  font-size: var(--clear-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--action-btn-bg);
-  color: var(--action-btn-color);
-  transition: all 0.12s;
+  background: var(--clear-btn-bg);
+  color: var(--clear-btn-color);
+  transition: var(--clear-btn-transition);
   flex-shrink: 0;
 }
 
@@ -165,7 +165,9 @@ input[type="range"]:disabled::-moz-range-thumb {
   --range-thumb-size: 11px;
   --value-label-font: 11px;
   --reset-btn-size: 14px;
+  --reset-btn-font-size: 10px;
   --clear-btn-size: 14px;
+  --clear-btn-font-size: 10px;
 }
 
 :host([size="lg"]) {
@@ -173,7 +175,9 @@ input[type="range"]:disabled::-moz-range-thumb {
   --range-thumb-size: 17px;
   --value-label-font: 14px;
   --reset-btn-size: 18px;
+  --reset-btn-font-size: 12px;
   --clear-btn-size: 18px;
+  --clear-btn-font-size: 12px;
 }
 
 .input-range,
@@ -198,11 +202,6 @@ input[type="range"]::-moz-range-thumb {
 
 .value-label {
   font-size: var(--value-label-font, 12px);
-}
-
-.reset-btn {
-  width: var(--reset-btn-size, 16px);
-  height: var(--reset-btn-size, 16px);
 }
 
 .value-input {

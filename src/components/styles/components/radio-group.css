@@ -380,20 +380,20 @@ slot {
   align-items:    center;
   justify-content: center;
   cursor:         pointer;
-  transition:     background 0.12s, color 0.12s, border-color 0.12s;
+  transition:     var(--reset-btn-transition);
   flex-shrink:    0;
   line-height:    1;
 
-  width:          18px;
-  height:         18px;
-  border-radius:  3px;
+  width:          var(--reset-btn-size);
+  height:         var(--reset-btn-size);
+  border-radius:  var(--reset-btn-border-radius);
   border:         none;
-  font-size:      12px;
-  background:     var(--action-btn-bg);
-  color:          var(--action-btn-color);
+  font-size:      var(--reset-btn-font-size);
+  background:     var(--reset-btn-bg);
+  color:          var(--reset-btn-color);
 }
 
-.reset-btn:hover { background: var(--action-btn-bg-hover); color: var(--action-btn-color-hover); }
+.reset-btn:hover { background: var(--reset-btn-bg-hover); color: var(--reset-btn-color-hover); }
 .clear-btn:hover  { background: var(--clear-btn-bg-hover);  color: var(--clear-btn-color-hover); }
 
 /* mode="button" & mode="button-group": sizing */

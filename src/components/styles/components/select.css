@@ -19,16 +19,6 @@
   --select-bg-focus: var(--surface-raised);
   --select-color: var(--color-text-muted);
   --select-transition: border-color 0.12s, background 0.12s;
-
-  /* Reset button variables */
-  --reset-btn-size: 16px;
-  --reset-btn-font-size: 11px;
-  --reset-btn-border-radius: 2px;
-  --reset-btn-bg: var(--action-btn-bg);
-  --reset-btn-bg-hover: var(--action-btn-bg-hover);
-  --reset-btn-color: var(--action-btn-color);
-  --reset-btn-color-hover: var(--action-btn-color-hover);
-  --reset-btn-transition: all 0.12s;
 }
 
 .select-container {

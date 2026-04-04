@@ -116,33 +116,33 @@
 
   /* Primary (Blue) */
   --color-primary:          var(--blue-500);
-  --color-primary-hover:    #1177bb;
-  --color-primary-active:   #0d5a8a;
-  --color-primary-disabled: #0a4a6e;
+  --color-primary-hover:    color-mix(in srgb, var(--blue) 80%, white);
+  --color-primary-active:   color-mix(in srgb, var(--blue) 80%, black);
+  --color-primary-disabled: color-mix(in srgb, var(--blue) 50%, var(--gray-600));
 
   /* Success (Green) */
   --color-success:          var(--green-500);
-  --color-success-hover:    #2cbd4f;
-  --color-success-active:   #23923d;
-  --color-success-disabled: #1e7d35;
+  --color-success-hover:    color-mix(in srgb, var(--green) 80%, white);
+  --color-success-active:   color-mix(in srgb, var(--green) 80%, black);
+  --color-success-disabled: color-mix(in srgb, var(--green) 50%, var(--gray-600));
 
   /* Danger (Red) */
   --color-danger:           var(--red-500);
-  --color-danger-hover:     #e04b59;
-  --color-danger-active:    #c82333;
-  --color-danger-disabled:  #a92a38;
+  --color-danger-hover:     color-mix(in srgb, var(--red) 80%, white);
+  --color-danger-active:    color-mix(in srgb, var(--red) 80%, black);
+  --color-danger-disabled:  color-mix(in srgb, var(--red) 50%, var(--gray-600));
 
   /* Warning (Yellow) */
   --color-warning:          var(--yellow-500);
-  --color-warning-hover:    #ffca2c;
-  --color-warning-active:   #e0a800;
-  --color-warning-disabled: #cc9a06;
+  --color-warning-hover:    color-mix(in srgb, var(--yellow) 80%, white);
+  --color-warning-active:   color-mix(in srgb, var(--yellow) 80%, black);
+  --color-warning-disabled: color-mix(in srgb, var(--yellow) 50%, var(--gray-600));
 
   /* Info (Cyan) */
   --color-info:             var(--cyan-500);
-  --color-info-hover:       #1ab5cd;
-  --color-info-active:      #138a9f;
-  --color-info-disabled:    #10778a;
+  --color-info-hover:       color-mix(in srgb, var(--cyan) 80%, white);
+  --color-info-active:      color-mix(in srgb, var(--cyan) 80%, black);
+  --color-info-disabled:    color-mix(in srgb, var(--cyan) 50%, var(--gray-600));
 
   /* Gray — UI element backgrounds and borders */
   --color-gray-dark:     var(--gray-400);
@@ -153,8 +153,8 @@
 
   /* Secondary (Slate) — blue-gray to distinguish from neutral gray */
   --color-secondary:        var(--slate-400);
-  --color-secondary-hover:  var(--slate-500);
-  --color-secondary-active: #334155;
+  --color-secondary-hover:  color-mix(in srgb, var(--color-secondary) 80%, white);
+  --color-secondary-active: color-mix(in srgb, var(--color-secondary) 80%, black);
   --color-secondary-text:   var(--slate-700);
 
   /* Text */
@@ -241,6 +241,24 @@
 
   --clear-btn-bg-hover:         #5a2a2a;
   --clear-btn-color-hover:      #ff6b6b;
+
+  /* Reset button defaults (fields: text-input, select) */
+  --reset-btn-size:             16px;
+  --reset-btn-font-size:        11px;
+  --reset-btn-border-radius:    2px;
+  --reset-btn-bg:               var(--action-btn-bg);
+  --reset-btn-bg-hover:         var(--action-btn-bg-hover);
+  --reset-btn-color:            var(--action-btn-color);
+  --reset-btn-color-hover:      var(--action-btn-color-hover);
+  --reset-btn-transition:       all 0.12s;
+
+  /* Clear button defaults (fields: text-input, checkbox, radio-group) */
+  --clear-btn-size:             16px;
+  --clear-btn-font-size:        11px;
+  --clear-btn-border-radius:    2px;
+  --clear-btn-bg:               var(--action-btn-bg);
+  --clear-btn-color:            var(--action-btn-color);
+  --clear-btn-transition:       all 0.12s;
 }
 
 
