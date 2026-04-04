@@ -1,8 +1,8 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { rangeFieldSpec } from '../../assets/css/specs'
 import type { NormalizedOption, SliderOption, SliderOptions } from './defines'
-
+import style from '../styles/components/slider.css?inline'
+import variables from '../styles/variables.css?inline'
 
 class Slider extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
@@ -32,7 +32,7 @@ class Slider extends AeicoField {
   declare editable?: boolean
   declare marks?: boolean
 
-  protected static styles = [rangeFieldSpec]
+  protected static styles = [variables, style]
 
   constructor() {
     super()

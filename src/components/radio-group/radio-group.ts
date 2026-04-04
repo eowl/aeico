@@ -1,9 +1,10 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { radioGroupSpec } from '../../assets/css/specs'
-import type { ButtonColor, ButtonVariant, ButtonSize } from '../button/button'
+import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import { t } from '../../localize'
 import type { RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './defines'
+import style from '../styles/components/radio-group.css?inline'
+import variables from '../styles/variables.css?inline'
 
 class RadioGroup extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
@@ -32,7 +33,7 @@ class RadioGroup extends AeicoField {
   declare size?:     ButtonSize
   declare allowEmpty?: boolean
 
-  protected static styles = [radioGroupSpec]
+  protected static styles = [variables, style]
 
   constructor() {
     super()
