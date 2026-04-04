@@ -2,13 +2,25 @@
   display: block;
   flex: 1;
   min-width: 0;
+  font-size: var(--size-base);
 
   /* Layout variables */
   --input-field-gap: 4px;
   
   /* Input element variables */
-  --input-font-size: 12px;
-  --input-padding: 4px 7px;
+  --input-font-size: 1em;
+  --input-padding: 0.333em 0.583em;
+  --input-border-width: 1px;
+  --input-border-radius: 2px;
+  --input-border-color: var(--border-subtle);
+  --input-border-color-hover: var(--border-default);
+  --input-border-color-focus: var(--border-focus);
+  --input-bg: var(--surface-base);
+  --input-bg-hover: var(--surface-raised);
+  --input-bg-focus: var(--surface-raised);
+  --input-color: var(--color-text-muted);
+  --input-placeholder-color: var(--color-text-disabled);
+  --input-transition: border-color 0.12s, background 0.12s;
 }
 
 .input-container {
@@ -52,12 +64,11 @@ input:disabled {
 
 /* Clear button styles */
 .clear-btn {
-  width: var(--clear-btn-size);
-  height: var(--clear-btn-size);
+  width: 1.333em;
+  height: 1.333em;
   border: none;
   border-radius: var(--clear-btn-border-radius);
   cursor: pointer;
-  font-size: var(--clear-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,12 +86,11 @@ input:disabled {
 
 /* Reset button styles */
 .reset-btn {
-  width: var(--reset-btn-size);
-  height: var(--reset-btn-size);
+  width: 1.333em;
+  height: 1.333em;
   border: none;
   border-radius: var(--reset-btn-border-radius);
   cursor: pointer;
-  font-size: var(--reset-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -97,22 +107,4 @@ input:disabled {
 }
 
 
-/* Size Variants */
 
-:host([size="sm"]) {
-  --input-font-size: 11px;
-  --input-padding: 2px 5px;
-  --clear-btn-size: 14px;
-  --clear-btn-font-size: 10px;
-  --reset-btn-size: 14px;
-  --reset-btn-font-size: 10px;
-}
-
-:host([size="lg"]) {
-  --input-font-size: 14px;
-  --input-padding: 6px 9px;
-  --clear-btn-size: 18px;
-  --clear-btn-font-size: 12px;
-  --reset-btn-size: 18px;
-  --reset-btn-font-size: 12px;
-}

@@ -2,6 +2,7 @@
   display: block;
   flex: 1;
   min-width: 0;
+  font-size: var(--size-base);
 }
 
 .range-container {
@@ -23,7 +24,7 @@ input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 4px;
+  height: 0.333em;
   border-radius: 2px;
   background: var(--border-subtle);
   outline: none;
@@ -40,8 +41,8 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 1.167em;
+  height: 1.167em;
   border-radius: 50%;
   background: var(--color-primary);
   cursor: pointer;
@@ -65,8 +66,8 @@ input[type="range"]:active::-webkit-slider-thumb {
 .input-range::-moz-range-thumb,
 .slider-input::-moz-range-thumb,
 input[type="range"]::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: 1.167em;
+  height: 1.167em;
   border: none;
   border-radius: 50%;
   background: var(--color-primary);
@@ -118,12 +119,11 @@ input[type="range"]:disabled::-moz-range-thumb {
 }
 
 .reset-btn {
-  width: var(--reset-btn-size);
-  height: var(--reset-btn-size);
+  width: 1.333em;
+  height: 1.333em;
   border: none;
   border-radius: var(--reset-btn-border-radius);
   cursor: pointer;
-  font-size: var(--reset-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -139,12 +139,11 @@ input[type="range"]:disabled::-moz-range-thumb {
 }
 
 .clear-btn {
-  width: var(--clear-btn-size);
-  height: var(--clear-btn-size);
+  width: 1.333em;
+  height: 1.333em;
   border: none;
   border-radius: var(--clear-btn-border-radius);
   cursor: pointer;
-  font-size: var(--clear-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -159,49 +158,30 @@ input[type="range"]:disabled::-moz-range-thumb {
   color: var(--clear-btn-color-hover);
 }
 
-/* Size Variants */
-:host([size="sm"]) {
-  --range-height: 3px;
-  --range-thumb-size: 11px;
-  --value-label-font: 11px;
-  --reset-btn-size: 14px;
-  --reset-btn-font-size: 10px;
-  --clear-btn-size: 14px;
-  --clear-btn-font-size: 10px;
-}
 
-:host([size="lg"]) {
-  --range-height: 5px;
-  --range-thumb-size: 17px;
-  --value-label-font: 14px;
-  --reset-btn-size: 18px;
-  --reset-btn-font-size: 12px;
-  --clear-btn-size: 18px;
-  --clear-btn-font-size: 12px;
-}
 
 .input-range,
 .slider-input,
 input[type="range"] {
-  height: var(--range-height, 4px);
+  height: 0.333em;
 }
 
 .input-range::-webkit-slider-thumb,
 .slider-input::-webkit-slider-thumb,
 input[type="range"]::-webkit-slider-thumb {
-  width: var(--range-thumb-size, 14px);
-  height: var(--range-thumb-size, 14px);
+  width: 1.167em;
+  height: 1.167em;
 }
 
 .input-range::-moz-range-thumb,
 .slider-input::-moz-range-thumb,
 input[type="range"]::-moz-range-thumb {
-  width: var(--range-thumb-size, 14px);
-  height: var(--range-thumb-size, 14px);
+  width: 1.167em;
+  height: 1.167em;
 }
 
 .value-label {
-  font-size: var(--value-label-font, 12px);
+  font-size: 1em;
 }
 
 .value-input {

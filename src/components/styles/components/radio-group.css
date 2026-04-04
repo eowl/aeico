@@ -1,12 +1,8 @@
-/* ============================================================================
- * RadioGroup — color tokens (mirrors button.css pattern)
- * Per-color blocks set --rg-* vars; mode/variant rules consume them.
- * ========================================================================== */
-
 :host {
   display: inline-flex;
   align-items: center;
-  gap: var(--rg-gap, 4px);
+  gap: var(--rg-gap, 0.286em);
+  font-size: var(--size-m);
 
   /* Color tokens — default */
   --rg-solid-bg:          var(--color-gray);
@@ -21,18 +17,15 @@
   --rg-subtle-bg:         rgba(255, 255, 255, 0.04);
   --rg-subtle-bg-hover:   rgba(255, 255, 255, 0.08);
 
-  /* Size tokens — md (default) */
-  --rg-font-size:    14px;
-  --rg-height:       32px;
-  --rg-padding:      6px 15px;
-  --rg-min-width:    64px;
+  --rg-font-size:    1em;
+  --rg-height:       2.286em;
+  --rg-padding:      0.429em 1.071em;
+  --rg-min-width:    4.571em;
   --rg-radius:       4px;
   --rg-font-weight:  400;
 
   --color-unselected: var(--color-gray-dark, #1e1e1e);
 }
-
-/* ── Color variants ─────────────────────────────────────────────────────── */
 
 :host([color="primary"]) {
   --rg-solid-bg:          var(--color-primary);
@@ -109,39 +102,8 @@
   --rg-subtle-bg-hover:   rgba(6, 182, 212, 0.15);
 }
 
-/* ── Size variants ──────────────────────────────────────────────────────── */
-
-:host([size="xs"]) {
-  --rg-font-size:  12px;
-  --rg-height:     22px;
-  --rg-padding:    2px 8px;
-  --rg-min-width:  48px;
-  --rg-radius:     3px;
-}
-
-:host([size="sm"]) {
-  --rg-font-size:  13px;
-  --rg-height:     28px;
-  --rg-padding:    4px 12px;
-  --rg-min-width:  56px;
-  --rg-radius:     3px;
-}
-
-:host([size="lg"]) {
-  --rg-font-size:  16px;
-  --rg-height:     40px;
-  --rg-padding:    8px 20px;
-  --rg-min-width:  80px;
-  --rg-radius:     4px;
-}
-
-/* ============================================================================
- * Structure
- * ========================================================================== */
-
-/* ============================================================================
- * Structure
- * ========================================================================== */
+:host([size="xs"]) { --rg-radius: 3px; }
+:host([size="sm"]) { --rg-radius: 3px; }
 
 .rg-container {
   display: inline-flex;
@@ -153,10 +115,6 @@
 slot {
   display: none;
 }
-
-/* ============================================================================
- * mode="default"  — native radio inputs
- * ========================================================================== */
 
 .rg-radio-option {
   display: inline-flex;
@@ -384,11 +342,10 @@ slot {
   flex-shrink:    0;
   line-height:    1;
 
-  width:          var(--reset-btn-size);
-  height:         var(--reset-btn-size);
+  width:          1.333em;
+  height:         1.333em;
   border-radius:  var(--reset-btn-border-radius);
   border:         none;
-  font-size:      var(--reset-btn-font-size);
   background:     var(--reset-btn-bg);
   color:          var(--reset-btn-color);
 }

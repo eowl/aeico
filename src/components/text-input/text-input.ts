@@ -1,6 +1,7 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
 import variables from '../styles/variables.css?inline'
+import sizeCSS from '../styles/size.css?inline'
 import style from '../styles/components/text-input.css?inline'
 
 class TextInput extends AeicoField {
@@ -16,7 +17,7 @@ class TextInput extends AeicoField {
   declare placeholder?: string
   declare type?: string
 
-  protected static styles = [variables, style]
+  protected static styles = [variables, sizeCSS, style]
 
   render() {
     this.build(() => {

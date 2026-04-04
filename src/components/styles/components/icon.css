@@ -1,27 +1,20 @@
-/* ============================================================================
- * Icon — size and color tokens
- * ========================================================================== */
-
 :host {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width:  var(--icon-size, 20px);
-  height: var(--icon-size, 20px);
+  font-size: 20px;
+  width:  1em;
+  height: 1em;
   color: inherit;
   flex-shrink: 0;
   line-height: 0;
   vertical-align: middle;
 }
 
-/* ── Size variants ───────────────────────────────────────────────────────── */
-
-:host([size="xs"]) { --icon-size: 12px; }
-:host([size="sm"]) { --icon-size: 16px; }
-:host([size="md"]) { --icon-size: 20px; }
-:host([size="lg"]) { --icon-size: 24px; }
-
-/* ── Color variants ──────────────────────────────────────────────────────── */
+:host([size="xs"]) { font-size: var(--size-s);    } /* 12px */
+:host([size="sm"]) { font-size: var(--size-base);  } /* 16px */
+:host([size="md"]) { font-size: 20px; }
+:host([size="lg"]) { font-size: 24px; }
 
 :host([color="primary"])   { color: var(--color-primary); }
 :host([color="secondary"]) { color: var(--color-secondary-text, var(--slate-700)); }
@@ -29,8 +22,6 @@
 :host([color="danger"])    { color: var(--color-danger); }
 :host([color="warning"])   { color: var(--color-warning); }
 :host([color="info"])      { color: var(--color-info); }
-
-/* ── SVG ─────────────────────────────────────────────────────────────────── */
 
 .icon-svg {
   display: block;

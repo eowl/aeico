@@ -4,6 +4,7 @@ import { t } from '../../localize'
 import type { SelectOptionValue, SelectOption, SelectOptions } from './defines'
 import style from '../styles/components/select.css?inline'
 import variables from '../styles/variables.css?inline'
+import sizeCSS from '../styles/size.css?inline'
 
 class Select extends AeicoField {
   protected fieldElement: HTMLSelectElement | null = null
@@ -18,7 +19,7 @@ class Select extends AeicoField {
 
   declare options?: SelectOptions
 
-  protected static styles = [variables, style]
+  protected static styles = [variables, sizeCSS, style]
 
   protected writeValue(value: SelectOptionValue): void {
     if (this.fieldElement) {

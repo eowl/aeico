@@ -242,9 +242,7 @@
   --clear-btn-bg-hover:         #5a2a2a;
   --clear-btn-color-hover:      #ff6b6b;
 
-  /* Reset button defaults (fields: text-input, select) */
-  --reset-btn-size:             16px;
-  --reset-btn-font-size:        11px;
+  /* Reset button defaults — size/font-size are em-based in each component */
   --reset-btn-border-radius:    2px;
   --reset-btn-bg:               var(--action-btn-bg);
   --reset-btn-bg-hover:         var(--action-btn-bg-hover);
@@ -252,9 +250,7 @@
   --reset-btn-color-hover:      var(--action-btn-color-hover);
   --reset-btn-transition:       all 0.12s;
 
-  /* Clear button defaults (fields: text-input, checkbox, radio-group) */
-  --clear-btn-size:             16px;
-  --clear-btn-font-size:        11px;
+  /* Clear button defaults — size/font-size are em-based in each component */
   --clear-btn-border-radius:    2px;
   --clear-btn-bg:               var(--action-btn-bg);
   --clear-btn-color:            var(--action-btn-color);
@@ -277,6 +273,36 @@
  *   <select-field theme="light"></select-field>
  *   SelectField.create({ theme: 'light' })
  * ========================================================================== */
+
+/* ============================================================================
+ * § 8  Size Scale
+ *
+ * A geometric ratio scale (×1.125) anchored at 1rem.
+ * --size-scale lets you resize the entire UI: :root { --size-scale: 1.2 }
+ *
+ *   --size-3xs  ≈ 10px
+ *   --size-2xs  ≈ 11px
+ *   --size-xs   ≈ 12px
+ *   --size-s    ≈ 14px
+ *   --size-m    = 16px  (= --size-base)
+ *   --size-base = 16px  — 1rem anchor
+ *   --size-l    ≈ 20px
+ *   --size-xl   ≈ 23px
+ * ========================================================================== */
+
+:root,
+:host {
+  --size-scale: 1;
+  --size-base:  calc(1rem * var(--size-scale));                    /* 16px */
+  --size-xl:    round(calc(var(--size-l) * 1.125), 1px);           /* 23px */
+  --size-l:     round(calc(var(--size-m) * 1.125 * 1.125), 1px);   /* 20px */
+  --size-m:     var(--size-base);                                  /* 16px */
+  --size-s:     round(calc(var(--size-m) / 1.125), 1px);           /* 14px */
+  --size-xs:    round(calc(var(--size-s) / 1.125), 1px);           /* 12px */
+  --size-2xs:   round(calc(var(--size-xs) / 1.125), 1px);          /* 11px */
+  --size-3xs:   round(calc(var(--size-2xs) / 1.125), 1px);         /* 10px */
+}
+
 
 :root[theme="light"],
 :host([theme="light"]) {

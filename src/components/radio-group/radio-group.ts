@@ -5,6 +5,7 @@ import { t } from '../../localize'
 import type { RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './defines'
 import style from '../styles/components/radio-group.css?inline'
 import variables from '../styles/variables.css?inline'
+import sizeCSS from '../styles/size.css?inline'
 
 class RadioGroup extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
@@ -33,7 +34,7 @@ class RadioGroup extends AeicoField {
   declare size?:     ButtonSize
   declare allowEmpty?: boolean
 
-  protected static styles = [variables, style]
+  protected static styles = [variables, sizeCSS, style]
 
   constructor() {
     super()

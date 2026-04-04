@@ -2,12 +2,13 @@
   display: block;
   flex: 1;
   min-width: 0;
+  font-size: var(--size-base);
 
   /* Layout */
   --checkbox-field-gap: 4px;
 
   /* Checkbox */
-  --checkbox-size: 14px;
+  --checkbox-size: 1.167em;
   --checkbox-border-width: 1px;
   --checkbox-border-radius: 2px;
   --checkbox-border-color: var(--border-subtle);
@@ -15,9 +16,9 @@
   --checkbox-accent-color: var(--color-primary);
 
   /* Toggle */
-  --toggle-width: 32px;
-  --toggle-height: 16px;
-  --toggle-slider-size: 12px;
+  --toggle-width: 2.667em;
+  --toggle-height: 1.333em;
+  --toggle-slider-size: 1em;
   --toggle-border-radius: calc(var(--toggle-height) / 2);
   --toggle-bg: var(--color-gray);
   --toggle-bg-checked: var(--color-primary);
@@ -120,12 +121,11 @@
 /* action buttons */
 .reset-btn,
 .clear-btn {
-  width: var(--reset-btn-size);
-  height: var(--reset-btn-size);
+  width: 1.333em;
+  height: 1.333em;
   border: none;
   border-radius: var(--reset-btn-border-radius);
   cursor: pointer;
-  font-size: var(--reset-btn-font-size);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,24 +147,4 @@
 }
 
 
-:host([size="sm"]) {
-  --checkbox-size: 12px;
-  --toggle-width: 24px;
-  --toggle-height: 12px;
-  --toggle-slider-size: 8px;
-  --reset-btn-size: 14px;
-  --reset-btn-font-size: 10px;
-  --clear-btn-size: 14px;
-  --clear-btn-font-size: 10px;
-}
 
-:host([size="lg"]) {
-  --checkbox-size: 16px;
-  --toggle-width: 40px;
-  --toggle-height: 20px;
-  --toggle-slider-size: 16px;
-  --reset-btn-size: 18px;
-  --reset-btn-font-size: 12px;
-  --clear-btn-size: 18px;
-  --clear-btn-font-size: 12px;
-}

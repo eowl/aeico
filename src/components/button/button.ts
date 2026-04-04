@@ -1,5 +1,6 @@
 import type { InferProps, Props } from '../../core/types'
 import styleVariables from '../styles/variables.css?inline'
+import sizeCSS from '../styles/size.css?inline'
 import buttonStyle from '../styles/components/button.css?inline'
 import AeicoComponent from '../aeico-component'
 import { ButtonColor, ButtonSize, ButtonVariant } from './defines'
@@ -39,7 +40,7 @@ class Button extends AeicoComponent {
   static readonly eventPrefix = 'button'
 
   protected static useStyles = ['button']
-  protected static styles = [styleVariables, buttonStyle]
+  protected static styles = [styleVariables, sizeCSS, buttonStyle]
 
   declare color?: ButtonColor
   declare variant?: ButtonVariant
@@ -75,7 +76,6 @@ class Button extends AeicoComponent {
       const { button, slot } = this.builder
 
       button({
-        className: 'btn',
         type: this.type || 'button',
         disabled: this.disabled,
         part: 'button'

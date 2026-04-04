@@ -7,6 +7,7 @@
 
 :host {
   display: inline-flex;
+  font-size: var(--size-m);
   --btn-solid-bg:          var(--color-gray);
   --btn-solid-bg-hover:    var(--color-gray-light);
   --btn-solid-bg-active:   var(--color-gray-dark);
@@ -99,8 +100,6 @@
   --btn-subtle-bg-hover:   rgba(6, 182, 212, 0.15);
 }
 
-/* ── Base button ──────────────────────────────────────────────────────────── */
-
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -114,9 +113,9 @@
   flex-shrink: 0;
 
   /* default: md */
-  width:  32px;
-  height: 32px;
-  --ib-icon-size: 18px;
+  width:  2.286em;
+  height: 2.286em;
+  --ib-icon-size: 1.286em;
 
   /* filled (default) */
   background:  var(--btn-solid-bg);
@@ -140,13 +139,8 @@
   cursor: not-allowed;
 }
 
-/* ── Size variants ────────────────────────────────────────────────────────── */
-
-:host([size="xs"]) .icon-btn { width: 22px; height: 22px; --ib-icon-size: 13px; border-radius: 3px; }
-:host([size="sm"]) .icon-btn { width: 28px; height: 28px; --ib-icon-size: 15px; border-radius: 3px; }
-:host([size="lg"]) .icon-btn { width: 40px; height: 40px; --ib-icon-size: 22px; }
-
-/* ── Variant: outlined ────────────────────────────────────────────────────── */
+:host([size="xs"]) .icon-btn,
+:host([size="sm"]) .icon-btn { border-radius: 3px; }
 
 :host([variant="outlined"]) .icon-btn {
   background:   transparent;
@@ -164,8 +158,6 @@
   background: var(--btn-subtle-bg-hover);
 }
 
-/* ── Variant: subtle ───────────────────────────────────────────────────────── */
-
 :host([variant="subtle"]) .icon-btn {
   background:   var(--btn-subtle-bg);
   border-color: transparent;
@@ -181,8 +173,6 @@
   background: var(--btn-subtle-bg-hover);
 }
 
-/* ── Variant: text ────────────────────────────────────────────────────────── */
-
 :host([variant="text"]) .icon-btn {
   background:   transparent;
   border-color: transparent;
@@ -197,8 +187,6 @@
 :host([variant="text"]) .icon-btn:active:not(:disabled) {
   background: var(--btn-subtle-bg-hover);
 }
-
-/* ── SVG icon ─────────────────────────────────────────────────────────────── */
 
 .icon-svg {
   display: block;

@@ -3,6 +3,7 @@ import type { InferProps, Props } from '../../core/types'
 import type { NormalizedOption, SliderOption, SliderOptions } from './defines'
 import style from '../styles/components/slider.css?inline'
 import variables from '../styles/variables.css?inline'
+import sizeCSS from '../styles/size.css?inline'
 
 class Slider extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
@@ -32,7 +33,7 @@ class Slider extends AeicoField {
   declare editable?: boolean
   declare marks?: boolean
 
-  protected static styles = [variables, style]
+  protected static styles = [variables, sizeCSS, style]
 
   constructor() {
     super()
