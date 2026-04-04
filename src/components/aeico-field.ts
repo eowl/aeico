@@ -77,7 +77,6 @@ class AeicoField extends AeicoComponent {
    */
   connectedCallback() {
     super.connectedCallback()
-    this.render()
   }
 
   /**
@@ -88,82 +87,15 @@ class AeicoField extends AeicoComponent {
   }
 
   /**
-   * Create reset button element with common styling and behavior
-   * 
-   * @param onReset Callback function to execute when reset button is clicked
-   * @returns Configured reset button element
-   */
-  protected createResetButton(onReset: () => void): HTMLButtonElement {
-    const resetText = this.resetText || '↺'
-    const resetKey = 'buttons.reset'
-
-    const resetBtn = document.createElement('button')
-
-    resetBtn.className = 'reset-btn'
-    resetBtn.textContent = resetText
-    resetBtn.title = t(resetKey, resetText)
-    
-    resetBtn.addEventListener('click', (e) => {
-      e.stopPropagation()
-      onReset()
-    })
-    
-    return resetBtn
-  }
-
-  /**
-   * Create clear button element with common styling and behavior
-   * 
-   * @param onClear Callback function to execute when clear button is clicked
-   * @returns Configured clear button element
-   */
-  protected createClearButton(onClear: () => void): HTMLButtonElement {
-    const clearText = this.clearText || '×'
-    const clearKey = 'buttons.clear'
-
-    const clearBtn = document.createElement('button')
-
-    clearBtn.className = 'clear-btn'
-    clearBtn.textContent = clearText
-    clearBtn.title = t(clearKey, clearText)
-    
-    clearBtn.addEventListener('click', (e) => {
-      e.stopPropagation()
-      onClear()
-    })
-    
-    return clearBtn
-  }
-
-  protected renderClearButton(container: HTMLElement) {
-    if (this.clearable) {
-      this.clearBtn = this.createClearButton(this.boundOnClear)
-      container.appendChild(this.clearBtn)
-    }
-  }
-
-  protected renderResetButton(container: HTMLElement) {
-    if (this.resettable) {
-      this.resetBtn = this.createResetButton(this.boundOnReset)
-      container.appendChild(this.resetBtn)
-    }
-  }
-
-  protected renderActionButtons(container: HTMLElement) {
-    this.renderClearButton(container)
-    this.renderResetButton(container)
-  }
-
-  /**
    * Render action buttons (clear/reset) using this.builder.
    * Must be called from within a build() callback.
    */
-  protected renderActionButtonsTags(force: boolean = false) {
-    this.renderClearButtonTag(force)
-    this.renderResetButtonTag(force)
+  protected renderActionButtons(force: boolean = false) {
+    this.renderClearButton(force)
+    this.renderResetButton(force)
   }
 
-  protected renderResetButtonTag(force: boolean = false) {
+  protected renderResetButton(force: boolean = false) {
     const { button } = this.builder
 
     if (force || this.resettable) {
@@ -176,7 +108,7 @@ class AeicoField extends AeicoComponent {
     }
   }
 
-  protected renderClearButtonTag(force: boolean = false) {
+  protected renderClearButton(force: boolean = false) {
     const { button } = this.builder
 
     if (force || this.clearable) {

@@ -69,7 +69,7 @@ class Checkbox extends AeicoField {
             span({ className: 'toggle-slider' })
           }
         })
-        this.renderActionButtonsTags()
+        this.renderActionButtons()
       })
     })
   }

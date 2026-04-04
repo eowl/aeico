@@ -30,7 +30,7 @@ class TextInput extends AeicoField {
           onInput: this.boundOnChange,
         })
 
-        this.renderActionButtonsTags()
+        this.renderActionButtons()
       })
     })
 

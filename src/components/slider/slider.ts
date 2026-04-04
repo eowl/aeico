@@ -212,7 +212,7 @@ class Slider extends AeicoField {
         }) as HTMLSpanElement
 
         // Action buttons first so the number input can be toggled without disrupting button reuse
-        this.renderActionButtonsTags()
+        this.renderActionButtons()
 
         if (this.editable) {
           this._numberInput = input({

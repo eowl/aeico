@@ -42,7 +42,7 @@ class Select extends AeicoField {
         this.fieldElement = select({ onChange: this.boundOnChange }, () => {
           this._renderOptions()
         }) as HTMLSelectElement
-        this.renderActionButtonsTags()
+        this.renderActionButtons()
       })
 
       const slotEl = slot({ style: { display: 'none' } }) as HTMLSlotElement
