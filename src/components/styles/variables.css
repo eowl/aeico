@@ -129,32 +129,32 @@
 :host {
   /* Primary (Blue) */
   --color-primary:          var(--blue-500);
-  --color-primary-hover:    var(--blue-400);
-  --color-primary-active:   var(--blue-600);
+  --color-primary-hover:    var(--blue-600);
+  --color-primary-active:   var(--blue-700);
   --color-primary-disabled: color-mix(in srgb, var(--blue) 50%, var(--gray-600));
 
   /* Success (Green) */
   --color-success:          var(--green-500);
-  --color-success-hover:    var(--green-400);
-  --color-success-active:   var(--green-600);
+  --color-success-hover:    var(--green-600);
+  --color-success-active:   var(--green-700);
   --color-success-disabled: color-mix(in srgb, var(--green) 50%, var(--gray-600));
 
   /* Danger (Red) */
   --color-danger:           var(--red-500);
-  --color-danger-hover:     var(--red-400);
-  --color-danger-active:    var(--red-600);
+  --color-danger-hover:     var(--red-600);
+  --color-danger-active:    var(--red-700);
   --color-danger-disabled:  color-mix(in srgb, var(--red) 50%, var(--gray-600));
 
   /* Warning (Yellow) */
   --color-warning:          var(--yellow-500);
-  --color-warning-hover:    var(--yellow-400);
-  --color-warning-active:   var(--yellow-600);
+  --color-warning-hover:    var(--yellow-600);
+  --color-warning-active:   var(--yellow-700);
   --color-warning-disabled: color-mix(in srgb, var(--yellow) 50%, var(--gray-600));
 
   /* Info (Cyan) */
   --color-info:             var(--cyan-500);
-  --color-info-hover:       var(--cyan-400);
-  --color-info-active:      var(--cyan-600);
+  --color-info-hover:       var(--cyan-600);
+  --color-info-active:      var(--cyan-700);
   --color-info-disabled:    color-mix(in srgb, var(--cyan) 50%, var(--gray-600));
 
   /* Gray — UI element backgrounds and borders (dark theme: darker end of palette) */
@@ -211,8 +211,8 @@
   --color-text-main:       white;
   --color-text-muted:      var(--gray-200);
   --color-text-disabled:   var(--gray-500);
-  --color-text-link:       var(--color-primary-hover);
-  --color-text-link-hover: var(--blue-300);
+  --color-text-link:       var(--blue-300);
+  --color-text-link-hover: var(--blue-200);
 
   /* Surfaces — fine-grained steps computed from gray base for dark-theme depth */
   --surface-sunken:  var(--gray-900);
