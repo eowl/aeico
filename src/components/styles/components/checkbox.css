@@ -22,7 +22,7 @@
   --toggle-border-radius: calc(var(--toggle-height) / 2);
   --toggle-bg: var(--color-gray);
   --toggle-bg-checked: var(--color-primary);
-  --toggle-slider-bg: #ffffff;
+  --toggle-slider-bg: white;
   --toggle-transition: 0.2s;
 
 }

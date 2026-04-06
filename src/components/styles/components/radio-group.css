@@ -22,7 +22,7 @@
   --rg-radius:       4px;
   --rg-font-weight:  400;
 
-  --color-unselected: var(--color-gray-dark, #1e1e1e);
+  --color-unselected: var(--color-gray-dark);
 }
 
 :host([size="xs"]) { --rg-radius: 3px; }
@@ -79,23 +79,23 @@ slot {
   outline: none;
   border-radius: var(--rg-radius);
 
-  background:   var(--color-unselected, #333);
-  border:       1px solid var(--color-gray-light, #444);
+  background:   var(--color-unselected);
+  border:       1px solid var(--color-gray-light);
   color:        var(--color-text-muted);
 }
 
 .rg-btn:hover:not(:disabled):not(.selected) {
-  background:   var(--color-gray-light, #444);
-  border-color: var(--color-gray-lighter, #555);
+  background:   var(--color-gray-light);
+  border-color: var(--color-gray-lighter);
   color:        var(--color-text-main);
 }
 
 .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: var(--rg-solid-bg);
-  color:        #fff;
+  color:        var(--color-text-main);
   font-weight:  500;
-  box-shadow:   0 1px 4px rgba(0,0,0,0.22);
+  box-shadow:   0 1px 4px rgb(from black r g b / 0.22);
 }
 
 .rg-btn.selected:hover:not(:disabled) {
@@ -127,7 +127,7 @@ slot {
 :host([variant="outlined"]) .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: var(--rg-solid-bg);
-  color:        #fff;
+  color:        var(--color-text-main);
 }
 
 :host([variant="subtle"]) .rg-btn {
@@ -207,9 +207,9 @@ slot {
 :host([mode="segmented"]) .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: transparent;
-  color:        #fff;
+  color:        var(--color-text-main);
   font-weight:  500;
-  box-shadow:   0 1px 4px rgba(0,0,0,0.35);
+  box-shadow:   0 1px 4px rgb(from black r g b / 0.35);
 }
 
 :host([mode="segmented"]) .rg-btn.selected:hover:not(:disabled) {
@@ -217,7 +217,7 @@ slot {
 }
 
 :host([mode="segmented"]:not([color])) .rg-btn.selected {
-  background: var(--color-gray-lighter, rgba(255,255,255,0.18));
+  background: var(--color-gray-lighter);
   color:      var(--color-text-main);
 }
 
@@ -227,7 +227,7 @@ slot {
 :host([mode="segmented"][variant="outlined"]) .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: transparent;
-  color:        #fff;
+  color:        var(--color-text-main);
 }
 
 .reset-btn,
@@ -276,23 +276,23 @@ slot {
 :host([mode="segmented"]) .reset-btn,
 :host([mode="segmented"]) .clear-btn {
   background:   transparent;
-  border:       1px solid var(--color-gray-light, #444);
+  border:       1px solid var(--color-gray-light);
   color:        var(--color-text-muted);
 }
 
 :host([mode="button"]) .reset-btn:hover,
 :host([mode="button-group"]) .reset-btn:hover,
 :host([mode="segmented"]) .reset-btn:hover {
-  background:   rgba(255, 255, 255, 0.08);
-  border-color: var(--color-gray-lighter, #555);
+  background:   var(--border-subtle);
+  border-color: var(--color-gray-lighter);
   color:        var(--color-text-main);
 }
 
 :host([mode="button"]) .clear-btn:hover,
 :host([mode="button-group"]) .clear-btn:hover,
 :host([mode="segmented"]) .clear-btn:hover {
-  background:   rgba(239, 68, 68, 0.1);
-  border-color: var(--color-gray-lighter, #555);
+  background:   rgb(from var(--red) r g b / 0.10);
+  border-color: var(--color-gray-lighter);
   color:        var(--color-danger);
 }
 
@@ -310,7 +310,7 @@ slot {
 :host([variant="outlined"][mode="button"]) .reset-btn:hover,
 :host([variant="outlined"][mode="button-group"]) .reset-btn:hover,
 :host([variant="outlined"][mode="segmented"]) .reset-btn:hover {
-  background:   rgba(255, 255, 255, 0.08);
+  background:   var(--border-subtle);
   border-color: var(--rg-border-hover);
   color:        var(--rg-accent-hover);
 }
@@ -318,7 +318,7 @@ slot {
 :host([variant="outlined"][mode="button"]) .clear-btn:hover,
 :host([variant="outlined"][mode="button-group"]) .clear-btn:hover,
 :host([variant="outlined"][mode="segmented"]) .clear-btn:hover {
-  background:   rgba(239, 68, 68, 0.1);
+  background:   rgb(from var(--red) r g b / 0.10);
   border-color: var(--rg-border-hover);
   color:        var(--color-danger);
 }
@@ -337,7 +337,7 @@ slot {
 :host([variant="subtle"][mode="button"]) .reset-btn:hover,
 :host([variant="subtle"][mode="button-group"]) .reset-btn:hover,
 :host([variant="subtle"][mode="segmented"]) .reset-btn:hover {
-  background:   rgba(255, 255, 255, 0.08);
+  background:   var(--border-subtle);
   border-color: transparent;
   color:        var(--rg-accent-hover);
 }
@@ -345,7 +345,7 @@ slot {
 :host([variant="subtle"][mode="button"]) .clear-btn:hover,
 :host([variant="subtle"][mode="button-group"]) .clear-btn:hover,
 :host([variant="subtle"][mode="segmented"]) .clear-btn:hover {
-  background:   rgba(239, 68, 68, 0.1);
+  background:   rgb(from var(--red) r g b / 0.10);
   border-color: transparent;
   color:        var(--color-danger);
 }
