@@ -218,6 +218,27 @@ events.forEach(eventName => {
   }) as EventListener)
 })
 
+// --- Theme switching ---
+
+let isDark = false
+
+function applyTheme() {
+  const btn = document.getElementById('theme-toggle')
+  if (isDark) {
+    document.documentElement.setAttribute('theme', 'dark')
+    if (btn) btn.textContent = '☀️ Light'
+  } else {
+    document.documentElement.removeAttribute('theme')
+    if (btn) btn.textContent = '🌙 Dark'
+  }
+  appendLog(`theme → ${isDark ? 'dark' : 'light'}`)
+}
+
+document.getElementById('theme-toggle')?.addEventListener('click', () => {
+  isDark = !isDark
+  applyTheme()
+})
+
 // --- Language switching ---
 
 function syncLangButtons() {

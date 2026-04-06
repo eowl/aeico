@@ -93,7 +93,7 @@ slot {
 .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: var(--rg-solid-bg);
-  color:        var(--color-text-main);
+  color:        var(--rg-solid-color);
   font-weight:  500;
   box-shadow:   0 1px 4px rgb(from black r g b / 0.22);
 }
@@ -127,7 +127,7 @@ slot {
 :host([variant="outlined"]) .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: var(--rg-solid-bg);
-  color:        var(--color-text-main);
+  color:        var(--rg-solid-color);
 }
 
 :host([variant="subtle"]) .rg-btn {
@@ -207,7 +207,7 @@ slot {
 :host([mode="segmented"]) .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: transparent;
-  color:        var(--color-text-main);
+  color:        var(--rg-solid-color);
   font-weight:  500;
   box-shadow:   0 1px 4px rgb(from black r g b / 0.35);
 }
@@ -227,7 +227,7 @@ slot {
 :host([mode="segmented"][variant="outlined"]) .rg-btn.selected {
   background:   var(--rg-solid-bg);
   border-color: transparent;
-  color:        var(--color-text-main);
+  color:        var(--rg-solid-color);
 }
 
 .reset-btn,

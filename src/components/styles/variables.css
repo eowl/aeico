@@ -1,6 +1,3 @@
-/* ============================================================================
- * § 1  Base Colors
- * ========================================================================== */
 :root,
 :host {
   --blue:   #0e639c;
@@ -14,12 +11,6 @@
   --light:  #f8f9fa;
 }
 
-/* ============================================================================
- * § 2  Color Palettes  (theme-agnostic — defined once, never overridden)
- *      100 = lightest  (20% hue + 80% white)
- *      500 = base hue
- *      900 = darkest   (20% hue + 80% black)
- * ========================================================================== */
 :root,
 :host {
   /* Blue */
@@ -122,55 +113,208 @@
   --light-900: color-mix(in srgb, var(--light) 20%, black);
 }
 
-/* ============================================================================
- * § 3  Semantic Intent Colors
- * ========================================================================== */
 :root,
 :host {
+  /* Hover / active mix (light default — overridden in § 6 dark) */
+  --color-mix-hover:  black 10%;
+  --color-mix-active: black 20%;
+
   /* Primary (Blue) */
   --color-primary:          var(--blue-500);
-  --color-primary-hover:    var(--blue-600);
-  --color-primary-active:   var(--blue-700);
-  --color-primary-disabled: color-mix(in srgb, var(--blue) 50%, var(--gray-600));
+  --color-primary-hover:    color-mix(in srgb, var(--color-primary), var(--color-mix-hover));
+  --color-primary-active:   color-mix(in srgb, var(--color-primary), var(--color-mix-active));
+  --color-primary-disabled: color-mix(in srgb, var(--blue) 50%, var(--gray-500));
 
   /* Success (Green) */
   --color-success:          var(--green-500);
-  --color-success-hover:    var(--green-600);
-  --color-success-active:   var(--green-700);
-  --color-success-disabled: color-mix(in srgb, var(--green) 50%, var(--gray-600));
+  --color-success-hover:    color-mix(in srgb, var(--color-success), var(--color-mix-hover));
+  --color-success-active:   color-mix(in srgb, var(--color-success), var(--color-mix-active));
+  --color-success-disabled: color-mix(in srgb, var(--green) 50%, var(--gray-500));
 
   /* Danger (Red) */
   --color-danger:           var(--red-500);
-  --color-danger-hover:     var(--red-600);
-  --color-danger-active:    var(--red-700);
-  --color-danger-disabled:  color-mix(in srgb, var(--red) 50%, var(--gray-600));
+  --color-danger-hover:     color-mix(in srgb, var(--color-danger), var(--color-mix-hover));
+  --color-danger-active:    color-mix(in srgb, var(--color-danger), var(--color-mix-active));
+  --color-danger-disabled:  color-mix(in srgb, var(--red) 50%, var(--gray-500));
 
   /* Warning (Yellow) */
   --color-warning:          var(--yellow-500);
-  --color-warning-hover:    var(--yellow-600);
-  --color-warning-active:   var(--yellow-700);
-  --color-warning-disabled: color-mix(in srgb, var(--yellow) 50%, var(--gray-600));
+  --color-warning-hover:    color-mix(in srgb, var(--color-warning), var(--color-mix-hover));
+  --color-warning-active:   color-mix(in srgb, var(--color-warning), var(--color-mix-active));
+  --color-warning-disabled: color-mix(in srgb, var(--yellow) 50%, var(--gray-500));
 
   /* Info (Cyan) */
   --color-info:             var(--cyan-500);
-  --color-info-hover:       var(--cyan-600);
-  --color-info-active:      var(--cyan-700);
-  --color-info-disabled:    color-mix(in srgb, var(--cyan) 50%, var(--gray-600));
+  --color-info-hover:       color-mix(in srgb, var(--color-info), var(--color-mix-hover));
+  --color-info-active:      color-mix(in srgb, var(--color-info), var(--color-mix-active));
+  --color-info-disabled:    color-mix(in srgb, var(--cyan) 50%, var(--gray-500));
 
-  /* Gray — UI element backgrounds and borders (dark theme: darker end of palette) */
+  /* Secondary (Slate) — base differs per theme, overridden in § 6 dark */
+  --color-secondary:        var(--slate-500);
+  --color-secondary-hover:  color-mix(in srgb, var(--color-secondary), var(--color-mix-hover));
+  --color-secondary-active: color-mix(in srgb, var(--color-secondary), var(--color-mix-active));
+  --color-secondary-text:   var(--slate-700);
+
+  /* On-solid — text color on filled (saturated) backgrounds.
+     Fixed white: blue/green/red/cyan buttons always have white text.
+     Does NOT follow --color-text-main. */
+  --color-on-solid: white;
+}
+
+
+.theme-light,
+:root[theme="light"],
+:host([theme="light"]),
+:host-context([theme="light"]),
+:where(:root),
+:host {
+  color-scheme: light;
+
+  /* Gray UI aliases — lighter palette steps for elements on white background */
+  --color-gray-dark:     var(--gray-400);
+  --color-gray:          var(--gray-300);
+  --color-gray-light:    var(--gray-200);
+  --color-gray-lighter:  var(--gray-100);
+  --color-gray-lightest: color-mix(in srgb, var(--gray) 10%, white);
+
+  /* Text */
+  --color-text-main:       var(--dark-700);
+  --color-text-muted:      var(--gray-600);
+  --color-text-disabled:   var(--gray-300);
+  --color-text-link:       var(--blue-500);
+  --color-text-link-hover: var(--blue-700);
+
+  /* Surfaces */
+  --surface-sunken:  var(--light-500);
+  --surface-base:    white;
+  --surface-raised:  var(--light-500);
+  --surface-overlay: white;
+  --color-overlay:   rgba(0, 0, 0, 0.4);
+
+  /* Borders */
+  --border-subtle:   rgba(0, 0, 0, 0.08);
+  --border-default:  rgba(0, 0, 0, 0.15);
+  --border-hover:    rgba(0, 0, 0, 0.25);
+  --border-focus:    var(--color-primary);
+  --border-disabled: rgba(0, 0, 0, 0.06);
+
+  /* Focus ring */
+  --focus-ring:    rgb(from var(--blue) r g b / 0.30);
+  --focus-ring-sm: rgb(from var(--blue) r g b / 0.15);
+
+  /* Subtle intent tokens — light context */
+  --color-primary-bg-subtle:       rgb(from var(--blue) r g b / 0.08);
+  --color-primary-border-subtle:   rgb(from var(--blue) r g b / 0.40);
+  --color-primary-text-emphasis:   var(--blue-700);
+
+  --color-success-bg-subtle:       rgb(from var(--green) r g b / 0.08);
+  --color-success-border-subtle:   rgb(from var(--green) r g b / 0.40);
+  --color-success-text-emphasis:   var(--green-700);
+
+  --color-danger-bg-subtle:        rgb(from var(--red) r g b / 0.08);
+  --color-danger-border-subtle:    rgb(from var(--red) r g b / 0.40);
+  --color-danger-text-emphasis:    var(--red-700);
+
+  --color-warning-bg-subtle:       rgb(from var(--yellow) r g b / 0.08);
+  --color-warning-border-subtle:   rgb(from var(--yellow) r g b / 0.40);
+  --color-warning-text-emphasis:   var(--yellow-700);
+
+  --color-info-bg-subtle:          rgb(from var(--cyan) r g b / 0.08);
+  --color-info-border-subtle:      rgb(from var(--cyan) r g b / 0.40);
+  --color-info-text-emphasis:      var(--cyan-700);
+
+  --color-secondary-bg-subtle:     rgb(from var(--slate) r g b / 0.08);
+  --color-secondary-border-subtle: rgb(from var(--slate) r g b / 0.40);
+  --color-secondary-text-emphasis: var(--slate-700);
+
+  --color-light-bg-subtle:         rgb(from var(--light) r g b / 0.10);
+  --color-light-border-subtle:     rgb(from var(--light) r g b / 0.30);
+
+  --color-dark-bg-subtle:          rgb(from var(--dark) r g b / 0.08);
+  --color-dark-border-subtle:      rgb(from var(--dark) r g b / 0.40);
+
+  /* Component tokens — light defaults */
+  --action-btn-bg:          var(--gray-200);
+  --action-btn-bg-hover:    var(--color-primary);
+  --action-btn-color:       var(--gray-600);
+  --action-btn-color-hover: white;
+
+  --clear-btn-bg-hover:     var(--color-danger);
+  --clear-btn-color-hover:  white;
+
+  --reset-btn-border-radius: 2px;
+  --reset-btn-bg:            var(--action-btn-bg);
+  --reset-btn-bg-hover:      var(--action-btn-bg-hover);
+  --reset-btn-color:         var(--action-btn-color);
+  --reset-btn-color-hover:   var(--action-btn-color-hover);
+  --reset-btn-transition:    all 0.12s;
+
+  --clear-btn-border-radius: 2px;
+  --clear-btn-bg:            var(--action-btn-bg);
+  --clear-btn-color:         var(--action-btn-color);
+  --clear-btn-transition:    all 0.12s;
+}
+
+:root,
+:host {
+  --size-scale: 1;
+  --size-base:  calc(1rem * var(--size-scale));                    /* 16px */
+  --size-xl:    round(calc(var(--size-l) * 1.125), 1px);           /* 23px */
+  --size-l:     round(calc(var(--size-m) * 1.125 * 1.125), 1px);   /* 20px */
+  --size-m:     var(--size-base);                                  /* 16px */
+  --size-s:     round(calc(var(--size-m) / 1.125), 1px);           /* 14px */
+  --size-xs:    round(calc(var(--size-s) / 1.125), 1px);           /* 12px */
+  --size-2xs:   round(calc(var(--size-xs) / 1.125), 1px);          /* 11px */
+  --size-3xs:   round(calc(var(--size-2xs) / 1.125), 1px);         /* 10px */
+}
+
+.theme-dark,
+:root[theme="dark"],
+:host([theme="dark"]),
+:host-context([theme="dark"]) {
+  color-scheme: dark;
+
+  /* Hover / active — slightly gentler on dark backgrounds */
+  --color-mix-hover:  black 8%;
+  --color-mix-active: black 16%;
+
+  /* Gray UI aliases — darker palette steps for elements on dark background */
   --color-gray-dark:     var(--gray-800);
   --color-gray:          var(--gray-700);
   --color-gray-light:    var(--gray-600);
   --color-gray-lighter:  var(--gray-500);
   --color-gray-lightest: var(--gray-400);
 
-  /* Secondary (Slate — blue-gray to distinguish from neutral gray) */
-  --color-secondary:        var(--slate-700);
-  --color-secondary-hover:  var(--slate-600);
-  --color-secondary-active: var(--slate-800);
-  --color-secondary-text:   var(--slate-300);
+  /* Secondary — deeper base on dark background */
+  --color-secondary:      var(--slate-700);
+  --color-secondary-text: var(--slate-300);
 
-  /* Subtle backgrounds (alpha overlay of base color) */
+  /* Text */
+  --color-text-main:       white;
+  --color-text-muted:      var(--gray-200);
+  --color-text-disabled:   var(--gray-500);
+  --color-text-link:       var(--blue-300);
+  --color-text-link-hover: var(--blue-200);
+
+  /* Surfaces */
+  --surface-sunken:  var(--gray-900);
+  --surface-base:    color-mix(in srgb, var(--gray) 27%, black);
+  --surface-raised:  color-mix(in srgb, var(--gray) 34%, black);
+  --surface-overlay: color-mix(in srgb, var(--gray) 38%, black);
+  --color-overlay:   rgba(0, 0, 0, 0.6);
+
+  /* Borders */
+  --border-subtle:   rgba(255, 255, 255, 0.08);
+  --border-default:  rgba(255, 255, 255, 0.12);
+  --border-hover:    rgba(255, 255, 255, 0.20);
+  --border-focus:    var(--color-primary);
+  --border-disabled: rgba(255, 255, 255, 0.06);
+
+  /* Focus ring */
+  --focus-ring:    rgb(from var(--blue) r g b / 0.25);
+  --focus-ring-sm: rgb(from var(--blue) r g b / 0.10);
+
+  /* Subtle intent tokens — dark context (more alpha, lighter text-emphasis) */
   --color-primary-bg-subtle:       rgb(from var(--blue) r g b / 0.10);
   --color-primary-border-subtle:   rgb(from var(--blue) r g b / 0.30);
   --color-primary-text-emphasis:   var(--blue-300);
@@ -200,158 +344,12 @@
 
   --color-dark-bg-subtle:          rgb(from var(--dark) r g b / 0.30);
   --color-dark-border-subtle:      rgb(from var(--dark) r g b / 0.50);
-}
 
-/* ============================================================================
- * § 4  Text, Surfaces, Borders, Focus
- * ========================================================================== */
-:root,
-:host {
-  /* Text */
-  --color-text-main:       white;
-  --color-text-muted:      var(--gray-200);
-  --color-text-disabled:   var(--gray-500);
-  --color-text-link:       var(--blue-300);
-  --color-text-link-hover: var(--blue-200);
-
-  /* Surfaces — fine-grained steps computed from gray base for dark-theme depth */
-  --surface-sunken:  var(--gray-900);
-  --surface-base:    color-mix(in srgb, var(--gray) 27%, black);
-  --surface-raised:  color-mix(in srgb, var(--gray) 34%, black);
-  --surface-overlay: color-mix(in srgb, var(--gray) 38%, black);
-  --color-overlay:   rgba(0, 0, 0, 0.6);
-
-  /* Borders */
-  --border-subtle:   rgba(255, 255, 255, 0.08);
-  --border-default:  rgba(255, 255, 255, 0.12);
-  --border-hover:    rgba(255, 255, 255, 0.20);
-  --border-focus:    var(--color-primary);
-  --border-disabled: rgba(255, 255, 255, 0.06);
-
-  /* Focus ring */
-  --focus-ring:    rgb(from var(--blue) r g b / 0.25);
-  --focus-ring-sm: rgb(from var(--blue) r g b / 0.10);
-}
-
-/* ============================================================================
- * § 5  Component-level Tokens
- * ========================================================================== */
-:root,
-:host {
-  --action-btn-bg:           var(--color-gray);
-  --action-btn-bg-hover:     color-mix(in srgb, var(--blue) 25%, var(--gray-800));
-  --action-btn-color:        var(--gray-400);
-  --action-btn-color-hover:  var(--cyan-300);
-
-  --clear-btn-bg-hover:      color-mix(in srgb, var(--red) 25%, var(--gray-800));
-  --clear-btn-color-hover:   var(--red-300);
-
-  /* Reset button */
-  --reset-btn-border-radius: 2px;
-  --reset-btn-bg:            var(--action-btn-bg);
-  --reset-btn-bg-hover:      var(--action-btn-bg-hover);
-  --reset-btn-color:         var(--action-btn-color);
-  --reset-btn-color-hover:   var(--action-btn-color-hover);
-  --reset-btn-transition:    all 0.12s;
-
-  /* Clear button */
-  --clear-btn-border-radius: 2px;
-  --clear-btn-bg:            var(--action-btn-bg);
-  --clear-btn-color:         var(--action-btn-color);
-  --clear-btn-transition:    all 0.12s;
-}
-
-/* ============================================================================
- * § 6  Size Scale
- * ========================================================================== */
-:root,
-:host {
-  --size-scale: 1;
-  --size-base:  calc(1rem * var(--size-scale));                    /* 16px */
-  --size-xl:    round(calc(var(--size-l) * 1.125), 1px);           /* 23px */
-  --size-l:     round(calc(var(--size-m) * 1.125 * 1.125), 1px);   /* 20px */
-  --size-m:     var(--size-base);                                  /* 16px */
-  --size-s:     round(calc(var(--size-m) / 1.125), 1px);           /* 14px */
-  --size-xs:    round(calc(var(--size-s) / 1.125), 1px);           /* 12px */
-  --size-2xs:   round(calc(var(--size-xs) / 1.125), 1px);          /* 11px */
-  --size-3xs:   round(calc(var(--size-2xs) / 1.125), 1px);         /* 10px */
-}
-
-/* ============================================================================
- * § 7  Light Theme  (overrides semantic layer only — palettes are unchanged)
- * ========================================================================== */
-:root[theme="light"],
-:host([theme="light"]) {
-  /* Gray aliases — lighter palette steps for UI elements on white background */
-  --color-gray-dark:     var(--gray-400);
-  --color-gray:          var(--gray-300);
-  --color-gray-light:    var(--gray-200);
-  --color-gray-lighter:  var(--gray-100);
-  --color-gray-lightest: color-mix(in srgb, var(--gray) 10%, white);
-
-  /* Secondary */
-  --color-secondary:        var(--slate-600);
-  --color-secondary-hover:  var(--slate-400);
-  --color-secondary-active: var(--slate-700);
-  --color-secondary-text:   var(--slate-700);
-
-  /* Text */
-  --color-text-main:       var(--dark-700);
-  --color-text-muted:      var(--gray-600);
-  --color-text-disabled:   var(--gray-300);
-  --color-text-link:       var(--blue-500);
-  --color-text-link-hover: var(--blue-700);
-
-  /* Surfaces */
-  --surface-sunken:  var(--light-500);
-  --surface-base:    white;
-  --surface-raised:  var(--light-500);
-  --surface-overlay: white;
-  --color-overlay:   rgba(0, 0, 0, 0.4);
-
-  /* Borders */
-  --border-subtle:   rgba(0, 0, 0, 0.08);
-  --border-default:  rgba(0, 0, 0, 0.15);
-  --border-hover:    rgba(0, 0, 0, 0.25);
-  --border-disabled: rgba(0, 0, 0, 0.06);
-
-  /* Focus */
-  --focus-ring:    rgb(from var(--blue) r g b / 0.30);
-  --focus-ring-sm: rgb(from var(--blue) r g b / 0.15);
-
-  /* Action / Clear buttons */
-  --action-btn-bg:          var(--gray-200);
-  --action-btn-bg-hover:    var(--color-primary);
-  --action-btn-color:       var(--gray-600);
-  --action-btn-color-hover: white;
-  --clear-btn-bg-hover:     var(--color-danger);
-  --clear-btn-color-hover:  white;
-
-  /* Subtle backgrounds — lower opacity for light context */
-  --color-primary-bg-subtle:       rgb(from var(--blue) r g b / 0.08);
-  --color-success-bg-subtle:       rgb(from var(--green) r g b / 0.08);
-  --color-danger-bg-subtle:        rgb(from var(--red) r g b / 0.08);
-  --color-warning-bg-subtle:       rgb(from var(--yellow) r g b / 0.08);
-  --color-info-bg-subtle:          rgb(from var(--cyan) r g b / 0.08);
-  --color-secondary-bg-subtle:     rgb(from var(--slate) r g b / 0.08);
-  --color-light-bg-subtle:         rgb(from var(--light) r g b / 0.10);
-  --color-dark-bg-subtle:          rgb(from var(--dark) r g b / 0.08);
-
-  /* Text emphasis — darker shades readable on light background */
-  --color-primary-text-emphasis:   var(--blue-700);
-  --color-success-text-emphasis:   var(--green-700);
-  --color-danger-text-emphasis:    var(--red-700);
-  --color-warning-text-emphasis:   var(--yellow-700);
-  --color-info-text-emphasis:      var(--cyan-700);
-  --color-secondary-text-emphasis: var(--slate-700);
-
-  /* Border subtle — higher opacity for visibility on light background */
-  --color-primary-border-subtle:   rgb(from var(--blue) r g b / 0.40);
-  --color-success-border-subtle:   rgb(from var(--green) r g b / 0.40);
-  --color-danger-border-subtle:    rgb(from var(--red) r g b / 0.40);
-  --color-warning-border-subtle:   rgb(from var(--yellow) r g b / 0.40);
-  --color-info-border-subtle:      rgb(from var(--cyan) r g b / 0.40);
-  --color-secondary-border-subtle: rgb(from var(--slate) r g b / 0.40);
-  --color-light-border-subtle:     rgb(from var(--light) r g b / 0.30);
-  --color-dark-border-subtle:      rgb(from var(--dark) r g b / 0.40);
+  /* Component tokens — dark overrides */
+  --action-btn-bg:          var(--color-gray);
+  --action-btn-bg-hover:    color-mix(in srgb, var(--blue) 25%, var(--gray-800));
+  --action-btn-color:       var(--gray-400);
+  --action-btn-color-hover: var(--cyan-300);
+  --clear-btn-bg-hover:     color-mix(in srgb, var(--red) 25%, var(--gray-800));
+  --clear-btn-color-hover:  var(--red-300);
 }

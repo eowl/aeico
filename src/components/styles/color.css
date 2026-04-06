@@ -1,10 +1,10 @@
 :host {
   --color-solid:           var(--color-gray);
-  --color-solid-hover:     var(--color-gray-light);
-  --color-solid-active:    var(--color-gray-dark);
+  --color-solid-hover:     color-mix(in srgb, var(--color-solid), var(--color-mix-hover));
+  --color-solid-active:    color-mix(in srgb, var(--color-solid), var(--color-mix-active));
   --color-on-solid:        var(--color-text-main);
   --color-border:          var(--color-gray-light);
-  --color-border-hover:    var(--color-gray-lighter);
+  --color-border-hover:    color-mix(in srgb, var(--color-border), var(--color-mix-hover));
   --color-accent:          var(--color-text-muted);
   --color-accent-hover:    var(--color-text-main);
   --color-subtle:          var(--border-subtle);
@@ -16,11 +16,8 @@
 
 :host([color="primary"]) {
   --color-solid:           var(--color-primary);
-  --color-solid-hover:     var(--color-primary-hover);
-  --color-solid-active:    var(--color-primary-active);
-  --color-on-solid:        var(--color-text-main);
+  --color-on-solid:        white;
   --color-border:          var(--color-primary);
-  --color-border-hover:    var(--color-primary-hover);
   --color-accent:          var(--color-text-link);
   --color-accent-hover:    var(--color-text-link-hover);
   --color-subtle:          var(--color-primary-bg-subtle);
@@ -32,14 +29,10 @@
 
 :host([color="secondary"]) {
   --color-solid:           var(--color-secondary);
-  --color-solid-hover:     var(--color-secondary-hover);
-  --color-solid-active:    var(--color-secondary-active);
-  --color-on-solid:        var(--color-text-main);
-  --color-on-solid-hover:  var(--color-text-main);
+  --color-on-solid:        white;
   --color-border:          var(--color-secondary-hover);
-  --color-border-hover:    var(--slate-500);
-  --color-accent:          var(--slate-300);
-  --color-accent-hover:    var(--slate-200);
+  --color-accent:          var(--color-secondary-text-emphasis);
+  --color-accent-hover:    var(--color-text-main);
   --color-subtle:          rgb(from var(--slate) r g b / 0.06);
   --color-subtle-hover:    rgb(from var(--slate) r g b / 0.12);
   --color-bg-subtle:       var(--color-secondary-bg-subtle);
@@ -49,12 +42,9 @@
 
 :host([color="success"]) {
   --color-solid:           var(--color-success);
-  --color-solid-hover:     var(--color-success-hover);
-  --color-solid-active:    var(--color-success-active);
-  --color-on-solid:        var(--color-text-main);
+  --color-on-solid:        white;
   --color-border:          var(--color-success);
-  --color-border-hover:    var(--color-success-hover);
-  --color-accent:          var(--color-success-text-emphasis, var(--color-success));
+  --color-accent:          var(--color-success-text-emphasis);
   --color-accent-hover:    var(--color-success-hover);
   --color-subtle:          var(--color-success-bg-subtle);
   --color-subtle-hover:    rgb(from var(--green) r g b / 0.15);
@@ -65,13 +55,10 @@
 
 :host([color="danger"]) {
   --color-solid:           var(--color-danger);
-  --color-solid-hover:     var(--color-danger-hover);
-  --color-solid-active:    var(--color-danger-active);
-  --color-on-solid:        var(--color-text-main);
+  --color-on-solid:        white;
   --color-border:          var(--color-danger);
-  --color-border-hover:    var(--color-danger-hover);
-  --color-accent:          var(--color-danger);
-  --color-accent-hover:    var(--red-300);
+  --color-accent:          var(--color-danger-text-emphasis);
+  --color-accent-hover:    var(--color-danger-hover);
   --color-subtle:          var(--color-danger-bg-subtle);
   --color-subtle-hover:    rgb(from var(--red) r g b / 0.15);
   --color-bg-subtle:       var(--color-danger-bg-subtle);
@@ -81,12 +68,9 @@
 
 :host([color="warning"]) {
   --color-solid:           var(--color-warning);
-  --color-solid-hover:     var(--color-warning-hover);
-  --color-solid-active:    var(--color-warning-active);
   --color-on-solid:        var(--gray-900);
   --color-border:          var(--color-warning);
-  --color-border-hover:    var(--color-warning-hover);
-  --color-accent:          var(--color-warning-text-emphasis, var(--color-warning));
+  --color-accent:          var(--color-warning-text-emphasis);
   --color-accent-hover:    var(--color-warning-hover);
   --color-subtle:          var(--color-warning-bg-subtle);
   --color-subtle-hover:    rgb(from var(--yellow) r g b / 0.15);
@@ -97,12 +81,9 @@
 
 :host([color="info"]) {
   --color-solid:           var(--color-info);
-  --color-solid-hover:     var(--color-info-hover);
-  --color-solid-active:    var(--color-info-active);
-  --color-on-solid:        var(--color-text-main);
+  --color-on-solid:        white;
   --color-border:          var(--color-info);
-  --color-border-hover:    var(--color-info-hover);
-  --color-accent:          var(--color-info-text-emphasis, var(--color-info));
+  --color-accent:          var(--color-info-text-emphasis);
   --color-accent-hover:    var(--color-info-hover);
   --color-subtle:          var(--color-info-bg-subtle);
   --color-subtle-hover:    rgb(from var(--cyan) r g b / 0.15);
@@ -122,7 +103,7 @@
 
 :host([color="dark"]) {
   --color-solid:           var(--dark-500);
-  --color-on-solid:        var(--color-text-main);
+  --color-on-solid:        white;
   --color-border:          var(--dark-400);
   --color-bg-subtle:       var(--color-dark-bg-subtle);
   --color-text-subtle:     var(--gray-200);
