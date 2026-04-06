@@ -3,7 +3,7 @@
   --color-solid-hover:     color-mix(in srgb, var(--color-solid), var(--color-mix-hover));
   --color-solid-active:    color-mix(in srgb, var(--color-solid), var(--color-mix-active));
   --color-on-solid:        var(--color-text-main);
-  --color-border:          var(--color-gray-light);
+  --color-border:          var(--color-gray);
   --color-border-hover:    color-mix(in srgb, var(--color-border), var(--color-mix-hover));
   --color-accent:          var(--color-text-muted);
   --color-accent-hover:    var(--color-text-main);
@@ -95,7 +95,7 @@
 :host([color="light"]) {
   --color-solid:           var(--color-gray-lighter);
   --color-on-solid:        var(--gray-900);
-  --color-border:          var(--color-gray-light);
+  --color-border:          var(--color-gray-lighter);
   --color-bg-subtle:       var(--color-light-bg-subtle);
   --color-text-subtle:     var(--color-text-muted);
   --color-border-subtle:   var(--color-light-border-subtle);
@@ -104,7 +104,7 @@
 :host([color="dark"]) {
   --color-solid:           var(--dark-500);
   --color-on-solid:        white;
-  --color-border:          var(--dark-400);
+  --color-border:          var(--dark-500);
   --color-bg-subtle:       var(--color-dark-bg-subtle);
   --color-text-subtle:     var(--gray-200);
   --color-border-subtle:   var(--color-dark-border-subtle);
