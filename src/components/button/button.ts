@@ -52,16 +52,15 @@ class Button extends AeicoComponent {
   private buttonElement: HTMLButtonElement | null = null
 
   protected render() {
-    if (this.buttonElement) return
-
     this.build(() => {
       const { button, slot } = this.builder
 
-      button({
+      this.buttonElement = button({
         type: this.type || 'button',
         disabled: this.disabled,
         part: 'button',
-        'aria-pressed': this.active
+        'aria-pressed': this.active,
+        'aria-disabled': this.disabled
       }, () => {
         slot()
       })
