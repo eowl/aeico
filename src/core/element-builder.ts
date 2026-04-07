@@ -1,3 +1,5 @@
+import { SVG_NS } from './types'
+
 type _Props = {
   className?: string | Record<string, boolean>
   text?: string
@@ -25,9 +27,21 @@ type SVGOnlyTags = {
   readonly [K in Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap | 'text'>]: SVGTagFunction<K>
 }
 
-const SVG_NS = 'http://www.w3.org/2000/svg'
+type KebabToCamel<S extends string> =
+  S extends `${infer Head}-${infer Tail}`
+    ? `${Head}${Capitalize<KebabToCamel<Tail>>}`
+    : S
 
-interface ElementBuilder extends HTMLTags, SVGOnlyTags {}
+type CustomHTMLTags = {
+  readonly [K in keyof HTMLElementTagNameMap as K extends `${string}-${string}` ? KebabToCamel<K> : never]:
+    (props?: BuilderProps, cb?: () => void) => HTMLElementTagNameMap[K]
+}
+
+function camelToKebab(str: string): string {
+  return str.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`)
+}
+
+interface ElementBuilder extends HTMLTags, SVGOnlyTags, CustomHTMLTags {}
 
 class ElementBuilder {
   private _stack: Node[] = []
@@ -38,8 +52,9 @@ class ElementBuilder {
     return new Proxy(this, {
       get(target, prop: string) {
         if (prop in target) return Reflect.get(target, prop) as unknown
-        
-        return (p?: BuilderProps, cb?: () => void) => target._create(prop, p, cb)
+
+        const tagName = /[A-Z]/.test(prop) ? camelToKebab(prop) : prop
+        return (p?: BuilderProps, cb?: () => void) => target._create(tagName, p, cb)
       }
     })
   }

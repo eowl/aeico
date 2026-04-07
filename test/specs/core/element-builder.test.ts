@@ -363,6 +363,68 @@ describe('ElementBuilder', () => {
     })
   })
 
+  describe('Custom elements (camelCase → kebab-case)', () => {
+    before(() => {
+      if (!customElements.get('my-widget'))    customElements.define('my-widget',    class extends HTMLElement {})
+      if (!customElements.get('ae-button'))    customElements.define('ae-button',    class extends HTMLElement {})
+      if (!customElements.get('ae-icon-button')) customElements.define('ae-icon-button', class extends HTMLElement {})
+    })
+
+    it('creates a custom element via camelCase property', () => {
+      const el = (builder as any).myWidget()
+      expect(el.tagName).to.equal('MY-WIDGET')
+    })
+
+    it('creates multi-segment custom element (ae-button → aeButton)', () => {
+      const el = (builder as any).aeButton()
+      expect(el.tagName).to.equal('AE-BUTTON')
+    })
+
+    it('creates multi-segment custom element with three parts (aeIconButton → ae-icon-button)', () => {
+      const el = (builder as any).aeIconButton()
+      expect(el.tagName).to.equal('AE-ICON-BUTTON')
+    })
+
+    it('passes props to custom element', () => {
+      const el = (builder as any).aeButton({ color: 'primary', disabled: true })
+      expect(el.getAttribute('color')).to.equal('primary')
+      expect(el.hasAttribute('disabled')).to.be.true
+    })
+
+    it('creates custom element with children callback', () => {
+      const el = (builder as any).aeButton({}, () => {
+        builder.span({ textContent: 'Label' })
+      })
+      expect(el.tagName).to.equal('AE-BUTTON')
+      expect(el.querySelector('span')?.textContent).to.equal('Label')
+    })
+
+    it('does not affect native elements (no uppercase, no conversion)', () => {
+      const div = builder.div()
+      expect(div.tagName).to.equal('DIV')
+      const button = builder.button()
+      expect(button.tagName).to.equal('BUTTON')
+    })
+
+    it('custom element is reused by build() reconciliation', () => {
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+
+      builder.build(container, () => {
+        ;(builder as any).aeButton({ id: 'btn1' })
+      })
+      const original = container.firstElementChild
+
+      builder.build(container, () => {
+        ;(builder as any).aeButton({ id: 'btn1', color: 'primary' })
+      })
+
+      expect(container.firstElementChild).to.equal(original)
+      expect(container.firstElementChild?.getAttribute('color')).to.equal('primary')
+      container.remove()
+    })
+  })
+
   describe('text() method', () => {
     it('appends text node to parent in stack', () => {
       const parent = builder.div({}, () => {
