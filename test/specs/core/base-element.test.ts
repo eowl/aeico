@@ -273,5 +273,77 @@ describe('BaseElement', () => {
         expect(el.items).to.deep.equal([1, 2, 3])
       })
     })
+
+    describe('update() call count with reflection', () => {
+      it('setting a reflected property calls update() twice but executeUpdate() only once', async () => {
+        const tag = `test-update-count-${++_counter}`
+        let updateCallCount = 0
+        let renderCallCount = 0
+
+        class TrackingEl extends BaseElement {
+          static props: Props = { value: { type: String } }
+          declare value: string
+
+          update(name?: string, oldValue?: unknown) {
+            updateCallCount++
+            super.update(name, oldValue)
+          }
+
+          protected render() {
+            renderCallCount++
+          }
+        }
+        customElements.define(tag, TrackingEl)
+
+        const el = await mount<TrackingEl>(`<${tag}></${tag}>`)
+        await updated()
+
+        // Reset counters after initial mount
+        updateCallCount = 0
+        renderCallCount = 0
+
+        el.value = 'hello'
+        await updated()
+
+        // setter calls update() once; _reflecting flag prevents attributeChangedCallback from calling it again
+        expect(updateCallCount).to.equal(1)
+        // but _updatePending flag ensures executeUpdate runs only once
+        expect(renderCallCount).to.equal(1)
+      })
+
+      it('setting a non-reflected property calls update() exactly once', async () => {
+        const tag = `test-update-count-noreflect-${++_counter}`
+        let updateCallCount = 0
+        let renderCallCount = 0
+
+        class TrackingEl extends BaseElement {
+          static props: Props = { value: { type: String, reflect: false } }
+          declare value: string
+
+          update(name?: string, oldValue?: unknown) {
+            updateCallCount++
+            super.update(name, oldValue)
+          }
+
+          protected render() {
+            renderCallCount++
+          }
+        }
+        customElements.define(tag, TrackingEl)
+
+        const el = await mount<TrackingEl>(`<${tag}></${tag}>`)
+        await updated()
+
+        updateCallCount = 0
+        renderCallCount = 0
+
+        el.value = 'hello'
+        await updated()
+
+        // No reflection → no attributeChangedCallback → update() called only once
+        expect(updateCallCount).to.equal(1)
+        expect(renderCallCount).to.equal(1)
+      })
+    })
   })
 })

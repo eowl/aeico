@@ -154,6 +154,7 @@ class BaseElement extends HTMLElement {
   }
 
   private _building = false
+  private _reflecting = false
 
   protected build(cb: () => void) {
     if (this._building) {
@@ -263,12 +264,14 @@ class BaseElement extends HTMLElement {
           const attrName = propDecl.attr ?? kebabName
 
           if (shouldReflect) {
+            this._reflecting = true
             if (value === null || value === undefined) {
               this.removeAttribute(attrName)
             } else {
               const serialized = this.serializeAttribute(value, propDecl)
               this.setAttribute(attrName, serialized)
             }
+            this._reflecting = false
           }
 
           this.update(propName, oldValue)
@@ -497,6 +500,7 @@ class BaseElement extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) return
+    if (this._reflecting) return
 
     const constructor = this.constructor as typeof BaseElement
     const entry = constructor._getPropertyForAttribute(name)
