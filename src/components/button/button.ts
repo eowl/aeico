@@ -36,6 +36,7 @@ class Button extends AeicoComponent {
     size: { type: String },
     disabled: { type: Boolean },
     type: { type: String },
+    active: { type: Boolean }
   }
 
   static readonly eventPrefix = 'button'
@@ -48,6 +49,7 @@ class Button extends AeicoComponent {
   declare size?: ButtonSize
   declare disabled?: boolean
   declare type?: 'button' | 'submit' | 'reset'
+  declare active?: boolean
 
   private buttonElement: HTMLButtonElement | null = null
 
@@ -79,7 +81,8 @@ class Button extends AeicoComponent {
       button({
         type: this.type || 'button',
         disabled: this.disabled,
-        part: 'button'
+        part: 'button',
+        'aria-pressed': this.active
       }, () => {
         slot()
       })

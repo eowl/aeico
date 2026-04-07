@@ -103,6 +103,12 @@ button:active:not(:disabled) { background: var(--btn-solid-bg-active); }
   background: var(--btn-subtle-bg-hover);
 }
 
+:host([active]) button {
+  background:   var(--btn-solid-bg-active);
+  border-color: var(--btn-border-hover);
+  color:        var(--btn-solid-color-hover, var(--btn-solid-color));
+}
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
