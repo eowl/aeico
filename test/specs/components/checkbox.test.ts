@@ -51,27 +51,12 @@ describe('Checkbox', () => {
     })
 
     it('sets the variant attribute on the container element', async () => {
-      const variant = randomItem(['checkbox', 'toggle'])
-      const el = await mount<Checkbox>(`<${TAG_NAME} variant="${variant}"></${TAG_NAME}>`)
+      const el = await mount<Checkbox>(`<${TAG_NAME} variant="checkbox"></${TAG_NAME}>`)
       await updated()
 
       const container = el.shadowRoot!.querySelector('.checkbox-container')
       expect(container).to.exist
-      expect(container!.getAttribute('variant')).to.equal(variant)
-    })
-
-    it('renders a toggle slider when variant is "toggle"', async () => {
-      const el = await mount<Checkbox>(`<${TAG_NAME} variant="toggle"></${TAG_NAME}>`)
-      await updated()
-      const slider = el.shadowRoot!.querySelector('.toggle-slider')
-      expect(slider).to.exist
-    })
-
-    it('does not render a toggle slider when variant is "checkbox"', async () => {
-      const el = await mount<Checkbox>(`<${TAG_NAME} variant="checkbox"></${TAG_NAME}>`)
-      await updated()
-      const slider = el.shadowRoot!.querySelector('.toggle-slider')
-      expect(slider).to.not.exist
+      expect(container!.getAttribute('variant')).to.equal('checkbox')
     })
   })
 })

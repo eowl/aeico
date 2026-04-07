@@ -1,1 +1,1 @@
-export type CheckboxVariant = 'checkbox' | 'toggle'
+export type CheckboxVariant = 'checkbox'

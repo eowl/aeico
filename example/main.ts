@@ -7,8 +7,9 @@ import {
   Icon,
   IconRegistry,
   IconButton,
+  Switch,
 } from '../src/components/index'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, IconButton]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, IconButton, Switch]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---

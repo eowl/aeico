@@ -2,23 +2,20 @@ import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
-import styles from '../styles/components/checkbox.css?inline'
-import { CheckboxVariant } from './defines'
+import styles from '../styles/components/switch.css?inline'
 
-class Checkbox extends AeicoField {
+class Switch extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
 
-  static tagName = 'checkbox'
+  static tagName = 'switch'
 
   static props: Props = {
     checked: { type: Boolean },
     defaultChecked: { type: Boolean },
-    variant: { type: String },
   }
 
   declare checked?: boolean
   declare defaultChecked?: boolean
-  declare variant?: CheckboxVariant
 
   protected static styles = [styleVariables, sizeCSS, styles]
 
@@ -54,10 +51,10 @@ class Checkbox extends AeicoField {
   }
 
   render() {
-    const { div, input } = this.builder
+    const { div, input, span } = this.builder
     this.build(() => {
-      div({ className: 'checkbox-container', variant: this.variant }, () => {
-        div({ className: 'checkbox-wrapper' }, () => {
+      div({ className: 'switch-container' }, () => {
+        div({ className: 'switch-wrapper' }, () => {
           this.fieldElement = input({
             type: 'checkbox',
             className: 'field-input',
@@ -65,6 +62,7 @@ class Checkbox extends AeicoField {
             disabled: Boolean(this.disabled),
             onChange: this.boundOnChange,
           }) as HTMLInputElement
+          span({ className: 'toggle-slider' })
         })
         this.renderActionButtons()
       })
@@ -72,13 +70,13 @@ class Checkbox extends AeicoField {
   }
 }
 
-Checkbox.register()
+Switch.register()
 
 declare global {
   interface HTMLElementTagNameMap {
-    'ae-checkbox': Checkbox
+    'ae-switch': Switch
   }
 }
 
-export default Checkbox
-export type CheckboxProps = InferProps<typeof Checkbox>
+export default Switch
+export type SwitchProps = InferProps<typeof Switch>
