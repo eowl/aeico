@@ -36,7 +36,6 @@ class IconButton extends AeicoComponent {
       const { button, svg, path } = this.builder
 
       button({
-        className: 'icon-btn',
         type: 'button',
         disabled: this.disabled,
         'aria-label': this.icon ?? '',
