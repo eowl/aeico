@@ -46,5 +46,13 @@ class Icon extends AeicoComponent {
   }
 }
 
+Icon.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-icon': Icon
+  }
+}
+
 export default Icon
 export type IconProps = InferProps<typeof Icon>

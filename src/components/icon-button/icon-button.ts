@@ -30,20 +30,6 @@ class IconButton extends AeicoComponent {
 
   protected static styles = [styleVariables, sizeCSS, colorCSS, style]
 
-  constructor() {
-    super()
-    this.addEventListener('click', this._handleClick)
-  }
-
-  private _handleClick = (event: Event) => {
-    if (this.disabled) {
-      event.preventDefault()
-      event.stopPropagation()
-      return
-    }
-    this.emit('click', { icon: this.icon, target: this })
-  }
-
   protected render() {
     this.build(() => {
       const def = this.icon ? IconRegistry.get(this.icon) : undefined
@@ -68,6 +54,14 @@ class IconButton extends AeicoComponent {
         }
       })
     })
+  }
+}
+
+IconButton.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-icon-button': IconButton
   }
 }
 

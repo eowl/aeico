@@ -75,5 +75,13 @@ class Checkbox extends AeicoField {
   }
 }
 
+Checkbox.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-checkbox': Checkbox
+  }
+}
+
 export default Checkbox
 export type CheckboxProps = InferProps<typeof Checkbox>

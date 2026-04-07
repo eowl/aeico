@@ -64,8 +64,13 @@ class TextInput extends AeicoField {
   }
 }
 
-// Component is no longer auto-registered
-// Call TextInput.register() explicitly if needed
+TextInput.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-text-input': TextInput
+  }
+}
 
 export default TextInput
 export type TextInputProps = InferProps<typeof TextInput>

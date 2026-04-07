@@ -125,8 +125,12 @@ class ButtonGroup extends AeicoComponent {
   }
 }
 
-if (!customElements.get('ae-button-group')) {
-  ButtonGroup.register()
+ButtonGroup.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-button-group': ButtonGroup
+  }
 }
 
 export default ButtonGroup

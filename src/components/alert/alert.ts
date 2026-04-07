@@ -91,9 +91,12 @@ class Alert extends AeicoComponent {
   }
 }
 
-// Auto-register when this module is imported as side effect
-if (!customElements.get('ae-alert')) {
-  Alert.register()
+Alert.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-alert': Alert
+  }
 }
 
 export default Alert

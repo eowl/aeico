@@ -82,5 +82,13 @@ class Select extends AeicoField {
   }
 }
 
+Select.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-select': Select
+  }
+}
+
 export default Select
 export type SelectProps = InferProps<typeof Select>

@@ -39,8 +39,6 @@ class Button extends AeicoComponent {
     active: { type: Boolean }
   }
 
-  static readonly eventPrefix = 'button'
-
   protected static useStyles = ['button']
   protected static styles = [styleVariables, sizeCSS, colorCSS, buttonStyle]
 
@@ -52,25 +50,6 @@ class Button extends AeicoComponent {
   declare active?: boolean
 
   private buttonElement: HTMLButtonElement | null = null
-
-  constructor() {
-    super()
-    this.addEventListener('click', this._handleClick)
-  }
-
-  private _handleClick = (event: Event) => {
-    if (this.disabled) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      return
-    }
-
-    this.emit('click', { 
-      variant: this.variant,
-      target: this 
-    })
-  }
 
   protected render() {
     if (this.buttonElement) return
@@ -118,9 +97,12 @@ class Button extends AeicoComponent {
 
 }
 
-// Auto-register when this module is imported as side effect
-if (!customElements.get('ae-button')) {
-  Button.register()
+Button.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-button': Button
+  }
 }
 
 export default Button

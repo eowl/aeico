@@ -213,5 +213,13 @@ class RadioGroup extends AeicoField {
   }
 }
 
+RadioGroup.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-radio-group': RadioGroup
+  }
+}
+
 export default RadioGroup
 export type RadioGroupProps = InferProps<typeof RadioGroup>

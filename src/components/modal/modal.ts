@@ -98,5 +98,11 @@ class Modal extends AeicoComponent {
 
 Modal.register()
 
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-modal': Modal
+  }
+}
+
 export default Modal
 export type ModalProps = InferProps<typeof Modal>

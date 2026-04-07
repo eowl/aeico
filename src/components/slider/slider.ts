@@ -277,5 +277,13 @@ class Slider extends AeicoField {
   }
 }
 
+Slider.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-slider': Slider
+  }
+}
+
 export default Slider
 export type SliderProps = InferProps<typeof Slider>
