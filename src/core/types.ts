@@ -71,13 +71,18 @@ export type PropertyTypeToTS<T extends PropertyType | undefined> =
   any
 
 /**
+ * Internal property keys excluded from InferProps output
+ */
+type InternalKeys = 'events'
+
+/**
  * Helper to exclude function properties and internal properties
  */
 type ExtractProperties<T> = {
-  [K in keyof T as T[K] extends (...args: any[]) => unknown
-    ? never 
-    : K extends 'events' | 'effectiveI18nConfig' | 'i18nEnabled' | 'i18nUnsubscribe'
-    ? never 
+  [K in keyof T as K extends InternalKeys
+    ? never
+    : T[K] extends (...args: any[]) => unknown
+    ? never
     : K]: T[K]
 }
 
