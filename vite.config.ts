@@ -9,7 +9,8 @@ export default defineConfig({
         core: path.resolve(__dirname, 'src/core/index.ts'),
         components: path.resolve(__dirname, 'src/components/index.ts'),
         mixins: path.resolve(__dirname, 'src/mixins/index.ts'),
-        localize: path.resolve(__dirname, 'src/localize/index.ts')
+        localize: path.resolve(__dirname, 'src/localize/index.ts'),
+        view: path.resolve(__dirname, 'src/view/index.ts')
       },
       name: 'Aeico',
       // Remove formats here, specify in output options instead
