@@ -1,6 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { html, getActiveBuilder } from '../../core/html'
+import { html, tags } from '../../core/html'
 import type { NormalizedOption, SliderOption, SliderOptions } from './defines'
 import style from '../styles/components/slider.css?inline'
 import variables from '../styles/variables.css?inline'
@@ -191,15 +191,14 @@ class Slider extends AeicoField {
 
           if (this.marks) {
             const marksData = this._getMarksData(normalized, attrs)
-            const b = getActiveBuilder()
             div({ key: 'marks', className: 'marks-container' }, () => {
               for (const m of marksData) {
-                b.span({
+                tags.span({
                   key: `mark-${m.value}`,
                   className: 'mark',
                   style: { left: `${m.pct}%` },
                 }, () => {
-                  b.span({ className: 'mark-label', textContent: m.label })
+                  tags.span({ className: 'mark-label', textContent: m.label })
                 })
               }
             })

@@ -1,6 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { html, getActiveBuilder } from '../../core/html'
+import { html, tags } from '../../core/html'
 import { t } from '../../localize'
 import type { SelectOptionValue, SelectOption, SelectOptions } from './defines'
 import style from '../styles/components/select.css?inline'
@@ -56,7 +56,7 @@ class Select extends AeicoField {
   }
 
   private _renderOptions(): void {
-    const { option } = getActiveBuilder()
+    const { option } = tags
     if (Array.isArray(this.options)) {
       for (const opt of this.options) {
         if (this._isSelectOption(opt)) {

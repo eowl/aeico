@@ -1,5 +1,5 @@
 import type { InferProps, Props, Watchers } from '../core/types'
-import { getActiveBuilder } from '../core/html'
+import { tags } from '../core/html'
 import AeicoComponent from './aeico-component'
 import { t } from '../localize'
 
@@ -97,7 +97,7 @@ class AeicoField extends AeicoComponent {
   }
 
   protected renderResetButton(force: boolean = false) {
-    const { button } = getActiveBuilder()
+    const { button } = tags
 
     if (force || this.resettable) {
       this.resetBtn = button({
@@ -110,7 +110,7 @@ class AeicoField extends AeicoComponent {
   }
 
   protected renderClearButton(force: boolean = false) {
-    const { button } = getActiveBuilder()
+    const { button } = tags
 
     if (force || this.clearable) {
       this.clearBtn = button({
