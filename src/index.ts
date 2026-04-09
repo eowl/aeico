@@ -34,6 +34,9 @@ export type { ComponentEventEmitter } from './core/events'
 export { default as ElementBuilder } from './core/element-builder'
 export type { BuilderProps } from './core/element-builder'
 
+export { html, render, getActiveBuilder } from './core/html'
+export type { RenderResult } from './core/html'
+
 export { default as styleStore } from './core/styles'
 export { StyleResult, supportAdoptStyle } from './core/styles'
 

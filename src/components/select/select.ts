@@ -1,5 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
+import { html, getActiveBuilder } from '../../core/html'
 import { t } from '../../localize'
 import type { SelectOptionValue, SelectOption, SelectOptions } from './defines'
 import style from '../styles/components/select.css?inline'
@@ -36,8 +37,7 @@ class Select extends AeicoField {
   }
 
   render() {
-    const { div, select, slot } = this.builder
-    this.build(() => {
+    return html(({ div, select, slot }) => {
       div({ className: 'select-container' }, () => {
         this.fieldElement = select({ onChange: this.boundOnChange }, () => {
           this._renderOptions()
@@ -50,13 +50,13 @@ class Select extends AeicoField {
         this._slotEl = slotEl
         this._slotEl.addEventListener('slotchange', () => this._onSlotChange())
       }
-    })
 
-    if (this.value) this.writeValue(this.value)
+      if (this.value) this.writeValue(this.value)
+    })
   }
 
   private _renderOptions(): void {
-    const { option } = this.builder
+    const { option } = getActiveBuilder()
     if (Array.isArray(this.options)) {
       for (const opt of this.options) {
         if (this._isSelectOption(opt)) {

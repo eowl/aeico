@@ -1,5 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
+import { html } from '../../core/html'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import styles from '../styles/components/switch.css?inline'
@@ -51,8 +52,7 @@ class Switch extends AeicoField {
   }
 
   render() {
-    const { div, input, span } = this.builder
-    this.build(() => {
+    return html(({ div, input, span }) => {
       div({ className: 'switch-container' }, () => {
         div({ className: 'switch-wrapper' }, () => {
           this.fieldElement = input({

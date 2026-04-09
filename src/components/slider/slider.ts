@@ -1,5 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
+import { html, getActiveBuilder } from '../../core/html'
 import type { NormalizedOption, SliderOption, SliderOptions } from './defines'
 import style from '../styles/components/slider.css?inline'
 import variables from '../styles/variables.css?inline'
@@ -173,9 +174,8 @@ class Slider extends AeicoField {
   render() {
     const normalized = this._normalizeOptions()
     const attrs = this._getRangeAttrs(normalized)
-    const { div, input, span } = this.builder
 
-    this.build(() => {
+    return html(({ div, input, span }) => {
       div({ className: 'range-container' }, () => {
         // Wrap range + optional marks in a column so marks don't push siblings
         div({ key: 'range-wrapper', className: 'range-wrapper' }, () => {
@@ -191,14 +191,15 @@ class Slider extends AeicoField {
 
           if (this.marks) {
             const marksData = this._getMarksData(normalized, attrs)
+            const b = getActiveBuilder()
             div({ key: 'marks', className: 'marks-container' }, () => {
               for (const m of marksData) {
-                this.builder.span({
+                b.span({
                   key: `mark-${m.value}`,
                   className: 'mark',
                   style: { left: `${m.pct}%` },
                 }, () => {
-                  this.builder.span({ className: 'mark-label', textContent: m.label })
+                  b.span({ className: 'mark-label', textContent: m.label })
                 })
               }
             })
@@ -230,9 +231,9 @@ class Slider extends AeicoField {
           this._numberInput = null
         }
       })
-    })
 
-    if (this.value != null) this.writeValue(this.value)
+      if (this.value != null) this.writeValue(this.value)
+    })
   }
 
   private _onRangeInput(): void {

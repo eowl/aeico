@@ -1,6 +1,7 @@
 import type { InferProps, Props } from '../../core/types'
 import { SVG_NS } from '../../core/types'
 import AeicoComponent from '../aeico-component'
+import { html } from '../../core/html'
 import styleVariables from '../styles/variables.css?inline'
 import style from '../styles/components/icon.css?inline'
 import type { IconSize, IconColor } from './defines'
@@ -29,11 +30,10 @@ class Icon extends AeicoComponent {
       this.style.removeProperty('--icon-size')
     }
 
-    this.build(() => {
+    return html(({ svg, path }) => {
       const def = this.name ? IconRegistry.get(this.name) : undefined
       if (!def) return
 
-      const { svg, path } = this.builder
       svg({
         className: 'icon-svg',
         viewBox: def.viewBox,

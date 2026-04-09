@@ -1,6 +1,7 @@
 import type { InferProps, Props } from '../../core/types'
 import { SVG_NS } from '../../core/types'
 import AeicoComponent from '../aeico-component'
+import { html } from '../../core/html'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import colorCSS from '../styles/color.css?inline'
@@ -31,9 +32,8 @@ class IconButton extends AeicoComponent {
   protected static styles = [styleVariables, sizeCSS, colorCSS, style]
 
   protected render() {
-    this.build(() => {
+    return html(({ button, svg, path }) => {
       const def = this.icon ? IconRegistry.get(this.icon) : undefined
-      const { button, svg, path } = this.builder
 
       button({
         type: 'button',

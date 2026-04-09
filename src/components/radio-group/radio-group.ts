@@ -1,5 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
+import { html, getActiveBuilder } from '../../core/html'
 import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import { t } from '../../localize'
 import type { RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './defines'
@@ -131,9 +132,8 @@ class RadioGroup extends AeicoField {
     const mode = (this.mode as RadioGroupMode) || 'default'
     const opts = this._allOptions()
     const current = this.value ?? ''
-    const { div, slot } = this.builder
 
-    this.build(() => {
+    return html(({ div, slot }) => {
       div({ className: 'rg-container' }, () => {
         if (mode === 'default') {
           this._renderRadio(opts, current)
@@ -158,7 +158,7 @@ class RadioGroup extends AeicoField {
     opts: Array<{ label: string; value: string }>,
     current: string,
   ): void {
-    const { label, input, span } = this.builder
+    const { label, input, span } = getActiveBuilder()
     for (const opt of opts) {
       const isChecked = opt.value === current
 
@@ -186,7 +186,7 @@ class RadioGroup extends AeicoField {
     current: string,
     mode: RadioGroupMode,
   ): void {
-    const { button } = this.builder
+    const { button } = getActiveBuilder()
     const count = opts.length
     for (let i = 0; i < count; i++) {
       const opt = opts[i]

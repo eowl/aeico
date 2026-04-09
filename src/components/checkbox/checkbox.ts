@@ -1,5 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
+import { html } from '../../core/html'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import styles from '../styles/components/checkbox.css?inline'
@@ -54,8 +55,7 @@ class Checkbox extends AeicoField {
   }
 
   render() {
-    const { div, input } = this.builder
-    this.build(() => {
+    return html(({ div, input }) => {
       div({ className: 'checkbox-container', variant: this.variant }, () => {
         div({ className: 'checkbox-wrapper' }, () => {
           this.fieldElement = input({

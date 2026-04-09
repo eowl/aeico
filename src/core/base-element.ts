@@ -6,8 +6,8 @@ import type {
   InferProps
 } from './types'
 import { createEventEmitter, type ComponentEventEmitter } from './events'
-import ElementBuilder from './element-builder'
 import { setRenderContext, clearRenderContext } from './render-context'
+import { render as applyRender, type RenderResult } from './html'
 import type { Updatable } from './render-context'
 
 /**
@@ -147,28 +147,7 @@ class BaseElement extends HTMLElement {
   static useShadowDOM: boolean = true
   static shadowOptions: ShadowRootInit = { mode: 'open', delegatesFocus: true }
 
-  private _elementBuilder?: ElementBuilder
-
-  protected get builder(): ElementBuilder {
-    return this._elementBuilder ??= new ElementBuilder()
-  }
-
-  private _building = false
   private _reflecting = false
-
-  protected build(cb: () => void) {
-    if (this._building) {
-      throw new Error('Already building. Nested build calls are not allowed.')
-    }
-
-    this._building = true
-
-    try {
-      this.builder.build(this.container, cb)
-    } finally {
-      this._building = false
-    }
-  }
 
   protected get container(): ShadowRoot | HTMLElement {
     const ctor = this.constructor as typeof BaseElement
@@ -348,13 +327,12 @@ class BaseElement extends HTMLElement {
     this.triggerWatchers(changedProps)
     this.invalidateComputed(changedProps)
 
-    if (typeof (this as Record<string, unknown>)['render'] === 'function') {
-      setRenderContext(this as unknown as Updatable)
-      try {
-        this.render()
-      } finally {
-        clearRenderContext()
-      }
+    setRenderContext(this as unknown as Updatable)
+    try {
+      const result = this.render()
+      if (result) applyRender(result, this.container)
+    } finally {
+      clearRenderContext()
     }
 
     this.onUpdated(changedProps)
@@ -477,7 +455,7 @@ class BaseElement extends HTMLElement {
    * Render method to override in subclasses. Called during the update cycle after onPrepare and before onUpdated.
    * Should contain the logic to update the component's DOM based on its props/state.
    */
-  protected render(): void {}
+  protected render(): RenderResult | void {}
 
   /**
    * Lifecycle methods to override in subclasses:

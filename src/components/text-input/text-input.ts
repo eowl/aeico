@@ -1,5 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
+import { html } from '../../core/html'
 import variables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import style from '../styles/components/text-input.css?inline'
@@ -20,9 +21,7 @@ class TextInput extends AeicoField {
   protected static styles = [variables, sizeCSS, style]
 
   render() {
-    this.build(() => {
-      const { div, input } = this.builder
-
+    return html(({ div, input }) => {
       div({ className: 'input-container' }, () => {
         this.fieldElement = input({
           type: this.type || 'text',
@@ -32,12 +31,12 @@ class TextInput extends AeicoField {
 
         this.renderActionButtons()
       })
-    })
 
-    if (this.fieldElement && this.value != null) {
-      this.fieldElement.value = String(this.value)
-    }
-    this.updateClearButtonVisibility()
+      if (this.fieldElement && this.value != null) {
+        this.fieldElement.value = String(this.value)
+      }
+      this.updateClearButtonVisibility()
+    })
   }
 
   /**

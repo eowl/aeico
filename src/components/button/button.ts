@@ -4,6 +4,7 @@ import sizeCSS from '../styles/size.css?inline'
 import colorCSS from '../styles/color.css?inline'
 import buttonStyle from '../styles/components/button.css?inline'
 import AeicoComponent from '../aeico-component'
+import { html } from '../../core/html'
 import { ButtonColor, ButtonSize, ButtonVariant } from './defines'
 
 /**
@@ -52,9 +53,7 @@ class Button extends AeicoComponent {
   private buttonElement: HTMLButtonElement | null = null
 
   protected render() {
-    this.build(() => {
-      const { button, slot } = this.builder
-
+    return html(({ button, slot }) => {
       this.buttonElement = button({
         type: this.type || 'button',
         disabled: this.disabled,

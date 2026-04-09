@@ -2,6 +2,7 @@ import type { InferProps, Props } from '../../core/types'
 import styleVariables from '../styles/variables.css?inline'
 import style from '../styles/components/modal.css?inline'
 import AeicoComponent from '../aeico-component'
+import { html } from '../../core/html'
 import { t } from '../../localize'
 
 class Modal extends AeicoComponent {
@@ -34,9 +35,7 @@ class Modal extends AeicoComponent {
   }
 
   protected render() {
-    this.build(() => {
-      const { div, h3, button, slot } = this.builder
-
+    return html(({ div, h3, button, slot }) => {
       div({ 
         className: 'modal-overlay',
         onclick: (e: Event) => this._handleOverlayClick(e)

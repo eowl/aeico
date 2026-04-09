@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll, updated } from '../../helpers/mount.js'
 import BaseElement from '../../../src/core/base-element.js'
+import { html, render as applyRender, getActiveBuilder } from '../../../src/core/html.js'
 import type { Props } from '../../../src/core/types.js'
 
 afterEach(() => {
@@ -12,18 +13,6 @@ let _counter = 0
 function createTestElement(Base = BaseElement) {
   const tag = `test-build-el-${++_counter}`
   const El = class extends Base {
-    callBuild(cb: () => void) { 
-      return this.build(cb) 
-    }
-    
-    callBuildNested() { 
-      this.build(() => { this.build(() => {}) })
-    }
-
-    get testBuilder() { 
-      return this.builder 
-    }
-
     get testContainer() { 
       return this.container 
     }
@@ -53,59 +42,32 @@ describe('BaseElement', () => {
     expect(BaseElement.props).to.be.an('object')
   })
 
-  describe('build()', () => {
-    it('execute callback then render to shadowRoot', async () => {
+  describe('html() and render()', () => {
+    it('render template to shadowRoot via html() + render()', async () => {
       const { tag } = createTestElement()
       const el = await mount<InstanceType<ReturnType<typeof createTestElement>['El']>>(`<${tag}></${tag}>`)
 
-      el.callBuild(() => {
-        const { div } = el.testBuilder
+      const tpl = html(({ div }) => {
         div({ textContent: 'hello' })
       })
+      applyRender(tpl, el.shadowRoot!)
 
       expect(el.shadowRoot!.querySelector('div')).to.exist
       expect(el.shadowRoot!.querySelector('div')!.textContent).to.equal('hello')
     })
 
-    it('throw "Already building" error when nested build is called', async () => {
+    it('multiple render calls reuse DOM nodes through diffing, only updating content', async () => {
       const { tag } = createTestElement()
       const el = await mount<InstanceType<ReturnType<typeof createTestElement>['El']>>(`<${tag}></${tag}>`)
 
-      expect(() => el.callBuildNested()).to.throw('Already building')
-    })
-
-    it('reset _building flag after callback throws, allowing subsequent build calls', async () => {
-      const { tag } = createTestElement()
-      const el = await mount<InstanceType<ReturnType<typeof createTestElement>['El']>>(`<${tag}></${tag}>`)
-
-      expect(() => {
-        el.callBuild(() => { throw new Error('callback error') })
-      }).to.throw('callback error')
-
-      expect(() => {
-        el.callBuild(() => {
-          const { span } = el.testBuilder
-          span({ textContent: 'recovered' })
-        })
-      }).not.to.throw()
-
-      expect(el.shadowRoot!.querySelector('span')!.textContent).to.equal('recovered')
-    })
-
-    it('multiple build calls reuse DOM nodes through diffing, only updating content', async () => {
-      const { tag } = createTestElement()
-      const el = await mount<InstanceType<ReturnType<typeof createTestElement>['El']>>(`<${tag}></${tag}>`)
-
-      el.callBuild(() => {
-        const { div } = el.testBuilder
+      applyRender(html(({ div }) => {
         div({ className: 'box', textContent: 'first' })
-      })
+      }), el.shadowRoot!)
       const firstNode = el.shadowRoot!.querySelector('.box')
 
-      el.callBuild(() => {
-        const { div } = el.testBuilder
+      applyRender(html(({ div }) => {
         div({ className: 'box', textContent: 'second' })
-      })
+      }), el.shadowRoot!)
       const secondNode = el.shadowRoot!.querySelector('.box')
 
       expect(firstNode).to.equal(secondNode)
@@ -116,29 +78,24 @@ describe('BaseElement', () => {
       const tag = `test-no-shadow-${++_counter}`
       class NoShadowEl extends BaseElement {
         static useShadowDOM = false
-
-        callBuild(cb: () => void) { return this.build(cb) }
-        get testBuilder()            { return this.builder }
       }
       customElements.define(tag, NoShadowEl)
 
       const el = await mount<NoShadowEl>(`<${tag}></${tag}>`)
 
-      el.callBuild(() => {
-        const { p } = el.testBuilder
+      applyRender(html(({ p }) => {
         p({ textContent: 'light dom' })
-      })
+      }), el)
 
       expect(el.shadowRoot).to.be.null
       expect(el.querySelector('p')!.textContent).to.equal('light dom')
     })
 
-    it('render() automatically calls build via executeUpdate, shadowRoot has content after first render', async () => {
+    it('render() in component returns html() result, shadowRoot has content after first render', async () => {
       const tag = `test-auto-render-${++_counter}`
       class AutoRenderEl extends BaseElement {
         protected render() {
-          this.build(() => {
-            const { span } = this.builder
+          return html(({ span }) => {
             span({ textContent: 'auto' })
           })
         }
@@ -149,6 +106,30 @@ describe('BaseElement', () => {
       await updated()
 
       expect(el.shadowRoot!.querySelector('span')!.textContent).to.equal('auto')
+    })
+
+    it('getActiveBuilder() works inside render context', async () => {
+      const tag = `test-active-builder-${++_counter}`
+      let builderInside: unknown = null
+      class TestEl extends BaseElement {
+        protected render() {
+          return html((builder) => {
+            builderInside = getActiveBuilder()
+            expect(builderInside).to.equal(builder)
+            builder.div({ textContent: 'ok' })
+          })
+        }
+      }
+      customElements.define(tag, TestEl)
+
+      await mount<TestEl>(`<${tag}></${tag}>`)
+      await updated()
+
+      expect(builderInside).to.not.be.null
+    })
+
+    it('getActiveBuilder() throws outside render context', () => {
+      expect(() => getActiveBuilder()).to.throw('outside of a render() context')
     })
   })
 

@@ -26,6 +26,10 @@ export { default as AeicoElement } from './aeico-element'
 export { getCurrentContext } from './render-context'
 export type { Updatable } from './render-context'
 
+// Template & render
+export { html, render, getActiveBuilder } from './html'
+export type { RenderResult } from './html'
+
 // Composer (DOM Builder)
 export { default as Composer } from './element-builder'
 export type { BuilderProps } from './element-builder'

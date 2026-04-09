@@ -3,6 +3,7 @@ import styleVariables from '../styles/variables.css?inline'
 import colorCSS from '../styles/color.css?inline'
 import alertStyle from '../styles/components/alert.css?inline'
 import AeicoComponent from '../aeico-component'
+import { html } from '../../core/html'
 import { t } from '../../localize'
 import type { AlertColor, AlertSize, AlertVariant } from './defines'
 
@@ -52,8 +53,7 @@ class Alert extends AeicoComponent {
   declare invisible?: boolean
 
   protected render() {
-    this.build(() => {
-      const { div, slot, button, span } = this.builder
+    return html(({ div, slot, button, span }) => {
       div({ 
         className: 'alert', 
         role: 'alert', 

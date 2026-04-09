@@ -2,6 +2,7 @@ import type { InferProps, Props } from '../../core/types'
 import styleVariables from '../styles/variables.css?inline'
 import buttonGroupStyle from '../styles/components/button-group.css?inline'
 import AeicoComponent from '../aeico-component'
+import { html } from '../../core/html'
 import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import Button from '../button/button'
 
@@ -67,9 +68,7 @@ class ButtonGroup extends AeicoComponent {
   }
 
   protected render() {
-    this.build(() => {
-      const { slot } = this.builder
-      
+    return html(({ slot }) => {
       this.slotEl = slot()
       this.slotEl.addEventListener('slotchange', () => this._syncChildren())
       this._syncChildren()
