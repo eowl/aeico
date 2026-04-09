@@ -31,11 +31,11 @@ export type { LocaleProvider, LocaleRegistry } from './localize/index'
 export { createEventEmitter } from './core/events'
 export type { ComponentEventEmitter } from './core/events'
 
-export { default as ElementBuilder } from './core/element-builder'
-export type { BuilderProps } from './core/element-builder'
+export { ElementBuilder } from './view'
+export type { BuilderProps } from './view'
 
-export { html, render, getActiveBuilder, tags } from './core/html'
-export type { RenderResult } from './core/html'
+export { html, render, getActiveBuilder, tags } from './view'
+export type { RenderResult } from './view'
 
 export { default as styleStore } from './core/styles'
 export { StyleResult, supportAdoptStyle } from './core/styles'

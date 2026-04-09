@@ -7,7 +7,7 @@ import type {
 } from './types'
 import { createEventEmitter, type ComponentEventEmitter } from './events'
 import { setRenderContext, clearRenderContext } from './render-context'
-import { render as applyRender, type RenderResult } from './html'
+import { render as applyRender, type RenderResult } from '../view'
 import type { Updatable } from './render-context'
 
 /**

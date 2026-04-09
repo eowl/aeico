@@ -12,7 +12,7 @@ export class RenderResult {
   constructor(readonly _cb: (builder: ElementBuilder) => void) {}
 }
 
-class HtmlContext {
+class Renderer {
   private readonly _builderCache = new WeakMap<Node, ElementBuilder>()
   private _activeBuilder: ElementBuilder | null = null
 
@@ -47,7 +47,8 @@ class HtmlContext {
   }
 
   /**
-   * Create a render template.
+   * Create a render structure
+   * html is a DSL function, is not a template literal tag
    *
    * The callback receives an `ElementBuilder` whose tag helpers
    * (`div`, `span`, …) can be destructured for convenience.
@@ -97,4 +98,4 @@ class HtmlContext {
   }
 }
 
-export const { html, render, getActiveBuilder, tags } = new HtmlContext()
+export const { html, render, getActiveBuilder, tags } = new Renderer()

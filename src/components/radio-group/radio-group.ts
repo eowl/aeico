@@ -1,6 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { html, tags } from '../../core/html'
+import { html, tags } from '../../view'
 import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import { t } from '../../localize'
 import type { RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './defines'

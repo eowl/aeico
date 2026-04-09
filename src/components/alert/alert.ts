@@ -3,7 +3,7 @@ import styleVariables from '../styles/variables.css?inline'
 import colorCSS from '../styles/color.css?inline'
 import alertStyle from '../styles/components/alert.css?inline'
 import AeicoComponent from '../aeico-component'
-import { html } from '../../core/html'
+import { html } from '../../view'
 import { t } from '../../localize'
 import type { AlertColor, AlertSize, AlertVariant } from './defines'
 

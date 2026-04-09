@@ -2,7 +2,7 @@ import type { InferProps, Props } from '../../core/types'
 import styleVariables from '../styles/variables.css?inline'
 import buttonGroupStyle from '../styles/components/button-group.css?inline'
 import AeicoComponent from '../aeico-component'
-import { html } from '../../core/html'
+import { html } from '../../view'
 import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import Button from '../button/button'
 

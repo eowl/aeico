@@ -4,7 +4,7 @@ import sizeCSS from '../styles/size.css?inline'
 import colorCSS from '../styles/color.css?inline'
 import buttonStyle from '../styles/components/button.css?inline'
 import AeicoComponent from '../aeico-component'
-import { html } from '../../core/html'
+import { html } from '../../view'
 import { ButtonColor, ButtonSize, ButtonVariant } from './defines'
 
 /**

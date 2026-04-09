@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai'
-import ElementBuilder from '../../../src/core/element-builder.js'
+import ElementBuilder from '../../../src/view/element-builder.js'
 
 describe('ElementBuilder - build()', () => {
   let builder: ElementBuilder

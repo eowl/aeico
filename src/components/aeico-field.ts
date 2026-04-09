@@ -1,5 +1,5 @@
 import type { InferProps, Props, Watchers } from '../core/types'
-import { tags } from '../core/html'
+import { tags } from '../view'
 import AeicoComponent from './aeico-component'
 import { t } from '../localize'
 

@@ -1,7 +1,7 @@
 import type { InferProps, Props } from '../../core/types'
 import { SVG_NS } from '../../core/types'
 import AeicoComponent from '../aeico-component'
-import { html } from '../../core/html'
+import { html } from '../../view'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import colorCSS from '../styles/color.css?inline'

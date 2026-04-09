@@ -1,6 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { html } from '../../core/html'
+import { html } from '../../view'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import styles from '../styles/components/switch.css?inline'

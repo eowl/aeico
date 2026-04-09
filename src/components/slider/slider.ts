@@ -1,6 +1,6 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
-import { html, tags } from '../../core/html'
+import { html, tags } from '../../view'
 import type { NormalizedOption, SliderOption, SliderOptions } from './defines'
 import style from '../styles/components/slider.css?inline'
 import variables from '../styles/variables.css?inline'

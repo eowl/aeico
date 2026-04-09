@@ -1,4 +1,4 @@
-import { SVG_NS } from './types'
+const SVG_NS = 'http://www.w3.org/2000/svg'
 
 type _Props = {
   className?: string | Record<string, boolean>
