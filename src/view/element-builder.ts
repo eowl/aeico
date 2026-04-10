@@ -206,6 +206,8 @@ class ElementBuilder {
         el.addEventListener(eventName, value as EventListener)
       } else if (typeof value === 'boolean') {
         el.setAttribute(ck, '')
+      } else if (typeof value === 'object') {
+        (el as unknown as Record<string, unknown>)[ck] = value
       } else {
         el.setAttribute(ck, String(value as string | number | bigint))
       }
@@ -218,6 +220,8 @@ class ElementBuilder {
         if (ck === 'textContent' && skipTextContent) continue
         if (ck.startsWith('on:') && typeof oldValue === 'function') {
           el.removeEventListener(ck.slice(3), oldValue as EventListener)
+        } else if (typeof oldValue === 'object' && oldValue !== null) {
+          (el as unknown as Record<string, unknown>)[ck] = null
         } else {
           this._removeProp(el, ck)
         }

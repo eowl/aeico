@@ -650,4 +650,97 @@ describe('ElementBuilder', () => {
       expect(el.getAttribute('data-value')).to.equal('{"key": "value"}')
     })
   })
+
+  describe('Object/array property assignment', () => {
+    before(() => {
+      if (!customElements.get('test-obj-element')) {
+        customElements.define('test-obj-element', class extends HTMLElement {
+          data: object | null = null
+          items: unknown[] | null = null
+        })
+      }
+    })
+
+    it('sets object property via DOM property assignment', () => {
+      const obj = { x: 1, y: 2 }
+      const el = (builder as any)['test-obj-element']({ data: obj }) as HTMLElement & { data: object | null }
+      expect(el.data).to.equal(obj)
+      expect(el.getAttribute('data')).to.be.null
+    })
+
+    it('updates object property when reference changes', () => {
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+
+      const obj1 = { value: 'first' }
+      const obj2 = { value: 'second' }
+
+      builder.build(container, () => {
+        ;(builder as any)['test-obj-element']({ data: obj1 })
+      })
+      const el = container.firstElementChild as HTMLElement & { data: object | null }
+      expect(el.data).to.equal(obj1)
+
+      builder.build(container, () => {
+        ;(builder as any)['test-obj-element']({ data: obj2 })
+      })
+      expect(container.firstElementChild).to.equal(el)
+      expect(el.data).to.equal(obj2)
+
+      container.remove()
+    })
+
+    it('skips reassignment when same object reference', () => {
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+
+      const obj = { value: 'same' }
+      let assignCount = 0
+
+      builder.build(container, () => {
+        ;(builder as any)['test-obj-element']({ data: obj })
+      })
+
+      const el = container.firstElementChild as HTMLElement & { data: object | null }
+      Object.defineProperty(el, 'data', {
+        get() { return obj },
+        set(_v) { assignCount++ },
+        configurable: true,
+      })
+
+      builder.build(container, () => {
+        ;(builder as any)['test-obj-element']({ data: obj })
+      })
+
+      expect(assignCount).to.equal(0)
+      container.remove()
+    })
+
+    it('removes object property by setting null when prop is dropped', () => {
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+
+      const obj = { value: 'hello' }
+
+      builder.build(container, () => {
+        ;(builder as any)['test-obj-element']({ data: obj })
+      })
+      const el = container.firstElementChild as HTMLElement & { data: object | null }
+      expect(el.data).to.equal(obj)
+
+      builder.build(container, () => {
+        ;(builder as any)['test-obj-element']({})
+      })
+      expect(el.data).to.be.null
+
+      container.remove()
+    })
+
+    it('sets array property via DOM property assignment', () => {
+      const arr = [1, 2, 3]
+      const el = (builder as any)['test-obj-element']({ items: arr }) as HTMLElement & { items: unknown[] | null }
+      expect(el.items).to.equal(arr)
+      expect(el.getAttribute('items')).to.be.null
+    })
+  })
 })
