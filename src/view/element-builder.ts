@@ -1,5 +1,7 @@
 const SVG_NS = 'http://www.w3.org/2000/svg'
 
+type _Style = Partial<CSSStyleDeclaration> & Record<string, string>
+
 type _Props = {
   className?: string | Record<string, boolean>
   text?: string
@@ -7,7 +9,7 @@ type _Props = {
   id?: string
   part?: string
   role?: string
-  style?: Partial<CSSStyleDeclaration>
+  style?: _Style
   key?: string
 }
 
@@ -199,7 +201,13 @@ class ElementBuilder {
       } else if (ck === 'textContent') {
         el.textContent = value as string
       } else if (ck === 'style') {
-        if (typeof value === 'object' && 'style' in el) Object.assign((el as HTMLElement).style, value)
+        if (typeof value === 'object' && 'style' in el) {
+          const s = (el as HTMLElement).style
+          for (const [k, v] of Object.entries(value as Record<string, string>)) {
+            if (k.startsWith('--')) s.setProperty(k, v)
+            else (s as unknown as Record<string, string>)[k] = v
+          }
+        }
       } else if (ck.startsWith('on:')) {
         const eventName = ck.slice(3)
         if (oldCache?.[ck]) el.removeEventListener(eventName, oldCache[ck] as EventListener)
@@ -220,6 +228,12 @@ class ElementBuilder {
         if (ck === 'textContent' && skipTextContent) continue
         if (ck.startsWith('on:') && typeof oldValue === 'function') {
           el.removeEventListener(ck.slice(3), oldValue as EventListener)
+        } else if (ck === 'style' && typeof oldValue === 'object' && oldValue !== null && 'style' in el) {
+          const s = (el as HTMLElement).style
+          for (const k of Object.keys(oldValue as Record<string, string>)) {
+            if (k.startsWith('--')) s.removeProperty(k)
+            else (s as unknown as Record<string, string>)[k] = ''
+          }
         } else if (typeof oldValue === 'object' && oldValue !== null) {
           (el as unknown as Record<string, unknown>)[ck] = null
         } else {

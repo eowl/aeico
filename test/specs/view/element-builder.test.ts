@@ -148,6 +148,35 @@ describe('ElementBuilder', () => {
         const el = builder.div({ style: {} })
         expect(el.style.cssText).to.equal('')
       })
+
+      it('sets CSS custom properties via setProperty', () => {
+        const el = builder.div({ style: { '--field-min-width': '100px' } })
+        expect(el.style.getPropertyValue('--field-min-width')).to.equal('100px')
+      })
+
+      it('sets mixed regular and custom properties', () => {
+        const el = builder.div({ style: { color: 'red', '--my-color': 'blue' } })
+        expect(el.style.color).to.equal('red')
+        expect(el.style.getPropertyValue('--my-color')).to.equal('blue')
+      })
+
+      it('removes CSS custom properties when style prop is dropped', () => {
+        const container = document.createElement('div')
+        document.body.appendChild(container)
+
+        builder.build(container, () => {
+          builder.div({ style: { '--foo': '42px' } })
+        })
+        const el = container.firstElementChild as HTMLElement
+        expect(el.style.getPropertyValue('--foo')).to.equal('42px')
+
+        builder.build(container, () => {
+          builder.div({})
+        })
+        expect(el.style.getPropertyValue('--foo')).to.equal('')
+
+        container.remove()
+      })
     })
 
     describe('boolean attributes', () => {
