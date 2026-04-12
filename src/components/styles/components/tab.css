@@ -16,6 +16,7 @@ button {
   font-size: inherit;
   font-family: inherit;
   color: var(--ae-tab-color, #909090);
+  font-size: var(--ae-tab-font-size, inherit);
   transition: color 0.15s, border-color 0.15s;
   outline: none;
   white-space: nowrap;
