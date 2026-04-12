@@ -274,7 +274,9 @@ class ElementBuilder {
 
       // on* event handlers → on:eventname
       if (key.startsWith('on') && typeof value === 'function') {
-        cache[`on:${key.slice(2).toLowerCase()}`] = value
+        const rest = key.slice(2)
+        const normalized = rest.charAt(0).toLowerCase() + rest.slice(1)
+        cache[`on:${camelToKebab(normalized)}`] = value
         continue
       }
 

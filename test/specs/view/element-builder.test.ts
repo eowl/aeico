@@ -234,14 +234,72 @@ describe('ElementBuilder', () => {
         el.dispatchEvent(new Event('change', { bubbles: true }))
       })
 
-      it('converts event name to lowercase', (done) => {
+      it('native multi-word event: onMouseover (all-lowercase) → mouseover', (done) => {
         const el = builder.div({
-          onMouseOver: (e: Event) => {
+          onMouseover: (e: Event) => {
             expect(e.type).to.equal('mouseover')
             done()
           }
         })
         el.dispatchEvent(new Event('mouseover', { bubbles: true }))
+      })
+
+      it('converts camelCase compound event name to kebab-case (e.g. onTabChange → tab-change)', (done) => {
+        const el = builder.div({
+          onTabChange: (e: Event) => {
+            expect(e.type).to.equal('tab-change')
+            done()
+          }
+        })
+        el.dispatchEvent(new CustomEvent('tab-change', { bubbles: true }))
+      })
+
+      it('converts multi-word camelCase event name (e.g. onFieldReset → field-reset)', (done) => {
+        const el = builder.div({
+          onFieldReset: (e: Event) => {
+            expect(e.type).to.equal('field-reset')
+            done()
+          }
+        })
+        el.dispatchEvent(new CustomEvent('field-reset', { bubbles: true }))
+      })
+
+      it('removes old listener and attaches new one on update', (done) => {
+        const root = document.createElement('div')
+        let firstCalled = false
+
+        builder.build(root, () => {
+          builder.button({
+            onClick: () => { firstCalled = true }
+          })
+        })
+
+        builder.build(root, () => {
+          builder.button({
+            onClick: () => {
+              expect(firstCalled).to.be.false
+              done()
+            }
+          })
+        })
+
+        ;(root.firstChild as HTMLElement).click()
+      })
+
+      it('removes listener when handler is removed from props', () => {
+        const root = document.createElement('div')
+        let called = false
+
+        builder.build(root, () => {
+          builder.button({ onClick: () => { called = true } })
+        })
+
+        builder.build(root, () => {
+          builder.button({})
+        })
+
+        ;(root.firstChild as HTMLElement).click()
+        expect(called).to.be.false
       })
     })
 

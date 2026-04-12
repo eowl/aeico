@@ -16,12 +16,8 @@ class Tab extends AeicoComponent {
 
   protected static styles = [tabStyle]
 
-  constructor() {
-    super()
-    this.setAttribute('slot', 'tab')
-  }
-
   connectedCallback() {
+    this.setAttribute('slot', 'tab')
     super.connectedCallback()
     this.addEventListener('click', this._handleClick)
   }
@@ -33,7 +29,7 @@ class Tab extends AeicoComponent {
 
   private _handleClick = () => {
     if (this.disabled) return
-    this.dispatchEvent(new CustomEvent('ae-tab-click', {
+    this.dispatchEvent(new CustomEvent('_tab-click', {
       bubbles: true,
       composed: true,
     }))

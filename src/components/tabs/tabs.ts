@@ -66,14 +66,14 @@ class Tabs extends AeicoComponent {
 
   connectedCallback() {
     super.connectedCallback()
-    this.addEventListener('ae-tab-click', this._handleTabClick)
+    this.addEventListener('_tab-click', this._handleTabClick)
     this._observer = new MutationObserver(() => this.update())
     this._observer.observe(this, { childList: true })
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
-    this.removeEventListener('ae-tab-click', this._handleTabClick)
+    this.removeEventListener('_tab-click', this._handleTabClick)
     this._observer?.disconnect()
     this._observer = null
   }
@@ -109,11 +109,7 @@ class Tabs extends AeicoComponent {
     const pairs = this._getPairs()
     if (index === (this.activeIndex ?? 0) || index >= pairs.length) return
     this.activeIndex = index
-    this.dispatchEvent(new CustomEvent('tab-change', {
-      bubbles: true,
-      composed: true,
-      detail: { index },
-    }))
+    this.emit('change', { index })
   }
 
   protected render() {
