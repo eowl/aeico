@@ -8,8 +8,11 @@ import {
   IconRegistry,
   IconButton,
   Switch,
+  Tabs,
+  Tab,
+  TabPanel,
 } from '../src/components/index'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, IconButton, Switch]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, IconButton, Switch, Tabs, Tab, TabPanel]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---
@@ -180,7 +183,7 @@ function appendLog(msg: string) {
 clearBtn.addEventListener('click', () => { log.innerHTML = '' })
 
 // Listen for component events on body (they bubble)
-const events = ['field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'modal-open', 'modal-close']
+const events = ['field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'modal-open', 'modal-close', 'tab-change']
 events.forEach(eventName => {
   document.body.addEventListener(eventName, ((e: CustomEvent) => {
     const tag = (e.target as HTMLElement).tagName.toLowerCase()

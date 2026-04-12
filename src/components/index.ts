@@ -47,6 +47,7 @@ export { default as Modal } from './modal'
 export { default as Icon } from './icon/icon'
 export { default as IconRegistry } from './icon/registry'
 export { default as IconButton } from './icon-button'
+export { Tabs, Tab, TabPanel } from './tabs'
 
 // Component types
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
