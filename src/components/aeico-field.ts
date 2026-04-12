@@ -52,17 +52,6 @@ class AeicoField extends AeicoComponent {
   protected readonly boundOnReset = () => this.onReset()
   protected readonly boundOnClear = () => this.onClear()
 
-  /**
-   * Event prefix for field components
-   * All field events will be prefixed with 'field-'
-   * 
-   * @example
-   * this.emit('change')  // Dispatches: 'field-change'
-   * this.emit('reset')   // Dispatches: 'field-reset'
-   * this.emit('clear')   // Dispatches: 'field-clear'
-   */
-  static readonly eventPrefix: string = 'field'
-
   // Declare reactive properties for TypeScript
   declare value?: string
   declare defaultValue?: string
