@@ -1,3 +1,5 @@
+/* @deprecated – Use <ae-button> with <ae-icon> slot instead. */
+
 :host {
   display: inline-flex;
   font-size: var(--size-m);
@@ -103,7 +105,11 @@ button:disabled {
   display: block;
   width:  var(--ib-icon-size);
   height: var(--ib-icon-size);
-  fill: currentColor;
+  fill: var(--icon-fill, currentColor);
+  stroke: var(--icon-stroke, none);
+  stroke-width: var(--icon-stroke-width, 2);
+  stroke-linecap: var(--icon-stroke-linecap, round);
+  stroke-linejoin: var(--icon-stroke-linejoin, round);
   pointer-events: none;
   overflow: visible;
   flex-shrink: 0;

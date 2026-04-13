@@ -51,6 +51,41 @@ class Button extends AeicoComponent {
   declare active?: boolean
 
   private buttonElement: HTMLButtonElement | null = null
+  private _autoAriaLabel = false
+
+  protected onMounted() {
+    const slot = this.shadowRoot?.querySelector('slot:not([name])')
+    slot?.addEventListener('slotchange', this._handleSlotChange)
+    this._handleSlotChange()
+  }
+
+  private _handleSlotChange = () => {
+    const slot = this.shadowRoot?.querySelector('slot:not([name])') as HTMLSlotElement | null
+    const nodes = slot?.assignedNodes() ?? []
+    // Icon-only: exactly one element (ae-icon) and no meaningful text nodes
+    const elements = nodes.filter((n): n is Element => n.nodeType === Node.ELEMENT_NODE)
+    const hasText = nodes.some(
+      n => n.nodeType === Node.TEXT_NODE && n.textContent!.trim() !== ''
+    )
+    const isIconOnly =
+      !hasText &&
+      elements.length === 1 &&
+      elements[0].tagName.toLowerCase() === 'ae-icon'
+
+    if (isIconOnly) {
+      this.setAttribute('icon-only', '')
+      if (!this.hasAttribute('aria-label') || this._autoAriaLabel) {
+        this.setAttribute('aria-label', elements[0].getAttribute('name') ?? '')
+        this._autoAriaLabel = true
+      }
+    } else {
+      this.removeAttribute('icon-only')
+      if (this._autoAriaLabel) {
+        this.removeAttribute('aria-label')
+        this._autoAriaLabel = false
+      }
+    }
+  }
 
   protected render() {
     return html(({ button, slot }) => {

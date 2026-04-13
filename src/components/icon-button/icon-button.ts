@@ -1,17 +1,21 @@
 import type { InferProps, Props } from '../../core/types'
-import { SVG_NS } from '../../core/types'
 import AeicoComponent from '../aeico-component'
 import { html } from '../../view'
-import styleVariables from '../styles/variables.css?inline'
-import sizeCSS from '../styles/size.css?inline'
-import colorCSS from '../styles/color.css?inline'
-import style from '../styles/components/icon-button.css?inline'
 import type { IconColor } from '../icon/defines'
-import IconRegistry from '../icon/registry'
+// Ensure ae-button and ae-icon are registered
+import '../button/button'
+import '../icon/icon'
 
 export type IconButtonVariant = 'filled' | 'outlined' | 'subtle' | 'text'
 export type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg'
 
+/**
+ * @deprecated Use `<ae-button>` with an `<ae-icon>` slot instead.
+ *
+ * ```html
+ * <ae-button color="primary"><ae-icon name="star"></ae-icon></ae-button>
+ * ```
+ */
 class IconButton extends AeicoComponent {
   static tagName = 'icon-button'
 
@@ -29,28 +33,17 @@ class IconButton extends AeicoComponent {
   declare variant?: IconButtonVariant
   declare disabled?: boolean
 
-  protected static styles = [styleVariables, sizeCSS, colorCSS, style]
+  protected static styles = [':host { display: contents; }']
 
   protected render() {
-    return html(({ button, svg, path }) => {
-      const def = this.icon ? IconRegistry.get(this.icon) : undefined
-
-      button({
-        type: 'button',
+    return html(({ aeButton, aeIcon }) => {
+      aeButton({
+        color: this.color,
+        variant: this.variant,
+        size: this.size,
         disabled: this.disabled,
-        'aria-label': this.icon ?? '',
-        part: 'button',
       }, () => {
-        if (def) {
-          svg({
-            className: 'icon-svg',
-            viewBox: def.viewBox,
-            'aria-hidden': 'true',
-            xmlns: SVG_NS,
-          }, () => {
-            path({ d: def.path })
-          })
-        }
+        aeIcon({ name: this.icon })
       })
     })
   }

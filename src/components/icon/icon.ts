@@ -34,11 +34,20 @@ class Icon extends AeicoComponent {
       const def = this.name ? IconRegistry.get(this.name) : undefined
       if (!def) return
 
+      const svgStyle = def.stroke
+        ? {
+            '--icon-fill': 'none',
+            '--icon-stroke': 'currentColor',
+            '--icon-stroke-width': String(def.strokeWidth ?? 2),
+          } as Record<string, string>
+        : undefined
+
       svg({
         className: 'icon-svg',
         viewBox: def.viewBox,
         'aria-hidden': 'true',
         xmlns: SVG_NS,
+        ...(svgStyle ? { style: svgStyle } : {}),
       }, () => {
         path({ d: def.path })
       })

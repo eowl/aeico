@@ -5,6 +5,8 @@ export type IconColor = 'default' | 'primary' | 'secondary' | 'success' | 'dange
 export interface IconDefinition {
   path: string
   viewBox?: string
+  stroke?: boolean
+  strokeWidth?: number
 }
 
 export const defaultViewBox = '0 0 24 24'
