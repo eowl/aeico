@@ -185,8 +185,8 @@ class Slider extends AeicoField {
             min: attrs.min,
             max: attrs.max,
             step: attrs.step,
-            onInput: this._boundOnRangeInput,
-            onChange: this.boundOnChange,
+            '@input': this._boundOnRangeInput,
+            '@change': this.boundOnChange,
           }) as HTMLInputElement
 
           if (this.marks) {
@@ -224,7 +224,7 @@ class Slider extends AeicoField {
             step: attrs.step,
             // Disabled in options mode: valid values are discrete, free text makes no sense
             disabled: attrs.inOptionsMode,
-            onInput: this._boundOnNumberInput,
+            '@input': this._boundOnNumberInput,
           }) as HTMLInputElement
         } else {
           this._numberInput = null

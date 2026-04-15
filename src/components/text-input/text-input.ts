@@ -26,7 +26,7 @@ class TextInput extends AeicoField {
         this.fieldElement = input({
           type: this.type || 'text',
           placeholder: this.placeholder || '',
-          onInput: this.boundOnChange,
+          '@input': this.boundOnChange,
         })
 
         this.renderActionButtons()

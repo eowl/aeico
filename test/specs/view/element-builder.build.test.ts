@@ -348,7 +348,7 @@ describe('ElementBuilder - build()', () => {
       builder.build(container, () => {
         builder.button({
           textContent: 'New',
-          onClick: () => done()
+          '@click': () => done()
         })
       })
 
@@ -415,17 +415,17 @@ describe('ElementBuilder - build()', () => {
 
       // First build
       builder.build(container, () => {
-        builder.button({ onClick: () => callCount++ })
+        builder.button({ '@click': () => callCount++ })
       })
 
       // Second build with new handler
       builder.build(container, () => {
-        builder.button({ onClick: () => callCount++ })
+        builder.button({ '@click': () => callCount++ })
       })
 
       // Third build with yet another handler
       builder.build(container, () => {
-        builder.button({ onClick: () => callCount++ })
+        builder.button({ '@click': () => callCount++ })
       })
 
       container.querySelector('button')!.click()
@@ -436,11 +436,11 @@ describe('ElementBuilder - build()', () => {
       const calls: string[] = []
 
       builder.build(container, () => {
-        builder.button({ onClick: () => calls.push('old') })
+        builder.button({ '@click': () => calls.push('old') })
       })
 
       builder.build(container, () => {
-        builder.button({ onClick: () => calls.push('new') })
+        builder.button({ '@click': () => calls.push('new') })
       })
 
       container.querySelector('button')!.click()
@@ -516,7 +516,7 @@ describe('ElementBuilder - build()', () => {
     it('removes stale event listener when event prop disappears', () => {
       let called = false
       builder.build(container, () => {
-        builder.button({ onClick: () => { called = true } })
+        builder.button({ '@click': () => { called = true } })
       })
 
       builder.build(container, () => {

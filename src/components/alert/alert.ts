@@ -65,7 +65,7 @@ class Alert extends AeicoComponent {
         if (this.dismissible) {
           button({
             className: 'alert-close',
-            onclick: () => this._handleClose(),
+            '@click': () => this._handleClose(),
             title: t('alert.close', 'Close alert'),
           }, () => {
             span({ 'aria-hidden': 'true', textContent: '\u00d7' })

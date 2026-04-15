@@ -169,7 +169,7 @@ class RadioGroup extends AeicoField {
           name: this._groupName,
           value: opt.value,
           disabled: Boolean(this.disabled),
-          onClick:  this._boundOnRadioClick,
+          '@click':  this._boundOnRadioClick,
         }) as HTMLInputElement
         // Sync DOM property directly — setAttribute('checked') doesn't work
         // after user interaction; only the .checked property controls state.
@@ -207,7 +207,7 @@ class RadioGroup extends AeicoField {
         textContent: opt.label,
         disabled:    Boolean(this.disabled),
         'data-value': opt.value,
-        onClick:     this._boundOnButtonClick,
+        '@click':     this._boundOnButtonClick,
       })
     }
   }

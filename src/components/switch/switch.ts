@@ -60,7 +60,7 @@ class Switch extends AeicoField {
             className: 'field-input',
             checked: Boolean(this.checked),
             disabled: Boolean(this.disabled),
-            onChange: this.boundOnChange,
+            '@change': this.boundOnChange,
           }) as HTMLInputElement
           span({ className: 'toggle-slider' })
         })

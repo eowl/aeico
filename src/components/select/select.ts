@@ -39,7 +39,7 @@ class Select extends AeicoField {
   render() {
     return html(({ div, select, slot }) => {
       div({ className: 'select-container' }, () => {
-        this.fieldElement = select({ onChange: this.boundOnChange }, () => {
+        this.fieldElement = select({ '@change': this.boundOnChange }, () => {
           this._renderOptions()
         }) as HTMLSelectElement
         this.renderActionButtons()

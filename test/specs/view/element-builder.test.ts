@@ -206,7 +206,7 @@ describe('ElementBuilder', () => {
     describe('event listeners', () => {
       it('attaches click event listener', (done) => {
         const el = builder.button({
-          onClick: (e: Event) => {
+          '@click': (e: Event) => {
             expect(e.type).to.equal('click')
             done()
           }
@@ -216,7 +216,7 @@ describe('ElementBuilder', () => {
 
       it('attaches input event listener', (done) => {
         const el = builder.input({
-          onInput: (e: Event) => {
+          '@input': (e: Event) => {
             expect(e.type).to.equal('input')
             done()
           }
@@ -226,7 +226,7 @@ describe('ElementBuilder', () => {
 
       it('attaches change event listener', (done) => {
         const el = builder.select({
-          onChange: (e: Event) => {
+          '@change': (e: Event) => {
             expect(e.type).to.equal('change')
             done()
           }
@@ -234,9 +234,9 @@ describe('ElementBuilder', () => {
         el.dispatchEvent(new Event('change', { bubbles: true }))
       })
 
-      it('native multi-word event: onMouseover (all-lowercase) → mouseover', (done) => {
+      it('@mouseover listens to mouseover event', (done) => {
         const el = builder.div({
-          onMouseover: (e: Event) => {
+          '@mouseover': (e: Event) => {
             expect(e.type).to.equal('mouseover')
             done()
           }
@@ -244,9 +244,9 @@ describe('ElementBuilder', () => {
         el.dispatchEvent(new Event('mouseover', { bubbles: true }))
       })
 
-      it('converts camelCase compound event name to kebab-case (e.g. onTabChange → tab-change)', (done) => {
+      it('@tab-change listens to tab-change event (no case conversion)', (done) => {
         const el = builder.div({
-          onTabChange: (e: Event) => {
+          '@tab-change': (e: Event) => {
             expect(e.type).to.equal('tab-change')
             done()
           }
@@ -254,9 +254,9 @@ describe('ElementBuilder', () => {
         el.dispatchEvent(new CustomEvent('tab-change', { bubbles: true }))
       })
 
-      it('converts multi-word camelCase event name (e.g. onFieldReset → field-reset)', (done) => {
+      it('@field-reset listens to field-reset event (no case conversion)', (done) => {
         const el = builder.div({
-          onFieldReset: (e: Event) => {
+          '@field-reset': (e: Event) => {
             expect(e.type).to.equal('field-reset')
             done()
           }
@@ -270,13 +270,13 @@ describe('ElementBuilder', () => {
 
         builder.build(root, () => {
           builder.button({
-            onClick: () => { firstCalled = true }
+            '@click': () => { firstCalled = true }
           })
         })
 
         builder.build(root, () => {
           builder.button({
-            onClick: () => {
+            '@click': () => {
               expect(firstCalled).to.be.false
               done()
             }
@@ -291,7 +291,7 @@ describe('ElementBuilder', () => {
         let called = false
 
         builder.build(root, () => {
-          builder.button({ onClick: () => { called = true } })
+          builder.button({ '@click': () => { called = true } })
         })
 
         builder.build(root, () => {

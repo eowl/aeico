@@ -93,7 +93,7 @@ class AeicoField extends AeicoComponent {
         className: 'reset-btn',
         textContent: this.resetText || '↺',
         title: t('buttons.reset', '↺'),
-        onClick: this.boundOnReset,
+        '@click': this.boundOnReset,
       })
     }
   }
@@ -106,7 +106,7 @@ class AeicoField extends AeicoComponent {
         className: 'clear-btn',
         textContent: this.clearText || '✕',
         title: t('buttons.clear', '✕'),
-        onClick: this.boundOnClear,
+        '@click': this.boundOnClear,
       })
     }
   }

@@ -38,7 +38,7 @@ class Modal extends AeicoComponent {
     return html(({ div, h3, button, slot }) => {
       div({ 
         className: 'modal-overlay',
-        onclick: (e: Event) => this._handleOverlayClick(e)
+        '@click': (e: Event) => this._handleOverlayClick(e)
       }, () => {
         div({ 
           className: 'modal-container',
@@ -55,7 +55,7 @@ class Modal extends AeicoComponent {
                 className: 'modal-close-btn',
                 textContent: '×',
                 title: t('buttons.cancel', 'Cancel'),
-                onclick: () => this.close()
+                '@click': () => this.close()
               })
             }
           })

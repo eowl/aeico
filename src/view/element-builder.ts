@@ -208,8 +208,8 @@ class ElementBuilder {
             else (s as unknown as Record<string, string>)[k] = v
           }
         }
-      } else if (ck.startsWith('on:')) {
-        const eventName = ck.slice(3)
+      } else if (ck.startsWith('@')) {
+        const eventName = ck.slice(1)
         if (oldCache?.[ck]) el.removeEventListener(eventName, oldCache[ck] as EventListener)
         el.addEventListener(eventName, value as EventListener)
       } else if (typeof value === 'boolean') {
@@ -226,8 +226,8 @@ class ElementBuilder {
       for (const [ck, oldValue] of Object.entries(oldCache)) {
         if (ck in newCache) continue
         if (ck === 'textContent' && skipTextContent) continue
-        if (ck.startsWith('on:') && typeof oldValue === 'function') {
-          el.removeEventListener(ck.slice(3), oldValue as EventListener)
+        if (ck.startsWith('@') && typeof oldValue === 'function') {
+          el.removeEventListener(ck.slice(1), oldValue as EventListener)
         } else if (ck === 'style' && typeof oldValue === 'object' && oldValue !== null && 'style' in el) {
           const s = (el as HTMLElement).style
           for (const k of Object.keys(oldValue as Record<string, string>)) {
@@ -272,11 +272,9 @@ class ElementBuilder {
         continue
       }
 
-      // on* event handlers → on:eventname
-      if (key.startsWith('on') && typeof value === 'function') {
-        const rest = key.slice(2)
-        const normalized = rest.charAt(0).toLowerCase() + rest.slice(1)
-        cache[`on:${camelToKebab(normalized)}`] = value
+      // @event handlers → @eventname (no case conversion)
+      if (key.startsWith('@') && typeof value === 'function') {
+        cache[`@${key.slice(1)}`] = value
         continue
       }
 
@@ -290,7 +288,7 @@ class ElementBuilder {
     if (key === 'class') el.removeAttribute('class')
     else if (key === 'textContent') el.textContent = ''
     else if (key === 'style' && 'style' in el) (el as HTMLElement).style.cssText = ''
-    else if (!key.startsWith('on:')) el.removeAttribute(key)
+    else if (!key.startsWith('@')) el.removeAttribute(key)
   }
 
   detached<T>(fn: () => T): T {
