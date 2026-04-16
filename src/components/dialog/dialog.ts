@@ -3,7 +3,6 @@ import styleVariables from '../styles/variables.css?inline'
 import style from '../styles/components/dialog.css?inline'
 import AeicoComponent from '../aeico-component'
 import { html } from '../../view'
-import { t } from '../../localize'
 
 class Dialog extends AeicoComponent {
   static props: Props = {
@@ -41,15 +40,14 @@ class Dialog extends AeicoComponent {
       }, () => {
         // Header
         if (this.header !== false) {
-          header({ className: 'dialog-header' }, () => {
+          header({}, () => {
             slot({ name: 'header' }, () => {
-              span({ className: 'dialog-title', textContent: this.label || '' })
+              span({ className: 'label', textContent: this.label || '' })
             })
             if (this.closable !== false) {
               button({
-                className: 'dialog-close-btn',
+                className: 'close-btn',
                 textContent: '×',
-                title: t('buttons.cancel', 'Cancel'),
                 '@click': () => this.close(),
               })
             }
@@ -57,13 +55,12 @@ class Dialog extends AeicoComponent {
         }
 
         // Body
-        div({ className: 'dialog-body' }, () => {
+        div({ className: 'body' }, () => {
           slot()
         })
 
         // Footer — always rendered to capture slotchange, hidden when empty
         footer({
-          className: 'dialog-footer',
           style: { display: this._hasFooter ? '' : 'none' },
         }, () => {
           slot({ name: 'footer', '@slotchange': this._handleFooterSlotChange })
