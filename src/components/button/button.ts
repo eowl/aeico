@@ -37,10 +37,10 @@ class Button extends AeicoComponent {
     size: { type: String },
     disabled: { type: Boolean },
     type: { type: String },
-    active: { type: Boolean }
+    active: { type: Boolean },
+    block: { type: Boolean }
   }
 
-  protected static useStyles = ['button']
   protected static styles = [styleVariables, sizeCSS, colorCSS, buttonStyle]
 
   declare color?: ButtonColor
@@ -49,6 +49,7 @@ class Button extends AeicoComponent {
   declare disabled?: boolean
   declare type?: 'button' | 'submit' | 'reset'
   declare active?: boolean
+  declare block?: boolean
 
   private buttonElement: HTMLButtonElement | null = null
   private _autoAriaLabel = false
