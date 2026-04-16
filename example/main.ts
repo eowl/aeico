@@ -10,8 +10,9 @@ import {
   Tabs,
   Tab,
   TabPanel,
+  Dialog,
 } from '../src/components/index'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---
@@ -167,10 +168,14 @@ if (sliderMarksNumeric) {
   sliderMarksNumeric.value = '50'
 }
 
-// Modal interaction
-const openBtn = document.getElementById('open-modal-btn')
-const modal = document.querySelector<any>('#demo-modal')
-openBtn?.addEventListener('click', () => modal?.open())
+// Dialog interaction
+const openBtn = document.getElementById('open-dialog-btn')
+const dialog = document.querySelector<any>('#demo-dialog')
+openBtn?.addEventListener('click', () => dialog?.open())
+
+const openNonModalBtn = document.getElementById('open-dialog-nonmodal-btn')
+const nonModalDialog = document.querySelector<any>('#demo-dialog-nonmodal')
+openNonModalBtn?.addEventListener('click', () => nonModalDialog?.open())
 
 // --- Event logging ---
 const log = document.getElementById('event-log')!
@@ -187,7 +192,7 @@ function appendLog(msg: string) {
 clearBtn.addEventListener('click', () => { log.innerHTML = '' })
 
 // Listen for component events on body (they bubble)
-const events = ['field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'modal-open', 'modal-close', 'tab-change']
+const events = ['field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'dialog-open', 'dialog-close', 'tab-change']
 events.forEach(eventName => {
   document.body.addEventListener(eventName, ((e: CustomEvent) => {
     const tag = (e.target as HTMLElement).tagName.toLowerCase()
