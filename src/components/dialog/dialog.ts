@@ -16,8 +16,6 @@ class Dialog extends AeicoComponent {
     closeOnOverlayClick: { type: Boolean },
   }
 
-  static readonly eventPrefix = 'dialog'
-
   declare label?: string
   declare width?: string
   declare height?: string
