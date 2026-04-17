@@ -70,7 +70,7 @@ class ButtonGroup extends AeicoComponent {
   protected render() {
     return html(({ slot }) => {
       this.slotEl = slot()
-      this.slotEl.addEventListener('slotchange', () => this._syncChildren())
+      this.listen(this.slotEl, 'slotchange', () => this._syncChildren())
       this._syncChildren()
     })
   }

@@ -125,3 +125,21 @@ export function createEventEmitter(
     }
   }
 }
+
+type TrackedListener = { target: EventTarget; event: string; handler: EventListenerOrEventListenerObject }
+
+export class ListenerRegistry {
+  private _listeners: TrackedListener[] = []
+
+  add(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject): void {
+    target.addEventListener(event, handler)
+    this._listeners.push({ target, event, handler })
+  }
+
+  removeAll(): void {
+    for (const { target, event, handler } of this._listeners) {
+      target.removeEventListener(event, handler)
+    }
+    this._listeners.length = 0
+  }
+}

@@ -56,7 +56,7 @@ class Button extends AeicoComponent {
 
   protected onMounted() {
     const slot = this.shadowRoot?.querySelector('slot:not([name])')
-    slot?.addEventListener('slotchange', this._handleSlotChange)
+    if (slot) this.listen(slot, 'slotchange', this._handleSlotChange)
     this._handleSlotChange()
   }
 

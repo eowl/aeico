@@ -66,14 +66,13 @@ class Tabs extends AeicoComponent {
 
   connectedCallback() {
     super.connectedCallback()
-    this.addEventListener('_tab-click', this._handleTabClick)
+    this.listen('_tab-click', this._handleTabClick)
     this._observer = new MutationObserver(() => this.update())
     this._observer.observe(this, { childList: true })
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
-    this.removeEventListener('_tab-click', this._handleTabClick)
     this._observer?.disconnect()
     this._observer = null
   }

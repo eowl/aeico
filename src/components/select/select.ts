@@ -48,7 +48,7 @@ class Select extends AeicoField {
       const slotEl = slot({ style: { display: 'none' } }) as HTMLSlotElement
       if (!this._slotEl) {
         this._slotEl = slotEl
-        this._slotEl.addEventListener('slotchange', () => this._onSlotChange())
+        this.listen(this._slotEl, 'slotchange', () => this._onSlotChange())
       }
 
       if (this.value) this.writeValue(this.value)

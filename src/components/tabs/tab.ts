@@ -19,12 +19,7 @@ class Tab extends AeicoComponent {
   connectedCallback() {
     this.setAttribute('slot', 'tab')
     super.connectedCallback()
-    this.addEventListener('click', this._handleClick)
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback()
-    this.removeEventListener('click', this._handleClick)
+    this.listen('click', this._handleClick)
   }
 
   private _handleClick = () => {

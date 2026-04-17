@@ -5,7 +5,7 @@ import type {
   Watchers,
   InferProps
 } from './types'
-import { createEventEmitter, type ComponentEventEmitter } from './events'
+import { createEventEmitter, ListenerRegistry, type ComponentEventEmitter } from './events'
 import { setRenderContext, clearRenderContext } from './render-context'
 import { render as applyRender, type RenderResult } from '../view'
 import type { Updatable } from './render-context'
@@ -473,8 +473,25 @@ class BaseElement extends HTMLElement {
    * - disconnectedCallback(): called when element is removed from the DOM
    * - attributeChangedCallback(name, oldValue, newValue): called when an observed attribute changes
    */
+  private _listenerManager?: ListenerRegistry
+
+  listen(event: string, handler: EventListenerOrEventListenerObject): void
+  listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject): void
+  listen(eventOrTarget: string | EventTarget, handlerOrEvent: EventListenerOrEventListenerObject | string, maybeHandler?: EventListenerOrEventListenerObject): void {
+    if (!this._listenerManager) this._listenerManager = new ListenerRegistry()
+
+    if (typeof eventOrTarget === 'string') {
+      this._listenerManager.add(this, eventOrTarget, handlerOrEvent as EventListenerOrEventListenerObject)
+    } else {
+      this._listenerManager.add(eventOrTarget, handlerOrEvent as string, maybeHandler!)
+    }
+  }
+
   connectedCallback() {}
-  disconnectedCallback() {}
+
+  disconnectedCallback() {
+    this._listenerManager?.removeAll()
+  }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
     if (oldValue === newValue) return
