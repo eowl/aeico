@@ -99,7 +99,7 @@ class Dialog extends AeicoComponent {
   }
 
   private _handleNativeClose = () => {
-    this.emit('close', { target: this })
+    this.emit('close', { detail: { target: this } })
   }
 
   private _handleFooterSlotChange = (e: Event) => {
@@ -118,7 +118,7 @@ class Dialog extends AeicoComponent {
     } else {
       this._dialogEl.show()
     }
-    this.emit('open', { target: this })
+    this.emit('open', { detail: { target: this } })
   }
 
   close() {

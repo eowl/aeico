@@ -108,7 +108,7 @@ class Tabs extends AeicoComponent {
     const pairs = this._getPairs()
     if (index === (this.activeIndex ?? 0) || index >= pairs.length) return
     this.activeIndex = index
-    this.emit('change', { index })
+    this.emit('change', { detail: { index } })
   }
 
   protected render() {

@@ -39,7 +39,7 @@ class Switch extends AeicoField {
     this.checked = checked
     this.writeValue(checked)
     if (options?.silent === false) {
-      this.emit('change', this.getEventPayload(checked, oldChecked, options.action || 'change'))
+      this.emit('change', { detail: this.getEventPayload(checked, oldChecked, options.action || 'change') })
     }
   }
 

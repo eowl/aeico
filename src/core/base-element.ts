@@ -5,7 +5,7 @@ import type {
   Watchers,
   InferProps
 } from './types'
-import { createEventEmitter, ListenerRegistry, type ComponentEventEmitter } from './events'
+import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
 import { render as applyRender, type RenderResult } from '../view'
 import type { Updatable } from './render-context'
@@ -27,46 +27,6 @@ class BaseElement extends HTMLElement {
   private _changedProps = new Map<string, unknown>()
   private _hasMounted = false
   private _computedCache = new Map<string, { deps: string; value: unknown }>()
-
-  /**
-   * Event prefix for this component.
-   * @example
-   * static readonly eventPrefix = 'field'  // emits 'field-change', 'field-reset'
-   */
-  static readonly eventPrefix: string = ''
-  static readonly eventNamespace?: string
-
-  private static _staticEvents?: Record<string, string>
-  static get events() {
-    if (!this._staticEvents) {
-      const namespace = this.eventNamespace
-      this._staticEvents = createEventEmitter(new EventTarget(), this.eventPrefix, namespace).events
-    }
-    
-    return this._staticEvents
-  }
-
-  private _eventEmitter?: ComponentEventEmitter
-
-  get events() {
-    if (!this._eventEmitter) {
-      const constructor = this.constructor as typeof BaseElement
-      const namespace = constructor.eventNamespace
-      this._eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
-    }
-
-    return this._eventEmitter.events
-  }
-
-  protected emit(eventKey: string, detail?: Record<string, unknown>): void {
-    if (!this._eventEmitter) {
-      const constructor = this.constructor as typeof BaseElement
-      const namespace = constructor.eventNamespace
-      this._eventEmitter = createEventEmitter(this, constructor.eventPrefix, namespace)
-    }
-
-    this._eventEmitter.emit(eventKey, detail)
-  }
 
   /**
    * Convert camelCase or PascalCase to kebab-case.
@@ -466,15 +426,26 @@ class BaseElement extends HTMLElement {
   protected onPrepare(_changedProps: Map<string, unknown>): boolean | void {}
   protected onUpdated(_changedProps: Map<string, unknown>): void {}
   protected onMounted(_changedProps: Map<string, unknown>): void {}
+  
 
   /**
-   * Standard custom element lifecycle callbacks (optional to implement):
-   * - connectedCallback(): called when element is added to the DOM
-   * - disconnectedCallback(): called when element is removed from the DOM
-   * - attributeChangedCallback(name, oldValue, newValue): called when an observed attribute changes
+   * Emit a custom event from this component. Wraps the standard CustomEvent API with additional options.
+   * @param eventName The name of the event to emit
+   * @param options Optional configuration for the event (detail payload, bubbles, composed)
    */
+  protected emit(eventName: string, options?: EmitOptions): void {
+    emitEvent(this, eventName, options)
+  }
+
   private _listenerManager?: ListenerRegistry
 
+  /**
+   * Add an event listener to this component or a target element. Automatically tracks listeners for cleanup.
+   * Can be called with (event, handler) to listen on this component, or (target, event, handler) to listen on a specific target.
+   * @example
+   * this.listen('click', () => { ... }) // listens for click events on this component
+   * this.listen(this.querySelector('button'), 'click', () => { ... }) // listens for click events on a button inside the component
+   */
   listen(event: string, handler: EventListenerOrEventListenerObject): void
   listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject): void
   listen(eventOrTarget: string | EventTarget, handlerOrEvent: EventListenerOrEventListenerObject | string, maybeHandler?: EventListenerOrEventListenerObject): void {
@@ -491,6 +462,12 @@ class BaseElement extends HTMLElement {
     }
   }
 
+  /**
+   * Standard custom element lifecycle callbacks (optional to implement):
+   * - connectedCallback(): called when element is added to the DOM
+   * - disconnectedCallback(): called when element is removed from the DOM
+   * - attributeChangedCallback(name, oldValue, newValue): called when an observed attribute changes
+   */
   connectedCallback() {}
 
   disconnectedCallback() {

@@ -46,8 +46,6 @@ class ButtonGroup extends AeicoComponent {
     disabled: { type: Boolean },
   }
 
-  static readonly eventPrefix = 'button-group'
-
   protected static styles = [styleVariables, buttonGroupStyle]
 
   declare variant?:  ButtonVariant

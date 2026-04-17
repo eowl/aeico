@@ -1,129 +1,34 @@
 /**
  * Event system utilities for components
- * Provides dynamic event definitions and dispatching
+ * Provides listener tracking and auto-cleanup
  */
 
 /**
- * Create dynamic event name proxy
- * Dynamically generates event names when accessed
- * 
- * @param prefix Event name prefix (e.g., 'field', 'modal', 'button')
- * @param namespace Optional event namespace (e.g., 'app', 'file')
- * @returns Proxy object that generates event names on property access
- * 
- * @example
- * const events = createEventProxy('field', '')
- * console.log(events.change) // 'field-change'
- * console.log(events.reset)  // 'field-reset'
- * 
- * const events2 = createEventProxy('', '')
- * console.log(events2.change) // 'change'
- * 
- * const events3 = createEventProxy('component', 'app')
- * console.log(events3.ready) // 'app:component-ready'
+ * Options for emitting a component event.
+ *
+ * @property detail  Arbitrary payload attached to the event, accessible via `event.detail`.
+ * @property bubbles Whether the event bubbles up through the DOM. Defaults to `true`.
+ * @property composed Whether the event crosses shadow DOM boundaries. Defaults to `true`.
  */
-function createEventProxy(
-  prefix: string,
-  namespace?: string
-): Record<string, string> {
-  return new Proxy({} as Record<string, string>, {
-    get(_target, prop: string | symbol) {
-      // Build event name: namespace:prefix-key or prefix-key or key
-      const parts: string[] = []
-      if (namespace) {
-        parts.push(namespace, ':')
-      }
-      if (prefix) {
-        parts.push(prefix, '-')
-      }
-      parts.push(String(prop))
-      return parts.join('')
-    }
-  })
+export interface EmitOptions {
+  detail?: Record<string, unknown>
+  bubbles?: boolean
+  composed?: boolean
 }
 
 /**
- * Event emitter interface for components
+ * Dispatch a CustomEvent on a target.
+ *
+ * @param target    The EventTarget to dispatch on (typically a component instance).
+ * @param eventName The event name to dispatch.
+ * @param options   Optional payload and bubbling/composed flags (both default to `true`).
  */
-export type ComponentEventEmitter ={
-  /**
-   * Dynamic event name map
-   * Access any property to get the corresponding event name
-   */
-  readonly events: Record<string, string>
-  
-  /**
-   * Emit a component event
-   * 
-   * @param eventKey Event key (any string)
-   * @param detail Optional event detail data
-   * 
-   * @example
-   * this.emit('change', { value: 'new value' })
-   */
-  emit(eventKey: string, detail?: Record<string, unknown>): void
-}
-
-/**
- * Create event emitter for a component
- * 
- * @param target Event target (typically the component instance)
- * @param eventPrefix Event name prefix (default: '')
- * @param eventNamespace Optional event namespace
- * @returns Object with dynamic events map and emit method
- * 
- * @example
- * // Basic usage with prefix
- * class MyComponent extends HTMLElement {
- *   private eventEmitter = createEventEmitter(this, 'my-component')
- * 
- *   get events() { return this.eventEmitter.events }
- *   protected emit = this.eventEmitter.emit.bind(this.eventEmitter)
- * 
- *   someMethod() {
- *     this.emit('open', { source: 'button' })
- *     // Dispatches: 'my-component-open'
- *   }
- * }
- * 
- * // Without prefix
- * class SimpleComponent extends HTMLElement {
- *   private eventEmitter = createEventEmitter(this, '')
- * 
- *   someMethod() {
- *     this.emit('change')
- *     // Dispatches: 'change'
- *   }
- * }
- * 
- * // With namespace
- * class NamespacedComponent extends HTMLElement {
- *   private eventEmitter = createEventEmitter(this, 'component', 'app')
- * 
- *   someMethod() {
- *     this.emit('ready')
- *     // Dispatches: 'app:component-ready'
- *   }
- * }
- */
-export function createEventEmitter(
-  target: EventTarget,
-  eventPrefix: string = '',
-  eventNamespace?: string
-): ComponentEventEmitter {
-  const events = createEventProxy(eventPrefix, eventNamespace)
-  
-  return {
-    events,
-    emit(eventKey: string, detail?: Record<string, unknown>): void {
-      const eventName = events[eventKey]
-      target.dispatchEvent(new CustomEvent(eventName, {
-        bubbles: true,
-        composed: true,
-        detail
-      }))
-    }
-  }
+export function emit(target: EventTarget, eventName: string, options?: EmitOptions): void {
+  target.dispatchEvent(new CustomEvent(eventName, {
+    bubbles:  options?.bubbles  ?? true,
+    composed: options?.composed ?? true,
+    detail:   options?.detail,
+  }))
 }
 
 type TrackedListener = { target: EventTarget; event: string; handler: EventListenerOrEventListenerObject }

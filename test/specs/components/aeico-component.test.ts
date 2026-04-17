@@ -12,12 +12,6 @@ describe('AeicoComponent', () => {
       expect(AeicoComponent.register).to.be.a('function')
     })
 
-    it('should have events static getter', () => {
-      // Just verify the getter exists and returns something
-      // Don't try to inspect the value as it contains Symbols
-      expect(typeof AeicoComponent.events).to.equal('object')
-    })
-
     it('should have toKebab() static method', () => {
       expect(AeicoComponent.toKebab).to.be.a('function')
       expect(AeicoComponent.toKebab('MyComponent')).to.equal('my-component')

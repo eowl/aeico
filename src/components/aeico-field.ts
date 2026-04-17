@@ -182,7 +182,7 @@ class AeicoField extends AeicoComponent {
     // Emit event if not silent
     if (options?.silent === false) {
       const payload = this.getEventPayload(value, oldValue, options.action || 'change')
-      this.emit('change', payload)
+      this.emit('change', { detail: payload })
     }
   }
 

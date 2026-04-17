@@ -41,8 +41,6 @@ class Alert extends AeicoComponent {
     invisible: { type: Boolean }
   }
 
-  static readonly eventPrefix = 'alert'
-
   protected static useStyles = ['alert']
   protected static styles = [styleVariables, colorCSS, alertStyle]
 
@@ -86,7 +84,7 @@ class Alert extends AeicoComponent {
   }
 
   private _handleClose = () => {
-    this.emit('close', { target: this })
+    this.emit('alert-close', { detail: { target: this } })
     this.remove()
   }
 }

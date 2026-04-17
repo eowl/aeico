@@ -28,9 +28,6 @@ export type { ThemeableProps } from './mixins/themeable'
 export { t, locale, LocaleStore, localeRegistry } from './localize/index'
 export type { LocaleProvider, LocaleRegistry } from './localize/index'
 
-export { createEventEmitter } from './core/events'
-export type { ComponentEventEmitter } from './core/events'
-
 export { ElementBuilder } from './view'
 export type { BuilderProps } from './view'
 
