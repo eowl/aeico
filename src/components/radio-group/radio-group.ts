@@ -146,11 +146,10 @@ class RadioGroup extends AeicoField {
       this.renderResetButton()
 
       // Hidden slot — captures <option> light DOM children
-      const slotEl = slot({ style: { display: 'none' } }) as HTMLSlotElement
-      if (!this._slotEl) {
-        this._slotEl = slotEl
-        this.listen(this._slotEl, 'slotchange', () => this._onSlotChange())
-      }
+      this._slotEl = slot({
+        style: { display: 'none' },
+        '@slotchange': () => this._onSlotChange(),
+      }) as HTMLSlotElement
     })
   }
 

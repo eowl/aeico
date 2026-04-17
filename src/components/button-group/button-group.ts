@@ -69,8 +69,9 @@ class ButtonGroup extends AeicoComponent {
 
   protected render() {
     return html(({ slot }) => {
-      this.slotEl = slot()
-      this.listen(this.slotEl, 'slotchange', () => this._syncChildren())
+      this.slotEl = slot({
+        '@slotchange': () => this._syncChildren(),
+      })
       this._syncChildren()
     })
   }

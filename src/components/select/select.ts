@@ -45,11 +45,10 @@ class Select extends AeicoField {
         this.renderActionButtons()
       })
 
-      const slotEl = slot({ style: { display: 'none' } }) as HTMLSlotElement
-      if (!this._slotEl) {
-        this._slotEl = slotEl
-        this.listen(this._slotEl, 'slotchange', () => this._onSlotChange())
-      }
+      this._slotEl = slot({
+        style: { display: 'none' },
+        '@slotchange': () => this._onSlotChange(),
+      }) as HTMLSlotElement
 
       if (this.value) this.writeValue(this.value)
     })
