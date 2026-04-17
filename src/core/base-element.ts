@@ -6,7 +6,7 @@ import type {
   InferProps
 } from './types'
 import { createEventEmitter, ListenerRegistry, type ComponentEventEmitter } from './events'
-import { setRenderContext, clearRenderContext } from './render-context'
+import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
 import { render as applyRender, type RenderResult } from '../view'
 import type { Updatable } from './render-context'
 
@@ -478,6 +478,10 @@ class BaseElement extends HTMLElement {
   listen(event: string, handler: EventListenerOrEventListenerObject): void
   listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject): void
   listen(eventOrTarget: string | EventTarget, handlerOrEvent: EventListenerOrEventListenerObject | string, maybeHandler?: EventListenerOrEventListenerObject): void {
+    if (__DEV__ && getCurrentContext() !== null) {
+      throw new Error('[aeico] listen() must not be called inside render(). Use declarative @event syntax instead.')
+    }
+
     if (!this._listenerManager) this._listenerManager = new ListenerRegistry()
 
     if (typeof eventOrTarget === 'string') {

@@ -2,6 +2,9 @@ import { defineConfig } from 'vite'
 import path from 'path'
 
 export default defineConfig({
+  define: {
+    __DEV__: 'import.meta.env.DEV',
+  },
   build: {
     lib: {
       entry: {
