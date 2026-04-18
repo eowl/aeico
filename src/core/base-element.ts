@@ -449,7 +449,7 @@ class BaseElement extends HTMLElement {
   listen(event: string, handler: EventListenerOrEventListenerObject): void
   listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject): void
   listen(eventOrTarget: string | EventTarget, handlerOrEvent: EventListenerOrEventListenerObject | string, maybeHandler?: EventListenerOrEventListenerObject): void {
-    if (__DEV__ && getCurrentContext() !== null) {
+    if (typeof __DEV__ !== 'undefined' && __DEV__ && getCurrentContext() !== null) {
       throw new Error('[aeico] listen() must not be called inside render(). Use declarative @event syntax instead.')
     }
 
