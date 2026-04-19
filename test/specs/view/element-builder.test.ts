@@ -419,6 +419,39 @@ describe('ElementBuilder', () => {
       expect(container.querySelector('footer')).to.exist
       expect(container.querySelectorAll('nav a').length).to.equal(2)
     })
+
+    it('allows omitting props when only a callback is needed', () => {
+      const parent = builder.div(() => {
+        builder.span({ textContent: 'Child' })
+      })
+
+      expect(parent.children.length).to.equal(1)
+      expect(parent.children[0].tagName).to.equal('SPAN')
+      expect(parent.children[0].textContent).to.equal('Child')
+    })
+
+    it('allows omitting props in deeply nested structure', () => {
+      const root = builder.div(() => {
+        builder.section(() => {
+          builder.p({ textContent: 'Deep' })
+        })
+      })
+
+      expect(root.querySelector('p')?.textContent).to.equal('Deep')
+    })
+
+    it('allows mixing props-only and callback-only calls as siblings', () => {
+      const parent = builder.ul(() => {
+        builder.li({ textContent: 'Item 1' })
+        builder.li(() => {
+          builder.span({ textContent: 'Item 2' })
+        })
+      })
+
+      expect(parent.children.length).to.equal(2)
+      expect(parent.children[0].textContent).to.equal('Item 1')
+      expect(parent.children[1].querySelector('span')?.textContent).to.equal('Item 2')
+    })
   })
 
   describe('el() method', () => {
@@ -441,6 +474,16 @@ describe('ElementBuilder', () => {
 
       expect(parent.children.length).to.equal(1)
       expect(parent.children[0].tagName).to.equal('SPAN')
+    })
+
+    it('allows omitting props when only a callback is needed in el method', () => {
+      const parent = builder.el('div', () => {
+        builder.el('span', { textContent: 'Child' })
+      })
+
+      expect(parent.children.length).to.equal(1)
+      expect(parent.children[0].tagName).to.equal('SPAN')
+      expect(parent.children[0].textContent).to.equal('Child')
     })
 
     it('creates SVG element using el method', () => {
@@ -480,6 +523,14 @@ describe('ElementBuilder', () => {
 
     it('creates custom element with children callback', () => {
       const el = (builder as any).aeButton({}, () => {
+        builder.span({ textContent: 'Label' })
+      })
+      expect(el.tagName).to.equal('AE-BUTTON')
+      expect(el.querySelector('span')?.textContent).to.equal('Label')
+    })
+
+    it('allows omitting props for custom element when only a callback is needed', () => {
+      const el = (builder as any).aeButton(() => {
         builder.span({ textContent: 'Label' })
       })
       expect(el.tagName).to.equal('AE-BUTTON')

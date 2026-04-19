@@ -15,15 +15,19 @@ type _Props = {
 
 type BuilderProps = _Props & Record<string, unknown>
 
-type TagFunction<K extends keyof HTMLElementTagNameMap> = 
-  (props?: BuilderProps, cb?: () => void) => HTMLElementTagNameMap[K]
+type TagFunction<K extends keyof HTMLElementTagNameMap> = {
+  (props?: BuilderProps, cb?: () => void): HTMLElementTagNameMap[K]
+  (cb: () => void): HTMLElementTagNameMap[K]
+}
 
 type HTMLTags = {
   readonly [K in keyof HTMLElementTagNameMap]: TagFunction<K>
 }
 
-type SVGTagFunction<K extends keyof SVGElementTagNameMap> = 
-  (props?: BuilderProps, cb?: () => void) => SVGElementTagNameMap[K]
+type SVGTagFunction<K extends keyof SVGElementTagNameMap> = {
+  (props?: BuilderProps, cb?: () => void): SVGElementTagNameMap[K]
+  (cb: () => void): SVGElementTagNameMap[K]
+}
 
 type SVGOnlyTags = {
   readonly [K in Exclude<keyof SVGElementTagNameMap, keyof HTMLElementTagNameMap | 'text'>]: SVGTagFunction<K>
@@ -35,8 +39,10 @@ type KebabToCamel<S extends string> =
     : S
 
 type CustomHTMLTags = {
-  readonly [K in keyof HTMLElementTagNameMap as K extends `${string}-${string}` ? KebabToCamel<K> : never]:
-    (props?: BuilderProps, cb?: () => void) => HTMLElementTagNameMap[K]
+  readonly [K in keyof HTMLElementTagNameMap as K extends `${string}-${string}` ? KebabToCamel<K> : never]: {
+    (props?: BuilderProps, cb?: () => void): HTMLElementTagNameMap[K]
+    (cb: () => void): HTMLElementTagNameMap[K]
+  }
 }
 
 function camelToKebab(str: string): string {
@@ -56,7 +62,10 @@ class ElementBuilder {
         if (prop in target) return Reflect.get(target, prop) as unknown
 
         const tagName = /[A-Z]/.test(prop) ? camelToKebab(prop) : prop
-        return (p?: BuilderProps, cb?: () => void) => target._create(tagName, p, cb)
+        return (p?: BuilderProps | (() => void), cb?: () => void) => {
+          if (typeof p === 'function') return target._create(tagName, undefined, p)
+          return target._create(tagName, p, cb)
+        }
       }
     })
   }
@@ -307,12 +316,14 @@ class ElementBuilder {
 
   el = <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
     tagName: T,
-    props?: BuilderProps,
+    propsOrCb?: BuilderProps | (() => void),
     cb?: () => void
   ): T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T]
     : T extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[T]
     : Element => {
-    return this._create(tagName, props, cb) as unknown as T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : T extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[T] : Element
+    const props = typeof propsOrCb === 'function' ? undefined : propsOrCb
+    const callback = typeof propsOrCb === 'function' ? propsOrCb : cb
+    return this._create(tagName, props, callback) as unknown as T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : T extends keyof SVGElementTagNameMap ? SVGElementTagNameMap[T] : Element
   }
 
   text = (content: string): Text => {
