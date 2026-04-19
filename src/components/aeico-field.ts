@@ -28,6 +28,7 @@ class AeicoField extends AeicoComponent {
     clearable: { type: Boolean },
     clearText: { type: String },
     size: { type: String },
+    disabled: { type: Boolean }
   }
 
   /**
