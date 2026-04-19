@@ -8,6 +8,7 @@ import type {
 import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
 import { render as applyRender, type RenderResult } from '../view'
+import { PROP_METADATA_KEY } from '../decorators'
 import type { Updatable } from './render-context'
 
 /**
@@ -87,6 +88,12 @@ class BaseElement extends HTMLElement {
       const cls = inheritanceStack.pop() as typeof BaseElement
       if (Object.prototype.hasOwnProperty.call(cls, 'props') && cls.props) {
         Object.assign(collected, cls.props)
+      }
+
+      // Collect props defined via @prop decorator (stored in Symbol.metadata)
+      const meta = (cls as any)[Symbol.metadata]
+      if (meta && Object.hasOwn(meta, PROP_METADATA_KEY)) {
+        Object.assign(collected, meta[PROP_METADATA_KEY])
       }
     }
 

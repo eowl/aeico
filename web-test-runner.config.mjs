@@ -15,7 +15,7 @@ export default {
     // Handle Vite-specific `*.css?inline` imports — must come before esbuild
     cssInlinePlugin(),
     // Transpile TypeScript
-    esbuildPlugin({ ts: true }),
+    esbuildPlugin({ ts: true, target: 'es2022' }),
   ],
   // Mocha timeout: any it() / before() / beforeEach() that hangs is auto-failed
   testFramework: {

@@ -38,3 +38,5 @@ export { default as styleStore } from './core/styles'
 export { StyleResult, supportAdoptStyle } from './core/styles'
 
 export type { PropertyType, Prop, Props, InferProps } from './core/types'
+
+export { prop, PROP_METADATA_KEY } from './decorators'
