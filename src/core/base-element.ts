@@ -3,12 +3,14 @@ import type {
   Prop,
   ComputedDeclaration,
   Watchers,
+  WatcherHandler,
   InferProps
 } from './types'
 import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
 import { render as applyRender, type RenderResult } from '../view'
 import { PROP_METADATA_KEY } from '../decorators'
+import { WATCHER_METADATA_KEY } from '../decorators/watcher'
 import type { Updatable } from './render-context'
 
 /**
@@ -59,6 +61,7 @@ class BaseElement extends HTMLElement {
 
   private static _propertyCache?: Record<string, Prop>
   private static _attrToPropMap?: Map<string, string>
+  private static _watcherCache?: Record<string, WatcherHandler>
 
   /**
    * Collect props from the entire inheritance chain, starting from the current class up to HTMLElement.
@@ -107,6 +110,43 @@ class BaseElement extends HTMLElement {
 
     this._propertyCache = collected
     this._attrToPropMap = attrMap
+
+    return collected
+  }
+
+  /**
+   * Collect watchers from the entire inheritance chain.
+   * Child class watchers override parent class watchers with the same key.
+   * Also merges watchers registered via the @watcher decorator (stored in Symbol.metadata).
+   */
+  private static _collectWatchers(): Record<string, WatcherHandler> {
+    if (Object.prototype.hasOwnProperty.call(this, '_watcherCache')) {
+      return this._watcherCache!
+    }
+
+    const inheritanceStack: (typeof HTMLElement)[] = []
+    let current: typeof HTMLElement | null = this as typeof HTMLElement
+
+    while (current && current !== HTMLElement) {
+      inheritanceStack.push(current)
+      current = Object.getPrototypeOf(current) as typeof HTMLElement | null
+    }
+
+    const collected: Record<string, WatcherHandler> = {}
+
+    while (inheritanceStack.length > 0) {
+      const cls = inheritanceStack.pop() as typeof BaseElement
+      if (Object.prototype.hasOwnProperty.call(cls, 'watchers') && cls.watchers) {
+        Object.assign(collected, cls.watchers)
+      }
+
+      const meta = (cls as any)[Symbol.metadata]
+      if (meta && Object.hasOwn(meta, WATCHER_METADATA_KEY)) {
+        Object.assign(collected, meta[WATCHER_METADATA_KEY])
+      }
+    }
+
+    this._watcherCache = collected
 
     return collected
   }
@@ -312,19 +352,28 @@ class BaseElement extends HTMLElement {
 
   /**
    * Trigger property watchers based on changed props. Called during the update cycle.
-   * For each changed property that has a watcher, calls the corresponding method with (newValue, oldValue).
+   * For each changed property that has a watcher, calls the corresponding handler with (newValue, oldValue).
+   * The handler can be a method name string or an inline function.
    * @param changedProps Map of changed property names to their old values
    */
   private triggerWatchers(changedProps: Map<string, unknown>): void {
     const constructor = this.constructor as typeof BaseElement
-    if (!constructor.watchers) return
+    const allWatchers = constructor._collectWatchers()
+    if (Object.keys(allWatchers).length === 0) return
 
     for (const [propName, oldValue] of changedProps) {
-      const methodName = constructor.watchers[propName]
-      const self = this as Record<string, unknown>
-      if (methodName && typeof self[methodName] === 'function') {
-        const newValue = self[propName]
-        ;(self[methodName] as (n: unknown, o: unknown) => void)(newValue, oldValue)
+      const handler = allWatchers[propName]
+      if (!handler) continue
+
+      const newValue = (this as Record<string, unknown>)[propName]
+
+      if (typeof handler === 'function') {
+        handler.call(this, newValue, oldValue)
+      } else {
+        const self = this as Record<string, unknown>
+        if (typeof self[handler] === 'function') {
+          ;(self[handler] as (n: unknown, o: unknown) => void)(newValue, oldValue)
+        }
       }
     }
   }

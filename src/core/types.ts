@@ -55,9 +55,14 @@ export interface ComputedPropertyConfig<T = any> {
 export type ComputedDeclaration = Record<string, ComputedPropertyConfig>
 
 /**
- * Watchers declaration (property name -> method name)
+ * Watcher handler: a method name string or an inline function
  */
-export type Watchers = Record<string, string>
+export type WatcherHandler = string | ((newValue: unknown, oldValue: unknown) => void)
+
+/**
+ * Watchers declaration (property name -> method name or inline function)
+ */
+export type Watchers = Record<string, WatcherHandler>
 
 /**
  * Convert PropertyType to TypeScript type
