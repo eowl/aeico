@@ -10,7 +10,8 @@ import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
 import { render as applyRender, type RenderResult } from '../view'
 import { PROP_METADATA_KEY } from '../decorators'
-import { WATCHER_METADATA_KEY } from '../decorators/watcher'
+import { WATCHER_METADATA_KEY } from '../decorators/watch'
+import { COMPUTED_METADATA_KEY } from '../decorators/computed'
 import type { Updatable } from './render-context'
 
 /**
@@ -62,6 +63,7 @@ class BaseElement extends HTMLElement {
   private static _propertyCache?: Record<string, Prop>
   private static _attrToPropMap?: Map<string, string>
   private static _watcherCache?: Record<string, WatcherHandler>
+  private static _computedDecls?: ComputedDeclaration
 
   /**
    * Collect props from the entire inheritance chain, starting from the current class up to HTMLElement.
@@ -147,6 +149,43 @@ class BaseElement extends HTMLElement {
     }
 
     this._watcherCache = collected
+
+    return collected
+  }
+
+  /**
+   * Collect computed declarations from the entire inheritance chain.
+   * Merges static `computed` objects and `@computed` decorator metadata (parent → child override).
+   * Result is cached on the class.
+   */
+  private static _collectComputed(): ComputedDeclaration {
+    if (Object.prototype.hasOwnProperty.call(this, '_computedDecls')) {
+      return this._computedDecls!
+    }
+
+    const inheritanceStack: (typeof HTMLElement)[] = []
+    let current: typeof HTMLElement | null = this as typeof HTMLElement
+
+    while (current && current !== HTMLElement) {
+      inheritanceStack.push(current)
+      current = Object.getPrototypeOf(current) as typeof HTMLElement | null
+    }
+
+    const collected: ComputedDeclaration = {}
+
+    while (inheritanceStack.length > 0) {
+      const cls = inheritanceStack.pop() as typeof BaseElement
+      if (Object.prototype.hasOwnProperty.call(cls, 'computed') && cls.computed) {
+        Object.assign(collected, cls.computed)
+      }
+
+      const meta = (cls as any)[Symbol.metadata]
+      if (meta && Object.hasOwn(meta, COMPUTED_METADATA_KEY)) {
+        Object.assign(collected, meta[COMPUTED_METADATA_KEY])
+      }
+    }
+
+    this._computedDecls = collected
 
     return collected
   }
@@ -282,9 +321,10 @@ class BaseElement extends HTMLElement {
    */
   private _initializeComputed() {
     const constructor = this.constructor as typeof BaseElement
-    if (!constructor.computed) return
+    const allComputed = constructor._collectComputed()
+    if (Object.keys(allComputed).length === 0) return
 
-    for (const [computedName, config] of Object.entries(constructor.computed)) {
+    for (const [computedName, config] of Object.entries(allComputed)) {
       Object.defineProperty(this, computedName, {
         get: () => {
           const self = this as Record<string, unknown>
@@ -385,9 +425,10 @@ class BaseElement extends HTMLElement {
    */
   private invalidateComputed(changedProps: Map<string, unknown>): void {
     const constructor = this.constructor as typeof BaseElement
-    if (!constructor.computed) return
+    const allComputed = constructor._collectComputed()
+    if (Object.keys(allComputed).length === 0) return
     const changedNames = Array.from(changedProps.keys())
-    for (const [computedName, config] of Object.entries(constructor.computed)) {
+    for (const [computedName, config] of Object.entries(allComputed)) {
       if (config.deps.some(dep => changedNames.includes(dep))) {
         this._computedCache.delete(computedName)
       }

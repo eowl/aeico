@@ -1,2 +1,3 @@
 export { prop, PROP_METADATA_KEY } from './prop'
-export { watcher, WATCHER_METADATA_KEY } from './watcher'
+export { watch, WATCHER_METADATA_KEY } from './watch'
+export { computed, COMPUTED_METADATA_KEY } from './computed'

@@ -18,14 +18,14 @@ type WatcherMetadata = Record<string, WatcherHandler>
  *
  * @example
  * ```typescript
- * @watcher('disabled')
+ * @watch('disabled')
  * onDisabledChanged(newValue: boolean, oldValue: boolean) { ... }
  *
- * @watcher('min', 'max')
+ * @watch('min', 'max')
  * onRangeChanged(newValue: unknown, oldValue: unknown) { ... }
  * ```
  */
-export function watcher(...propNames: string[]) {
+export function watch(...propNames: string[]) {
   return function <This, Value extends (newValue: unknown, oldValue: unknown) => void>(
     _target: Value,
     context: ClassMethodDecoratorContext<This, Value>,

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll, updated } from '../../helpers/mount.js'
 import BaseElement from '../../../src/core/base-element.js'
-import { prop, watcher } from '../../../src/decorators/index.js'
+import { prop, watch } from '../../../src/decorators/index.js'
 import type { Props, Watchers } from '../../../src/core/types.js'
 
 afterEach(() => {
@@ -10,7 +10,7 @@ afterEach(() => {
 
 let _counter = 0
 
-describe('@watcher decorator', () => {
+describe('@watch decorator', () => {
   describe('basic triggering', () => {
     it('calls decorated method when watched property changes', async () => {
       const tag = `test-watcher-basic-${++_counter}`
@@ -20,7 +20,7 @@ describe('@watcher decorator', () => {
         static props: Props = { count: { type: Number } }
         declare count: number | undefined
 
-        @watcher('count')
+        @watch('count')
         onCountChanged(newValue: unknown, oldValue: unknown) {
           calls.push({ newValue, oldValue })
         }
@@ -47,7 +47,7 @@ describe('@watcher decorator', () => {
         static props: Props = { name: { type: String } }
         declare name: string | undefined
 
-        @watcher('name')
+        @watch('name')
         onNameChanged(newValue: unknown, oldValue: unknown) {
           captured = { newValue, oldValue }
         }
@@ -63,7 +63,7 @@ describe('@watcher decorator', () => {
   })
 
   describe('multiple properties', () => {
-    it('@watcher with multiple prop names triggers on any of them', async () => {
+    it('@watch with multiple prop names triggers on any of them', async () => {
       const tag = `test-watcher-multi-${++_counter}`
       const triggeredFor: string[] = []
 
@@ -72,7 +72,7 @@ describe('@watcher decorator', () => {
         declare min: number | undefined
         declare max: number | undefined
 
-        @watcher('min', 'max')
+        @watch('min', 'max')
         onRangeChanged() {
           // record which props are currently set as a snapshot
           triggeredFor.push(`min=${this.min},max=${this.max}`)
@@ -99,7 +99,7 @@ describe('@watcher decorator', () => {
         static props: Props = { active: { type: Boolean } }
         declare active: boolean | undefined
 
-        @watcher('active')
+        @watch('active')
         onActiveChanged() {
           capturedThis = this
         }
@@ -201,7 +201,7 @@ describe('inheritance', () => {
       static props: Props = { base: { type: String } }
       declare base: string | undefined
 
-      @watcher('base')
+      @watch('base')
       onBaseChanged() {
         calls.push('parent:base')
       }
@@ -211,7 +211,7 @@ describe('inheritance', () => {
       static props: Props = { extra: { type: String } }
       declare extra: string | undefined
 
-      @watcher('extra')
+      @watch('extra')
       onExtraChanged() {
         calls.push('child:extra')
       }
@@ -236,7 +236,7 @@ describe('inheritance', () => {
       static props: Props = { shared: { type: String } }
       declare shared: string | undefined
 
-      @watcher('shared')
+      @watch('shared')
       onSharedFromParent() {
         calls.push('parent')
       }
