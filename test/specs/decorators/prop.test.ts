@@ -16,7 +16,7 @@ describe('@prop decorator', () => {
       const tag = `test-dec-str-${++_counter}`
 
       class El extends BaseElement {
-        @prop({ type: String }) accessor title: string | undefined
+        @prop({ type: String }) accessor title: string = ''
       }
       customElements.define(tag, El)
 
@@ -194,16 +194,16 @@ describe('@prop decorator', () => {
       const tag = `test-dec-observed-${++_counter}`
 
       class El extends BaseElement {
-        @prop({ type: String }) accessor title: string | undefined
+        @prop({ type: String }) accessor title: string = ''
         @prop({ type: Number }) accessor count: number | undefined
-        @prop({ type: Boolean, observe: false }) accessor hidden: boolean | undefined
+        @prop({ type: Boolean, observe: false }) accessor inactive: boolean | undefined
       }
       customElements.define(tag, El)
 
       const observed = (El as unknown as typeof BaseElement).observedAttributes
       expect(observed).to.include('title')
       expect(observed).to.include('count')
-      expect(observed).to.not.include('hidden')
+      expect(observed).to.not.include('inactive')
     })
   })
 })
