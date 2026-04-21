@@ -1,7 +1,7 @@
 import type {
   Props,
   Prop,
-  ComputedDeclaration,
+  Computed,
   Watchers,
   WatcherHandler,
   InferProps
@@ -47,7 +47,7 @@ class BaseElement extends HTMLElement {
   static props: Props = {}
 
   /** Computed property declarations. Automatically cached and invalidated. */
-  static computed?: ComputedDeclaration
+  static computed?: Computed
 
   /** Property watcher declarations. Maps property name → method name. */
   static watchers?: Watchers
@@ -63,7 +63,7 @@ class BaseElement extends HTMLElement {
   private static _propertyCache?: Record<string, Prop>
   private static _attrToPropMap?: Map<string, string>
   private static _watcherCache?: Record<string, WatcherHandler>
-  private static _computedDecls?: ComputedDeclaration
+  private static _computedDecls?: Computed
 
   /**
    * Collect props from the entire inheritance chain, starting from the current class up to HTMLElement.
@@ -158,7 +158,7 @@ class BaseElement extends HTMLElement {
    * Merges static `computed` objects and `@computed` decorator metadata (parent → child override).
    * Result is cached on the class.
    */
-  private static _collectComputed(): ComputedDeclaration {
+  private static _collectComputed(): Computed {
     if (Object.prototype.hasOwnProperty.call(this, '_computedDecls')) {
       return this._computedDecls!
     }
@@ -171,7 +171,7 @@ class BaseElement extends HTMLElement {
       current = Object.getPrototypeOf(current) as typeof HTMLElement | null
     }
 
-    const collected: ComputedDeclaration = {}
+    const collected: Computed = {}
 
     while (inheritanceStack.length > 0) {
       const cls = inheritanceStack.pop() as typeof BaseElement

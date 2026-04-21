@@ -52,7 +52,7 @@ export interface ComputedPropertyConfig<T = any> {
 /**
  * Computed properties declaration
  */
-export type ComputedDeclaration = Record<string, ComputedPropertyConfig>
+export type Computed = Record<string, ComputedPropertyConfig>
 
 /**
  * Watcher handler: a method name string or an inline function
