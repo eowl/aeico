@@ -1,0 +1,14 @@
+{
+  "name": "@aeico/aeico-page-core",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Core library for aeico-page static site generator",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  }
+}

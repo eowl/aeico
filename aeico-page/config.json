@@ -1,0 +1,48 @@
+{
+  "site": {
+    "title": "aeico-page",
+    "description": "Markdown-first static site",
+    "base": "/",
+    "origin": "http://localhost:4173"
+  },
+  "content": {
+    "rootDir": "content",
+    "include": ["**/*.md"],
+    "exclude": []
+  },
+  "layout": {
+    "rootDir": "layout",
+    "defaultLayout": "home",
+    "partials": {
+      "header": "header",
+      "footer": "footer",
+      "menu": "menu"
+    }
+  },
+  "routing": {
+    "trailingSlash": "always",
+    "cleanIndex": true,
+    "slugify": "lower"
+  },
+  "i18n": {
+    "enabled": true,
+    "mode": "same-path",
+    "defaultLocale": "zh-CN",
+    "locales": ["zh-CN", "en-US"],
+    "localeDetection": "none"
+  },
+  "theme": {
+    "mode": "auto",
+    "switchable": true
+  },
+  "build": {
+    "outDir": "dist",
+    "minifyHtml": false,
+    "sitemap": false,
+    "rss": false
+  },
+  "dev": {
+    "port": 4173,
+    "open": false
+  }
+}

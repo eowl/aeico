@@ -1,0 +1,23 @@
+{
+  "name": "aeico-page",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Markdown-first static site generator",
+  "scripts": {
+    "compile": "npm run compile:core && npm run compile:cli",
+    "compile:core": "tsc -p ./packages/aeico-page-core/tsconfig.json",
+    "compile:cli": "tsc -p ./packages/aeico-page-cli/tsconfig.json",
+    "build": "npm run compile && node ./packages/aeico-page-cli/dist/index.js build",
+    "dev": "npm run compile && node ./packages/aeico-page-cli/dist/index.js dev",
+    "preview": "npm run compile && node ./packages/aeico-page-cli/dist/index.js preview",
+    "init": "npm run compile && node ./packages/aeico-page-cli/dist/index.js init",
+    "example:build": "npm run compile && node ./packages/aeico-page-cli/dist/index.js build --site ./examples/basic-site",
+    "example:dev": "npm run compile && node ./packages/aeico-page-cli/dist/index.js dev --site ./examples/basic-site",
+    "example:preview": "npm run compile && node ./packages/aeico-page-cli/dist/index.js preview --site ./examples/basic-site"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "typescript": "^5.8.3"
+  }
+}

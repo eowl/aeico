@@ -1,0 +1,24 @@
+{
+  "site": {
+    "title": "aeico-page site",
+    "description": "A markdown-first static site",
+    "base": "/",
+    "origin": "http://localhost:4173"
+  },
+  "content": {
+    "rootDir": "content"
+  },
+  "layout": {
+    "rootDir": "layout",
+    "defaultLayout": "home"
+  },
+  "i18n": {
+    "enabled": true,
+    "mode": "same-path",
+    "defaultLocale": "zh-CN",
+    "locales": [
+      "zh-CN",
+      "en-US"
+    ]
+  }
+}

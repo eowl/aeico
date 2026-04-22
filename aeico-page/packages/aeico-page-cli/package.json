@@ -1,0 +1,11 @@
+{
+  "name": "@aeico/aeico-page-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "CLI for aeico-page static site generator",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "aeico-page": "./dist/index.js"
+  }
+}
