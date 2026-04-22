@@ -1,3 +1,0 @@
----
-
-Built with aeico-page.

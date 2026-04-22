@@ -6,12 +6,13 @@
     <title>{{ page.title }} | {{ site.title }}</title>
     <meta name="description" content="{{ page.description }}" />
     <link rel="stylesheet" href="/assets/style.css" />
+    <script src="/assets/components.js"></script>
     {{ include.head_extra }}
   </head>
   <body>
-    {{ navbar }}
+    <ap-navbar data='{{ tree_json }}' current='{{ current_route }}'></ap-navbar>
     <div class="ap-layout">
-      {{ sidebar }}
+      <ap-sidebar data='{{ tree_json }}' current='{{ current_route }}'></ap-sidebar>
       <main class="ap-content">
         {{ content }}
       </main>

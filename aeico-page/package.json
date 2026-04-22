@@ -17,7 +17,7 @@
     "theme"
   ],
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsc && vite build --config vite.components.config.ts",
     "prepublishOnly": "npm run compile",
     "build": "npm run compile && node ./dist/cli.js build",
     "dev": "npm run compile && node ./dist/cli.js dev",
@@ -27,8 +27,12 @@
     "example:dev": "npm run compile && node ./dist/cli.js dev --site ./examples/basic-site",
     "example:preview": "npm run compile && node ./dist/cli.js preview --site ./examples/basic-site"
   },
+  "dependencies": {
+    "aeico": "file:../"
+  },
   "devDependencies": {
     "@types/node": "^22.15.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "^6.0.0"
   }
 }
