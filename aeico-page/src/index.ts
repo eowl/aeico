@@ -121,15 +121,15 @@ function mergeConfig(userConfig: Partial<AeicoPageConfig>): AeicoPageConfig {
 }
 
 export function getDefaultThemeLayoutDir(): string {
-  return fileURLToPath(new URL('../../aeico-page-theme-default/layout/', import.meta.url))
+  return fileURLToPath(new URL('../theme/layout/', import.meta.url))
 }
 
 export function getDefaultThemeAssetsDir(): string {
-  return fileURLToPath(new URL('../../aeico-page-theme-default/assets/', import.meta.url))
+  return fileURLToPath(new URL('../theme/assets/', import.meta.url))
 }
 
 export function getDefaultThemeIncludesDir(): string {
-  return fileURLToPath(new URL('../../aeico-page-theme-default/includes/', import.meta.url))
+  return fileURLToPath(new URL('../theme/includes/', import.meta.url))
 }
 
 /**
@@ -342,15 +342,6 @@ function routeToOutputFile(route: string, outDir: string, trailingSlash: Trailin
   return path.join(outDir, normalized, 'index.html')
 }
 
-function deepGet(obj: Record<string, unknown>, keyPath: string): unknown {
-  return keyPath.split('.').reduce<unknown>((acc, key) => {
-    if (typeof acc === 'object' && acc !== null && key in acc) {
-      return (acc as Record<string, unknown>)[key]
-    }
-    return undefined
-  }, obj)
-}
-
 function renderTemplate(template: string, context: Record<string, unknown>): string {
   return template.replace(/{{\s*([a-zA-Z0-9_.]+)\s*}}/g, (_, keyPath: string) => {
     const value = keyPath.split('.').reduce<unknown>((acc, key) => {
@@ -419,10 +410,10 @@ export function generateNavbarHtml(tree: SiteTree, currentRoute: string, siteTit
   const homeActive = currentRoute === '/'
 
   const navLinks = [
-    `<a href="/" class="ap-nav-link${homeActive ? ' ap-active' : ''}"><ae-button variant="text"${homeActive ? ' active' : ''}>Home</ae-button></a>`,
+    `<a href="/" class="ap-nav-link${homeActive ? ' ap-active' : ''}">Home</a>`,
     ...tree.sections.map((section) => {
       const isActive = currentSection === section.name
-      return `<a href="${section.entryRoute}" class="ap-nav-link${isActive ? ' ap-active' : ''}"><ae-button variant="text"${isActive ? ' active' : ''}>${capitalize(section.name)}</ae-button></a>`
+      return `<a href="${section.entryRoute}" class="ap-nav-link${isActive ? ' ap-active' : ''}">${capitalize(section.name)}</a>`
     })
   ].join('\n    ')
 
@@ -445,7 +436,7 @@ export function generateSidebarHtml(tree: SiteTree, currentRoute: string): strin
   const items = section.pages
     .map((page) => {
       const isActive = page.route === currentRoute
-      return `<li><a href="${page.route}" class="ap-sidebar-link${isActive ? ' ap-active' : ''}"><ae-button variant="text"${isActive ? ' active' : ''}>${escapeHtml(page.title)}</ae-button></a></li>`
+      return `<li><a href="${page.route}" class="ap-sidebar-link${isActive ? ' ap-active' : ''}">${escapeHtml(page.title)}</a></li>`
     })
     .join('\n    ')
 
@@ -546,7 +537,7 @@ export function writeOutput({
   // Copy static assets from default theme
   const assetsDir = getDefaultThemeAssetsDir()
   const outAssetsDir = path.join(outDir, 'assets')
-  for (const name of ['aeico.js', 'style.css']) {
+  for (const name of ['style.css']) {
     const src = path.join(assetsDir, name)
     if (fs.existsSync(src)) {
       ensureDir(outAssetsDir)
@@ -577,7 +568,7 @@ export async function buildSite(options: BuildOptions = {}): Promise<BuildResult
   const tree = buildSiteTree(parsedPages)
 
   const layoutDir = getDefaultThemeLayoutDir()
-  const layoutFile = path.join(layoutDir, 'home.md')
+  const layoutFile = path.join(layoutDir, 'home.html')
   if (!fs.existsSync(layoutFile)) {
     throw new Error(`Default theme layout not found: ${layoutFile}`)
   }

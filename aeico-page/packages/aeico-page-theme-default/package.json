@@ -1,9 +1,0 @@
-{
-  "name": "@aeico/aeico-page-theme-default",
-  "version": "0.1.0",
-  "type": "module",
-  "description": "Default theme assets for aeico-page",
-  "scripts": {
-    "build:bundle": "vite build --config vite.bundle.config.ts"
-  }
-}

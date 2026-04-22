@@ -6,7 +6,7 @@ import process from 'node:process'
 import {
   buildSite,
   loadConfig
-} from '../../aeico-page-core/dist/index.js'
+} from './index.js'
 
 type CliArgs = {
   command: string

@@ -4,33 +4,28 @@
   "type": "module",
   "description": "Markdown-first static site generator",
   "bin": {
-    "aeico-page": "./packages/aeico-page-cli/dist/index.js"
+    "aeico-page": "./dist/cli.js"
   },
   "exports": {
     ".": {
-      "import": "./packages/aeico-page-core/dist/index.js",
-      "types": "./packages/aeico-page-core/dist/index.d.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
-    "packages/aeico-page-cli/dist",
-    "packages/aeico-page-core/dist",
-    "packages/aeico-page-theme-default/assets",
-    "packages/aeico-page-theme-default/includes",
-    "packages/aeico-page-theme-default/layout"
+    "dist",
+    "theme"
   ],
   "scripts": {
-    "compile": "npm run compile:core && npm run compile:cli",
-    "compile:core": "tsc -p ./packages/aeico-page-core/tsconfig.json",
-    "compile:cli": "tsc -p ./packages/aeico-page-cli/tsconfig.json",
+    "compile": "tsc",
     "prepublishOnly": "npm run compile",
-    "build": "npm run compile && node ./packages/aeico-page-cli/dist/index.js build",
-    "dev": "npm run compile && node ./packages/aeico-page-cli/dist/index.js dev",
-    "preview": "npm run compile && node ./packages/aeico-page-cli/dist/index.js preview",
-    "init": "npm run compile && node ./packages/aeico-page-cli/dist/index.js init",
-    "example:build": "npm run compile && node ./packages/aeico-page-cli/dist/index.js build --site ./examples/basic-site",
-    "example:dev": "npm run compile && node ./packages/aeico-page-cli/dist/index.js dev --site ./examples/basic-site",
-    "example:preview": "npm run compile && node ./packages/aeico-page-cli/dist/index.js preview --site ./examples/basic-site"
+    "build": "npm run compile && node ./dist/cli.js build",
+    "dev": "npm run compile && node ./dist/cli.js dev",
+    "preview": "npm run compile && node ./dist/cli.js preview",
+    "init": "npm run compile && node ./dist/cli.js init",
+    "example:build": "npm run compile && node ./dist/cli.js build --site ./examples/basic-site",
+    "example:dev": "npm run compile && node ./dist/cli.js dev --site ./examples/basic-site",
+    "example:preview": "npm run compile && node ./dist/cli.js preview --site ./examples/basic-site"
   },
   "devDependencies": {
     "@types/node": "^22.15.2",
