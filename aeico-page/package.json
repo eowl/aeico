@@ -1,13 +1,29 @@
 {
   "name": "aeico-page",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "description": "Markdown-first static site generator",
+  "bin": {
+    "aeico-page": "./packages/aeico-page-cli/dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./packages/aeico-page-core/dist/index.js",
+      "types": "./packages/aeico-page-core/dist/index.d.ts"
+    }
+  },
+  "files": [
+    "packages/aeico-page-cli/dist",
+    "packages/aeico-page-core/dist",
+    "packages/aeico-page-theme-default/assets",
+    "packages/aeico-page-theme-default/includes",
+    "packages/aeico-page-theme-default/layout"
+  ],
   "scripts": {
     "compile": "npm run compile:core && npm run compile:cli",
     "compile:core": "tsc -p ./packages/aeico-page-core/tsconfig.json",
     "compile:cli": "tsc -p ./packages/aeico-page-cli/tsconfig.json",
+    "prepublishOnly": "npm run compile",
     "build": "npm run compile && node ./packages/aeico-page-cli/dist/index.js build",
     "dev": "npm run compile && node ./packages/aeico-page-cli/dist/index.js dev",
     "preview": "npm run compile && node ./packages/aeico-page-cli/dist/index.js preview",
