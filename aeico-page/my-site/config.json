@@ -1,0 +1,9 @@
+{
+  "site": {
+    "title": "My Site",
+    "description": "A markdown-first static site"
+  },
+  "build": {
+    "outDir": "dist"
+  }
+}

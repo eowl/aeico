@@ -5,7 +5,6 @@ import path from 'node:path'
 import process from 'node:process'
 import {
   buildSite,
-  getDefaultThemeLayoutDir,
   loadConfig
 } from '../../aeico-page-core/dist/index.js'
 
@@ -45,12 +44,14 @@ async function runBuild(siteRoot: string, configPath: string): Promise<void> {
 }
 
 function runDev(siteRoot: string, configPath: string): void {
+  const { config } = loadConfig({ rootDir: siteRoot, configPath })
+  const outDir = path.resolve(siteRoot, config.build.outDir)
+  const port = config.dev.port || 4173
+
   const schedule = (() => {
     let timer: ReturnType<typeof setTimeout> | null = null
     return () => {
-      if (timer) {
-        clearTimeout(timer)
-      }
+      if (timer) clearTimeout(timer)
       timer = setTimeout(async () => {
         try {
           await runBuild(siteRoot, configPath)
@@ -62,23 +63,59 @@ function runDev(siteRoot: string, configPath: string): void {
     }
   })()
 
-  const { config } = loadConfig({ rootDir: siteRoot, configPath })
   const targets = [
     path.resolve(siteRoot, config.content.rootDir),
-    path.resolve(siteRoot, config.layout.rootDir),
     path.resolve(siteRoot, configPath)
   ]
 
   void runBuild(siteRoot, configPath)
 
   for (const target of targets) {
-    if (!fs.existsSync(target)) {
-      continue
-    }
+    if (!fs.existsSync(target)) continue
     fs.watch(target, { recursive: true }, schedule)
   }
 
-  console.log(`[aeico-page] dev watching in ${siteRoot}`)
+  const server = http.createServer((req, res) => {
+    const requestPath = decodeURIComponent((req.url || '/').split('?')[0])
+    const normalized = requestPath === '/' ? '/index.html' : requestPath
+
+    const candidates = [
+      path.join(outDir, normalized),
+      path.join(outDir, normalized, 'index.html'),
+      path.join(outDir, normalized.replace(/\/$/, ''), 'index.html')
+    ]
+
+    const filePath = candidates.find((c) => fs.existsSync(c) && fs.statSync(c).isFile())
+    if (!filePath) {
+      res.statusCode = 404
+      res.end('Not Found')
+      return
+    }
+
+    const contentType = filePath.endsWith('.html')
+      ? 'text/html; charset=utf-8'
+      : filePath.endsWith('.js')
+        ? 'application/javascript; charset=utf-8'
+        : filePath.endsWith('.css')
+          ? 'text/css; charset=utf-8'
+          : 'text/plain; charset=utf-8'
+
+    res.setHeader('content-type', contentType)
+    fs.createReadStream(filePath).pipe(res)
+  })
+
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[aeico-page] port ${port} is already in use`)
+    } else {
+      console.error(`[aeico-page] server error: ${err.message}`)
+    }
+    process.exitCode = 1
+  })
+
+  server.listen(port, () => {
+    console.log(`[aeico-page] dev server at http://localhost:${port}`)
+  })
 }
 
 function runPreview(siteRoot: string, configPath: string): void {
@@ -105,10 +142,23 @@ function runPreview(siteRoot: string, configPath: string): void {
 
     const contentType = filePath.endsWith('.html')
       ? 'text/html; charset=utf-8'
-      : 'text/plain; charset=utf-8'
+      : filePath.endsWith('.js')
+        ? 'application/javascript; charset=utf-8'
+        : filePath.endsWith('.css')
+          ? 'text/css; charset=utf-8'
+          : 'text/plain; charset=utf-8'
 
     res.setHeader('content-type', contentType)
     fs.createReadStream(filePath).pipe(res)
+  })
+
+  server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[aeico-page] port ${port} is already in use`)
+    } else {
+      console.error(`[aeico-page] server error: ${err.message}`)
+    }
+    process.exitCode = 1
   })
 
   server.listen(port, () => {
@@ -125,24 +175,18 @@ function ensureFileIfMissing(filePath: string, content: string): void {
 function runInit(siteRoot: string): void {
   fs.mkdirSync(siteRoot, { recursive: true })
 
-  const contentDir = path.join(siteRoot, 'content', 'chapter_1')
-  fs.mkdirSync(contentDir, { recursive: true })
-  const layoutDir = path.join(siteRoot, 'layout')
-  fs.mkdirSync(layoutDir, { recursive: true })
+  fs.mkdirSync(path.join(siteRoot, '_pages', 'docs'), { recursive: true })
+  fs.mkdirSync(path.join(siteRoot, '_pages', 'blog'), { recursive: true })
 
   ensureFileIfMissing(
     path.join(siteRoot, 'config.json'),
     JSON.stringify(
       {
         site: {
-          title: 'aeico-page site',
-          description: 'A markdown-first static site',
-          base: '/',
-          origin: 'http://localhost:4173'
+          title: 'My Site',
+          description: 'A markdown-first static site'
         },
-        content: { rootDir: 'content' },
-        layout: { rootDir: 'layout', defaultLayout: 'home' },
-        i18n: { enabled: true, mode: 'same-path', defaultLocale: 'zh-CN', locales: ['zh-CN', 'en-US'] }
+        build: { outDir: 'dist' }
       },
       null,
       2
@@ -150,24 +194,19 @@ function runInit(siteRoot: string): void {
   )
 
   ensureFileIfMissing(
-    path.join(contentDir, 'hello.md'),
-    '# Hello\n\nThis site was initialized by aeico-page.'
+    path.join(siteRoot, '_pages', 'index.md'),
+    '# Welcome\n\nThis is the home page of your aeico-page site.\n'
   )
 
   ensureFileIfMissing(
-    path.join(siteRoot, 'content', 'index.md'),
-    '# Home\n\nWelcome to your aeico-page site.'
+    path.join(siteRoot, '_pages', 'docs', 'getting-started.md'),
+    '---\ntitle: Getting Started\n---\n\n# Getting Started\n\nAdd your documentation here.\n'
   )
 
-  const defaultLayoutDir = getDefaultThemeLayoutDir()
-  const layoutFiles = ['home.md', 'header.md', 'menu.md', 'footer.md']
-  for (const fileName of layoutFiles) {
-    const src = path.join(defaultLayoutDir, fileName)
-    const dst = path.join(layoutDir, fileName)
-    if (!fs.existsSync(dst) && fs.existsSync(src)) {
-      fs.copyFileSync(src, dst)
-    }
-  }
+  ensureFileIfMissing(
+    path.join(siteRoot, '_pages', 'blog', 'hello-world.md'),
+    '---\ntitle: Hello World\n---\n\n# Hello World\n\nYour first blog post.\n'
+  )
 
   console.log(`[aeico-page] initialized site in ${siteRoot}`)
 }
