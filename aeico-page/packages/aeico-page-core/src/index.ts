@@ -128,6 +128,42 @@ export function getDefaultThemeAssetsDir(): string {
   return fileURLToPath(new URL('../../aeico-page-theme-default/assets/', import.meta.url))
 }
 
+export function getDefaultThemeIncludesDir(): string {
+  return fileURLToPath(new URL('../../aeico-page-theme-default/includes/', import.meta.url))
+}
+
+/**
+ * Resolve includes: theme defaults merged with user overrides from <siteRoot>/_includes/.
+ * Returns a Record where key = filename without .html extension, value = file content.
+ */
+export function resolveIncludes(siteRoot: string): Record<string, string> {
+  const result: Record<string, string> = {}
+
+  // 1. Load theme defaults
+  const themeIncludesDir = getDefaultThemeIncludesDir()
+  if (fs.existsSync(themeIncludesDir)) {
+    for (const entry of fs.readdirSync(themeIncludesDir, { withFileTypes: true })) {
+      if (entry.isFile() && entry.name.endsWith('.html')) {
+        const key = entry.name.slice(0, -5).replace(/-/g, '_')
+        result[key] = fs.readFileSync(path.join(themeIncludesDir, entry.name), 'utf-8')
+      }
+    }
+  }
+
+  // 2. User overrides take precedence
+  const userIncludesDir = path.resolve(siteRoot, '_includes')
+  if (fs.existsSync(userIncludesDir)) {
+    for (const entry of fs.readdirSync(userIncludesDir, { withFileTypes: true })) {
+      if (entry.isFile() && entry.name.endsWith('.html')) {
+        const key = entry.name.slice(0, -5).replace(/-/g, '_')
+        result[key] = fs.readFileSync(path.join(userIncludesDir, entry.name), 'utf-8').replace(/^\uFEFF/, '')
+      }
+    }
+  }
+
+  return result
+}
+
 export function loadConfig({ rootDir = process.cwd(), configPath = 'config.json' }: { rootDir?: string; configPath?: string } = {}): {
   config: AeicoPageConfig
   configPath: string
@@ -467,12 +503,14 @@ function renderPageHtml({
   page,
   config,
   tree,
-  layoutTemplate
+  layoutTemplate,
+  includes
 }: {
   page: ParsedPage
   config: AeicoPageConfig
   tree: SiteTree
   layoutTemplate: string
+  includes: Record<string, string>
 }): string {
   const navbar = generateNavbarHtml(tree, page.route, config.site.title)
   const sidebar = generateSidebarHtml(tree, page.route)
@@ -481,7 +519,8 @@ function renderPageHtml({
     site: config.site,
     navbar,
     sidebar,
-    content: markdownToHtml(page.content)
+    content: markdownToHtml(page.content),
+    include: includes
   })
 }
 
@@ -504,13 +543,15 @@ export function writeOutput({
     fs.writeFileSync(outFile, page.html, 'utf-8')
   }
 
-  // Copy aeico.js bundle from default theme assets if present
+  // Copy static assets from default theme
   const assetsDir = getDefaultThemeAssetsDir()
-  const aeicoJs = path.join(assetsDir, 'aeico.js')
-  if (fs.existsSync(aeicoJs)) {
-    const outAssetsDir = path.join(outDir, 'assets')
-    ensureDir(outAssetsDir)
-    fs.copyFileSync(aeicoJs, path.join(outAssetsDir, 'aeico.js'))
+  const outAssetsDir = path.join(outDir, 'assets')
+  for (const name of ['aeico.js', 'style.css']) {
+    const src = path.join(assetsDir, name)
+    if (fs.existsSync(src)) {
+      ensureDir(outAssetsDir)
+      fs.copyFileSync(src, path.join(outAssetsDir, name))
+    }
   }
 
   return { outDir, pages: renderedPages.length }
@@ -541,11 +582,12 @@ export async function buildSite(options: BuildOptions = {}): Promise<BuildResult
     throw new Error(`Default theme layout not found: ${layoutFile}`)
   }
   const layoutTemplate = fs.readFileSync(layoutFile, 'utf-8')
+  const includes = resolveIncludes(rootDir)
 
   const warnings: string[] = []
   const renderedPages: RenderedPage[] = parsedPages.map((page) => ({
     ...page,
-    html: renderPageHtml({ page, config, tree, layoutTemplate })
+    html: renderPageHtml({ page, config, tree, layoutTemplate, includes })
   }))
 
   const written = writeOutput({ rootDir, config, renderedPages })

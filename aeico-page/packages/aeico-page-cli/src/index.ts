@@ -65,6 +65,7 @@ function runDev(siteRoot: string, configPath: string): void {
 
   const targets = [
     path.resolve(siteRoot, config.content.rootDir),
+    path.resolve(siteRoot, '_includes'),
     path.resolve(siteRoot, configPath)
   ]
 
