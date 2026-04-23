@@ -49,6 +49,7 @@ export type ParsedPage = ParsedInputPage & {
   description: string
   draft: boolean
   isMeta: boolean
+  layout: string
 }
 
 export type RenderedPage = ParsedPage & {

@@ -137,7 +137,8 @@ export function transformPage(page: ParsedInputPage, _config: AeicoPageConfig): 
     title: String(frontmatter.title ?? inferTitle(page.relativePath.replace(/\.md$/i, ''))),
     description: String(frontmatter.description ?? ''),
     draft: frontmatter.draft === true,
-    isMeta
+    isMeta,
+    layout: isMeta ? '' : String(frontmatter.layout ?? 'default')
   }
 }
 

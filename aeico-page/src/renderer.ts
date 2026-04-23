@@ -89,7 +89,7 @@ export function renderPageHtml({
   const treeJson = JSON.stringify(tree).replaceAll("'", '&#39;')
   const currentSection = page.route.split('/').filter(Boolean)[0] ?? ''
 
-  return renderTemplate(layoutTemplate, {
+  const baseContext: Record<string, unknown> = {
     page: { title: page.title, description: page.description, route: page.route },
     site: config.site,
     tree_json: treeJson,
@@ -97,7 +97,15 @@ export function renderPageHtml({
     current_section: currentSection,
     content: markdownToHtml(page.content),
     include: includes
-  })
+  }
+
+  // Pre-render each include so nested {{ }} references inside includes are resolved
+  const renderedIncludes: Record<string, string> = {}
+  for (const [key, val] of Object.entries(includes)) {
+    renderedIncludes[key] = renderTemplate(val, baseContext)
+  }
+
+  return renderTemplate(layoutTemplate, { ...baseContext, include: renderedIncludes })
 }
 
 export function writeOutput({

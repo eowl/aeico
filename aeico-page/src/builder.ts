@@ -28,16 +28,24 @@ export async function buildSite(options: BuildOptions = {}): Promise<BuildResult
   const renderablePages = parsedPages.filter((p) => !p.isMeta)
 
   const layoutDir = getDefaultThemeLayoutDir()
-  const layoutFile = path.join(layoutDir, 'home.html')
-  if (!fs.existsSync(layoutFile)) {
-    throw new Error(`Default theme layout not found: ${layoutFile}`)
+  const layoutCache = new Map<string, string>()
+
+  function loadLayout(name: string): string {
+    if (layoutCache.has(name)) return layoutCache.get(name)!
+    const layoutFile = path.join(layoutDir, `${name}.html`)
+    if (!fs.existsSync(layoutFile)) {
+      throw new Error(`Layout not found: ${name}.html (looked in ${layoutDir})`)
+    }
+    const template = fs.readFileSync(layoutFile, 'utf-8')
+    layoutCache.set(name, template)
+    return template
   }
-  const layoutTemplate = fs.readFileSync(layoutFile, 'utf-8')
+
   const includes = resolveIncludes(rootDir)
 
   const renderedPages: RenderedPage[] = renderablePages.map((page) => ({
     ...page,
-    html: renderPageHtml({ page, config, tree, layoutTemplate, includes })
+    html: renderPageHtml({ page, config, tree, layoutTemplate: loadLayout(page.layout), includes })
   }))
 
   const written = writeOutput({ rootDir, config, renderedPages })

@@ -1,3 +1,6 @@
-# Welcome
+---
+title: Home
+layout: home
+---
 
-This is the home page of your aeico-page site.
+# Welcome

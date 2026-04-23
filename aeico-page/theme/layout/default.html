@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  {{ include.head }}
+  <body>
+    <ap-navbar data='{{ tree_json }}' current='{{ current_route }}'></ap-navbar>
+    <div class="ap-layout">
+      <ap-sidebar data='{{ tree_json }}' current='{{ current_route }}'></ap-sidebar>
+      <main class="ap-content">
+        {{ content }}
+      </main>
+    </div>
+    {{ include.footer }}
+  </body>
+</html>
