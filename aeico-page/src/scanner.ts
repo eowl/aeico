@@ -4,6 +4,7 @@ import type {
   AeicoPageConfig,
   ParsedInputPage,
   ParsedPage,
+  MetaLink,
   SitePage,
   SiteSection,
   SiteTree,
@@ -41,20 +42,69 @@ function parseFrontmatter(markdown: string): { data: Record<string, unknown>; co
   }
 
   const data: Record<string, unknown> = {}
-  for (const line of match[1].split('\n')) {
+  const lines = match[1].split('\n')
+  let i = 0
+
+  function parseScalar(raw: string): unknown {
+    const v = raw.trim()
+    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) return v.slice(1, -1)
+    if (v === 'true') return true
+    if (v === 'false') return false
+    if (v === 'null' || v === '~') return null
+    if (/^-?\d+$/.test(v)) return Number(v)
+    if (/^-?\d+\.\d+$/.test(v)) return Number(v)
+    return v
+  }
+
+  while (i < lines.length) {
+    const line = lines[i]
     const trimmed = line.trim()
-    if (!trimmed || trimmed.startsWith('#')) continue
+    if (!trimmed || trimmed.startsWith('#')) { i++; continue }
+
     const idx = trimmed.indexOf(':')
-    if (idx <= 0) continue
+    if (idx <= 0) { i++; continue }
+
     const key = trimmed.slice(0, idx).trim()
-    let value = trimmed.slice(idx + 1).trim()
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1)
+    const rest = trimmed.slice(idx + 1).trim()
+
+    if (rest === '') {
+      // Could be a block: list items follow as "  - ..." lines
+      const items: Record<string, unknown>[] = []
+      i++
+      while (i < lines.length) {
+        const next = lines[i]
+        const nextTrimmed = next.trim()
+        if (!nextTrimmed || nextTrimmed.startsWith('#')) { i++; continue }
+        // List item start
+        if (!nextTrimmed.startsWith('-')) break
+        const itemLine = nextTrimmed.slice(1).trim()
+        const item: Record<string, unknown> = {}
+        // First field on the same line
+        const firstColon = itemLine.indexOf(':')
+        if (firstColon > 0) {
+          item[itemLine.slice(0, firstColon).trim()] = parseScalar(itemLine.slice(firstColon + 1))
+        }
+        i++
+        // Continuation fields with deeper indent
+        while (i < lines.length) {
+          const cont = lines[i]
+          if (!cont.trim() || cont.trim().startsWith('-') || cont.trim().startsWith('#')) break
+          const contColon = cont.indexOf(':')
+          if (contColon > 0) {
+            const contKey = cont.slice(0, contColon).trim()
+            const contVal = parseScalar(cont.slice(contColon + 1))
+            item[contKey] = contVal
+          }
+          i++
+        }
+        items.push(item)
+      }
+      data[key] = items
+      continue
     }
-    if (value === 'true') data[key] = true
-    else if (value === 'false') data[key] = false
-    else if (/^\d+$/.test(value)) data[key] = Number(value)
-    else data[key] = value
+
+    data[key] = parseScalar(rest)
+    i++
   }
 
   return { data, content: markdown.slice(match[0].length) }
@@ -183,10 +233,12 @@ export function buildSiteTree(
     (p) => !p.isMeta && p.route !== '/'
   )
 
-  // Collect top-level section names (first path segment)
-  const topNames = [...new Set(
-    sectionPages.map((p) => p.route.split('/').filter(Boolean)[0])
-  )]
+  // Collect top-level section names from content pages AND from top-level meta files
+  const topNamesFromPages = sectionPages.map((p) => p.route.split('/').filter(Boolean)[0])
+  const topNamesFromMeta = [...metaMap.keys()]
+    .filter((dir) => !dir.includes('/'))  // only top-level dirs (e.g. "test", not "blog/2024")
+    .filter((dir) => dir !== '.')
+  const topNames = [...new Set([...topNamesFromPages, ...topNamesFromMeta])]
 
   function firstRoute(section: SiteSection): string {
     if (section.index) return section.index.route
@@ -202,6 +254,13 @@ export function buildSiteTree(
     const name = prefix.split('/').at(-1)!
     const meta = metaMap.get(prefix)
     const title = meta?.title ? String(meta.title) : name.charAt(0).toUpperCase() + name.slice(1)
+
+    // Parse links array from _meta.md frontmatter
+    const rawLinks = Array.isArray(meta?.links) ? meta.links : []
+    const links: MetaLink[] = rawLinks
+      .filter((l): l is Record<string, unknown> => typeof l === 'object' && l !== null)
+      .map((l) => ({ title: String(l.title ?? ''), url: String(l.url ?? '') }))
+      .filter((l) => l.url)
 
     // Direct child pages whose relativePath parent dir equals prefix
     const directPages = sectionPages.filter((p) => {
@@ -244,11 +303,12 @@ export function buildSiteTree(
       name,
       title,
       entryRoute: '',
+      links,
       index: indexPage ? { title: indexPage.title, route: indexPage.route, relativePath: indexPage.relativePath } : null,
       pages,
       sections: subsections
     }
-    section.entryRoute = firstRoute(section)
+    section.entryRoute = meta?.link ? String(meta.link) : firstRoute(section)
     return section
   }
 

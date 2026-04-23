@@ -62,10 +62,16 @@ export type SitePage = {
   relativePath: string
 }
 
+export type MetaLink = {
+  title: string
+  url: string
+}
+
 export type SiteSection = {
   name: string
   title: string
   entryRoute: string
+  links: MetaLink[]
   index: SitePage | null
   pages: SitePage[]
   sections: SiteSection[]
