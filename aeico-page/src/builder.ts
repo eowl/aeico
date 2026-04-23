@@ -24,6 +24,9 @@ export async function buildSite(options: BuildOptions = {}): Promise<BuildResult
 
   const tree = buildSiteTree(parsedPages)
 
+  // Meta pages (_meta.md) are not rendered to HTML
+  const renderablePages = parsedPages.filter((p) => !p.isMeta)
+
   const layoutDir = getDefaultThemeLayoutDir()
   const layoutFile = path.join(layoutDir, 'home.html')
   if (!fs.existsSync(layoutFile)) {
@@ -32,7 +35,7 @@ export async function buildSite(options: BuildOptions = {}): Promise<BuildResult
   const layoutTemplate = fs.readFileSync(layoutFile, 'utf-8')
   const includes = resolveIncludes(rootDir)
 
-  const renderedPages: RenderedPage[] = parsedPages.map((page) => ({
+  const renderedPages: RenderedPage[] = renderablePages.map((page) => ({
     ...page,
     html: renderPageHtml({ page, config, tree, layoutTemplate, includes })
   }))

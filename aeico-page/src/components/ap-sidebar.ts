@@ -53,8 +53,59 @@ class ApSidebar extends AeicoElement {
     const section = tree.sections.find((s) => s.name === currentSection)
     if (!section) return
 
-    return html(({ nav, ul, li, a }) => {
+    return html(({ nav, ul, li, a, span }) => {
+      const renderSec = (sec: typeof section, depth: number) => {
+        // section title (linked if has index, plain text otherwise)
+        if (depth > 0) {
+          li({ className: 'ap-section-item' }, () => {
+            if (sec.index) {
+              const isActive = sec.index.route === current
+              a({
+                href: sec.index.route,
+                className: isActive ? 'ap-section-title ap-active' : 'ap-section-title',
+                'aria-current': isActive ? 'page' : 'false',
+                text: sec.title,
+              })
+            } else {
+              span({ className: 'ap-section-title', text: sec.title })
+            }
+          })
+        }
+        // direct pages
+        for (const page of sec.pages) {
+          const isActive = page.route === current
+          li(() => {
+            a({
+              href: page.route,
+              className: isActive ? 'ap-sidebar-link ap-active' : 'ap-sidebar-link',
+              'aria-current': isActive ? 'page' : 'false',
+              text: page.title,
+            })
+          })
+        }
+        // nested sections
+        for (const sub of sec.sections) {
+          li({ className: 'ap-subsection' }, () => {
+            ul({ className: `ap-sidebar-depth-${depth + 1}` }, () => {
+              renderSec(sub, depth + 1)
+            })
+          })
+        }
+      }
+
       nav({ className: 'ap-sidebar' }, () => {
+        // top-level section: show index link as section header
+        if (section.index) {
+          const isActive = section.index.route === current
+          li({ className: 'ap-section-header' }, () => {
+            a({
+              href: section.index!.route,
+              className: isActive ? 'ap-section-title ap-active' : 'ap-section-title',
+              'aria-current': isActive ? 'page' : 'false',
+              text: section.title,
+            })
+          })
+        }
         ul(() => {
           for (const page of section.pages) {
             const isActive = page.route === current
@@ -64,6 +115,13 @@ class ApSidebar extends AeicoElement {
                 className: isActive ? 'ap-sidebar-link ap-active' : 'ap-sidebar-link',
                 'aria-current': isActive ? 'page' : 'false',
                 text: page.title,
+              })
+            })
+          }
+          for (const sub of section.sections) {
+            li({ className: 'ap-subsection' }, () => {
+              ul({ className: 'ap-sidebar-depth-1' }, () => {
+                renderSec(sub, 1)
               })
             })
           }

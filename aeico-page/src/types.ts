@@ -48,6 +48,7 @@ export type ParsedPage = ParsedInputPage & {
   title: string
   description: string
   draft: boolean
+  isMeta: boolean
 }
 
 export type RenderedPage = ParsedPage & {
@@ -62,8 +63,11 @@ export type SitePage = {
 
 export type SiteSection = {
   name: string
+  title: string
   entryRoute: string
+  index: SitePage | null
   pages: SitePage[]
+  sections: SiteSection[]
 }
 
 export type SiteTree = {

@@ -123,8 +123,9 @@ export function scanContent({
 export function transformPage(page: ParsedInputPage, _config: AeicoPageConfig): ParsedPage {
   const parsed = parseFrontmatter(page.source)
   const frontmatter = parsed.data
+  const isMeta = path.basename(page.relativePath) === '_meta.md'
 
-  if (frontmatter.date !== undefined && Number.isNaN(Date.parse(String(frontmatter.date)))) {
+  if (!isMeta && frontmatter.date !== undefined && Number.isNaN(Date.parse(String(frontmatter.date)))) {
     throw new Error(`Invalid date in frontmatter: ${page.absPath}`)
   }
 
@@ -135,7 +136,8 @@ export function transformPage(page: ParsedInputPage, _config: AeicoPageConfig): 
     route: '',
     title: String(frontmatter.title ?? inferTitle(page.relativePath.replace(/\.md$/i, ''))),
     description: String(frontmatter.description ?? ''),
-    draft: frontmatter.draft === true
+    draft: frontmatter.draft === true,
+    isMeta
   }
 }
 
@@ -148,6 +150,10 @@ export function resolveRoutes({
 }): ParsedPage[] {
   const routeSet = new Set<string>()
   for (const page of pages) {
+    if (page.isMeta) {
+      page.route = ''
+      continue
+    }
     const route = relativeMdToRoute(page.relativePath, config.routing)
     validateRoute(route)
     const key = route.toLowerCase()
@@ -159,37 +165,95 @@ export function resolveRoutes({
 }
 
 export function buildSiteTree(
-  parsedPages: Array<{ title: string; route: string; relativePath: string }>
+  parsedPages: Array<{ title: string; route: string; relativePath: string; isMeta: boolean; frontmatter: Record<string, unknown> }>
 ): SiteTree {
   const home = parsedPages.find((p) => p.route === '/') ?? null
-  const sectionMap = new Map<string, SitePage[]>()
 
+  // Build a lookup from dir prefix (normalized) → meta frontmatter
+  const metaMap = new Map<string, Record<string, unknown>>()
   for (const page of parsedPages) {
-    if (page.route === '/') continue
-    const segments = page.route.split('/').filter(Boolean)
-    const sectionName = segments[0]
-    const hasDir = page.relativePath.includes('/') || page.relativePath.includes('\\')
-    if (!hasDir) continue
-
-    if (!sectionMap.has(sectionName)) sectionMap.set(sectionName, [])
-    sectionMap.get(sectionName)!.push({
-      title: page.title,
-      route: page.route,
-      relativePath: page.relativePath
-    })
+    if (!page.isMeta) continue
+    const dir = path.dirname(page.relativePath).replace(/\\/g, '/')
+    metaMap.set(dir, page.frontmatter)
   }
 
-  const sections: SiteSection[] = []
-  for (const [name, pages] of sectionMap) {
-    pages.sort((a, b) => {
-      if (a.route === `/${name}`) return -1
-      if (b.route === `/${name}`) return 1
-      return a.route.localeCompare(b.route)
-    })
-    const hasIndex = pages.some((p) => p.route === `/${name}`)
-    const entryRoute = hasIndex ? `/${name}` : pages[0].route
-    sections.push({ name, entryRoute, pages })
+  // Only non-meta, non-home pages go into sections
+  const sectionPages = parsedPages.filter(
+    (p) => !p.isMeta && p.route !== '/'
+  )
+
+  // Collect top-level section names (first path segment)
+  const topNames = [...new Set(
+    sectionPages.map((p) => p.route.split('/').filter(Boolean)[0])
+  )]
+
+  function firstRoute(section: SiteSection): string {
+    if (section.index) return section.index.route
+    if (section.pages.length > 0) return section.pages[0].route
+    for (const sub of section.sections) {
+      const r = firstRoute(sub)
+      if (r) return r
+    }
+    return ''
   }
+
+  function buildSection(prefix: string): SiteSection {
+    const name = prefix.split('/').at(-1)!
+    const meta = metaMap.get(prefix)
+    const title = meta?.title ? String(meta.title) : name.charAt(0).toUpperCase() + name.slice(1)
+
+    // Direct child pages whose relativePath parent dir equals prefix
+    const directPages = sectionPages.filter((p) => {
+      const rel = p.relativePath.replace(/\\/g, '/')
+      const dir = rel.split('/').slice(0, -1).join('/')
+      const filename = rel.split('/').at(-1)!
+      return dir === prefix && filename !== 'index.md'
+    })
+
+    // index.md in this dir
+    const indexPage = sectionPages.find((p) => {
+      const rel = p.relativePath.replace(/\\/g, '/')
+      const dir = rel.split('/').slice(0, -1).join('/')
+      return dir === prefix && rel.endsWith('/index.md')
+    }) ?? null
+
+    // Immediate subdirectories
+    const subDirNames = [...new Set(
+      sectionPages
+        .filter((p) => {
+          const rel = p.relativePath.replace(/\\/g, '/')
+          const parts = rel.split('/')
+          return parts.length > prefix.split('/').length + 1 && parts.slice(0, prefix.split('/').length).join('/') === prefix
+        })
+        .map((p) => {
+          const rel = p.relativePath.replace(/\\/g, '/')
+          return rel.split('/')[prefix.split('/').length]
+        })
+    )]
+
+    const pages: SitePage[] = directPages
+      .sort((a, b) => a.route.localeCompare(b.route))
+      .map((p) => ({ title: p.title, route: p.route, relativePath: p.relativePath }))
+
+    const subsections = subDirNames
+      .map((sub) => buildSection(`${prefix}/${sub}`))
+      .sort((a, b) => a.name.localeCompare(b.name))
+
+    const section: SiteSection = {
+      name,
+      title,
+      entryRoute: '',
+      index: indexPage ? { title: indexPage.title, route: indexPage.route, relativePath: indexPage.relativePath } : null,
+      pages,
+      sections: subsections
+    }
+    section.entryRoute = firstRoute(section)
+    return section
+  }
+
+  const sections = topNames
+    .map((name) => buildSection(name))
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   return {
     home: home ? { title: home.title, route: '/', relativePath: home.relativePath } : null,

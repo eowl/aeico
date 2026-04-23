@@ -75,7 +75,7 @@ class ApNavbar extends AeicoElement {
               href: section.entryRoute,
               className: isActive ? 'ap-nav-link ap-active' : 'ap-nav-link',
               'aria-current': isActive ? 'page' : 'false',
-              text: section.name.charAt(0).toUpperCase() + section.name.slice(1),
+              text: section.title,
             })
           }
         })
