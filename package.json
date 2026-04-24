@@ -27,6 +27,11 @@
       "import": "./dist/mixins.js",
       "require": "./dist/mixins.cjs"
     },
+    "./decorators": {
+      "types": "./dist/types/decorators/index.d.ts",
+      "import": "./dist/decorators.js",
+      "require": "./dist/decorators.cjs"
+    },
     "./localize": {
       "types": "./dist/types/localize/index.d.ts",
       "import": "./dist/localize.js",

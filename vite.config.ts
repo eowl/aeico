@@ -13,6 +13,7 @@ export default defineConfig({
         components: path.resolve(__dirname, 'src/components/index.ts'),
         mixins: path.resolve(__dirname, 'src/mixins/index.ts'),
         localize: path.resolve(__dirname, 'src/localize/index.ts'),
+        decorators: path.resolve(__dirname, 'src/decorators/index.ts'),
         view: path.resolve(__dirname, 'src/view/index.ts')
       },
       name: 'Aeico',
