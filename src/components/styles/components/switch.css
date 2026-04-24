@@ -7,11 +7,15 @@
   --toggle-width:       2.667em;
   --toggle-height:      1.333em;
   --toggle-slider-size: 1em;
+  --toggle-gap:         calc((var(--toggle-height) - var(--toggle-slider-size)) / 2);
   --toggle-border-radius: calc(var(--toggle-height) / 2);
   --toggle-bg:          var(--color-gray);
-  --toggle-bg-checked:  var(--color-primary);
+  --toggle-bg-checked:  var(--color-solid);
   --toggle-slider-bg:   white;
   --toggle-transition:  0.2s;
+
+  /* Default color when no [color] attribute — overridden by color.css :host([color=...]) */
+  --color-solid: var(--color-primary);
 }
 
 .switch-container {
@@ -64,8 +68,8 @@
   position: absolute;
   height: var(--toggle-slider-size);
   width: var(--toggle-slider-size);
-  left: 2px;
-  top: 2px;
+  left: var(--toggle-gap);
+  top: var(--toggle-gap);
   background: var(--toggle-slider-bg);
   border-radius: 50%;
   transition: var(--toggle-transition);
@@ -76,7 +80,7 @@
 }
 
 .field-input:checked + .toggle-slider::before {
-  transform: translateX(calc(var(--toggle-width) - var(--toggle-slider-size) - 4px));
+  transform: translateX(calc(var(--toggle-width) - var(--toggle-height)));
 }
 
 .field-input:disabled + .toggle-slider {

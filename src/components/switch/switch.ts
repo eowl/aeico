@@ -3,6 +3,7 @@ import type { InferProps, Props } from '../../core/types'
 import { html } from '../../view'
 import styleVariables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
+import colorCSS from '../styles/color.css?inline'
 import styles from '../styles/components/switch.css?inline'
 
 class Switch extends AeicoField {
@@ -18,7 +19,7 @@ class Switch extends AeicoField {
   declare checked?: boolean
   declare defaultChecked?: boolean
 
-  protected static styles = [styleVariables, sizeCSS, styles]
+  protected static styles = [styleVariables, sizeCSS, colorCSS, styles]
 
   protected getValue(): boolean {
     return this.fieldElement?.checked ?? false
