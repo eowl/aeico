@@ -163,6 +163,24 @@ if (sliderMarksNumeric) {
   sliderMarksNumeric.value = '50'
 }
 
+// Marks — custom array (visual only, step=10 still snaps)
+const sliderMarksCustom = document.querySelector<any>('#slider-marks-custom')
+if (sliderMarksCustom) {
+  sliderMarksCustom.marks = [0, 20, 40, 60, 80, 100]
+}
+
+// Marks — custom array with labels
+const sliderMarksLabeledCustom = document.querySelector<any>('#slider-marks-labeled-custom')
+if (sliderMarksLabeledCustom) {
+  sliderMarksLabeledCustom.marks = [
+    { value: 0,   label: 'Min' },
+    { value: 25,  label: '¼' },
+    { value: 50,  label: 'Mid' },
+    { value: 75,  label: '¾' },
+    { value: 100, label: 'Max' },
+  ]
+}
+
 // Dialog interaction
 const openBtn = document.getElementById('open-dialog-btn')
 const dialog = document.querySelector<any>('#demo-dialog')

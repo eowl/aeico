@@ -246,6 +246,21 @@
 
       <label>Marks — options mode, numeric values only (no label)</label>
       <ae-slider id="slider-marks-numeric" marks percentage resettable></ae-slider>
+
+      <label>Marks — custom array (purely visual, step=10 still snaps)</label>
+      <ae-slider id="slider-marks-custom" value="40" min="0" max="100" step="10" resettable default-value="40"></ae-slider>
+
+      <label>Marks — custom array with labels</label>
+      <ae-slider id="slider-marks-labeled-custom" value="50" min="0" max="100" step="25" resettable default-value="50"></ae-slider>
+
+      <label>Color — success</label>
+      <ae-slider value="60" min="0" max="100" step="10" marks color="success" resettable default-value="60"></ae-slider>
+
+      <label>Color — danger</label>
+      <ae-slider value="30" min="0" max="100" step="10" marks color="danger" resettable default-value="30"></ae-slider>
+
+      <label>Color — warning</label>
+      <ae-slider value="70" min="0" max="100" step="10" marks color="warning" resettable default-value="70"></ae-slider>
     </div>
   </div>
 

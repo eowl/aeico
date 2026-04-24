@@ -1,10 +1,11 @@
 import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
 import { html, tags } from '../../view'
-import type { NormalizedOption, SliderOption, SliderOptions } from './defines'
+import type { MarkItem, NormalizedOption, SliderMarks, SliderOption, SliderOptions } from './defines'
 import style from '../styles/components/slider.css?inline'
 import variables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
+import colorCSS from '../styles/color.css?inline'
 
 class Slider extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
@@ -23,7 +24,16 @@ class Slider extends AeicoField {
     max: { type: Number },
     step: { type: Number },
     editable: { type: Boolean },
-    marks: { type: Boolean },
+    marks: {
+      // bare attribute (<ae-slider marks>) → true; JSON array → MarkItem[]
+      type: Array,
+      parser: (value: string | null) => {
+        if (value === null) return undefined
+        if (value === '' || value === 'true') return true
+        if (value === 'false') return false
+        try { return JSON.parse(value) } catch { return true }
+      },
+    },
   }
 
   declare options?: SliderOptions
@@ -32,9 +42,9 @@ class Slider extends AeicoField {
   declare max?: number
   declare step?: number
   declare editable?: boolean
-  declare marks?: boolean
+  declare marks?: SliderMarks
 
-  protected static styles = [variables, sizeCSS, style]
+  protected static styles = [variables, sizeCSS, colorCSS, style]
 
   constructor() {
     super()
@@ -132,6 +142,26 @@ class Slider extends AeicoField {
     const maxVal = Number(attrs.max)
     const range = maxVal - minVal || 1
 
+    const marks = this.marks
+
+    // Custom marks array — purely visual, no snapping effect
+    if (Array.isArray(marks)) {
+      return marks
+        .map(m => {
+          const isObj = m !== null && typeof m === 'object'
+          const numVal = isObj ? (m as { value: number }).value : (m as number)
+          const label  = isObj ? ((m as { value: number; label?: string }).label ?? String(numVal)) : String(numVal)
+          return { numVal, label }
+        })
+        .filter(({ numVal }) => numVal >= minVal && numVal <= maxVal)
+        .map(({ numVal, label }) => ({
+          value: String(numVal),
+          label: this.percentage ? `${label}%` : label,
+          pct:   ((numVal - minVal) / range) * 100,
+        }))
+    }
+
+    // marks === true — auto-generate from options or free-mode endpoints
     if (normalized) {
       return normalized.map(o => ({
         value: o.value,
