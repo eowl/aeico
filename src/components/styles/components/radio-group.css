@@ -22,7 +22,8 @@
   --rg-radius:       4px;
   --rg-font-weight:  400;
 
-  --color-unselected: var(--color-gray-dark);
+  --color-unselected:       var(--surface-base);
+  --color-unselected-hover: var(--color-gray-lighter);
 }
 
 :host([size="xs"]) { --rg-radius: 3px; }
@@ -85,8 +86,8 @@ slot {
 }
 
 .rg-btn:hover:not(:disabled):not(.selected) {
-  background:   var(--color-gray-light);
-  border-color: var(--color-gray-lighter);
+  background:   var(--color-unselected-hover);
+  border-color: var(--color-gray-light);
   color:        var(--color-text-main);
 }
 
@@ -146,6 +147,18 @@ slot {
   color:        var(--rg-accent-hover);
   font-weight:  600;
   box-shadow:   none;
+}
+
+:host([variant="filled"]) .rg-btn:not(.selected) {
+  background:   var(--surface-base);
+  border-color: var(--border-default);
+  color:        var(--color-text-muted);
+}
+
+:host([variant="filled"]) .rg-btn:hover:not(:disabled):not(.selected) {
+  background:   var(--surface-raised);
+  border-color: var(--border-hover);
+  color:        var(--color-text-main);
 }
 
 :host([mode="button"]) .rg-container {
