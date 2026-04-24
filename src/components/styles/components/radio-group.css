@@ -252,6 +252,8 @@ slot {
   transition:     var(--reset-btn-transition);
   flex-shrink:    0;
   line-height:    1;
+  font-family:    inherit;
+  padding:        0;
 
   width:          1.333em;
   height:         1.333em;
@@ -267,18 +269,12 @@ slot {
 :host([mode="button"]) .reset-btn,
 :host([mode="button"]) .clear-btn,
 :host([mode="button-group"]) .reset-btn,
-:host([mode="button-group"]) .clear-btn {
+:host([mode="button-group"]) .clear-btn,
+:host([mode="segmented"]) .reset-btn,
+:host([mode="segmented"]) .clear-btn {
   height:        var(--rg-height);
   width:         var(--rg-height);
   border-radius: var(--rg-radius);
-  font-size:     calc(var(--rg-font-size) * 1.1);
-}
-
-:host([mode="segmented"]) .reset-btn,
-:host([mode="segmented"]) .clear-btn {
-  height:        calc(var(--rg-height) + 4px);
-  width:         calc(var(--rg-height) + 4px);
-  border-radius: calc(var(--rg-radius) + 2px);
   font-size:     var(--rg-font-size);
 }
 
