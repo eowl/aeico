@@ -258,6 +258,16 @@ input[type="range"]::-moz-range-thumb {
   cursor: not-allowed;
 }
 
+:host([tracked]) .input-range,
+:host([tracked]) .slider-input,
+:host([tracked]) input[type="range"] {
+  background: linear-gradient(
+    to right,
+    var(--color-solid) var(--fill-pct, 0%),
+    var(--border-subtle) var(--fill-pct, 0%)
+  );
+}
+
 .range-wrapper {
   flex: 1;
   min-width: 0;

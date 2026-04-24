@@ -24,6 +24,7 @@ class Slider extends AeicoField {
     max: { type: Number },
     step: { type: Number },
     editable: { type: Boolean },
+    tracked: { type: Boolean },
     marks: {
       // bare attribute (<ae-slider marks>) → true; JSON array → MarkItem[]
       type: Array,
@@ -42,6 +43,7 @@ class Slider extends AeicoField {
   declare max?: number
   declare step?: number
   declare editable?: boolean
+  declare tracked?: boolean
   declare marks?: SliderMarks
 
   protected static styles = [variables, sizeCSS, colorCSS, style]
@@ -134,6 +136,16 @@ class Slider extends AeicoField {
   }
 
 
+  private _updateTrackFill(): void {
+    if (!this.tracked || !this.fieldElement) return
+    const min = Number(this.fieldElement.min)
+    const max = Number(this.fieldElement.max)
+    const val = Number(this.fieldElement.value)
+    const range = max - min || 1
+    const pct = Math.max(0, Math.min(100, ((val - min) / range) * 100))
+    this.style.setProperty('--fill-pct', `${pct}%`)
+  }
+
   private _getMarksData(
     normalized: NormalizedOption[] | null,
     attrs: { min: string; max: string; inOptionsMode: boolean },
@@ -193,6 +205,8 @@ class Slider extends AeicoField {
     if (this._numberInput && !normalized && this._numberInput.value !== rv) {
       this._numberInput.value = rv
     }
+
+    this._updateTrackFill()
   }
 
   protected getValue(): string {
@@ -278,6 +292,8 @@ class Slider extends AeicoField {
     if (this._numberInput && !normalized) {
       this._numberInput.value = this.fieldElement.value
     }
+
+    this._updateTrackFill()
   }
 
   private _onNumberInput(): void {
