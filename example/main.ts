@@ -79,11 +79,6 @@ const radioOptions = [
   { label: 'Option C', value: 'c' },
 ]
 
-document.querySelectorAll<any>('ae-radio').forEach(el => {
-  el.options = radioOptions
-  el.value = 'a'
-})
-
 // SelectField
 
 // Slot Mode (HTML)
@@ -192,7 +187,7 @@ function appendLog(msg: string) {
 clearBtn.addEventListener('click', () => { log.innerHTML = '' })
 
 // Listen for component events on body (they bubble)
-const events = ['field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'dialog-open', 'dialog-close', 'tab-change']
+const events = ['change', 'field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'dialog-open', 'dialog-close', 'tab-change']
 events.forEach(eventName => {
   document.body.addEventListener(eventName, ((e: CustomEvent) => {
     const tag = (e.target as HTMLElement).tagName.toLowerCase()

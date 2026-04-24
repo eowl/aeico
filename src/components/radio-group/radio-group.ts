@@ -4,6 +4,7 @@ import { html, tags } from '../../view'
 import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import { t } from '../../localize'
 import type { RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './defines'
+import Radio from './radio'
 import style from '../styles/components/radio-group.css?inline'
 import variables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
@@ -13,7 +14,7 @@ class RadioGroup extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
 
   private _slotEl: HTMLSlotElement | null = null
-  private _slotOptions: HTMLOptionElement[] = []
+  private _slotOptions: Radio[] = []
 
   private static _instanceCount = 0
   private readonly _groupName: string
@@ -55,7 +56,7 @@ class RadioGroup extends AeicoField {
     return String(opt)
   }
 
-  private _allOptions(): Array<{ label: string; value: string }> {
+  private _allOptions(): Array<{ label: string; value: string; disabled?: boolean }> {
     const from_props = (Array.isArray(this.options) ? this.options : []).map(o => ({
       label: this._optLabel(o),
       value: this._optValue(o),
@@ -64,6 +65,7 @@ class RadioGroup extends AeicoField {
     const from_slot = this._slotOptions.map(el => ({
       label: el.textContent?.trim() || el.value,
       value: el.value,
+      disabled: el.disabled,
     }))
 
     return [...from_props, ...from_slot]
@@ -73,7 +75,7 @@ class RadioGroup extends AeicoField {
     if (!this._slotEl) return
 
     this._slotOptions = (this._slotEl.assignedElements({ flatten: true }) as HTMLElement[])
-      .filter(el => el.tagName.toLowerCase() === 'option') as HTMLOptionElement[]
+      .filter(el => el.tagName.toLowerCase() === 'ae-radio') as Radio[]
     this.update()
   }
 
@@ -154,7 +156,7 @@ class RadioGroup extends AeicoField {
   }
 
   private _renderRadio(
-    opts: Array<{ label: string; value: string }>,
+    opts: Array<{ label: string; value: string; disabled?: boolean }>,
     current: string,
   ): void {
     const { label, input, span } = tags
@@ -167,7 +169,7 @@ class RadioGroup extends AeicoField {
           className: 'rg-radio-input',
           name: this._groupName,
           value: opt.value,
-          disabled: Boolean(this.disabled),
+          disabled: Boolean(this.disabled) || Boolean(opt.disabled),
           '@click':  this._boundOnRadioClick,
         }) as HTMLInputElement
         // Sync DOM property directly — setAttribute('checked') doesn't work
@@ -181,7 +183,7 @@ class RadioGroup extends AeicoField {
   }
 
   private _renderButtons(
-    opts: Array<{ label: string; value: string }>,
+    opts: Array<{ label: string; value: string; disabled?: boolean }>,
     current: string,
     mode: RadioGroupMode,
   ): void {
@@ -204,7 +206,7 @@ class RadioGroup extends AeicoField {
         key:         `opt-${opt.value}`,
         className:   `rg-btn${isSelected ? ' selected' : ''}${posClass}`,
         textContent: opt.label,
-        disabled:    Boolean(this.disabled),
+        disabled:    Boolean(this.disabled) || Boolean(opt.disabled),
         'data-value': opt.value,
         '@click':     this._boundOnButtonClick,
       })

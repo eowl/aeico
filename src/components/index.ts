@@ -37,6 +37,7 @@ export { default as Select } from './select'
 export { default as Slider } from './slider'
 export { default as Checkbox } from './checkbox'
 export { default as RadioGroup } from './radio-group'
+export { Radio } from './radio-group'
 export { default as Switch } from './switch'
 
 // UI components
@@ -54,6 +55,7 @@ export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from
 export type { SliderProps, SliderOption, SliderOptions, SliderOptionValue } from './slider'
 export type { CheckboxProps, CheckboxVariant } from './checkbox'
 export type { RadioGroupProps, RadioGroupMode, RadioGroupOption, RadioGroupOptions } from './radio-group'
+export type { RadioProps } from './radio-group'
 export type { SwitchProps } from './switch'
 export type { TextInputProps } from './text-input'
 export type { ButtonProps, ButtonColor, ButtonSize, ButtonVariant } from './button'
