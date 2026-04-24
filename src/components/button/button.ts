@@ -6,6 +6,7 @@ import buttonStyle from '../styles/components/button.css?inline'
 import AeicoComponent from '../aeico-component'
 import { html } from '../../view'
 import { ButtonColor, ButtonSize, ButtonVariant } from './defines'
+import { prop } from '../../decorators'
 
 /**
  * Button Component
@@ -31,25 +32,28 @@ import { ButtonColor, ButtonSize, ButtonVariant } from './defines'
  * ```
  */
 class Button extends AeicoComponent {
-  static props: Props = {
-    color: { type: String },
-    variant: { type: String },
-    size: { type: String },
-    disabled: { type: Boolean },
-    type: { type: String },
-    active: { type: Boolean },
-    block: { type: Boolean }
-  }
-
   protected static styles = [styleVariables, sizeCSS, colorCSS, buttonStyle]
 
-  declare color?: ButtonColor
-  declare variant?: ButtonVariant
-  declare size?: ButtonSize
-  declare disabled?: boolean
-  declare type?: 'button' | 'submit' | 'reset'
-  declare active?: boolean
-  declare block?: boolean
+  @prop({ type: String })
+  color?: ButtonColor
+
+  @prop({ type: String })
+  variant?: ButtonVariant
+
+  @prop({ type: String })
+  size?: ButtonSize
+
+  @prop({ type: Boolean })
+  disabled?: boolean
+
+  @prop({ type: String })
+  type?: 'button' | 'submit' | 'reset'
+
+  @prop({ type: Boolean })
+  active?: boolean
+  
+  @prop({ type: Boolean })
+  block?: boolean
 
   private buttonElement: HTMLButtonElement | null = null
   private _autoAriaLabel = false

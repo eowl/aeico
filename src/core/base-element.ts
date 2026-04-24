@@ -244,7 +244,6 @@ class BaseElement extends HTMLElement {
     const allProps = constructor._collectProps()
 
     for (const [propName, propDecl] of Object.entries(allProps)) {
-      const kebabName = constructor.toKebab(propName)
       const internalKey = `_${String(propName)}`
       const self = this as Record<string, unknown>
 
@@ -258,56 +257,106 @@ class BaseElement extends HTMLElement {
       }
 
       self[internalKey] = undefined
-
-      Object.defineProperty(this, propName, {
-        get: () => {
-          if (propDecl.observe === false) { // if observe is disabled, just return the internal value without trying to read from attribute
-            return self[internalKey]
-          }
-
-          const attrName = propDecl.attr ?? kebabName
-          const attrValue = this.getAttribute(attrName)
-          if (attrValue === null) {
-            return self[internalKey]
-          }
-
-          return this.deserializeAttribute(attrValue, propDecl)
-        },
-        set: (value: unknown) => {
-          const oldValue = self[propName]
-
-          if (propDecl.observe === false) { // if observe is disabled, just update the internal value without reflecting to attribute
-            self[internalKey] = value
-            this.update(propName, oldValue)
-
-            return
-          }
-
-          self[internalKey] = value
-
-          const shouldReflect = propDecl.reflect !== false
-          const attrName = propDecl.attr ?? kebabName
-
-          if (shouldReflect) {
-            this._reflecting = true
-            if (value === null || value === undefined) {
-              this.removeAttribute(attrName)
-            } else {
-              const serialized = this.serializeAttribute(value, propDecl)
-              this.setAttribute(attrName, serialized)
-            }
-            this._reflecting = false
-          }
-
-          this.update(propName, oldValue)
-        },
-        enumerable: true,
-        configurable: true,
-      })
+      this._defineReactiveProp(propName, propDecl)
 
       if (hasPreUpgrade && preUpgradeValue !== undefined) {
         self[propName] = preUpgradeValue
       }
+    }
+  }
+
+  /**
+   * Defines a reactive getter/setter for a single prop on this instance.
+   * Extracted so it can be called both from `_initializeProps()` and `_reclaimProp()`.
+   */
+  private _defineReactiveProp(propName: string, propDecl: Prop) {
+    const constructor = this.constructor as typeof BaseElement
+    const kebabName = constructor.toKebab(propName)
+    const internalKey = `_${propName}`
+    const self = this as Record<string, unknown>
+
+    Object.defineProperty(this, propName, {
+      get: () => {
+        if (propDecl.observe === false) { // if observe is disabled, just return the internal value without trying to read from attribute
+          return self[internalKey]
+        }
+
+        const attrName = propDecl.attr ?? kebabName
+        const attrValue = this.getAttribute(attrName)
+        if (attrValue === null) {
+          return self[internalKey]
+        }
+
+        return this.deserializeAttribute(attrValue, propDecl)
+      },
+      set: (value: unknown) => {
+        const oldValue = self[propName]
+
+        if (propDecl.observe === false) { // if observe is disabled, just update the internal value without reflecting to attribute
+          self[internalKey] = value
+          this.update(propName, oldValue)
+
+          return
+        }
+
+        self[internalKey] = value
+
+        const shouldReflect = propDecl.reflect !== false
+        const attrName = propDecl.attr ?? kebabName
+
+        if (shouldReflect) {
+          this._reflecting = true
+          if (value === null || value === undefined) {
+            this.removeAttribute(attrName)
+          } else {
+            const serialized = this.serializeAttribute(value, propDecl)
+            this.setAttribute(attrName, serialized)
+          }
+          this._reflecting = false
+        }
+
+        this.update(propName, oldValue)
+      },
+      enumerable: true,
+      configurable: true,
+    })
+  }
+
+  /**
+   * Re-establishes the reactive getter/setter for a prop that was overridden by a field initializer
+   * (e.g. the `__publicField` call emitted by esbuild when lowering TC39 field decorators).
+   *
+   * Called automatically via `addInitializer` by the `@prop` decorator when used on a class field
+   * (not an `accessor`). Field initializers run after `super()` returns, so they can overwrite the
+   * getter/setter that `_initializeProps()` defined. This method runs after the field initializer
+   * and restores the reactive accessor.
+   *
+   * @internal
+   */
+  _reclaimProp(propName: string): void {
+    const constructor = this.constructor as typeof BaseElement
+    const allProps = constructor._collectProps()
+    const propDecl = allProps[propName]
+    if (!propDecl) return
+
+    const self = this as Record<string, unknown>
+    const internalKey = `_${propName}`
+
+    // Capture the value that __publicField stored (usually undefined), then remove the
+    // plain data property it created so we can redefine the reactive accessor.
+    const overriddenValue = self[propName]
+    Reflect.deleteProperty(this, propName)
+
+    // Restore the internal backing store in case __publicField somehow cleared it.
+    if (!Object.prototype.hasOwnProperty.call(this, internalKey)) {
+      self[internalKey] = undefined
+    }
+
+    this._defineReactiveProp(propName, propDecl)
+
+    // Re-apply the value through the new setter so initial value (if any) is picked up.
+    if (overriddenValue !== undefined) {
+      self[propName] = overriddenValue
     }
   }
 
