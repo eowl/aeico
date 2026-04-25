@@ -1,11 +1,12 @@
 import AeicoField from '../aeico-field'
-import type { InferProps, Props } from '../../core/types'
+import type { InferProps } from '../../core/types'
 import { html, tags } from '../../view'
-import type { MarkItem, NormalizedOption, SliderMarks, SliderOption, SliderOptions } from './defines'
+import type { NormalizedOption, SliderMarks, SliderOption, SliderOptions } from './defines'
 import style from '../styles/components/slider.css?inline'
 import variables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import colorCSS from '../styles/color.css?inline'
+import { prop } from '../../decorators'
 
 class Slider extends AeicoField {
   protected fieldElement: HTMLInputElement | null = null
@@ -17,34 +18,38 @@ class Slider extends AeicoField {
 
   static tagName = 'slider'
 
-  static props: Props = {
-    options: { type: Array },
-    percentage: { type: Boolean },
-    min: { type: Number },
-    max: { type: Number },
-    step: { type: Number },
-    editable: { type: Boolean },
-    tracked: { type: Boolean },
-    marks: {
-      // bare attribute (<ae-slider marks>) → true; JSON array → MarkItem[]
-      type: Array,
-      parser: (value: string | null) => {
-        if (value === null) return undefined
-        if (value === '' || value === 'true') return true
-        if (value === 'false') return false
-        try { return JSON.parse(value) } catch { return true }
-      },
-    },
-  }
+  @prop({ type: Array })
+  accessor options: SliderOptions = []
 
-  declare options?: SliderOptions
-  declare percentage?: boolean
-  declare min?: number
-  declare max?: number
-  declare step?: number
-  declare editable?: boolean
-  declare tracked?: boolean
-  declare marks?: SliderMarks
+  @prop({ type: Boolean })
+  accessor percentage = false
+
+  @prop({ type: Number })
+  accessor min = 0
+
+  @prop({ type: Number })
+  accessor max = 100
+
+  @prop({ type: Number })
+  accessor step = 1
+
+  @prop({ type: Boolean })
+  accessor editable = false
+
+  @prop({ type: Boolean })
+  accessor tracked = false
+
+  @prop({
+    type: Array,
+    // bare attribute (<ae-slider marks>) → true; JSON array → MarkItem[]
+    parser: (value: string | null) => {
+      if (value === null) return undefined
+      if (value === '' || value === 'true') return true
+      if (value === 'false') return false
+      try { return JSON.parse(value) } catch { return true }
+    },
+  })
+  accessor marks: SliderMarks | undefined
 
   protected static styles = [variables, sizeCSS, colorCSS, style]
 
@@ -100,9 +105,9 @@ class Slider extends AeicoField {
     }
 
     return {
-      min: this.min !== undefined ? String(this.min) : '0',
-      max: this.max !== undefined ? String(this.max) : '100',
-      step: this.step !== undefined ? String(this.step) : '1',
+      min: String(this.min),
+      max: String(this.max),
+      step: String(this.step),
       inOptionsMode: false,
     }
   }
@@ -121,6 +126,7 @@ class Slider extends AeicoField {
   private _fromRangeValue(rv: string, normalized: NormalizedOption[] | null): string {
     if (normalized) {
       const n = Number(rv)
+
       return normalized.find(o => o.rangeValue === n)?.value ?? normalized[0]?.value ?? rv
     }
     return rv
@@ -170,19 +176,22 @@ class Slider extends AeicoField {
 
     // Custom marks array — purely visual, no snapping effect
     if (Array.isArray(marks)) {
-      return marks
-        .map(m => {
-          const isObj = m !== null && typeof m === 'object'
-          const numVal = isObj ? (m as { value: number }).value : (m as number)
-          const label  = isObj ? ((m as { value: number; label?: string }).label ?? String(numVal)) : String(numVal)
-          return { numVal, label }
-        })
-        .filter(({ numVal }) => numVal >= minVal && numVal <= maxVal)
-        .map(({ numVal, label }) => ({
+      const result: Array<{ value: string; label: string; pct: number }> = []
+      for (const m of marks) {
+        const isObj = m !== null && typeof m === 'object'
+        const numVal = isObj ? (m as { value: number }).value : (m as number)
+        if (numVal < minVal || numVal > maxVal) continue
+        const rawLabel = isObj
+          ? ((m as { value: number; label?: string }).label ?? String(numVal))
+          : String(numVal)
+        result.push({
           value: String(numVal),
-          label: this.percentage ? `${label}%` : label,
-          pct:   ((numVal - minVal) / range) * 100,
-        }))
+          label: this.percentage ? `${rawLabel}%` : rawLabel,
+          pct: ((numVal - minVal) / range) * 100,
+        })
+      }
+      
+      return result
     }
 
     // marks === true — auto-generate from options or free-mode endpoints
