@@ -165,6 +165,7 @@ input[type="range"]:disabled::-moz-range-thumb {
   font-size: 12px;
   color: var(--color-text-muted);
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
   pointer-events: none;
   user-select: none;
 }
@@ -273,6 +274,7 @@ input[type="range"]::-moz-range-thumb {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  position: relative;  /* marks-container positions against this */
 }
 
 .range-wrapper input[type="range"] {
@@ -280,11 +282,14 @@ input[type="range"]::-moz-range-thumb {
   flex: none;
 }
 
-/* Container inset by half-thumb so left:0% / left:100% align with track ends */
+/* Marks are absolutely positioned so they don't affect range-wrapper's layout height */
 .marks-container {
-  position: relative;
+  position: absolute;
+  top: 100%;
+  left: 7px;   /* inset by half thumb so 0%/100% align with track ends */
+  right: 7px;
   height: 18px;
-  margin: 2px 7px 0;
+  margin-top: 2px;
   overflow: visible;
 }
 
@@ -314,9 +319,8 @@ input[type="range"]::-moz-range-thumb {
   white-space: nowrap;
 }
 
-/* When marks are active, allow the host to grow and align items to start */
+/* When marks are active, add padding-bottom to make room for the absolute-positioned marks */
 :host([marks]) .range-container {
-  align-items: flex-start;
+  padding-bottom: 24px; /* marks-container height (18px) + margin-top (2px) + extra (4px) */
   height: auto;
-  padding-bottom: 2px;
 }

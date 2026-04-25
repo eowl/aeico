@@ -136,6 +136,18 @@ class Slider extends AeicoField {
   }
 
 
+  private _maxValueLabelWidth(
+    normalized: NormalizedOption[] | null,
+    attrs: { min: string; max: string },
+  ): string {
+    const candidates = normalized
+      ? normalized.map(o => this._displayLabel(o.value, normalized))
+      : [this._displayLabel(attrs.min, null), this._displayLabel(attrs.max, null)]
+    const maxLen = Math.max(...candidates.map(l => l.length), 1)
+
+    return `${maxLen}ch`
+  }
+
   private _updateTrackFill(): void {
     if (!this.tracked || !this.fieldElement) return
     const min = Number(this.fieldElement.min)
@@ -252,6 +264,7 @@ class Slider extends AeicoField {
         this._valueLabel = span({
           key: 'label',
           className: 'value-label',
+          style: { minWidth: this._maxValueLabelWidth(normalized, attrs) },
           textContent: this._displayLabel(this.value, normalized),
         }) as HTMLSpanElement
 
