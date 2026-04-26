@@ -68,7 +68,7 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
   }
 
   protected onDisabledChanged(_newValue: boolean): void {
-    // disabled is a reactive prop — render() already picks it up automatically
+    // disabled is a reactive prop �?render() already picks it up automatically
   }
 
   private _findLabel(value: SelectOptionValue): string {
@@ -142,7 +142,7 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
       const next: SelectMultiValue = idx >= 0
         ? current.filter((_, i) => i !== idx)
         : [...current, value]
-      // setValue sets this.value (reactive) → schedules update → render() → _syncSlotOptionsSelected()
+      // setValue sets this.value (reactive) �?schedules update �?render() �?_syncSlotOptionsSelected()
       this.setValue(next, { silent: false, action: 'change' })
     } else {
       this.setValue(value, { silent: false, action: 'change' })
@@ -188,9 +188,9 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
     this._syncSlotOptionsSelected()
 
     return html(({ div, span, slot }) => {
-      div({ className: 'select-container' }, () => {
+      div({ className: 'container' }, () => {
         this._triggerEl = div({
-          className: `select-trigger${this._isOpen ? ' open' : ''}${isDisabled ? ' disabled' : ''}`,
+          className: `trigger${this._isOpen ? ' open' : ''}${isDisabled ? ' disabled' : ''}`,
           '@click': () => {
             if (isDisabled) return
 
@@ -199,13 +199,13 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
         }, () => {
           if (this.multiple) {
             if (hasMultiSelection) {
-              div({ className: 'select-selected-list' }, () => {
+              div({ className: 'selected-list' }, () => {
                 for (const v of multiValues) {
                   const lbl = this._findLabel(v)
-                  span({ key: `sel-${v}`, className: 'select-selected-item' }, () => {
-                    span({ className: 'select-selected-label', textContent: lbl })
+                  span({ key: `sel-${v}`, className: 'selected-item' }, () => {
+                    span({ className: 'selected-label', textContent: lbl })
                     span({
-                      className: 'select-selected-remove',
+                      className: 'selected-remove',
                       textContent: '×',
                       '@click': (e: Event) => {
                         e.stopPropagation()
@@ -219,20 +219,20 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
                 }
               })
             } else {
-              span({ className: 'select-value select-placeholder', textContent: this.placeholder || '' })
+              span({ className: 'value placeholder', textContent: this.placeholder || '' })
             }
           } else {
             if (selectedLabel) {
-              span({ className: 'select-value', textContent: selectedLabel })
+              span({ className: 'value', textContent: selectedLabel })
             } else {
-              span({ className: 'select-value select-placeholder', textContent: this.placeholder || '' })
+              span({ className: 'value placeholder', textContent: this.placeholder || '' })
             }
           }
-          span({ className: 'select-arrow', textContent: '▾' })
+          span({ className: 'arrow', textContent: '▾' })
         }) as HTMLElement
 
         this._dropdownEl = div({
-          className: `select-dropdown position-${position}${this._isOpen ? ' open' : ''}`,
+          className: `dropdown position-${position}${this._isOpen ? ' open' : ''}`,
         }, () => {
           this._renderProgrammaticOptions()
           this._slotEl = slot({
