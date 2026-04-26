@@ -83,57 +83,78 @@ const radioOptions = [
 
 // SelectField
 
-// Slot Mode — set initial value via JS
-const selectSlotEl = document.querySelector<any>('#select-slot')
-if (selectSlotEl) {
-  selectSlotEl.value = 'banana'
-}
+const FRUIT_OPTIONS = [
+  { label: 'Apple', value: 'apple' },
+  { label: 'Banana', value: 'banana' },
+  { label: 'Cherry', value: 'cherry' },
+  { label: 'Grape', value: 'grape' },
+]
 
-// Attribute Mode — set options via JS
-const selectEl = document.querySelector<any>('#select-default')
-if (selectEl) {
-  selectEl.options = [
-    { label: 'Apple', value: 'apple' },
-    { label: 'Banana', value: 'banana' },
-    { label: 'Cherry', value: 'cherry' },
-    { label: 'Grape', value: 'grape' },
-  ]
-  selectEl.value = 'cherry'
-}
+const COLOR_OPTIONS = [
+  { label: 'Red', value: 'red' },
+  { label: 'Green', value: 'green' },
+  { label: 'Blue', value: 'blue' },
+  { label: 'Yellow', value: 'yellow' },
+  { label: 'Purple', value: 'purple' },
+]
 
-// Multiple — JS options prop
-const selectMultiOptsEl = document.querySelector<any>('#select-multi-opts')
-if (selectMultiOptsEl) {
-  selectMultiOptsEl.options = [
-    { label: 'Red', value: 'red' },
-    { label: 'Green', value: 'green' },
-    { label: 'Blue', value: 'blue' },
-    { label: 'Yellow', value: 'yellow' },
-    { label: 'Purple', value: 'purple' },
-  ]
-  selectMultiOptsEl.value = ['red', 'blue']
-}
-
-// Multiple — live value output
-const selectMultiLiveEl = document.querySelector<any>('#select-multi-live')
-const selectMultiLiveOutput = document.getElementById('select-multi-live-output')
-if (selectMultiLiveEl && selectMultiLiveOutput) {
-  selectMultiLiveEl.addEventListener('change', (e: CustomEvent) => {
-    const val: string[] = e.detail?.value ?? []
-    selectMultiLiveOutput.textContent = `value: [${val.map(v => JSON.stringify(v)).join(', ')}]`
-  })
-}
-
-// Position demos — shared options
-const positionOptions = [
+const POSITION_OPTIONS = [
   { label: 'Option 1', value: '1' },
   { label: 'Option 2', value: '2' },
   { label: 'Option 3', value: '3' },
 ]
+
+// Slot mode — set initial value via JS
+const selectSlotEl = document.querySelector<any>('#select-slot')
+if (selectSlotEl) selectSlotEl.value = 'banana'
+
+// Options prop — JS array with clearable + resettable + defaultValue
+const selectOptsEl = document.querySelector<any>('#select-opts')
+if (selectOptsEl) {
+  selectOptsEl.options = FRUIT_OPTIONS
+  selectOptsEl.defaultValue = 'cherry'
+  selectOptsEl.value = 'cherry'
+}
+
+// Disabled — pre-fill so the selected state is visible
+const selectDisabledEl = document.querySelector<any>('#select-disabled')
+if (selectDisabledEl) {
+  selectDisabledEl.options = FRUIT_OPTIONS
+  selectDisabledEl.value = 'apple'
+}
+
+// Sizes — all share the same options
+;['#select-size-xs', '#select-size-sm', '#select-size-md', '#select-size-lg', '#select-size-xl'].forEach(id => {
+  const el = document.querySelector<any>(id)
+  if (el) el.options = FRUIT_OPTIONS
+})
+
+// Position demos
 ;['#select-pos-bottom', '#select-pos-top', '#select-pos-right', '#select-pos-left'].forEach(id => {
   const el = document.querySelector<any>(id)
-  if (el) el.options = positionOptions
+  if (el) el.options = POSITION_OPTIONS
 })
+
+// Multiple — JS options prop, pre-selected + resettable defaultValue
+const selectMultiOptsEl = document.querySelector<any>('#select-multi-opts')
+if (selectMultiOptsEl) {
+  selectMultiOptsEl.options = COLOR_OPTIONS
+  selectMultiOptsEl.defaultValue = ['red', 'blue']
+  selectMultiOptsEl.value = ['red', 'blue']
+}
+
+// Change event — live output
+const selectEventEl = document.querySelector<any>('#select-event')
+const selectEventOutput = document.getElementById('select-event-output')
+if (selectEventEl && selectEventOutput) {
+  selectEventEl.addEventListener('change', (e: CustomEvent) => {
+    const val: unknown = e.detail?.value
+    const display = Array.isArray(val)
+      ? `[${val.map(v => JSON.stringify(v)).join(', ')}]`
+      : JSON.stringify(val)
+    selectEventOutput.textContent = `value: ${display}`
+  })
+}
 
 
 // RadioGroup demos
