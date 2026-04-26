@@ -31,6 +31,16 @@
 }
 
 
+:host([variant="faint"]) .alert {
+  background-color: var(--alert-subtle-bg);
+  color:            var(--alert-subtle-color);
+  border-color:     var(--alert-subtle-border);
+}
+
+:host([variant="subtle"]) .alert {
+  border-color: transparent;
+}
+
 :host([variant="filled"]) .alert {
   background-color: var(--alert-solid-bg);
   color:            var(--alert-solid-color);

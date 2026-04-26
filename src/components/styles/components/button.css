@@ -93,6 +93,22 @@ button:disabled {
   background: var(--btn-subtle-bg-hover);
 }
 
+:host([variant="faint"]) button {
+  background:   var(--btn-subtle-bg);
+  border-color: var(--btn-border);
+  color:        var(--btn-accent);
+}
+
+:host([variant="faint"]) button:hover:not(:disabled) {
+  background:   var(--btn-subtle-bg-hover);
+  border-color: var(--btn-border-hover);
+  color:        var(--btn-accent-hover);
+}
+
+:host([variant="faint"]) button:active:not(:disabled) {
+  background: var(--btn-subtle-bg-hover);
+}
+
 :host([variant="text"]) button {
   background:   transparent;
   border-color: transparent;

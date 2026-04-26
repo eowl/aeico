@@ -93,7 +93,7 @@
 }
 
 :host([color="light"]) {
-  --color-solid:           var(--color-gray-lighter);
+  --color-solid:           var(--light);
   --color-on-solid:        var(--gray-900);
   --color-border:          var(--color-gray-lighter);
   --color-bg-subtle:       var(--color-light-bg-subtle);

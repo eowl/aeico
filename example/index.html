@@ -334,100 +334,126 @@
   <div class="section">
     <h2>Button</h2>
     <span class="tag">&lt;ae-button&gt;</span>
-    <div class="demo-row">
-      <ae-button>Default</ae-button>
-      <ae-button color="secondary">Secondary</ae-button>
-      <ae-button color="primary">Primary</ae-button>
-      <ae-button color="success">Success</ae-button>
-      <ae-button color="danger">Danger</ae-button>
-      <ae-button color="warning">Warning</ae-button>
-      <ae-button color="info">Info</ae-button>
-      <ae-button color="light">Light</ae-button>
-      <ae-button color="dark">Dark</ae-button>
-    </div>
+
     <div class="demo-group">
-      <label>Active</label>
+      <label>filled (default)</label>
       <div class="demo-row">
-        <ae-button active>Default</ae-button>
-        <ae-button color="secondary" active>Secondary</ae-button>
-        <ae-button color="primary" active>Primary</ae-button>
-        <ae-button color="success" active>Success</ae-button>
-        <ae-button color="danger" active>Danger</ae-button>
-        <ae-button color="warning" active>Warning</ae-button>
-        <ae-button color="info" active>Info</ae-button>
-        <ae-button color="light" active>Light</ae-button>
-        <ae-button color="dark" active>Dark</ae-button>
+        <ae-button>Default</ae-button>
+        <ae-button color="primary">Primary</ae-button>
+        <ae-button color="secondary">Secondary</ae-button>
+        <ae-button color="success">Success</ae-button>
+        <ae-button color="danger">Danger</ae-button>
+        <ae-button color="warning">Warning</ae-button>
+        <ae-button color="info">Info</ae-button>
+        <ae-button color="light">Light</ae-button>
+        <ae-button color="dark">Dark</ae-button>
+        <ae-button disabled>Disabled</ae-button>
       </div>
     </div>
+
     <div class="demo-group">
-      <label>Button + Icon slot (icon inherits button color)</label>
+      <label>outlined</label>
       <div class="demo-row">
-        <ae-button>
-          <ae-icon name="home" size="sm"></ae-icon>
-        </ae-button>
+        <ae-button variant="outlined">Default</ae-button>
+        <ae-button variant="outlined" color="primary">Primary</ae-button>
+        <ae-button variant="outlined" color="secondary">Secondary</ae-button>
+        <ae-button variant="outlined" color="success">Success</ae-button>
+        <ae-button variant="outlined" color="danger">Danger</ae-button>
+        <ae-button variant="outlined" color="warning">Warning</ae-button>
+        <ae-button variant="outlined" color="info">Info</ae-button>
+        <ae-button variant="outlined" color="light">Light</ae-button>
+        <ae-button variant="outlined" color="dark">Dark</ae-button>
+        <ae-button variant="outlined" disabled>Disabled</ae-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>faint</label>
+      <div class="demo-row">
+        <ae-button variant="faint">Default</ae-button>
+        <ae-button variant="faint" color="primary">Primary</ae-button>
+        <ae-button variant="faint" color="secondary">Secondary</ae-button>
+        <ae-button variant="faint" color="success">Success</ae-button>
+        <ae-button variant="faint" color="danger">Danger</ae-button>
+        <ae-button variant="faint" color="warning">Warning</ae-button>
+        <ae-button variant="faint" color="info">Info</ae-button>
+        <ae-button variant="faint" color="light">Light</ae-button>
+        <ae-button variant="faint" color="dark">Dark</ae-button>
+        <ae-button variant="faint" disabled>Disabled</ae-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>subtle</label>
+      <div class="demo-row">
+        <ae-button variant="subtle">Default</ae-button>
+        <ae-button variant="subtle" color="primary">Primary</ae-button>
+        <ae-button variant="subtle" color="secondary">Secondary</ae-button>
+        <ae-button variant="subtle" color="success">Success</ae-button>
+        <ae-button variant="subtle" color="danger">Danger</ae-button>
+        <ae-button variant="subtle" color="warning">Warning</ae-button>
+        <ae-button variant="subtle" color="info">Info</ae-button>
+        <ae-button variant="subtle" color="light">Light</ae-button>
+        <ae-button variant="subtle" color="dark">Dark</ae-button>
+        <ae-button variant="subtle" disabled>Disabled</ae-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>text</label>
+      <div class="demo-row">
+        <ae-button variant="text">Default</ae-button>
+        <ae-button variant="text" color="primary">Primary</ae-button>
+        <ae-button variant="text" color="secondary">Secondary</ae-button>
+        <ae-button variant="text" color="success">Success</ae-button>
+        <ae-button variant="text" color="danger">Danger</ae-button>
+        <ae-button variant="text" color="warning">Warning</ae-button>
+        <ae-button variant="text" color="info">Info</ae-button>
+        <ae-button variant="text" color="light">Light</ae-button>
+        <ae-button variant="text" color="dark">Dark</ae-button>
+        <ae-button variant="text" disabled>Disabled</ae-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Sizes</label>
+      <div class="demo-row" style="align-items: center;">
+        <ae-button size="xs" color="primary">XS</ae-button>
+        <ae-button size="sm" color="primary">SM</ae-button>
+        <ae-button size="md" color="primary">MD</ae-button>
+        <ae-button size="lg" color="primary">LG</ae-button>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>With icon</label>
+      <div class="demo-row">
         <ae-button color="primary">
           <ae-icon name="home" size="sm"></ae-icon>
-          Primary
-        </ae-button>
-        <ae-button color="primary" size="xs">
-          <ae-icon name="home"></ae-icon>
+          Home
         </ae-button>
         <ae-button color="success">
           <ae-icon name="check" size="sm"></ae-icon>
-          Success
+          Confirm
         </ae-button>
         <ae-button color="danger">
           <ae-icon name="close" size="sm"></ae-icon>
-          Danger
+          Delete
         </ae-button>
-        <ae-button color="primary">
-          <ae-icon name="home" size="sm" color="danger"></ae-icon>
-          Icon override
-        </ae-button>
-      </div>
-    </div>
-    <div class="demo-row">
-      <ae-button variant="outlined">Default</ae-button>
-      <ae-button variant="outlined" color="secondary">Secondary</ae-button>
-      <ae-button variant="outlined" color="primary">Primary</ae-button>
-      <ae-button variant="outlined" color="success">Success</ae-button>
-      <ae-button variant="outlined" color="success">
-        <ae-icon name="check"></ae-icon>
-      </ae-button>
-      <ae-button variant="outlined" color="danger">Danger</ae-button>
-      <ae-button variant="outlined" color="warning">Warning</ae-button>
-    </div>
-    <div class="demo-row">
-      <ae-button variant="subtle">Default</ae-button>
-      <ae-button variant="subtle" color="secondary">Secondary</ae-button>
-      <ae-button variant="subtle" color="primary">Primary</ae-button>
-      <ae-button variant="subtle" color="info">
-        <ae-icon name="check" size="sm"></ae-icon>
-      </ae-button>
-      <ae-button variant="subtle" color="danger">Danger</ae-button>
-      <ae-button disabled>Disabled</ae-button>
-    </div>
-    <div class="demo-row">
-      <ae-button size="xs" color="primary">XS</ae-button>
-      <ae-button size="sm" color="primary">SM</ae-button>
-      <ae-button size="md" color="primary">MD</ae-button>
-      <ae-button size="lg" color="primary">LG</ae-button>
-    </div>
-    <div class="demo-group">
-      <label>Button Variant text</label>
-      <div class="demo-row">
-        <ae-button variant="text" color="primary">Text</ae-button>
-        <ae-button variant="text" color="primary">
+        <ae-button variant="outlined" color="primary">
           <ae-icon name="home" size="sm"></ae-icon>
+          Outlined
+        </ae-button>
+        <ae-button variant="subtle" color="info">
+          <ae-icon name="home" size="sm"></ae-icon>
+          Subtle
         </ae-button>
       </div>
     </div>
+
     <div class="demo-group">
       <label>Block</label>
-      <div class="demo-row">
-        <ae-button block color="primary">Block Button</ae-button>
-        <ae-button style="width: 100%">Width 100%</ae-button>
-      </div>
+      <ae-button block color="primary">Block Button</ae-button>
     </div>
   </div>
 
@@ -703,25 +729,67 @@
   <div class="section">
     <h2>Alert</h2>
     <span class="tag">&lt;ae-alert&gt;</span>
+
     <div class="demo-group">
-      <label>Subtle (default)</label>
-      <ae-alert>Primary</ae-alert>
+      <label>faint (default)</label>
+      <ae-alert color="primary">Primary</ae-alert>
       <ae-alert color="secondary">Secondary</ae-alert>
       <ae-alert color="success">Success</ae-alert>
-      <ae-alert color="warning">Warning</ae-alert>
       <ae-alert color="danger">Danger</ae-alert>
+      <ae-alert color="warning">Warning</ae-alert>
       <ae-alert color="info">Info</ae-alert>
-      <label>Filled</label>
-      <ae-alert variant="filled" color="primary"><ae-icon name="home" size="md"></ae-icon></ae-alert>
-      <ae-alert variant="filled" color="primary">Filled primary</ae-alert>
-      <ae-alert variant="filled" color="success">Filled success</ae-alert>
-      <ae-alert variant="filled" color="danger">Filled danger</ae-alert>
-      <ae-alert variant="filled" color="danger" invisible>Hidden Filled danger</ae-alert>
-      <label>Outlined</label>
-      <ae-alert variant="outlined" color="primary">Outlined primary</ae-alert>
-      <ae-alert variant="outlined" color="warning">Outlined warning</ae-alert>
-      <ae-alert color="info" dismissible>Dismissible alert — click to close</ae-alert>
-      
+      <ae-alert color="light">Light</ae-alert>
+      <ae-alert color="dark">Dark</ae-alert>
+    </div>
+
+    <div class="demo-group">
+      <label>subtle</label>
+      <ae-alert variant="subtle" color="primary">Primary</ae-alert>
+      <ae-alert variant="subtle" color="secondary">Secondary</ae-alert>
+      <ae-alert variant="subtle" color="success">Success</ae-alert>
+      <ae-alert variant="subtle" color="danger">Danger</ae-alert>
+      <ae-alert variant="subtle" color="warning">Warning</ae-alert>
+      <ae-alert variant="subtle" color="info">Info</ae-alert>
+      <ae-alert variant="subtle" color="light">Light</ae-alert>
+      <ae-alert variant="subtle" color="dark">Dark</ae-alert>
+    </div>
+
+    <div class="demo-group">
+      <label>filled</label>
+      <ae-alert variant="filled" color="primary">Primary</ae-alert>
+      <ae-alert variant="filled" color="secondary">Secondary</ae-alert>
+      <ae-alert variant="filled" color="success">Success</ae-alert>
+      <ae-alert variant="filled" color="danger">Danger</ae-alert>
+      <ae-alert variant="filled" color="warning">Warning</ae-alert>
+      <ae-alert variant="filled" color="info">Info</ae-alert>
+      <ae-alert variant="filled" color="light">Light</ae-alert>
+      <ae-alert variant="filled" color="dark">Dark</ae-alert>
+    </div>
+
+    <div class="demo-group">
+      <label>outlined</label>
+      <ae-alert variant="outlined" color="primary">Primary</ae-alert>
+      <ae-alert variant="outlined" color="secondary">Secondary</ae-alert>
+      <ae-alert variant="outlined" color="success">Success</ae-alert>
+      <ae-alert variant="outlined" color="danger">Danger</ae-alert>
+      <ae-alert variant="outlined" color="warning">Warning</ae-alert>
+      <ae-alert variant="outlined" color="info">Info</ae-alert>
+      <ae-alert variant="outlined" color="light">Light</ae-alert>
+      <ae-alert variant="outlined" color="dark">Dark</ae-alert>
+    </div>
+
+    <div class="demo-group">
+      <label>Sizes</label>
+      <ae-alert size="sm" color="info">Small (sm)</ae-alert>
+      <ae-alert color="info">Medium (default)</ae-alert>
+      <ae-alert size="lg" color="info">Large (lg)</ae-alert>
+    </div>
+
+    <div class="demo-group">
+      <label>Dismissible</label>
+      <ae-alert color="primary" dismissible>Dismissible — click × to close</ae-alert>
+      <ae-alert variant="filled" color="success" dismissible>Filled dismissible</ae-alert>
+      <ae-alert variant="outlined" color="danger" dismissible>Outlined dismissible</ae-alert>
     </div>
   </div>
 
@@ -774,73 +842,123 @@
     <span class="tag">&lt;ae-card&gt;</span>
 
     <div class="demo-group">
-      <label>Default (body only)</label>
-      <ae-card style="max-width: 300px;">
-        <p>Card body content. Just a default card with no header or footer.</p>
-      </ae-card>
-    </div>
-
-    <div class="demo-group">
-      <label>With header &amp; footer</label>
-      <ae-card style="max-width: 300px;">
-        <span slot="header">Card Title</span>
-        <p>Some content inside the card body.</p>
-        <span slot="footer">Footer note</span>
-      </ae-card>
-    </div>
-
-    <div class="demo-group">
-      <label>Variants</label>
+      <label>Variants (primary)</label>
       <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
-        <ae-card style="max-width: 200px;">
-          <span slot="header">subtle (default)</span>
-          <p>Subtle variant.</p>
+        <ae-card color="primary" style="max-width: 180px;">
+          <span slot="header">faint (default)</span>
+          <p>Subtle bg with border.</p>
         </ae-card>
-        <ae-card variant="outlined" style="max-width: 200px;">
+        <ae-card color="primary" variant="subtle" style="max-width: 180px;">
+          <span slot="header">subtle</span>
+          <p>Subtle bg, no border.</p>
+        </ae-card>
+        <ae-card color="primary" variant="outlined" style="max-width: 180px;">
           <span slot="header">outlined</span>
-          <p>Outlined variant.</p>
+          <p>Transparent bg, visible border.</p>
         </ae-card>
-        <ae-card variant="filled" style="max-width: 200px;">
+        <ae-card color="primary" variant="filled" style="max-width: 180px;">
           <span slot="header">filled</span>
-          <p>Filled variant.</p>
+          <p>Solid color background.</p>
         </ae-card>
       </div>
     </div>
 
     <div class="demo-group">
-      <label>Colors</label>
+      <label>Colors — faint (default)</label>
       <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
-        <ae-card color="primary" variant="subtle" style="max-width: 160px;">
-          <span slot="header">primary</span>
-          <p>subtle</p>
+        <ae-card style="max-width: 130px;">
+          <span slot="header">default</span>
+          <p>faint</p>
         </ae-card>
-        <ae-card color="primary" variant="filled" style="max-width: 160px;">
+        <ae-card color="primary" style="max-width: 130px;">
+          <span slot="header">primary</span>
+          <p>faint</p>
+        </ae-card>
+        <ae-card color="secondary" style="max-width: 130px;">
+          <span slot="header">secondary</span>
+          <p>faint</p>
+        </ae-card>
+        <ae-card color="success" style="max-width: 130px;">
+          <span slot="header">success</span>
+          <p>faint</p>
+        </ae-card>
+        <ae-card color="danger" style="max-width: 130px;">
+          <span slot="header">danger</span>
+          <p>faint</p>
+        </ae-card>
+        <ae-card color="warning" style="max-width: 130px;">
+          <span slot="header">warning</span>
+          <p>faint</p>
+        </ae-card>
+        <ae-card color="info" style="max-width: 130px;">
+          <span slot="header">info</span>
+          <p>faint</p>
+        </ae-card>
+        <ae-card color="light" style="max-width: 130px;">
+          <span slot="header">light</span>
+          <p>faint</p>
+        </ae-card>
+        <ae-card color="dark" style="max-width: 130px;">
+          <span slot="header">dark</span>
+          <p>faint</p>
+        </ae-card>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Colors — filled</label>
+      <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
+        <ae-card variant="filled" style="max-width: 130px;">
+          <span slot="header">default</span>
+          <p>filled</p>
+        </ae-card>
+        <ae-card color="primary" variant="filled" style="max-width: 130px;">
           <span slot="header">primary</span>
           <p>filled</p>
         </ae-card>
-        <ae-card color="primary" variant="outlined" style="max-width: 160px;">
-          <span slot="header">primary</span>
-          <p>outlined</p>
+        <ae-card color="secondary" variant="filled" style="max-width: 130px;">
+          <span slot="header">secondary</span>
+          <p>filled</p>
         </ae-card>
-        <ae-card color="success" variant="filled" style="max-width: 160px;">
+        <ae-card color="success" variant="filled" style="max-width: 130px;">
           <span slot="header">success</span>
           <p>filled</p>
         </ae-card>
-        <ae-card color="danger" variant="filled" style="max-width: 160px;">
+        <ae-card color="danger" variant="filled" style="max-width: 130px;">
           <span slot="header">danger</span>
           <p>filled</p>
         </ae-card>
-        <ae-card color="warning" variant="outlined" style="max-width: 160px;">
+        <ae-card color="warning" variant="filled" style="max-width: 130px;">
           <span slot="header">warning</span>
-          <p>outlined</p>
+          <p>filled</p>
         </ae-card>
-         <ae-card color="light" variant="subtle" style="max-width: 160px;">
+        <ae-card color="info" variant="filled" style="max-width: 130px;">
+          <span slot="header">info</span>
+          <p>filled</p>
+        </ae-card>
+        <ae-card color="light" variant="filled" style="max-width: 130px;">
           <span slot="header">light</span>
-          <p>outlined</p>
+          <p>filled</p>
         </ae-card>
-        <ae-card color="dark" variant="subtle" style="max-width: 160px;">
-            <span slot="header">dark</span>
-            <p>outlined</p>
+        <ae-card color="dark" variant="filled" style="max-width: 130px;">
+          <span slot="header">dark</span>
+          <p>filled</p>
+        </ae-card>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>With header &amp; footer</label>
+      <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
+        <ae-card color="primary" style="max-width: 240px;">
+          <span slot="header">Card Title</span>
+          <p>Default faint card with header and footer.</p>
+          <span slot="footer">Footer note</span>
+        </ae-card>
+        <ae-card color="primary" variant="filled" style="max-width: 240px;">
+          <span slot="header">Card Title</span>
+          <p>Filled card with header and footer.</p>
+          <span slot="footer">Footer note</span>
         </ae-card>
       </div>
     </div>
