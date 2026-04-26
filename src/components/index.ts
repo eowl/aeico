@@ -49,6 +49,7 @@ export { default as Icon } from './icon/icon'
 export { default as IconRegistry } from './icon/registry'
 export { default as IconButton } from './icon-button'
 export { Tabs, Tab, TabPanel } from './tabs'
+export { default as Divider } from './divider'
 
 // Component types
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
@@ -64,3 +65,4 @@ export type { AlertProps, AlertColor, AlertSize, AlertVariant } from './alert'
 export type { DialogProps } from './dialog'
 export type { IconProps, IconSize, IconColor, IconDefinition, IconRegistryData } from './icon'
 export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './icon-button'
+export type { DividerProps } from './divider'
