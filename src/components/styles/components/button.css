@@ -37,7 +37,7 @@ button {
   width: 100%;
 
   background:   var(--btn-solid-bg);
-  border: 1px solid var(--btn-border);
+  border: 1px solid var(--btn-solid-bg);
   color:        var(--btn-solid-color);
 }
 

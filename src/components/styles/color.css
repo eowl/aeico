@@ -95,7 +95,9 @@
 :host([color="light"]) {
   --color-solid:           var(--light);
   --color-on-solid:        var(--gray-900);
-  --color-border:          var(--color-gray-lighter);
+  --color-border:          var(--border-hover);
+  --color-subtle:          var(--color-light-bg-subtle);
+  --color-subtle-hover:    var(--color-light-border-subtle);
   --color-bg-subtle:       var(--color-light-bg-subtle);
   --color-text-subtle:     var(--color-text-muted);
   --color-border-subtle:   var(--color-light-border-subtle);
@@ -105,7 +107,11 @@
   --color-solid:           var(--dark-500);
   --color-on-solid:        white;
   --color-border:          var(--dark-500);
+  --color-accent:          var(--color-text-main);
+  --color-accent-hover:    var(--color-text-main);
+  --color-subtle:          var(--color-dark-bg-subtle);
+  --color-subtle-hover:    var(--color-dark-border-subtle);
   --color-bg-subtle:       var(--color-dark-bg-subtle);
-  --color-text-subtle:     var(--gray-200);
+  --color-text-subtle:     var(--color-text-main);
   --color-border-subtle:   var(--color-dark-border-subtle);
 }

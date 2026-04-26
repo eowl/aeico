@@ -62,19 +62,3 @@
 .body {
   padding: 16px;
 }
-
-/* light: border barely visible on light bg, use default border token */
-:host([color="light"]:not([variant="filled"])) {
-  --card-border:  var(--border-default);
-  --card-divider: var(--border-subtle);
-}
-
-/* dark: override light tokens with real dark colors */
-:host([color="dark"]:not([variant="filled"])) {
-  --card-color:   var(--color-text-main);
-  --card-border:  var(--dark-400);
-  --card-divider: var(--dark-300);
-}
-:host([color="dark"]:is(:not([variant]), [variant="subtle"], [variant="faint"])) {
-  --card-bg: var(--dark-100);
-}

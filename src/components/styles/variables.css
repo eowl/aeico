@@ -227,11 +227,11 @@
   --color-secondary-border-subtle: rgb(from var(--slate) r g b / 0.40);
   --color-secondary-text-emphasis: var(--slate-700);
 
-  --color-light-bg-subtle:         rgb(from var(--light) r g b / 0.10);
-  --color-light-border-subtle:     rgb(from var(--light) r g b / 0.30);
+  --color-light-bg-subtle:         var(--gray-100);   /* opaque on white: ~#e2e2e2 */
+  --color-light-border-subtle:     var(--gray-200);   /* opaque on white: ~#c4c4c4 */
 
-  --color-dark-bg-subtle:          rgb(from var(--dark) r g b / 0.08);
-  --color-dark-border-subtle:      rgb(from var(--dark) r g b / 0.40);
+  --color-dark-bg-subtle:          var(--dark-100);   /* opaque on white: ~#d6d8d9 */
+  --color-dark-border-subtle:      var(--dark-300);   /* opaque on white: ~#85898c */
 
   /* Component tokens — light defaults */
   --action-btn-bg:          var(--gray-200);
@@ -339,8 +339,8 @@
   --color-secondary-border-subtle: rgb(from var(--slate) r g b / 0.30);
   --color-secondary-text-emphasis: var(--slate-300);
 
-  --color-light-bg-subtle:         rgb(from var(--light) r g b / 0.05);
-  --color-light-border-subtle:     rgb(from var(--light) r g b / 0.20);
+  --color-light-bg-subtle:         rgb(from var(--light) r g b / 0.20);
+  --color-light-border-subtle:     rgb(from var(--light) r g b / 0.25);
 
   --color-dark-bg-subtle:          rgb(from var(--dark) r g b / 0.30);
   --color-dark-border-subtle:      rgb(from var(--dark) r g b / 0.50);

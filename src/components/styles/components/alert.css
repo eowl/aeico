@@ -44,7 +44,7 @@
 :host([variant="filled"]) .alert {
   background-color: var(--alert-solid-bg);
   color:            var(--alert-solid-color);
-  border-color:     var(--alert-border);
+  border-color:     var(--alert-solid-bg);
 }
 
 :host([variant="outlined"]) .alert {
