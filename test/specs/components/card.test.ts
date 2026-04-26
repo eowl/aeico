@@ -128,7 +128,7 @@ describe('Card', () => {
   })
 
   describe('shadow DOM structure', () => {
-    it('has card, card-header, card-body, card-footer parts', async () => {
+    it('has card, header, body, footer parts', async () => {
       const el = await mount<Card>(`<${TAG_NAME}></${TAG_NAME}>`)
       const root = el.shadowRoot!
       expect(root.querySelector('[part="card"]')).to.not.be.null

@@ -19,15 +19,15 @@ class Card extends AeicoComponent {
   accessor variant: CardVariant = 'subtle'
 
   protected render() {
-    return html(({ div, slot }) => {
+    return html(({ div, header, footer, slot }) => {
       div({ className: 'card', part: 'card' }, () => {
-        div({ className: 'card-header', part: 'header' }, () => {
+        header({ className: 'header', part: 'header' }, () => {
           slot({ name: 'header', '@slotchange': (e: Event) => this._onHeaderSlotChange(e) })
         })
-        div({ className: 'card-body', part: 'body' }, () => {
+        div({ className: 'body', part: 'body' }, () => {
           slot()
         })
-        div({ className: 'card-footer', part: 'footer' }, () => {
+        footer({ className: 'footer', part: 'footer' }, () => {
           slot({ name: 'footer', '@slotchange': (e: Event) => this._onFooterSlotChange(e) })
         })
       })
