@@ -328,6 +328,45 @@
         <ae-select-option value="c">Option C</ae-select-option>
       </ae-select>
     </div>
+
+    <!-- Multiple — Slot Mode -->
+    <div class="demo-group">
+      <label>Multiple — Slot Mode</label>
+      <ae-select id="select-multi-slot" multiple clearable placeholder="Select fruits...">
+        <ae-select-option value="apple">Apple</ae-select-option>
+        <ae-select-option value="banana">Banana</ae-select-option>
+        <ae-select-option value="cherry">Cherry</ae-select-option>
+        <ae-select-option value="grape">Grape</ae-select-option>
+        <ae-select-option value="mango">Mango</ae-select-option>
+      </ae-select>
+      <small style="color: #666; display: block; margin-top: 4px;">
+        Multi-select via slot options; click items to toggle, click <code>×</code> on a tag to remove.
+      </small>
+    </div>
+
+    <!-- Multiple — JS options prop -->
+    <div class="demo-group">
+      <label>Multiple — JS options prop (pre-selected)</label>
+      <ae-select id="select-multi-opts" multiple clearable resettable placeholder="Select colors..."></ae-select>
+      <small style="color: #666; display: block; margin-top: 4px;">
+        Options and initial value set via JavaScript.
+      </small>
+    </div>
+
+    <!-- Multiple — live value output -->
+    <div class="demo-group">
+      <label>Multiple — live value output</label>
+      <ae-select id="select-multi-live" multiple placeholder="Select tags...">
+        <ae-select-option value="ts">TypeScript</ae-select-option>
+        <ae-select-option value="js">JavaScript</ae-select-option>
+        <ae-select-option value="css">CSS</ae-select-option>
+        <ae-select-option value="html">HTML</ae-select-option>
+        <ae-select-option value="wc">Web Components</ae-select-option>
+      </ae-select>
+      <small id="select-multi-live-output" style="color: #666; display: block; margin-top: 4px;">
+        value: []
+      </small>
+    </div>
   </div>
 
   <!-- Button -->

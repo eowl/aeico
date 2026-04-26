@@ -101,6 +101,29 @@ if (selectEl) {
   selectEl.value = 'cherry'
 }
 
+// Multiple — JS options prop
+const selectMultiOptsEl = document.querySelector<any>('#select-multi-opts')
+if (selectMultiOptsEl) {
+  selectMultiOptsEl.options = [
+    { label: 'Red', value: 'red' },
+    { label: 'Green', value: 'green' },
+    { label: 'Blue', value: 'blue' },
+    { label: 'Yellow', value: 'yellow' },
+    { label: 'Purple', value: 'purple' },
+  ]
+  selectMultiOptsEl.value = ['red', 'blue']
+}
+
+// Multiple — live value output
+const selectMultiLiveEl = document.querySelector<any>('#select-multi-live')
+const selectMultiLiveOutput = document.getElementById('select-multi-live-output')
+if (selectMultiLiveEl && selectMultiLiveOutput) {
+  selectMultiLiveEl.addEventListener('change', (e: CustomEvent) => {
+    const val: string[] = e.detail?.value ?? []
+    selectMultiLiveOutput.textContent = `value: [${val.map(v => JSON.stringify(v)).join(', ')}]`
+  })
+}
+
 // Position demos — shared options
 const positionOptions = [
   { label: 'Option 1', value: '1' },

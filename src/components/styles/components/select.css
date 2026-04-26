@@ -47,6 +47,7 @@
   min-width: 0;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.333em;
   font-size: var(--select-font-size);
   padding: var(--select-padding);
@@ -89,8 +90,57 @@
   color: var(--color-text-disabled);
 }
 
+.select-selected-list {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.select-selected-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 4px 1px 8px;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border-radius: 3px;
+  font-size: 0.82em;
+  line-height: 1.6;
+  max-width: 160px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.select-selected-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.select-selected-remove {
+  flex-shrink: 0;
+  cursor: pointer;
+  opacity: 0.55;
+  line-height: 1;
+  font-size: 1em;
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+.select-selected-remove:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
 .select-arrow {
   flex-shrink: 0;
+  align-self: center;
   font-size: var(--select-arrow-size);
   color: var(--select-arrow-color);
   transition: transform 0.12s;
@@ -142,6 +192,27 @@
   left: 100%;
   top: 0;
   margin-left: 2px;
+}
+
+.clear-btn {
+  width: 1.333em;
+  height: 1.333em;
+  border: none;
+  border-radius: var(--clear-btn-border-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--clear-btn-bg);
+  color: var(--clear-btn-color);
+  transition: var(--clear-btn-transition);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.clear-btn:hover {
+  background: var(--clear-btn-bg-hover);
+  color: var(--clear-btn-color-hover);
 }
 
 .reset-btn {

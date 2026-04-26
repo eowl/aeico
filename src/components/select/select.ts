@@ -2,11 +2,11 @@ import AeicoField from '../aeico-field'
 import type { InferProps, Props } from '../../core/types'
 import { html, tags } from '../../view'
 import { t } from '../../localize'
-import type { SelectOptionValue, SelectOption, SelectOptions, SelectPosition } from './defines'
+import type { SelectOptionValue, SelectOption, SelectOptions, SelectPosition, SelectMultiValue } from './defines'
 import style from '../styles/components/select.css?inline'
 import variables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
-import './select-option'
+import SelectOptionElement from './select-option'
 
 class Select extends AeicoField {
   protected fieldElement = null
@@ -22,24 +22,51 @@ class Select extends AeicoField {
     options: { type: Array },
     position: { type: String },
     placeholder: { type: String },
+    multiple: { type: Boolean },
+    // Override base class value prop to support both string and array (multi-select)
+    value: {
+      type: String,
+      parser: (v) => {
+        if (v === null || v === undefined) return undefined
+        try { return JSON.parse(v) } catch { return v }
+      },
+      formatter: (v) => {
+        if (v === null || v === undefined) return ''
+        if (Array.isArray(v)) return JSON.stringify(v)
+
+        return String(v)
+      },
+    },
   }
 
   declare options?: SelectOptions
   declare position?: SelectPosition
   declare placeholder?: string
+  declare multiple?: boolean
+  // value can be a single value or array in multiple mode
+  declare value?: any
 
   protected static styles = [variables, sizeCSS, style]
 
-  protected writeValue(_value: SelectOptionValue): void {
+  protected writeValue(_value: SelectOptionValue | SelectMultiValue): void {
     // Reactive re-render via this.value prop change handles the display update
   }
 
   protected getValue(): any {
+    if (this.multiple) return this._getMultiValues()
+
     return this.value || ''
   }
 
+  private _getMultiValues(): SelectMultiValue {
+    if (Array.isArray(this.value)) return this.value
+    if (this.value != null && this.value !== '') return [this.value as SelectOptionValue]
+
+    return []
+  }
+
   protected onDisabledChanged(_newValue: boolean): void {
-    this.update()
+    // disabled is a reactive prop — render() already picks it up automatically
   }
 
   private _findLabel(value: SelectOptionValue): string {
@@ -53,20 +80,26 @@ class Select extends AeicoField {
         }
       }
     }
+
     for (const opt of this._slotOptionData) {
       if (opt.value === strVal) return opt.label
     }
+
     return strVal
   }
 
   private _onSlotChange(): void {
     if (!this._slotEl) return
-    this._slotOptionData = (this._slotEl.assignedElements({ flatten: true }) as HTMLElement[])
-      .filter(el => el.tagName.toLowerCase() === 'ae-select-option')
-      .map(el => ({
-        value: (el as any).value ?? el.getAttribute('value') ?? '',
-        label: (el as any).label || el.textContent?.trim() || '',
-      }))
+    const data: Array<{ value: string; label: string }> = []
+    for (const el of this._slotEl.assignedElements({ flatten: true })) {
+      if (el.tagName.toLowerCase() !== 'ae-select-option') continue
+      const optEl = el as SelectOptionElement
+      data.push({
+        value: optEl.value ?? el.getAttribute('value') ?? '',
+        label: optEl.label || el.textContent?.trim() || '',
+      })
+    }
+    this._slotOptionData = data
     this.update()
   }
 
@@ -101,8 +134,18 @@ class Select extends AeicoField {
     if (!this._slotOptionData.find(o => o.value === value)) {
       this._slotOptionData = [...this._slotOptionData.filter(o => o.value !== value), { value, label }]
     }
-    this.setValue(value, { silent: false, action: 'change' })
-    this._closeDropdown()
+    if (this.multiple) {
+      const current = this._getMultiValues()
+      const idx = current.findIndex(v => String(v) === value)
+      const next: SelectMultiValue = idx >= 0
+        ? current.filter((_, i) => i !== idx)
+        : [...current, value]
+      // setValue sets this.value (reactive) → schedules update → render() → _syncSlotOptionsSelected()
+      this.setValue(next, { silent: false, action: 'change' })
+    } else {
+      this.setValue(value, { silent: false, action: 'change' })
+      this._closeDropdown()
+    }
   }
 
   connectedCallback() {
@@ -117,10 +160,30 @@ class Select extends AeicoField {
     this.removeEventListener('selectoption', this._handleOptionSelect)
   }
 
+  private _syncSlotOptionsSelected(): void {
+    if (!this._slotEl) return
+    const multiValues = this._getMultiValues()
+    for (const el of this._slotEl.assignedElements({ flatten: true })) {
+      if (el.tagName.toLowerCase() !== 'ae-select-option') continue
+      const optEl = el as SelectOptionElement
+      const optVal = optEl.value ?? el.getAttribute('value') ?? ''
+      const isSelected = this.multiple
+        ? multiValues.some(v => String(v) === optVal)
+        : this.value != null && this.value !== '' && String(this.value) === optVal
+      // undefined triggers removeAttribute via reactive setter
+      // (null would work too but undefined is type-safe for boolean | undefined)
+      optEl.selected = isSelected ? true : undefined
+    }
+  }
+
   render() {
     const position = this.position || 'bottom'
-    const selectedLabel = this.value != null && this.value !== '' ? this._findLabel(this.value) : ''
+    const multiValues = this.multiple ? this._getMultiValues() : []
+    const hasMultiSelection = this.multiple && multiValues.length > 0
+    const selectedLabel = !this.multiple && this.value != null && this.value !== '' ? this._findLabel(this.value as SelectOptionValue) : ''
     const isDisabled = Boolean(this.disabled)
+
+    this._syncSlotOptionsSelected()
 
     return html(({ div, span, slot }) => {
       div({ className: 'select-container' }, () => {
@@ -128,13 +191,40 @@ class Select extends AeicoField {
           className: `select-trigger${this._isOpen ? ' open' : ''}${isDisabled ? ' disabled' : ''}`,
           '@click': () => {
             if (isDisabled) return
+            
             this._toggleDropdown()
           },
         }, () => {
-          if (selectedLabel) {
-            span({ className: 'select-value', textContent: selectedLabel })
+          if (this.multiple) {
+            if (hasMultiSelection) {
+              div({ className: 'select-selected-list' }, () => {
+                for (const v of multiValues) {
+                  const lbl = this._findLabel(v)
+                  span({ key: `sel-${v}`, className: 'select-selected-item' }, () => {
+                    span({ className: 'select-selected-label', textContent: lbl })
+                    span({
+                      className: 'select-selected-remove',
+                      textContent: '×',
+                      '@click': (e: Event) => {
+                        e.stopPropagation()
+                        if (isDisabled) return
+
+                        const next = multiValues.filter(item => String(item) !== String(v))
+                        this.setValue(next, { silent: false, action: 'change' })
+                      },
+                    })
+                  })
+                }
+              })
+            } else {
+              span({ className: 'select-value select-placeholder', textContent: this.placeholder || '' })
+            }
           } else {
-            span({ className: 'select-value select-placeholder', textContent: this.placeholder || '' })
+            if (selectedLabel) {
+              span({ className: 'select-value', textContent: selectedLabel })
+            } else {
+              span({ className: 'select-value select-placeholder', textContent: this.placeholder || '' })
+            }
           }
           span({ className: 'select-arrow', textContent: '▾' })
         }) as HTMLElement
@@ -155,26 +245,30 @@ class Select extends AeicoField {
 
   private _renderProgrammaticOptions(): void {
     if (!Array.isArray(this.options)) return
-    const { aeSelectOption } = tags as unknown as {
-      aeSelectOption: (props: Record<string, unknown>) => HTMLElement
-    }
+
+    const { aeSelectOption } = tags
+    const multiValues = this.multiple ? this._getMultiValues() : []
     for (const opt of this.options) {
       if (this._isSelectOption(opt)) {
-        const isSelected = this.value != null && String(opt.value) === String(this.value)
+        const isSelected = this.multiple
+          ? multiValues.some(v => String(v) === String(opt.value))
+          : this.value != null && String(opt.value) === String(this.value)
         aeSelectOption({
           key: `opt-${opt.value}`,
           value: String(opt.value),
           label: opt.label,
           textContent: t(opt.label, opt.label),
-          ...(isSelected ? { selected: true } : {}),
+          selected: isSelected ? true : undefined,
         })
       } else {
-        const isSelected = this.value != null && String(opt) === String(this.value)
+        const isSelected = this.multiple
+          ? multiValues.some(v => String(v) === String(opt))
+          : this.value != null && String(opt) === String(this.value)
         aeSelectOption({
           key: `opt-${opt}`,
           value: String(opt),
           textContent: String(opt),
-          ...(isSelected ? { selected: true } : {}),
+          selected: isSelected ? true : undefined,
         })
       }
     }
