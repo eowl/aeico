@@ -6,3 +6,5 @@ export type SelectOption = {
 }
 
 export type SelectOptions = SelectOptionValue[] | SelectOption[]
+
+export type SelectPosition = 'top' | 'bottom' | 'left' | 'right'

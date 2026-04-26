@@ -81,14 +81,13 @@ const radioOptions = [
 
 // SelectField
 
-// Slot Mode (HTML)
-
+// Slot Mode — set initial value via JS
 const selectSlotEl = document.querySelector<any>('#select-slot')
 if (selectSlotEl) {
-  selectSlotEl.value = 'banana' // 仍可通过 JS 设置 value
+  selectSlotEl.value = 'banana'
 }
 
-// Attribute Mode（JS Method）
+// Attribute Mode — set options via JS
 const selectEl = document.querySelector<any>('#select-default')
 if (selectEl) {
   selectEl.options = [
@@ -97,10 +96,20 @@ if (selectEl) {
     { label: 'Cherry', value: 'cherry' },
     { label: 'Grape', value: 'grape' },
   ]
-  selectEl.value = 'banana'
+  selectEl.value = 'cherry'
 }
 
-// Slider — options mode demos
+// Position demos — shared options
+const positionOptions = [
+  { label: 'Option 1', value: '1' },
+  { label: 'Option 2', value: '2' },
+  { label: 'Option 3', value: '3' },
+]
+;['#select-pos-bottom', '#select-pos-top', '#select-pos-right', '#select-pos-left'].forEach(id => {
+  const el = document.querySelector<any>(id)
+  if (el) el.options = positionOptions
+})
+
 
 // RadioGroup demos
 const rgDemoOptions = [

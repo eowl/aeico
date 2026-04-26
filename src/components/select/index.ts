@@ -1,3 +1,5 @@
 export { default, default as Select } from './select'
 export type { SelectProps } from './select'
-export type { SelectOptionValue, SelectOption, SelectOptions } from './defines'
+export { default as SelectOption } from './select-option'
+export type { SelectOptionProps } from './select-option'
+export type { SelectOptionValue, SelectOption, SelectOptions, SelectPosition } from './defines'

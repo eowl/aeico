@@ -277,28 +277,56 @@
   <div class="section">
     <h2>SelectField</h2>
     <span class="tag">&lt;ae-select&gt;</span>
-    
+
     <!-- Slot Mode -->
     <div class="demo-group">
-      <label>Slot Mode (HTML)</label>
-      <ae-select id="select-slot" resettable>
-        <option value="apple">Apple</option>
-        <option value="banana" selected>Banana</option>
-        <option value="cherry">Cherry</option>
-        <option value="grape">Grape</option>
+      <label>Slot Mode (ae-select-option)</label>
+      <ae-select id="select-slot" resettable placeholder="Choose a fruit...">
+        <ae-select-option value="apple">Apple</ae-select-option>
+        <ae-select-option value="banana">Banana</ae-select-option>
+        <ae-select-option value="cherry">Cherry</ae-select-option>
+        <ae-select-option value="grape">Grape</ae-select-option>
       </ae-select>
       <small style="color: #666; display: block; margin-top: 4px;">
-        Slot Mode: options defined in HTML, does not support dynamic updates
+        Slot Mode: options defined in HTML via <code>ae-select-option</code>
       </small>
     </div>
-    
+
     <!-- Attribute Mode -->
     <div class="demo-group">
-      <label>Attribute Mode (JS)</label>
-      <ae-select id="select-default" resettable></ae-select>
+      <label>Attribute Mode (JS options prop)</label>
+      <ae-select id="select-default" resettable placeholder="Choose a fruit..."></ae-select>
       <small style="color: #666; display: block; margin-top: 4px;">
         Attribute Mode: options set via JavaScript, supports dynamic updates
       </small>
+    </div>
+
+    <!-- Position variants -->
+    <div class="demo-group">
+      <label>Position — bottom (default)</label>
+      <ae-select id="select-pos-bottom" placeholder="Open dropdown..."></ae-select>
+    </div>
+    <div class="demo-group">
+      <label>Position — top</label>
+      <ae-select id="select-pos-top" position="top" placeholder="Open dropdown..."></ae-select>
+    </div>
+    <div class="demo-group">
+      <label>Position — right</label>
+      <ae-select id="select-pos-right" position="right" placeholder="Open dropdown..."></ae-select>
+    </div>
+    <div class="demo-group">
+      <label>Position — left</label>
+      <ae-select id="select-pos-left" position="left" placeholder="Open dropdown..."></ae-select>
+    </div>
+
+    <!-- Disabled option -->
+    <div class="demo-group">
+      <label>With disabled option</label>
+      <ae-select id="select-disabled-opt" placeholder="Choose...">
+        <ae-select-option value="a">Option A</ae-select-option>
+        <ae-select-option value="b" disabled>Option B (disabled)</ae-select-option>
+        <ae-select-option value="c">Option C</ae-select-option>
+      </ae-select>
     </div>
   </div>
 
