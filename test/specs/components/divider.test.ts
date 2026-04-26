@@ -54,18 +54,18 @@ describe('Divider', () => {
   })
 
   describe('thickness prop', () => {
-    it('sets --divider-thickness when thickness is provided', async () => {
+    it('sets --thickness when thickness is provided', async () => {
       const el = await mount<Divider>(`<${TAG_NAME} thickness="4px"></${TAG_NAME}>`) as Divider
       await updated()
-      expect(el.style.getPropertyValue('--divider-thickness')).to.equal('4px')
+      expect(el.style.getPropertyValue('--thickness')).to.equal('4px')
     })
 
-    it('removes --divider-thickness when thickness is cleared', async () => {
+    it('removes --thickness when thickness is cleared', async () => {
       const el = await mount<Divider>(`<${TAG_NAME} thickness="4px"></${TAG_NAME}>`) as Divider
       await updated()
       el.thickness = undefined
       await updated()
-      expect(el.style.getPropertyValue('--divider-thickness')).to.equal('')
+      expect(el.style.getPropertyValue('--thickness')).to.equal('')
     })
   })
 
