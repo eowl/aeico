@@ -1,0 +1,58 @@
+import type { InferProps, Props } from '../../core/types'
+import styleVariables from '../styles/variables.css?inline'
+import colorCSS from '../styles/color.css?inline'
+import cardStyle from '../styles/components/card.css?inline'
+import AeicoComponent from '../aeico-component'
+import { html } from '../../view'
+import type { CardVariant, CardColor } from './defines'
+
+class Card extends AeicoComponent {
+  static tagName = 'card'
+
+  static props: Props = {
+    color: { type: String },
+    variant: { type: String },
+  }
+
+  protected static styles = [styleVariables, colorCSS, cardStyle]
+
+  declare color?: CardColor
+  declare variant?: CardVariant
+
+  protected render() {
+    return html(({ div, slot }) => {
+      div({ className: 'card', part: 'card' }, () => {
+        div({ className: 'card-header', part: 'header' }, () => {
+          slot({ name: 'header', '@slotchange': (e: Event) => this._onHeaderSlotChange(e) })
+        })
+        div({ className: 'card-body', part: 'body' }, () => {
+          slot()
+        })
+        div({ className: 'card-footer', part: 'footer' }, () => {
+          slot({ name: 'footer', '@slotchange': (e: Event) => this._onFooterSlotChange(e) })
+        })
+      })
+    })
+  }
+
+  private _onHeaderSlotChange(e: Event) {
+    const slot = e.target as HTMLSlotElement
+    this.toggleAttribute('has-header', slot.assignedNodes({ flatten: true }).length > 0)
+  }
+
+  private _onFooterSlotChange(e: Event) {
+    const slot = e.target as HTMLSlotElement
+    this.toggleAttribute('has-footer', slot.assignedNodes({ flatten: true }).length > 0)
+  }
+}
+
+Card.register()
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ae-card': Card
+  }
+}
+
+export default Card
+export type CardProps = InferProps<typeof Card>

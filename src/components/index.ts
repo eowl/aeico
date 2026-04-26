@@ -50,6 +50,7 @@ export { default as IconRegistry } from './icon/registry'
 export { default as IconButton } from './icon-button'
 export { Tabs, Tab, TabPanel } from './tabs'
 export { default as Divider } from './divider'
+export { default as Card } from './card'
 
 // Component types
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
@@ -66,3 +67,4 @@ export type { DialogProps } from './dialog'
 export type { IconProps, IconSize, IconColor, IconDefinition, IconRegistryData } from './icon'
 export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './icon-button'
 export type { DividerProps } from './divider'
+export type { CardProps, CardVariant, CardColor } from './card'

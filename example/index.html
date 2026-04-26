@@ -768,6 +768,76 @@
     </div>
   </div>
 
+  <!-- Card -->
+  <div class="section">
+    <h2>Card</h2>
+    <span class="tag">&lt;ae-card&gt;</span>
+
+    <div class="demo-group">
+      <label>Default (body only)</label>
+      <ae-card style="max-width: 300px;">
+        <p>Card body content. Just a default card with no header or footer.</p>
+      </ae-card>
+    </div>
+
+    <div class="demo-group">
+      <label>With header &amp; footer</label>
+      <ae-card style="max-width: 300px;">
+        <span slot="header">Card Title</span>
+        <p>Some content inside the card body.</p>
+        <span slot="footer">Footer note</span>
+      </ae-card>
+    </div>
+
+    <div class="demo-group">
+      <label>Variants</label>
+      <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
+        <ae-card style="max-width: 200px;">
+          <span slot="header">subtle (default)</span>
+          <p>Subtle variant.</p>
+        </ae-card>
+        <ae-card variant="outlined" style="max-width: 200px;">
+          <span slot="header">outlined</span>
+          <p>Outlined variant.</p>
+        </ae-card>
+        <ae-card variant="filled" style="max-width: 200px;">
+          <span slot="header">filled</span>
+          <p>Filled variant.</p>
+        </ae-card>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Colors</label>
+      <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
+        <ae-card color="primary" variant="subtle" style="max-width: 160px;">
+          <span slot="header">primary</span>
+          <p>subtle</p>
+        </ae-card>
+        <ae-card color="primary" variant="filled" style="max-width: 160px;">
+          <span slot="header">primary</span>
+          <p>filled</p>
+        </ae-card>
+        <ae-card color="primary" variant="outlined" style="max-width: 160px;">
+          <span slot="header">primary</span>
+          <p>outlined</p>
+        </ae-card>
+        <ae-card color="success" variant="filled" style="max-width: 160px;">
+          <span slot="header">success</span>
+          <p>filled</p>
+        </ae-card>
+        <ae-card color="danger" variant="filled" style="max-width: 160px;">
+          <span slot="header">danger</span>
+          <p>filled</p>
+        </ae-card>
+        <ae-card color="warning" variant="outlined" style="max-width: 160px;">
+          <span slot="header">warning</span>
+          <p>outlined</p>
+        </ae-card>
+      </div>
+    </div>
+  </div>
+
   <!-- Icon -->
   <div class="section">
     <h2>Icon</h2>

@@ -12,8 +12,9 @@ import {
   TabPanel,
   Dialog,
   Divider,
+  Card,
 } from '../src/components/index'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---
