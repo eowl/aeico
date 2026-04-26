@@ -1,5 +1,5 @@
 import AeicoField from '../aeico-field'
-import type { InferProps, Props } from '../../core/types'
+import type { InferProps } from '../../core/types'
 import { html, tags } from '../../view'
 import { t } from '../../localize'
 import type { SelectOptionValue, SelectOption, SelectOptions, SelectPosition, SelectMultiValue } from './defines'
@@ -7,8 +7,9 @@ import style from '../styles/components/select.css?inline'
 import variables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import SelectOptionElement from './select-option'
+import { prop } from '../../decorators'
 
-class Select extends AeicoField {
+class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
   protected fieldElement = null
   private _isOpen = false
   private _triggerEl: HTMLElement | null = null
@@ -18,33 +19,34 @@ class Select extends AeicoField {
 
   static tagName = 'select'
 
-  static props: Props = {
-    options: { type: Array },
-    position: { type: String },
-    placeholder: { type: String },
-    multiple: { type: Boolean },
-    // Override base class value prop to support both string and array (multi-select)
-    value: {
-      type: String,
-      parser: (v) => {
-        if (v === null || v === undefined) return undefined
-        try { return JSON.parse(v) } catch { return v }
-      },
-      formatter: (v) => {
-        if (v === null || v === undefined) return ''
-        if (Array.isArray(v)) return JSON.stringify(v)
+  @prop({ type: Array })
+  accessor options: SelectOptions | undefined
 
-        return String(v)
-      },
+  @prop({ type: String })
+  accessor position: SelectPosition | undefined
+
+  @prop({ type: String })
+  accessor placeholder: string | undefined
+
+  @prop({ type: Boolean })
+  accessor multiple: boolean = false
+
+  // Override base class value prop to support both string and array (multi-select).
+  // Uses field decorator (not accessor) because TypeScript TS2611 disallows overriding
+  // a parent class data property (declare value?) with an accessor in a subclass.
+  @prop({
+    type: String,
+    parser: (v) => {
+      if (v === null || v === undefined) return undefined
+      try { return JSON.parse(v) } catch { return v }
     },
-  }
-
-  declare options?: SelectOptions
-  declare position?: SelectPosition
-  declare placeholder?: string
-  declare multiple?: boolean
-  // value can be a single value or array in multiple mode
-  declare value?: any
+    formatter: (v) => {
+      if (v === null || v === undefined) return ''
+      if (Array.isArray(v)) return JSON.stringify(v)
+      return String(v)
+    },
+  })
+  override value: SelectOptionValue | SelectMultiValue | undefined = undefined
 
   protected static styles = [variables, sizeCSS, style]
 
@@ -191,7 +193,7 @@ class Select extends AeicoField {
           className: `select-trigger${this._isOpen ? ' open' : ''}${isDisabled ? ' disabled' : ''}`,
           '@click': () => {
             if (isDisabled) return
-            
+
             this._toggleDropdown()
           },
         }, () => {

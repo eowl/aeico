@@ -16,7 +16,7 @@ export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaEl
  * - Value management
  * - Common configuration handling
  */
-class AeicoField extends AeicoComponent {
+class AeicoField<TValue = string> extends AeicoComponent {
   /**
    * Define base field properties (extends AeicoElement properties)
    */
@@ -54,7 +54,7 @@ class AeicoField extends AeicoComponent {
   protected readonly boundOnClear = () => this.onClear()
 
   // Declare reactive properties for TypeScript
-  declare value?: string
+  declare value?: TValue
   declare defaultValue?: string
   declare resettable?: boolean
   declare resetText?: string
