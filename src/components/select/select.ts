@@ -9,6 +9,17 @@ import sizeCSS from '../styles/size.css?inline'
 import SelectOptionElement from './select-option'
 import { prop } from '../../decorators'
 
+/**
+ * Select component supporting single and multi-select modes, with options provided via both props and slots.
+ * - `options` prop accepts an array of strings or objects with `value` and `label` for programmatic options.
+ * - Slot content allows for declarative options using `<ae-select-option>` elements.
+ * @example
+ * <ae-select placeholder="Choose an option" position="bottom">
+ *   <ae-select-option value="1" label="Option 1">Option 1</ae-select-option>
+ *   <ae-select-option value="2" label="Option 2">Option 2</ae-select-option>
+ * </ae-select>
+ * 
+ */
 class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
   protected fieldElement = null
   private _isOpen = false
@@ -132,7 +143,6 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
 
   private readonly _handleOptionSelect = (e: Event): void => {
     const { value, label } = (e as CustomEvent<{ value: string; label: string }>).detail
-    // Temporarily store label so _findLabel fallback isn't needed for just-selected slot options
     if (!this._slotOptionData.find(o => o.value === value)) {
       this._slotOptionData = [...this._slotOptionData.filter(o => o.value !== value), { value, label }]
     }
@@ -142,7 +152,7 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
       const next: SelectMultiValue = idx >= 0
         ? current.filter((_, i) => i !== idx)
         : [...current, value]
-      // setValue sets this.value (reactive) �?schedules update �?render() �?_syncSlotOptionsSelected()
+
       this.setValue(next, { silent: false, action: 'change' })
     } else {
       this.setValue(value, { silent: false, action: 'change' })
