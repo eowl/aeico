@@ -363,6 +363,29 @@
       <ae-select id="select-multi-opts" multiple clearable resettable placeholder="Select colors..." style="max-width:400px"></ae-select>
     </div>
 
+    <!-- 8. Multiple expandable (overflow → expand) -->
+    <div class="demo-group">
+      <label>Multiple — <code>expandable=false</code> (default): fixed height, overflow shows <code>…</code></label>
+      <ae-select id="select-overflow" multiple clearable placeholder="Select items..." style="max-width:260px">
+        <ae-select-option value="ts">TypeScript</ae-select-option>
+        <ae-select-option value="js">JavaScript</ae-select-option>
+        <ae-select-option value="css">CSS</ae-select-option>
+        <ae-select-option value="html">HTML</ae-select-option>
+        <ae-select-option value="wc">Web Components</ae-select-option>
+      </ae-select>
+    </div>
+
+    <div class="demo-group">
+      <label>Multiple — <code>expandable</code>: height grows with selections</label>
+      <ae-select id="select-expandable" multiple expandable clearable placeholder="Select items..." style="max-width:260px">
+        <ae-select-option value="ts">TypeScript</ae-select-option>
+        <ae-select-option value="js">JavaScript</ae-select-option>
+        <ae-select-option value="css">CSS</ae-select-option>
+        <ae-select-option value="html">HTML</ae-select-option>
+        <ae-select-option value="wc">Web Components</ae-select-option>
+      </ae-select>
+    </div>
+
     <!-- 8. Change event — live output -->
     <div class="demo-group">
       <label>Change event — live value output</label>

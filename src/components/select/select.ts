@@ -27,8 +27,12 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
   private _dropdownEl: HTMLElement | null = null
   private _slotEl: HTMLSlotElement | null = null
   private _slotOptionData: Array<{ value: string; label: string }> = []
+  private _selectedListEl: HTMLElement | null = null
 
   static tagName = 'select'
+
+  @prop({ type: Boolean, observe: false, reflect: false })
+  private accessor _expanded: boolean = false
 
   @prop({ type: Array })
   accessor options: SelectOptions | undefined
@@ -41,6 +45,9 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
 
   @prop({ type: Boolean })
   accessor multiple: boolean = false
+
+  @prop({ type: Boolean })
+  accessor expandable: boolean = false
 
   // Override base class value prop to support both string and array (multi-select).
   // Uses field decorator (not accessor) because TypeScript TS2611 disallows overriding
@@ -79,7 +86,18 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
   }
 
   protected onDisabledChanged(_newValue: boolean): void {
-    // disabled is a reactive prop �?render() already picks it up automatically
+    // disabled is a reactive prop — render() already picks it up automatically
+  }
+
+  protected onUpdated(_changedProps: Map<string, unknown>): void {
+    if (!this.multiple || this.expandable) {
+      if (this._expanded) this._expanded = false
+      return
+    }
+    const list = this._selectedListEl
+    if (!list) return
+    const overflowing = list.scrollWidth > list.clientWidth + 1
+    if (overflowing !== this._expanded) this._expanded = overflowing
   }
 
   private _findLabel(value: SelectOptionValue): string {
@@ -194,6 +212,7 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
     const hasMultiSelection = this.multiple && multiValues.length > 0
     const selectedLabel = !this.multiple && this.value != null && this.value !== '' ? this._findLabel(this.value as SelectOptionValue) : ''
     const isDisabled = Boolean(this.disabled)
+    this._selectedListEl = null
 
     this._syncSlotOptionsSelected()
 
@@ -209,14 +228,14 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
         }, () => {
           if (this.multiple) {
             if (hasMultiSelection) {
-              div({ className: 'selected-list' }, () => {
+              this._selectedListEl = div({ className: `selected-list${!this.expandable ? ' selected-list--clipped' : ''}` }, () => {
                 for (const v of multiValues) {
                   const lbl = this._findLabel(v)
                   span({ key: `sel-${v}`, className: 'selected-item' }, () => {
                     span({ className: 'selected-label', textContent: lbl })
                     span({
                       className: 'selected-remove',
-                      textContent: '×',
+                      textContent: '\u00d7',
                       '@click': (e: Event) => {
                         e.stopPropagation()
                         if (isDisabled) return
@@ -227,7 +246,10 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
                     })
                   })
                 }
-              })
+              }) as HTMLElement
+              if (!this.expandable && this._expanded) {
+                span({ className: 'overflow-indicator', textContent: '…' })
+              }
             } else {
               span({ className: 'value placeholder', textContent: this.placeholder || '' })
             }

@@ -421,4 +421,69 @@ describe('Select', () => {
       expect(JSON.parse(attr!)).to.deep.equal(['x', 'y'])
     })
   })
+
+  describe('expandable prop', () => {
+    it('defaults expandable to false (attribute absent)', async () => {
+      const el = await mount<Select>(`<${TAG} multiple></${TAG}>`)
+      await updated()
+      expect(el.expandable).to.not.be.true
+    })
+
+    it('selected-list has --clipped class when expandable=false', async () => {
+      const el = await mount<Select>(`<${TAG} multiple></${TAG}>`)
+      el.options = FRUITS
+      el.value = ['apple']
+      await updated()
+      const list = el.shadowRoot!.querySelector('.selected-list')
+      expect(list!.classList.contains('selected-list--clipped')).to.be.true
+    })
+
+    it('selected-list does NOT have --clipped class when expandable=true', async () => {
+      const el = await mount<Select>(`<${TAG} multiple expandable></${TAG}>`)
+      el.options = FRUITS
+      el.value = ['apple']
+      await updated()
+      const list = el.shadowRoot!.querySelector('.selected-list')
+      expect(list!.classList.contains('selected-list--clipped')).to.be.false
+    })
+
+    it('no overflow-indicator when expandable=true even with many items', async () => {
+      const el = await mount<Select>(`<${TAG} multiple expandable style="max-width:120px"></${TAG}>`)
+      el.options = FRUITS
+      el.value = ['apple', 'banana', 'cherry']
+      await updated()
+      await updated() // second cycle for onUpdated overflow check
+      expect(el.shadowRoot!.querySelector('.overflow-indicator')).to.be.null
+    })
+
+    it('overflow-indicator absent when only one item fits (not yet overflowing)', async () => {
+      const el = await mount<Select>(`<${TAG} multiple></${TAG}>`)
+      el.options = FRUITS
+      el.value = ['apple']
+      await updated()
+      await updated()
+      // With a single item there is no overflow; indicator should not be present
+      expect(el.shadowRoot!.querySelector('.overflow-indicator')).to.be.null
+    })
+
+    it('sets expandable via attribute', async () => {
+      const el = await mount<Select>(`<${TAG} multiple expandable></${TAG}>`)
+      await updated()
+      expect(el.expandable).to.equal(true)
+    })
+
+    it('clipped list resets when switching from expandable=false to expandable=true', async () => {
+      const el = await mount<Select>(`<${TAG} multiple></${TAG}>`)
+      el.options = FRUITS
+      el.value = ['apple', 'banana']
+      await updated()
+      await updated()
+      // Now switch to expandable
+      el.expandable = true
+      await updated()
+      await updated()
+      const list = el.shadowRoot!.querySelector('.selected-list')
+      expect(list!.classList.contains('selected-list--clipped')).to.be.false
+    })
+  })
 })
