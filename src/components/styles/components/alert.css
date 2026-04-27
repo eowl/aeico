@@ -5,9 +5,9 @@
   border-radius: 4px;
   font-size: 12px;
   line-height: 1.6;
-  background-color: var(--alert-subtle-bg);
-  color:            var(--alert-subtle-color);
-  border: 1px solid var(--alert-subtle-border);
+  background-color: var(--alert-solid-bg);
+  color:            var(--alert-solid-color);
+  border: 1px solid var(--alert-solid-bg);
 }
 
 .alert:last-child {
@@ -38,7 +38,9 @@
 }
 
 :host([variant="subtle"]) .alert {
-  border-color: transparent;
+  background-color: var(--alert-subtle-bg);
+  color:            var(--alert-subtle-color);
+  border-color:     transparent;
 }
 
 :host([variant="filled"]) .alert {

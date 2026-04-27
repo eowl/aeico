@@ -16,7 +16,7 @@ class Card extends AeicoComponent {
   accessor color: CardColor = 'default'
 
   @prop({ type: String })
-  accessor variant: CardVariant = 'subtle'
+  accessor variant: CardVariant = 'filled'
 
   protected render() {
     return html(({ div, header, footer, slot }) => {
