@@ -89,7 +89,7 @@ class BaseElement extends HTMLElement {
 
       // Collect props defined via @prop decorator (stored in Symbol.metadata)
       // [TC39 Stage 3 Decorators] context.metadata on each class is accessible via cls[Symbol.metadata]
-      const meta = (cls as any)[Symbol.metadata]
+      const meta = (cls as unknown as { [Symbol.metadata]?: Record<PropertyKey, unknown> })[Symbol.metadata]
       if (meta && Object.hasOwn(meta, PROP_METADATA_KEY)) {
         Object.assign(collected, meta[PROP_METADATA_KEY])
       }
@@ -144,7 +144,7 @@ class BaseElement extends HTMLElement {
       }
 
       // [TC39 Stage 3 Decorators] context.metadata on each class is accessible via cls[Symbol.metadata]
-      const meta = (cls as any)[Symbol.metadata]
+      const meta = (cls as unknown as { [Symbol.metadata]?: Record<PropertyKey, unknown> })[Symbol.metadata]
       if (meta && Object.hasOwn(meta, WATCHER_METADATA_KEY)) {
         Object.assign(collected, meta[WATCHER_METADATA_KEY])
       }
@@ -182,7 +182,7 @@ class BaseElement extends HTMLElement {
       }
 
       // [TC39 Stage 3 Decorators] context.metadata on each class is accessible via cls[Symbol.metadata]
-      const meta = (cls as any)[Symbol.metadata]
+      const meta = (cls as unknown as { [Symbol.metadata]?: Record<PropertyKey, unknown> })[Symbol.metadata]
       if (meta && Object.hasOwn(meta, COMPUTED_METADATA_KEY)) {
         Object.assign(collected, meta[COMPUTED_METADATA_KEY])
       }
@@ -273,7 +273,6 @@ class BaseElement extends HTMLElement {
    * Extracted so it can be called both from `_initializeProps()` and `_reclaimProp()`.
    */
   private _defineReactiveProp(propName: string, propDecl: Prop) {
-    const constructor = this.constructor as typeof BaseElement
     const kebabName = toKebab(propName)
     const internalKey = `_${propName}`
     const self = this as Record<string, unknown>
