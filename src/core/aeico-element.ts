@@ -61,14 +61,14 @@ class AeicoElement extends BaseElement {
    */
   static create<T extends AeicoElement>(
     this: new () => T,
-    config?: Record<string, any>
+    config?: Record<string, unknown>
   ): T {
     const instance = new this()
 
     if (config) {
       Object.entries(config).forEach(([key, value]) => {
         if (key in instance) {
-          (instance as any)[key] = value
+          (instance as Record<string, unknown>)[key] = value
         }
       })
       // Style props are applied when the element connects to the DOM
