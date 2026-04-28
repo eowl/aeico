@@ -16,7 +16,10 @@
 
   /* layout tokens — declared here so they are clearly part of the public API */
   --ae-navbar-radius: 0;
-  --ae-navbar-padding-x: 1.25rem;
+  /* Default padding-x references the global layout token so ae-navbar content
+     automatically aligns with .container / .container-fluid in light DOM.
+     Override with --ae-navbar-padding-x to decouple if needed. */
+  --ae-navbar-padding-x: var(--container-padding-x, 1.5rem);
   --ae-navbar-gap: 0.5rem;
 
   /* link style tokens — text mode defaults.

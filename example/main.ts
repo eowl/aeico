@@ -18,6 +18,7 @@ import {
   BreadcrumbItem,
   Navbar,
 } from '../src/components/index'
+import '../src/components/styles/layout.css'
 void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem, Navbar]
 import { locale } from '../src/localize'
 

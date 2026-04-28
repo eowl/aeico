@@ -268,6 +268,13 @@
   --size-3xs:   round(calc(var(--size-2xs) / 1.125), 1px);         /* 10px */
 }
 
+/* Layout tokens — defined on :root so all light DOM elements can use them */
+:root,
+:host {
+  --container-max-width: 1280px;
+  --container-padding-x: 1.5rem;
+}
+
 .theme-dark,
 :root[theme="dark"],
 :host([theme="dark"]),
