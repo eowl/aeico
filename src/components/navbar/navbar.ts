@@ -137,7 +137,7 @@ class Navbar extends AeicoComponent {
         button({
           part: 'hamburger',
           type: 'button',
-          'aria-expanded': this.open,
+          'aria-expanded': String(this.open),
           'aria-label': 'Toggle navigation',
           '@click': this._toggleMenu,
         }, () => {
