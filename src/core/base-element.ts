@@ -43,11 +43,13 @@ class BaseElement extends HTMLElement {
   static watchers?: Watchers
 
   static get observedAttributes(): string[] {
-    const allProps = this._collectProps() as Props
+    const allProps = this._collectProps()
 
-    return Object.entries(allProps)
-      .filter(([_, decl]) => decl.observe !== false)
-      .map(([key, decl]) => decl.attr ?? toKebab(key))
+    return Object.entries(allProps).reduce<string[]>((acc, [key, decl]) => {
+      if (decl.observe !== false) acc.push(decl.attr ?? toKebab(key))
+        
+      return acc
+    }, [])
   }
 
   private static _propertyCache?: Record<string, Prop>
