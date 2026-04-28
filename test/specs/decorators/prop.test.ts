@@ -55,7 +55,7 @@ describe('@prop decorator', () => {
       expect(el.active).to.equal(true)
 
       el.active = false
-      expect(el.getAttribute('active')).to.equal('false')
+      expect(el.getAttribute('active')).to.be.null
     })
   })
 
@@ -204,6 +204,88 @@ describe('@prop decorator', () => {
       expect(observed).to.include('title')
       expect(observed).to.include('count')
       expect(observed).to.not.include('inactive')
+    })
+  })
+
+  describe('inline default values', () => {
+    it('string default is available on property and reflected to attribute', async () => {
+      const tag = `test-dec-def-str-${++_counter}`
+
+      class El extends BaseElement {
+        @prop({ type: String }) accessor color: string = 'primary'
+      }
+      customElements.define(tag, El)
+
+      const el = await mount<El>(`<${tag}></${tag}>`)
+      expect(el.color).to.equal('primary')
+      expect(el.getAttribute('color')).to.equal('primary')
+    })
+
+    it('HTML attribute overrides inline string default', async () => {
+      const tag = `test-dec-def-override-${++_counter}`
+
+      class El extends BaseElement {
+        @prop({ type: String }) accessor color: string = 'primary'
+      }
+      customElements.define(tag, El)
+
+      const el = await mount<El>(`<${tag} color="danger"></${tag}>`)
+      expect(el.color).to.equal('danger')
+    })
+
+    it('number default is reflected to attribute', async () => {
+      const tag = `test-dec-def-num-${++_counter}`
+
+      class El extends BaseElement {
+        @prop({ type: Number }) accessor size: number = 100
+      }
+      customElements.define(tag, El)
+
+      const el = await mount<El>(`<${tag}></${tag}>`)
+      expect(el.size).to.equal(100)
+      expect(el.getAttribute('size')).to.equal('100')
+    })
+
+    it('boolean default false does NOT add attribute (presence-based semantics)', async () => {
+      const tag = `test-dec-def-bool-false-${++_counter}`
+
+      class El extends BaseElement {
+        @prop({ type: Boolean }) accessor active: boolean = false
+      }
+      customElements.define(tag, El)
+
+      const el = await mount<El>(`<${tag}></${tag}>`)
+      expect(el.active).to.equal(false)
+      expect(el.getAttribute('active')).to.be.null
+    })
+
+    it('boolean default true adds attribute', async () => {
+      const tag = `test-dec-def-bool-true-${++_counter}`
+
+      class El extends BaseElement {
+        @prop({ type: Boolean }) accessor active: boolean = true
+      }
+      customElements.define(tag, El)
+
+      const el = await mount<El>(`<${tag}></${tag}>`)
+      expect(el.active).to.equal(true)
+      expect(el.getAttribute('active')).to.equal('true')
+    })
+
+    it('setting prop to false removes boolean attribute', async () => {
+      const tag = `test-dec-def-bool-remove-${++_counter}`
+
+      class El extends BaseElement {
+        @prop({ type: Boolean }) accessor active: boolean | undefined
+      }
+      customElements.define(tag, El)
+
+      const el = await mount<El>(`<${tag} active></${tag}>`)
+      expect(el.active).to.equal(true)
+
+      el.active = false
+      expect(el.getAttribute('active')).to.be.null
+      expect(el.active).to.equal(false)
     })
   })
 })

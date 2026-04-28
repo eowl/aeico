@@ -42,10 +42,10 @@ describe('Card', () => {
       expect(el.hasAttribute('has-footer')).to.be.false
     })
 
-    it('has no variant attribute when not specified', async () => {
+    it('has variant="filled" attribute by default', async () => {
       const el = await mount<Card>(`<${TAG_NAME}></${TAG_NAME}>`) as Card
       await updated()
-      expect(el.hasAttribute('variant')).to.be.false
+      expect(el.getAttribute('variant')).to.equal('filled')
     })
   })
 

@@ -9,7 +9,7 @@ import type {
 import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
 import { render as applyRender, type RenderResult } from '../view'
-import { PROP_METADATA_KEY } from '../decorators'
+import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from '../decorators'
 import { WATCHER_METADATA_KEY } from '../decorators/watch'
 import { COMPUTED_METADATA_KEY } from '../decorators/computed'
 import type { Updatable } from './render-context'
@@ -54,6 +54,7 @@ class BaseElement extends HTMLElement {
   private static _attrToPropMap?: Map<string, string>
   private static _watcherCache?: Record<string, WatcherHandler>
   private static _computedDecls?: Computed
+  private static _accessorPropsCache?: Set<string>
 
   /**
    * Collect props from the entire inheritance chain, starting from the current class up to HTMLElement.
@@ -77,6 +78,7 @@ class BaseElement extends HTMLElement {
     }
 
     const collected: Record<string, Prop> = {}
+    const accessorProps = new Set<string>()
 
     // Pop classes from the stack and merge their props (child class props override parent class props)
     while (inheritanceStack.length > 0) {
@@ -86,9 +88,17 @@ class BaseElement extends HTMLElement {
       }
 
       // Collect props defined via @prop decorator (stored in Symbol.metadata)
+      // [TC39 Stage 3 Decorators] context.metadata on each class is accessible via cls[Symbol.metadata]
       const meta = (cls as any)[Symbol.metadata]
       if (meta && Object.hasOwn(meta, PROP_METADATA_KEY)) {
         Object.assign(collected, meta[PROP_METADATA_KEY])
+      }
+
+      // Collect accessor prop names (declared via `accessor` keyword)
+      if (meta && Object.hasOwn(meta, ACCESSOR_PROPS_KEY)) {
+        for (const name of meta[ACCESSOR_PROPS_KEY] as Set<string>) {
+          accessorProps.add(name)
+        }
       }
     }
 
@@ -102,6 +112,7 @@ class BaseElement extends HTMLElement {
 
     this._propertyCache = collected
     this._attrToPropMap = attrMap
+    this._accessorPropsCache = accessorProps
 
     return collected
   }
@@ -132,6 +143,7 @@ class BaseElement extends HTMLElement {
         Object.assign(collected, cls.watchers)
       }
 
+      // [TC39 Stage 3 Decorators] context.metadata on each class is accessible via cls[Symbol.metadata]
       const meta = (cls as any)[Symbol.metadata]
       if (meta && Object.hasOwn(meta, WATCHER_METADATA_KEY)) {
         Object.assign(collected, meta[WATCHER_METADATA_KEY])
@@ -169,6 +181,7 @@ class BaseElement extends HTMLElement {
         Object.assign(collected, cls.computed)
       }
 
+      // [TC39 Stage 3 Decorators] context.metadata on each class is accessible via cls[Symbol.metadata]
       const meta = (cls as any)[Symbol.metadata]
       if (meta && Object.hasOwn(meta, COMPUTED_METADATA_KEY)) {
         Object.assign(collected, meta[COMPUTED_METADATA_KEY])
@@ -296,7 +309,7 @@ class BaseElement extends HTMLElement {
 
         if (shouldReflect) {
           this._reflecting = true
-          if (value === null || value === undefined) {
+          if (value === null || value === undefined || (propDecl.type === Boolean && value === false)) {
             this.removeAttribute(attrName)
           } else {
             const serialized = this.serializeAttribute(value, propDecl)
@@ -315,6 +328,9 @@ class BaseElement extends HTMLElement {
   /**
    * Re-establishes the reactive getter/setter for a prop that was overridden by a field initializer
    * (e.g. the `__publicField` call emitted by esbuild when lowering TC39 field decorators).
+   *
+   * [TC39 Class Fields] Field initializers run *after* `super()` returns per spec, so they can
+   * overwrite instance properties defined in the base constructor. This method repairs that.
    *
    * Called automatically via `addInitializer` by the `@prop` decorator when used on a class field
    * (not an `accessor`). Field initializers run after `super()` returns, so they can overwrite the
@@ -398,11 +414,54 @@ class BaseElement extends HTMLElement {
   }
 
   /**
+   * Reflect inline accessor defaults to attributes on the first render.
+   * Called once from executeUpdate() before _hasMounted is set to true.
+   *
+   * [TC39 Stage 3 Auto-Accessors] The `accessor` keyword causes the engine to call the decorator's
+   * `init()` synchronously inside the constructor body. At that point, `setAttribute()` is forbidden
+   * by the Custom Elements spec (the element is not yet connected). Deferring the reflection to the
+   * first microtask update (here) satisfies both specs simultaneously.
+   *
+   * Accessor props store their inline default in `_propName` (written by the `@prop` init callback)
+   * rather than reflecting it immediately, because setAttribute() is forbidden inside the
+   * constructor body. This method runs in the first microtask update, past the constructor boundary,
+   * so setAttribute() is safe. Setter calls here run while _updatePending is still true, so they
+   * merge into the existing _changedProps without scheduling a second microtask → single render.
+   */
+  private _reflectAccessorDefaults(): void {
+    const constructor = this.constructor as typeof BaseElement
+    const accessorProps = constructor._accessorPropsCache
+    if (!accessorProps || accessorProps.size === 0) return
+
+    const allProps = constructor._propertyCache!
+    for (const propName of accessorProps) {
+      const propDecl = allProps[propName]
+      if (!propDecl || propDecl.reflect === false) continue
+      const attrName = propDecl.attr ?? toKebab(propName)
+      // HTML attribute (set by parser or attributeChangedCallback) takes priority.
+      if (!this.hasAttribute(attrName)) {
+        const internalKey = `_${propName}`
+        const self = this as Record<string, unknown>
+        const value = self[internalKey]
+        if (value !== undefined) {
+          // Reset backing field so the setter records oldValue = undefined (correct semantics).
+          self[internalKey] = undefined
+          self[propName] = value
+        }
+      }
+    }
+  }
+
+  /**
    * Execute the update cycle: onPrepare → render → onUpdated → onMounted.
    * Called automatically after update is triggered.
    * Can be overridden to customize update behavior, but should call super.executeUpdate() if so.
    */
   protected async executeUpdate(): Promise<void> {
+    if (!this._hasMounted) {
+      this._reflectAccessorDefaults()
+    }
+
     const changedProps = this._changedProps
     this._changedProps = new Map<string, unknown>()
     this._updatePending = false
@@ -599,10 +658,11 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Standard custom element lifecycle callbacks (optional to implement):
-   * - connectedCallback(): called when element is added to the DOM
-   * - disconnectedCallback(): called when element is removed from the DOM
-   * - attributeChangedCallback(name, oldValue, newValue): called when an observed attribute changes
+   * Standard custom element lifecycle callbacks.
+   *
+   * Subclasses that override these MUST call the super implementation:
+   * - `disconnectedCallback()`: cleans up registered event listeners.
+   * - `attributeChangedCallback()`: drives the reactive prop system.
    */
   connectedCallback() {}
 
