@@ -11,7 +11,7 @@ export type PropertyType =
 /**
  * Property declaration with metadata
  */
-export interface Prop<T = any> {
+export interface Prop<T = unknown> {
   /** Property type constructor */
   type?: PropertyType
   
@@ -42,11 +42,11 @@ export type Props = Record<string, Prop>
 /**
  * Computed property configuration
  */
-export interface ComputedPropertyConfig<T = any> {
+export interface ComputedPropertyConfig<T = unknown> {
   /** Dependent property names */
   deps: string[]
   /** Compute function */
-  compute: (self: any) => T
+  compute: (self: object) => T
 }
 
 /**
@@ -71,9 +71,9 @@ export type PropertyTypeToTS<T extends PropertyType | undefined> =
   T extends StringConstructor ? string :
   T extends NumberConstructor ? number :
   T extends BooleanConstructor ? boolean :
-  T extends ArrayConstructor ? any[] :
-  T extends ObjectConstructor ? Record<string, any> :
-  any
+  T extends ArrayConstructor ? unknown[] :
+  T extends ObjectConstructor ? Record<string, unknown> :
+  unknown
 
 /**
  * Internal property keys excluded from InferProps output
@@ -86,7 +86,7 @@ type InternalKeys = 'events'
 type ExtractProperties<T> = {
   [K in keyof T as K extends InternalKeys
     ? never
-    : T[K] extends (...args: any[]) => unknown
+    : T[K] extends (...args: never[]) => unknown
     ? never
     : K]: T[K]
 }
@@ -105,7 +105,7 @@ type ExtractProperties<T> = {
  * type SelectFieldProps = InferProps<typeof SelectField>
  * // Result: { options?: any[], value?: string, defaultValue?: string, ... }
  */
-export type InferProps<T extends new (...args: any[]) => any> = ExtractProperties<
+export type InferProps<T extends new (...args: never[]) => unknown> = ExtractProperties<
   Omit<InstanceType<T>, keyof HTMLElement>
 >
 
