@@ -583,7 +583,7 @@ class BaseElement extends HTMLElement {
     emitEvent(this, eventName, options)
   }
 
-  private _listenerManager?: ListenerRegistry
+  private _listeners?: ListenerRegistry
 
   /**
    * Add an event listener to this component or a target element. Automatically tracks listeners for cleanup.
@@ -599,12 +599,12 @@ class BaseElement extends HTMLElement {
       throw new Error('[aeico] listen() must not be called inside render(). Use declarative @event syntax instead.')
     }
 
-    if (!this._listenerManager) this._listenerManager = new ListenerRegistry()
+    if (!this._listeners) this._listeners = new ListenerRegistry()
 
     if (typeof eventOrTarget === 'string') {
-      this._listenerManager.add(this, eventOrTarget, handlerOrEvent as EventListenerOrEventListenerObject)
+      this._listeners.add(this, eventOrTarget, handlerOrEvent as EventListenerOrEventListenerObject)
     } else {
-      this._listenerManager.add(eventOrTarget, handlerOrEvent as string, maybeHandler!)
+      this._listeners.add(eventOrTarget, handlerOrEvent as string, maybeHandler!)
     }
   }
 
@@ -617,7 +617,7 @@ class BaseElement extends HTMLElement {
   connectedCallback() {}
 
   disconnectedCallback() {
-    this._listenerManager?.removeAll()
+    this._listeners?.removeAll()
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
