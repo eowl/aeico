@@ -1,8 +1,8 @@
 :host {
   /* layout — padding lives in .inner so document * { padding:0 } cannot override it */
   display: block;
-  position: sticky;
-  top: 0;
+  position: static;
+  top: auto;
   z-index: var(--ae-navbar-z-index, 100);
   box-sizing: border-box;
   height: var(--ae-navbar-height, 3.25rem);
@@ -33,6 +33,11 @@
   --ae-navbar-link-hover-bg: transparent;
   --ae-navbar-link-active-color: var(--color-text-link);
   --ae-navbar-link-active-font-weight: 600;
+}
+
+:host([sticky]) {
+  position: sticky;
+  top: 0;
 }
 
 :host([color]) {

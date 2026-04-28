@@ -51,6 +51,10 @@ class Navbar extends AeicoComponent {
   @prop({ type: String })
   accessor color: NavbarColor | undefined
 
+  /** When true (default), the navbar sticks to the top of the viewport while scrolling. Set to false to let it scroll with the page. */
+  @prop({ type: Boolean })
+  accessor sticky: boolean = false
+
   /**
    * Hover style preset for slotted `<a>` links.
    * - `text`  — only the font color changes on hover (default)

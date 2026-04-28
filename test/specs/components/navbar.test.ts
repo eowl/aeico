@@ -142,6 +142,28 @@ describe('Navbar', () => {
     })
   })
 
+  describe('sticky prop', () => {
+    it('defaults to false and has no sticky attribute', async () => {
+      const el = await mount<Navbar>(`<${TAG}></${TAG}>`)
+      await updated()
+      expect(el.sticky).to.equal(false)
+      expect(el.hasAttribute('sticky')).to.equal(false)
+    })
+
+    it('sticky=true adds the sticky attribute', async () => {
+      const el = await mount<Navbar>(`<${TAG}></${TAG}>`)
+      el.sticky = true
+      await updated()
+      expect(el.hasAttribute('sticky')).to.equal(true)
+    })
+
+    it('sticky attribute present sets sticky=true', async () => {
+      const el = await mount<Navbar>(`<${TAG} sticky></${TAG}>`)
+      await updated()
+      expect(el.sticky).to.equal(true)
+    })
+  })
+
   // ─── Hamburger interaction ─────────────────────────────────────────────────
 
   describe('hamburger toggle', () => {

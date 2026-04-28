@@ -150,7 +150,7 @@
   </style>
 </head>
 <body>
-  <ae-navbar id="page-navbar" color="dark" appearance="block">
+  <ae-navbar id="page-navbar" color="dark" appearance="block" sticky>
     <a slot="brand" href="#">Aeico Components</a>
     <ae-button slot="end" id="theme-toggle" size="sm" color="light" variant="text">🌙 Dark</ae-button>
     <ae-button-group slot="end" compact>
@@ -385,7 +385,7 @@
 
       <!-- 8. Multiple expandable (overflow expand) -->
       <div class="demo-group">
-        <label>Multiple <code>expandable=false</code> (default): fixed height, overflow shows <code>…</code></label>
+        <label>Multiple <code>expandable=false</code> (default): fixed height, overflow shows <code>�?/code></label>
         <ae-select id="select-overflow" multiple clearable placeholder="Select items..." style="max-width:260px">
           <ae-select-option value="ts">TypeScript</ae-select-option>
           <ae-select-option value="js">JavaScript</ae-select-option>
@@ -1520,20 +1520,15 @@
       <div class="demo-group">
         <label>Default brand + start links (text hover) + end button</label>
         <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
-          <ae-navbar style="position:relative;top:auto;">
-            <a slot="brand" href="#">MyApp</a>
-            <a slot="start" href="#" aria-current="page">Home</a>
-            <a slot="start" href="#">Docs</a>
-            <a slot="start" href="#">Blog</a>
-            <ae-button slot="end" size="sm" variant="outlined" color="primary">Sign in</ae-button>
+          <ae-navbar>
           </ae-navbar>
         </div>
       </div>
 
       <div class="demo-group">
-        <label>appearance="block" — hover fills full navbar height</label>
+        <label>appearance="block" �?hover fills full navbar height</label>
         <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
-          <ae-navbar appearance="block" style="position:relative;top:auto;">
+          <ae-navbar appearance="block">
             <a slot="brand" href="#">MyApp</a>
             <a slot="start" href="#" aria-current="page">Home</a>
             <a slot="start" href="#">Docs</a>
@@ -1546,7 +1541,7 @@
       <div class="demo-group">
         <label>color="primary"</label>
         <div style="border-radius:3px;overflow:hidden;position:relative;">
-          <ae-navbar color="primary" appearance="block" style="position:relative;top:auto;">
+          <ae-navbar color="primary" appearance="block">
             <a slot="brand" href="#">MyApp</a>
             <a slot="start" href="#" aria-current="page">Home</a>
             <a slot="start" href="#">Docs</a>
@@ -1559,7 +1554,7 @@
       <div class="demo-group">
         <label>color="dark"</label>
         <div style="border-radius:3px;overflow:hidden;position:relative;">
-          <ae-navbar color="dark" appearance="block" style="position:relative;top:auto;">
+          <ae-navbar color="dark" appearance="block">
             <a slot="brand" href="#">MyApp</a>
             <a slot="start" href="#" aria-current="page">Home</a>
             <a slot="start" href="#">Docs</a>
@@ -1572,7 +1567,7 @@
       <div class="demo-group">
         <label>Custom height via --ae-navbar-height (4.5rem) + transparent bg</label>
         <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:3px;overflow:hidden;position:relative;">
-          <ae-navbar style="position:relative;top:auto;--ae-navbar-height:4.5rem;--ae-navbar-bg:transparent;--ae-navbar-border-width:0;--ae-navbar-color:white;--ae-navbar-link-hover-bg:rgba(255,255,255,0.15);--ae-navbar-link-hover-color:white;--ae-navbar-link-active-color:white;--ae-navbar-link-padding-x:1rem;">
+          <ae-navbar style="--ae-navbar-height:4.5rem;--ae-navbar-bg:transparent;--ae-navbar-border-width:0;--ae-navbar-color:white;--ae-navbar-link-hover-bg:rgba(255,255,255,0.15);--ae-navbar-link-hover-color:white;--ae-navbar-link-active-color:white;--ae-navbar-link-padding-x:1rem;">
             <a slot="brand" href="#">Purple</a>
             <a slot="start" href="#" aria-current="page">Home</a>
             <a slot="start" href="#">Features</a>
@@ -1585,7 +1580,7 @@
       <div class="demo-group">
         <label>Compact height (2.5rem) via --ae-navbar-height</label>
         <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
-          <ae-navbar variant="background" style="position:relative;top:auto;--ae-navbar-height:2.5rem;--ae-navbar-padding-x:1rem;--ae-navbar-link-padding-x:0.6rem;">
+          <ae-navbar style="--ae-navbar-height:2.5rem;--ae-navbar-padding-x:1rem;--ae-navbar-link-padding-x:0.6rem;">
             <a slot="brand" href="#">Compact</a>
             <a slot="start" href="#" aria-current="page">Home</a>
             <a slot="start" href="#">Docs</a>
@@ -1597,9 +1592,7 @@
       <div class="demo-group">
         <label>end-only brand + right actions, no start links</label>
         <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
-          <ae-navbar style="position:relative;top:auto;">
-            <a slot="brand" href="#">MyApp</a>
-            <ae-button slot="end" size="sm" variant="text">Log in</ae-button>
+          <ae-navbar>
             <ae-button slot="end" size="sm" color="primary">Sign up</ae-button>
           </ae-navbar>
         </div>
