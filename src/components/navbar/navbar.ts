@@ -23,7 +23,7 @@ import type { NavbarColor, NavbarVariant } from './defines'
  *
  * @example
  * ```html
- * <ae-navbar color="primary" variant="background">
+ * <ae-navbar color="primary" appearance="block">
  *   <a slot="brand" href="/">MyApp</a>
  *   <a slot="start" href="/" aria-current="page">Home</a>
  *   <a slot="start" href="/docs">Docs</a>
@@ -53,14 +53,14 @@ class Navbar extends AeicoComponent {
 
   /**
    * Hover style preset for slotted `<a>` links.
-   * - `text`       — only the font color changes on hover (default)
-   * - `background` — a subtle filled background appears on hover
+   * - `text`  — only the font color changes on hover (default)
+   * - `block` — a subtle filled background block appears on hover
    *
    * Fine-tune further with `--ae-navbar-link-hover-color` /
    * `--ae-navbar-link-hover-bg` CSS variables.
    */
-  @prop({ type: String, attr: 'variant' })
-  accessor variant: NavbarVariant = 'text'
+  @prop({ type: String })
+  accessor appearance: NavbarVariant = 'text'
 
   /** Whether the mobile menu is expanded. Reflects as the `open` attribute. */
   @prop({ type: Boolean })
