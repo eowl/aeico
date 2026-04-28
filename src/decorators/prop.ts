@@ -2,7 +2,7 @@ import type { Prop } from '../core/types'
 
 // Polyfill Symbol.metadata for runtimes that don't support it yet
 // [TC39 Stage 3 Decorators] Symbol.metadata is the per-class metadata store defined by the Decorators proposal
-;(Symbol as any).metadata ??= Symbol.for('Symbol.metadata')
+;(Symbol as unknown as Record<string, unknown>).metadata ??= Symbol.for('Symbol.metadata')
 
 export const PROP_METADATA_KEY = Symbol('aeico:props')
 
@@ -44,7 +44,7 @@ function applyProp(options: Prop, context: PropDecoratorContext): ClassAccessorD
     // [TC39 Stage 3 Decorators] addInitializer callbacks run after TC39 Class Fields initializers,
     // so this restores the reactive accessor after esbuild's __publicField overwrite.
     context.addInitializer(function (this: unknown) {
-      ;(this as any)._reclaimProp?.(propName)
+      ;(this as { _reclaimProp?: (name: string) => void })._reclaimProp?.(propName)
     })
 
     return
@@ -75,7 +75,7 @@ function applyProp(options: Prop, context: PropDecoratorContext): ClassAccessorD
         // init runs synchronously inside the constructor body (spec violation).
         ;(this as Record<string, unknown>)[`_${propName}`] = value
       }
-      return value as unknown
+      return value
     },
   } as ClassAccessorDecoratorResult<unknown, unknown>
 }
@@ -111,7 +111,7 @@ export function prop<This, Value>(
 export function prop(options?: Prop): PropDecorator
 
 export function prop<This, Value>(
-  targetOrOptions?: ClassAccessorDecoratorTarget<This, Value> | Prop | undefined,
+  targetOrOptions?: ClassAccessorDecoratorTarget<This, Value> | Prop,
   context?: PropDecoratorContext<This, Value>,
 ): ClassAccessorDecoratorResult<unknown, unknown> | void | PropDecorator {
   // Bare usage: @prop foo / @prop accessor foo
