@@ -5,7 +5,7 @@ import navbarStyle from '../styles/components/navbar.css?inline'
 import AeicoComponent from '../aeico-component'
 import { html } from '../../view'
 import { prop } from '../../decorators'
-import type { NavbarColor, NavbarLinkStyle } from './defines'
+import type { NavbarColor, NavbarVariant } from './defines'
 
 /**
  * Navbar Component
@@ -23,7 +23,7 @@ import type { NavbarColor, NavbarLinkStyle } from './defines'
  *
  * @example
  * ```html
- * <ae-navbar color="primary" link-style="background">
+ * <ae-navbar color="primary" variant="background">
  *   <a slot="brand" href="/">MyApp</a>
  *   <a slot="start" href="/" aria-current="page">Home</a>
  *   <a slot="start" href="/docs">Docs</a>
@@ -59,8 +59,8 @@ class Navbar extends AeicoComponent {
    * Fine-tune further with `--ae-navbar-link-hover-color` /
    * `--ae-navbar-link-hover-bg` CSS variables.
    */
-  @prop({ type: String, attr: 'link-style' })
-  accessor linkStyle: NavbarLinkStyle = 'text'
+  @prop({ type: String, attr: 'variant' })
+  accessor variant: NavbarVariant = 'text'
 
   /** Whether the mobile menu is expanded. Reflects as the `open` attribute. */
   @prop({ type: Boolean })

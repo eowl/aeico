@@ -41,13 +41,13 @@
 }
 
 /* background preset: hover shows a subtle filled block */
-:host([link-style="background"]) {
+:host([variant="background"]) {
   --ae-navbar-link-hover-bg: var(--color-bg-subtle);
   --ae-navbar-link-hover-color: inherit;
 }
 
 /* background preset on colored navbar: use semi-transparent white */
-:host([color][link-style="background"]) {
+:host([color][variant="background"]) {
   --ae-navbar-link-hover-bg: rgba(255, 255, 255, 0.15);
   --ae-navbar-link-hover-color: var(--color-on-solid);
 }

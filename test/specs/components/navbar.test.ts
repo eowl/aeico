@@ -102,13 +102,13 @@ describe('Navbar', () => {
   describe('linkStyle prop', () => {
     it('defaults to "text"', async () => {
       const el = await mount<Navbar>(`<${TAG}></${TAG}>`)
-      expect(el.linkStyle).to.equal('text')
+      expect(el.variant).to.equal('text')
     })
 
-    it('reflects link-style attribute', async () => {
-      const el = await mount<Navbar>(`<${TAG} link-style="background"></${TAG}>`)
-      expect(el.getAttribute('link-style')).to.equal('background')
-      expect(el.linkStyle).to.equal('background')
+    it('reflects variant attribute', async () => {
+      const el = await mount<Navbar>(`<${TAG} variant="background"></${TAG}>`)
+      expect(el.getAttribute('variant')).to.equal('background')
+      expect(el.variant).to.equal('background')
     })
   })
 
