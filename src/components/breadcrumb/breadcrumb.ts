@@ -51,13 +51,18 @@ class Breadcrumb extends AeicoComponent {
 
   /** Text separator shown between items. Ignored when `slot="separator"` is provided. */
   @prop({ type: String })
-  accessor separator: string = '/'
+  accessor separator: string | undefined
 
   @prop({ type: String })
   accessor color: string | undefined
 
   private _itemsSlot: HTMLSlotElement | null = null
   private _sepSlot: HTMLSlotElement | null = null
+
+  connectedCallback() {
+    super.connectedCallback()
+    if (this.separator === undefined) this.separator = '/'
+  }
 
   protected render() {
     return html(({ nav, ol, slot }) => {

@@ -13,6 +13,7 @@ import { PROP_METADATA_KEY } from '../decorators'
 import { WATCHER_METADATA_KEY } from '../decorators/watch'
 import { COMPUTED_METADATA_KEY } from '../decorators/computed'
 import type { Updatable } from './render-context'
+import { toKebab } from './utils'
 
 /**
  * BaseElement — internal reactive foundation for all Aeico elements.
@@ -32,17 +33,6 @@ class BaseElement extends HTMLElement {
   private _hasMounted = false
   private _computedCache = new Map<string, { deps: string; value: unknown }>()
 
-  /**
-   * Convert camelCase or PascalCase to kebab-case.
-   * Strips leading underscores/numbers to ensure valid custom element names.
-   * @example toKebab('MyComponent') // => 'my-component'
-   */
-  static toKebab(str: string): string {
-    const cleaned = str.replace(/^[_\d]+/, '')
-
-    return cleaned.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
-  }
-
   /** Static property declarations. Subclasses override to define their props. */
   static props: Props = {}
 
@@ -57,7 +47,7 @@ class BaseElement extends HTMLElement {
 
     return Object.entries(allProps)
       .filter(([_, decl]) => decl.observe !== false)
-      .map(([key, decl]) => decl.attr ?? this.toKebab(key))
+      .map(([key, decl]) => decl.attr ?? toKebab(key))
   }
 
   private static _propertyCache?: Record<string, Prop>
@@ -106,7 +96,7 @@ class BaseElement extends HTMLElement {
     for (const [propName, decl] of Object.entries(collected)) {
       if (decl.observe === false) continue
 
-      const attrName = decl.attr ?? this.toKebab(propName)
+      const attrName = decl.attr ?? toKebab(propName)
       attrMap.set(attrName, propName)
     }
 
@@ -271,7 +261,7 @@ class BaseElement extends HTMLElement {
    */
   private _defineReactiveProp(propName: string, propDecl: Prop) {
     const constructor = this.constructor as typeof BaseElement
-    const kebabName = constructor.toKebab(propName)
+    const kebabName = toKebab(propName)
     const internalKey = `_${propName}`
     const self = this as Record<string, unknown>
 
@@ -667,7 +657,7 @@ class BaseElement extends HTMLElement {
    * ```
    */
   static register(name?: string) {
-    const tagName = name || this.tagName || this.toKebab(this.name)
+    const tagName = name || this.tagName || toKebab(this.name)
 
     if (!tagName || !tagName.includes('-')) {
       throw new Error(`Invalid registration: ${tagName} must contain a dash.`);

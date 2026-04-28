@@ -1,4 +1,5 @@
 const SVG_NS = 'http://www.w3.org/2000/svg'
+import { camelToKebab } from './utils'
 
 type _Style = Partial<CSSStyleDeclaration> & Record<string, string>
 
@@ -43,10 +44,6 @@ type CustomHTMLTags = {
     (props?: BuilderProps, cb?: () => void): HTMLElementTagNameMap[K]
     (cb: () => void): HTMLElementTagNameMap[K]
   }
-}
-
-function camelToKebab(str: string): string {
-  return str.replace(/[A-Z]/g, c => `-${c.toLowerCase()}`)
 }
 
 interface ElementBuilder extends HTMLTags, SVGOnlyTags, CustomHTMLTags {}

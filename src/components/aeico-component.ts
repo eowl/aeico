@@ -1,6 +1,7 @@
 import AeicoElement from '../core/aeico-element'
 import { Themeable, type ThemeableProps } from '../mixins/themeable'
 import { compose, Constructor } from '../mixins/compose'
+import { toKebab } from '../core/utils'
 
 const BaseComponent = compose(Themeable)(AeicoElement) as typeof AeicoElement & Constructor<ThemeableProps>
 
@@ -15,7 +16,7 @@ const TAG_NAME_PREFIX = 'ae'
 class AeicoComponent extends BaseComponent {
 
   static register(name?: string) {
-    const tagName = name || `${TAG_NAME_PREFIX}-${this.tagName || this.toKebab(this.name)}`
+    const tagName = name || `${TAG_NAME_PREFIX}-${this.tagName || toKebab(this.name)}`
 
     super.register(tagName)
   }

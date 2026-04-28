@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll } from '../../helpers/mount.js'
 import AeicoComponent from '../../../src/components/aeico-component.js'
+import { toKebab } from '../../../src/core/utils.js'
 
 afterEach(() => {
   unmountAll()
@@ -11,10 +12,15 @@ describe('AeicoComponent', () => {
     it('should have register() static method', () => {
       expect(AeicoComponent.register).to.be.a('function')
     })
+  })
 
-    it('should have toKebab() static method', () => {
-      expect(AeicoComponent.toKebab).to.be.a('function')
-      expect(AeicoComponent.toKebab('MyComponent')).to.equal('my-component')
+  describe('toKebab util', () => {
+    it('converts PascalCase to kebab-case', () => {
+      expect(toKebab('MyComponent')).to.equal('my-component')
+    })
+
+    it('strips leading underscores and digits', () => {
+      expect(toKebab('_1MyEl')).to.equal('my-el')
     })
   })
 
