@@ -72,4 +72,4 @@ export type { IconProps, IconSize, IconColor, IconDefinition, IconRegistryData }
 export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './icon-button'
 export type { DividerProps } from './divider'
 export type { CardProps, CardVariant, CardColor } from './card'
-export type { NavbarProps, NavbarColor, NavbarLinkStyle } from './navbar'
+export type { NavbarProps, NavbarColor, NavbarAppearance } from './navbar'

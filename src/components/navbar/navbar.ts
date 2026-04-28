@@ -5,7 +5,7 @@ import navbarStyle from '../styles/components/navbar.css?inline'
 import AeicoComponent from '../aeico-component'
 import { html } from '../../view'
 import { prop } from '../../decorators'
-import type { NavbarColor, NavbarVariant } from './defines'
+import type { NavbarColor, NavbarAppearance } from './defines'
 
 /**
  * Navbar Component
@@ -64,7 +64,7 @@ class Navbar extends AeicoComponent {
    * `--ae-navbar-link-hover-bg` CSS variables.
    */
   @prop({ type: String })
-  accessor appearance: NavbarVariant = 'text'
+  accessor appearance: NavbarAppearance = 'text'
 
   /** Whether the mobile menu is expanded. Reflects as the `open` attribute. */
   @prop({ type: Boolean })
