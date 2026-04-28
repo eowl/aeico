@@ -220,55 +220,55 @@
     <h2>Slider</h2>
     <span class="tag">&lt;ae-slider&gt;</span>
     <div class="demo-group">
-      <label>Free mode — default (0–100, step 1) with reset</label>
+      <label>Free mode default ( 00, step 1) with reset</label>
       <ae-slider value="40" resettable default-value="40"></ae-slider>
 
-      <label>Free mode — percentage (step 5) with reset + clear</label>
+      <label>Free mode percentage (step 5) with reset + clear</label>
       <ae-slider value="60" min="0" max="100" step="5" percentage resettable clearable default-value="60"></ae-slider>
 
-      <label>Free mode — with editable number box</label>
+      <label>Free mode with editable number box</label>
       <ae-slider id="slider-editable" value="30" min="0" max="100" step="10" editable resettable></ae-slider>
 
-      <label>Options mode — numeric values (sorted automatically)</label>
+      <label>Options mode numeric values (sorted automatically)</label>
       <ae-slider id="slider-opts-numeric" resettable></ae-slider>
 
-      <label>Options mode — labeled steps (non-numeric, preserves order)</label>
+      <label>Options mode labeled steps (non-numeric, preserves order)</label>
       <ae-slider id="slider-opts-labeled" resettable></ae-slider>
 
-      <label>Options mode — editable disabled (options override free input)</label>
+      <label>Options mode editable disabled (options override free input)</label>
       <ae-slider id="slider-opts-input" editable resettable></ae-slider>
 
-      <label>Marks — free mode (shows min/max endpoints)</label>
+      <label>Marks free mode (shows min/max endpoints)</label>
       <ae-slider value="40" min="0" max="100" step="10" marks resettable></ae-slider>
 
-      <label>Marks — options mode with labels</label>
+      <label>Marks options mode with labels</label>
       <ae-slider id="slider-marks-labeled" marks resettable></ae-slider>
 
-      <label>Marks — options mode, numeric values only (no label)</label>
+      <label>Marks options mode, numeric values only (no label)</label>
       <ae-slider id="slider-marks-numeric" marks percentage resettable></ae-slider>
 
-      <label>Marks — custom array (purely visual, step=10 still snaps)</label>
+      <label>Marks custom array (purely visual, step=10 still snaps)</label>
       <ae-slider id="slider-marks-custom" value="40" min="0" max="100" step="10" resettable default-value="40"></ae-slider>
 
-      <label>Marks — custom array with labels</label>
+      <label>Marks custom array with labels</label>
       <ae-slider id="slider-marks-labeled-custom" value="50" min="0" max="100" step="25" resettable default-value="50"></ae-slider>
 
-      <label>Color — success</label>
+      <label>Color success</label>
       <ae-slider value="60" min="0" max="100" step="10" marks color="success" resettable default-value="60"></ae-slider>
 
-      <label>Color — danger</label>
+      <label>Color danger</label>
       <ae-slider value="30" min="0" max="100" step="10" marks color="danger" resettable default-value="30"></ae-slider>
 
-      <label>Color — warning</label>
+      <label>Color warning</label>
       <ae-slider value="70" min="0" max="100" step="10" marks color="warning" resettable default-value="70"></ae-slider>
 
-      <label>Tracked — default color</label>
+      <label>Tracked default color</label>
       <ae-slider value="40" min="0" max="100" step="1" tracked resettable default-value="40"></ae-slider>
 
-      <label>Tracked — success color</label>
+      <label>Tracked success color</label>
       <ae-slider value="60" min="0" max="100" step="1" tracked color="success" marks resettable default-value="60"></ae-slider>
 
-      <label>Tracked — danger color</label>
+      <label>Tracked danger color</label>
       <ae-slider value="30" min="0" max="100" step="1" tracked color="danger" marks resettable default-value="30"></ae-slider>
     </div>
   </div>
@@ -278,9 +278,9 @@
     <h2>Select</h2>
     <span class="tag">&lt;ae-select&gt;</span>
 
-    <!-- 1. Options source — slot vs JS prop -->
+    <!-- 1. Options source slot vs JS prop -->
     <div class="demo-group">
-      <label>Slot mode — options via <code>&lt;ae-select-option&gt;</code> (initial value set by JS)</label>
+      <label>Slot mode options via <code>&lt;ae-select-option&gt;</code> (initial value set by JS)</label>
       <ae-select id="select-slot" placeholder="Choose a fruit..." style="max-width:260px">
         <ae-select-option value="apple">Apple</ae-select-option>
         <ae-select-option value="banana">Banana</ae-select-option>
@@ -290,7 +290,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Options prop — JS array, <code>clearable</code> + <code>resettable</code> + <code>default-value</code></label>
+      <label>Options prop JS array, <code>clearable</code> + <code>resettable</code> + <code>default-value</code></label>
       <ae-select id="select-opts" clearable resettable placeholder="Choose a fruit..." style="max-width:260px"></ae-select>
     </div>
 
@@ -312,7 +312,7 @@
 
     <!-- 4. Sizes -->
     <div class="demo-group">
-      <label>Sizes — <code>size</code> prop (xs / sm / md / lg / xl)</label>
+      <label>Sizes <code>size</code> prop (xs / sm / md / lg / xl)</label>
       <div class="demo-row" style="align-items:flex-start">
         <ae-select size="xs"  placeholder="xs"  style="max-width:120px" id="select-size-xs"></ae-select>
         <ae-select size="sm"  placeholder="sm"  style="max-width:140px" id="select-size-sm"></ae-select>
@@ -324,7 +324,7 @@
 
     <!-- 5. Position variants -->
     <div class="demo-group">
-      <label>Dropdown position — <code>position</code> prop</label>
+      <label>Dropdown position <code>position</code> prop</label>
       <div class="demo-row" style="align-items:flex-start">
         <div>
           <div style="font-size:0.75rem;color:#999;margin-bottom:4px">bottom (default)</div>
@@ -345,9 +345,9 @@
       </div>
     </div>
 
-    <!-- 6. Multiple — slot mode -->
+    <!-- 6. Multiple slot mode -->
     <div class="demo-group">
-      <label>Multiple — slot mode (<code>multiple clearable</code>)</label>
+      <label>Multiple slot mode (<code>multiple clearable</code>)</label>
       <ae-select id="select-multi-slot" multiple clearable placeholder="Select fruits..." style="max-width:400px">
         <ae-select-option value="apple">Apple</ae-select-option>
         <ae-select-option value="banana">Banana</ae-select-option>
@@ -357,15 +357,15 @@
       </ae-select>
     </div>
 
-    <!-- 7. Multiple — JS options prop, pre-selected -->
+    <!-- 7. Multiple JS options prop, pre-selected -->
     <div class="demo-group">
-      <label>Multiple — options prop, pre-selected (<code>multiple clearable resettable default-value</code>)</label>
+      <label>Multiple options prop, pre-selected (<code>multiple clearable resettable default-value</code>)</label>
       <ae-select id="select-multi-opts" multiple clearable resettable placeholder="Select colors..." style="max-width:400px"></ae-select>
     </div>
 
-    <!-- 8. Multiple expandable (overflow → expand) -->
+    <!-- 8. Multiple expandable (overflow expand) -->
     <div class="demo-group">
-      <label>Multiple — <code>expandable=false</code> (default): fixed height, overflow shows <code>…</code></label>
+      <label>Multiple <code>expandable=false</code> (default): fixed height, overflow shows <code>…</code></label>
       <ae-select id="select-overflow" multiple clearable placeholder="Select items..." style="max-width:260px">
         <ae-select-option value="ts">TypeScript</ae-select-option>
         <ae-select-option value="js">JavaScript</ae-select-option>
@@ -376,7 +376,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Multiple — <code>expandable</code>: height grows with selections</label>
+      <label>Multiple <code>expandable</code>: height grows with selections</label>
       <ae-select id="select-expandable" multiple expandable clearable placeholder="Select items..." style="max-width:260px">
         <ae-select-option value="ts">TypeScript</ae-select-option>
         <ae-select-option value="js">JavaScript</ae-select-option>
@@ -386,9 +386,9 @@
       </ae-select>
     </div>
 
-    <!-- 8. Change event — live output -->
+    <!-- 8. Change event live output -->
     <div class="demo-group">
-      <label>Change event — live value output</label>
+      <label>Change event live value output</label>
       <ae-select id="select-event" multiple clearable placeholder="Select tags..." style="max-width:400px">
         <ae-select-option value="ts">TypeScript</ae-select-option>
         <ae-select-option value="js">JavaScript</ae-select-option>
@@ -533,7 +533,7 @@
     <span class="tag">&lt;ae-button-group&gt;</span>
 
     <div class="demo-group">
-      <label>Loose — filled (default)</label>
+      <label>Loose filled (default)</label>
       <ae-button-group>
         <ae-button>One</ae-button>
         <ae-button>Two</ae-button>
@@ -542,7 +542,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Loose — colors</label>
+      <label>Loose colors</label>
       <ae-button-group color="primary">
         <ae-button>Save</ae-button>
         <ae-button>Preview</ae-button>
@@ -556,7 +556,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Compact — filled</label>
+      <label>Compact filled</label>
       <ae-button-group compact>
         <ae-button>Left</ae-button>
         <ae-button>Middle</ae-button>
@@ -577,7 +577,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Compact — outlined</label>
+      <label>Compact outlined</label>
       <ae-button-group compact variant="outlined" color="primary">
         <ae-button>Bold</ae-button>
         <ae-button>Italic</ae-button>
@@ -626,7 +626,7 @@
     <span class="tag">&lt;ae-radio-group&gt;</span>
 
     <div class="demo-group">
-      <label>Default mode — slot options</label>
+      <label>Default mode slot options</label>
       <ae-radio-group resettable value="b">
         <ae-radio value="a">Option A</ae-radio>
         <ae-radio value="b">Option B</ae-radio>
@@ -635,12 +635,12 @@
     </div>
 
     <div class="demo-group">
-      <label>Default mode — JS options</label>
+      <label>Default mode JS options</label>
       <ae-radio-group id="rg-default-opts" resettable></ae-radio-group>
     </div>
     
     <div class="demo-group">
-      <label>Default mode — slot allow-empty with clearable</label>
+      <label>Default mode slot allow-empty with clearable</label>
       <ae-radio-group resettable clearable allow-empty value="b" default-value="b" color="primary">
         <ae-radio value="a">Option A</ae-radio>
         <ae-radio value="b">Option B</ae-radio>
@@ -649,7 +649,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Button mode — colors</label>
+      <label>Button mode colors</label>
       <ae-radio-group mode="button" value="a">
         <ae-radio value="a">Option A</ae-radio>
         <ae-radio value="b">Option B</ae-radio>
@@ -678,7 +678,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Button mode — variants</label>
+      <label>Button mode variants</label>
       <ae-radio-group mode="button" color="primary" variant="filled" value="a">
         <ae-radio value="a">Filled</ae-radio>
         <ae-radio value="b">Option B</ae-radio>
@@ -707,7 +707,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Button mode — sizes</label>
+      <label>Button mode sizes</label>
       <ae-radio-group mode="button" color="primary" size="xs" value="a">
         <ae-radio value="a">XS</ae-radio>
         <ae-radio value="b">Option B</ae-radio>
@@ -727,7 +727,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Button Group mode — sizes</label>
+      <label>Button Group mode sizes</label>
       <ae-radio-group mode="button-group" color="default" size="xs" value="a">
         <ae-radio value="a">XS</ae-radio>
         <ae-radio value="b">Option B</ae-radio>
@@ -751,7 +751,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Button-group mode — JS options</label>
+      <label>Button-group mode JS options</label>
       <ae-radio-group id="rg-button-group-opts" mode="button-group" color="primary" value="a"></ae-radio-group>
       <ae-radio-group mode="button-group" color="primary" variant="outlined" value="b">
         <ae-radio value="a">Option A</ae-radio>
@@ -845,7 +845,7 @@
 
     <div class="demo-group">
       <label>Dismissible</label>
-      <ae-alert color="primary" dismissible>Dismissible — click × to close</ae-alert>
+      <ae-alert color="primary" dismissible>Dismissible click × to close</ae-alert>
       <ae-alert variant="filled" color="success" dismissible>Filled dismissible</ae-alert>
       <ae-alert variant="outlined" color="danger" dismissible>Outlined dismissible</ae-alert>
     </div>
@@ -862,12 +862,12 @@
     </div>
 
     <div class="demo-group">
-      <label>Thickness — 3px</label>
+      <label>Thickness 3px</label>
       <ae-divider thickness="3px"></ae-divider>
     </div>
 
     <div class="demo-group">
-      <label>Thickness — 6px</label>
+      <label>Thickness 6px</label>
       <ae-divider thickness="6px"></ae-divider>
     </div>
 
@@ -922,7 +922,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Colors — filled (default)</label>
+      <label>Colors filled (default)</label>
       <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
         <ae-card style="max-width: 130px;">
           <span slot="header">default</span>
@@ -964,7 +964,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Colors — subtle</label>
+      <label>Colors subtle</label>
       <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
         <ae-card variant="subtle" style="max-width: 130px;">
           <span slot="header">default</span>
@@ -1006,7 +1006,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Colors — outlined</label>
+      <label>Colors outlined</label>
       <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
         <ae-card variant="outlined" style="max-width: 130px;">
           <span slot="header">default</span>
@@ -1048,7 +1048,7 @@
     </div>
 
     <div class="demo-group">
-      <label>Colors — filled</label>
+      <label>Colors filled</label>
       <div class="demo-row" style="flex-wrap: wrap; gap: 12px;">
         <ae-card variant="filled" style="max-width: 130px;">
           <span slot="header">default</span>
@@ -1175,9 +1175,9 @@
     </div>
   </div>
 
-  <!-- IconButton (deprecated → use ae-button + ae-icon slot) -->
+  <!-- IconButton (deprecated use ae-button + ae-icon slot) -->
   <div class="section">
-    <h2>IconButton <small style="color:var(--text-secondary)">(deprecated — use ae-button + ae-icon)</small></h2>
+    <h2>IconButton <small style="color:var(--text-secondary)">(deprecated use ae-button + ae-icon)</small></h2>
     <span class="tag">&lt;ae-button&gt; + &lt;ae-icon&gt;</span>
 
     <div class="demo-group">
@@ -1257,7 +1257,7 @@
     <span class="tag">&lt;ae-tabs&gt; &lt;ae-tab&gt; &lt;ae-tab-panel&gt;</span>
 
     <div class="demo-group">
-      <label>Basic — position-based pairing</label>
+      <label>Basic position-based pairing</label>
       <ae-tabs>
         <ae-tab>Tab 1</ae-tab>
         <ae-tab>Tab 2</ae-tab>
@@ -1269,7 +1269,7 @@
     </div>
 
     <div class="demo-group">
-      <label>ID-based pairing (panel attribute → panel id)</label>
+      <label>ID-based pairing (panel attribute panel id)</label>
       <ae-tabs>
         <ae-tab panel="panel-c">Panel C first</ae-tab>
         <ae-tab panel="panel-a">Panel A</ae-tab>
@@ -1427,8 +1427,8 @@
     </div>
 
     <div class="demo-group">
-      <label>Custom text separator "›"</label>
-      <ae-breadcrumb separator="›">
+      <label>Custom text separator "/"</label>
+      <ae-breadcrumb separator="/">
         <ae-breadcrumb-item href="/">Home</ae-breadcrumb-item>
         <ae-breadcrumb-item href="/products">Products</ae-breadcrumb-item>
         <ae-breadcrumb-item>Detail</ae-breadcrumb-item>
@@ -1479,5 +1479,101 @@
   </div>
 
   <script type="module" src="./main.ts"></script>
+
+  <!-- Navbar -->
+  <div class="section">
+    <h2>Navbar</h2>
+    <span class="tag">&lt;ae-navbar&gt;</span>
+
+    <div class="demo-group">
+      <label>Default brand + start links (text hover) + end button</label>
+      <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
+        <ae-navbar style="position:relative;top:auto;">
+          <a slot="brand" href="#">MyApp</a>
+          <a slot="start" href="#" aria-current="page">Home</a>
+          <a slot="start" href="#">Docs</a>
+          <a slot="start" href="#">Blog</a>
+          <ae-button slot="end" size="sm" variant="outlined" color="primary">Sign in</ae-button>
+        </ae-navbar>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>link-style="background" hover fills full navbar height</label>
+      <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
+        <ae-navbar link-style="background" style="position:relative;top:auto;">
+          <a slot="brand" href="#">MyApp</a>
+          <a slot="start" href="#" aria-current="page">Home</a>
+          <a slot="start" href="#">Docs</a>
+          <a slot="start" href="#">Blog</a>
+          <ae-button slot="end" size="sm">Sign in</ae-button>
+        </ae-navbar>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>color="primary"</label>
+      <div style="border-radius:3px;overflow:hidden;position:relative;">
+        <ae-navbar color="primary" link-style="background" style="position:relative;top:auto;">
+          <a slot="brand" href="#">MyApp</a>
+          <a slot="start" href="#" aria-current="page">Home</a>
+          <a slot="start" href="#">Docs</a>
+          <a slot="start" href="#">Blog</a>
+          <ae-button slot="end" size="sm" variant="text" color="light">Sign in</ae-button>
+        </ae-navbar>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>color="dark"</label>
+      <div style="border-radius:3px;overflow:hidden;position:relative;">
+        <ae-navbar color="dark" link-style="background" style="position:relative;top:auto;">
+          <a slot="brand" href="#">MyApp</a>
+          <a slot="start" href="#" aria-current="page">Home</a>
+          <a slot="start" href="#">Docs</a>
+          <a slot="start" href="#">Changelog</a>
+          <ae-button slot="end" size="sm" color="primary">Get started</ae-button>
+        </ae-navbar>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Custom height via --ae-navbar-height (4.5rem) + transparent bg</label>
+      <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:3px;overflow:hidden;position:relative;">
+        <ae-navbar style="position:relative;top:auto;--ae-navbar-height:4.5rem;--ae-navbar-bg:transparent;--ae-navbar-border-width:0;--ae-navbar-color:white;--ae-navbar-link-hover-bg:rgba(255,255,255,0.15);--ae-navbar-link-hover-color:white;--ae-navbar-link-active-color:white;--ae-navbar-link-padding-x:1rem;">
+          <a slot="brand" href="#">Purple</a>
+          <a slot="start" href="#" aria-current="page">Home</a>
+          <a slot="start" href="#">Features</a>
+          <a slot="start" href="#">Pricing</a>
+          <ae-button slot="end" size="sm" color="light">Get started</ae-button>
+        </ae-navbar>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>Compact height (2.5rem) via --ae-navbar-height</label>
+      <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
+        <ae-navbar link-style="background" style="position:relative;top:auto;--ae-navbar-height:2.5rem;--ae-navbar-padding-x:1rem;--ae-navbar-link-padding-x:0.6rem;">
+          <a slot="brand" href="#">Compact</a>
+          <a slot="start" href="#" aria-current="page">Home</a>
+          <a slot="start" href="#">Docs</a>
+          <ae-button slot="end" size="xs" color="primary">Sign in</ae-button>
+        </ae-navbar>
+      </div>
+    </div>
+
+    <div class="demo-group">
+      <label>end-only brand + right actions, no start links</label>
+      <div style="border:1px solid var(--border-color);border-radius:3px;overflow:hidden;position:relative;">
+        <ae-navbar style="position:relative;top:auto;">
+          <a slot="brand" href="#">MyApp</a>
+          <ae-button slot="end" size="sm" variant="text">Log in</ae-button>
+          <ae-button slot="end" size="sm" color="primary">Sign up</ae-button>
+        </ae-navbar>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
+

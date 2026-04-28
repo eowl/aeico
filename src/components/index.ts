@@ -53,6 +53,7 @@ export { default as IconButton } from './icon-button'
 export { Tabs, Tab, TabPanel } from './tabs'
 export { default as Divider } from './divider'
 export { default as Card } from './card'
+export { default as Navbar } from './navbar'
 
 // Component types
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
@@ -71,3 +72,4 @@ export type { IconProps, IconSize, IconColor, IconDefinition, IconRegistryData }
 export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './icon-button'
 export type { DividerProps } from './divider'
 export type { CardProps, CardVariant, CardColor } from './card'
+export type { NavbarProps, NavbarColor, NavbarLinkStyle } from './navbar'

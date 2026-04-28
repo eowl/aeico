@@ -16,8 +16,9 @@ import {
   Badge,
   Breadcrumb,
   BreadcrumbItem,
+  Navbar,
 } from '../src/components/index'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem, Navbar]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---
