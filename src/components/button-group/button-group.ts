@@ -5,6 +5,7 @@ import AeicoComponent from '../aeico-component'
 import { html } from '../../view'
 import type { ButtonColor, ButtonVariant, ButtonSize } from '../button'
 import Button from '../button/button'
+import DropdownButton from '../dropdown/dropdown-button'
 
 /**
  * ButtonGroup Component
@@ -74,18 +75,21 @@ class ButtonGroup extends AeicoComponent {
     })
   }
 
-  private _getButtons(): Button[] {
+  private _getButtons(): Array<Button | DropdownButton> {
     if (!this.slotEl) return []
 
-    return (this.slotEl.assignedElements({ flatten: true }) as Button[])
-      .filter(el => el.tagName.toLowerCase() === 'ae-button')
+    return (this.slotEl.assignedElements({ flatten: true }) as Array<Button | DropdownButton>)
+      .filter(el => {
+        const tag = el.tagName.toLowerCase()
+        return tag === 'ae-button' || tag === 'ae-dropdown-button'
+      })
   }
 
   private _syncChildren() {
     const buttons  = this._getButtons()
     const r        = this.size === 'xs' || this.size === 'sm' ? 3 : 4
 
-    buttons.forEach((btn: Button, i) => {
+    buttons.forEach((btn: Button | DropdownButton, i) => {
       btn.variant = this.variant
       btn.color = this.color
       btn.size = this.size
