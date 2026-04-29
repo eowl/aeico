@@ -84,19 +84,20 @@
   min-width: 0;
 }
 
-[part="start"] {
+[part="start"],
+[part="end"] {
   flex: 0 0 auto;
   display: flex;
   align-self: stretch;
+}
+
+[part="start"] {
   align-items: stretch;  /* slotted <a> will stretch to full height */
   gap: var(--ae-navbar-start-gap, 0);
 }
 
 [part="end"] {
-  flex: 0 0 auto;
-  display: flex;
   align-items: center;   /* buttons / avatars stay vertically centred */
-  align-self: stretch;
   gap: var(--ae-navbar-end-gap, 0.5rem);
   margin-left: auto;
 }
@@ -144,11 +145,9 @@
   white-space: nowrap;
 }
 
-/* Start links — fill the full navbar height so hover
-   background covers the entire bar strip, not just the text row.
-   --ae-navbar-height is a CSS custom property defined on :host and
-   inherited into slotted content. */
-::slotted(a[slot="start"]) {
+/* Nav links (start / end slots) — fill full navbar height for block hover effect */
+::slotted(a[slot="start"]),
+::slotted(a[slot="end"]) {
   display: inline-flex;
   align-items: center;
   height: var(--ae-navbar-height, 3.25rem);  /* full-height hover area */
@@ -163,15 +162,29 @@
   outline-offset: 2px;
 }
 
-::slotted(a[slot="start"]:hover) {
+::slotted(a[slot="start"]:hover),
+::slotted(a[slot="end"]:hover) {
   color: var(--ae-navbar-link-hover-color);
   background-color: var(--ae-navbar-link-hover-bg);
 }
 
-/* aria-current="page" marks the active link */
-::slotted(a[slot="start"][aria-current="page"]) {
+::slotted(a[slot="start"][aria-current="page"]),
+::slotted(a[slot="end"][aria-current="page"]) {
   color: var(--ae-navbar-link-active-color);
   font-weight: var(--ae-navbar-link-active-font-weight);
+}
+
+/* ae-dropdown inside navbar — map navbar tokens to dropdown trigger API */
+::slotted(ae-dropdown) {
+  align-self: stretch;
+  --dropdown-trigger-height: 100%;
+  --dropdown-trigger-padding-x: var(--ae-navbar-link-padding-x);
+  --dropdown-trigger-color: var(--ae-navbar-link-color);
+  --dropdown-trigger-bg: none;
+  --dropdown-trigger-radius: var(--ae-navbar-link-radius);
+  --dropdown-trigger-font-size: var(--ae-navbar-link-font-size);
+  --dropdown-trigger-hover-color: var(--ae-navbar-link-hover-color);
+  --dropdown-trigger-hover-bg: var(--ae-navbar-link-hover-bg);
 }
 
 @media (max-width: 768px) {
@@ -208,7 +221,8 @@
   }
 
   /* Mobile: links revert to auto height and add vertical padding */
-  ::slotted(a[slot="start"]) {
+  ::slotted(a[slot="start"]),
+  ::slotted(a[slot="end"]) {
     height: auto;
     width: 100%;
     padding: 0.75rem var(--ae-navbar-link-padding-x);

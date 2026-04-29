@@ -81,6 +81,14 @@ class Dropdown extends AeicoComponent {
   @prop({ type: Boolean })
   accessor disabled: boolean = false
 
+  /**
+   * Optional label text. When set, `ae-dropdown` renders its own trigger button
+   * in the shadow DOM (no `slot="trigger"` needed). Inherits `--ae-navbar-link-*`
+   * CSS variables so it automatically matches navbar link styles.
+   */
+  @prop({ type: String })
+  accessor label: string = ''
+
   private _outsideClickHandler: ((e: MouseEvent) => void) | null = null
 
   connectedCallback() {
@@ -101,9 +109,11 @@ class Dropdown extends AeicoComponent {
 
   disconnectedCallback() {
     super.disconnectedCallback()
-    // Remove any injected arrow spans from the slotted trigger element
-    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot[name="trigger"]')
-    slot?.assignedElements()[0]?.querySelector('.ae-dropdown-arrow')?.remove()
+    // Remove any injected arrow spans from the slotted trigger element (slot mode only)
+    if (!this.label) {
+      const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot[name="trigger"]')
+      slot?.assignedElements()[0]?.querySelector('.ae-dropdown-arrow')?.remove()
+    }
     if (this._outsideClickHandler) {
       document.removeEventListener('click', this._outsideClickHandler)
       this._outsideClickHandler = null
@@ -179,14 +189,29 @@ class Dropdown extends AeicoComponent {
 
   protected render() {
     const placementClass = `placement-${this.placement}`
-    return html(({ div, slot }) => {
+    const hasLabel = !!this.label
+    const dir = this.placement.split('-')[0]
+    const chars: Record<string, string> = { top: '\u25b4', bottom: '\u25be', right: '\u25b8', left: '\u25c2' }
+    const arrowChar = chars[dir] ?? '\u25be'
+    return html(({ div, slot, button, span }) => {
       div({
         className: 'trigger-wrapper',
         'aria-haspopup': 'menu',
         'aria-expanded': String(this.open),
         '@click': this.disabled ? undefined : this._handleTriggerClick,
       }, () => {
-        slot({ name: 'trigger', '@slotchange': this._handleSlotChange })
+        if (hasLabel) {
+          button({
+            className: 'trigger-label',
+            type: 'button',
+            disabled: this.disabled || undefined,
+          }, () => {
+            span({ text: this.label })
+            span({ className: 'ae-dropdown-arrow', 'aria-hidden': 'true', text: arrowChar })
+          })
+        } else {
+          slot({ name: 'trigger', '@slotchange': this._handleSlotChange })
+        }
       })
       div({
         part: 'panel',

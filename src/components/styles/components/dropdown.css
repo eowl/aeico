@@ -12,7 +12,54 @@
 }
 
 .trigger-wrapper {
-  display: contents;
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+}
+
+/* Internal trigger rendered when `label` prop is set.
+   Uses --dropdown-trigger-* variables. Context components (e.g. ae-navbar)
+   map their own tokens to these variables via ::slotted(ae-dropdown). */
+.trigger-label {
+  display: inline-flex;
+  align-items: center;
+  height: var(--dropdown-trigger-height, auto);
+  padding: 0 var(--dropdown-trigger-padding-x, 0.75rem);
+  color: var(--dropdown-trigger-color, inherit);
+  background: var(--dropdown-trigger-bg, none);
+  border: none;
+  border-radius: var(--dropdown-trigger-radius, 0);
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--dropdown-trigger-font-size, inherit);
+  white-space: nowrap;
+  transition: color 0.15s ease, background-color 0.15s ease;
+  outline-offset: 2px;
+}
+
+.trigger-label:hover {
+  color: var(--dropdown-trigger-hover-color, inherit);
+  background-color: var(--dropdown-trigger-hover-bg, transparent);
+}
+
+:host([disabled]) .trigger-label {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Arrow span inside shadow DOM (label mode) */
+.ae-dropdown-arrow {
+  display: inline-block;
+  font-size: .7em;
+  line-height: 1;
+  margin-left: .25em;
+  opacity: .7;
+  pointer-events: none;
+  user-select: none;
+  vertical-align: middle;
 }
 
 .panel {

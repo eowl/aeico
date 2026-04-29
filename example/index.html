@@ -739,12 +739,11 @@
       <div class="demo-group">
         <label>In Navbar (slot="end")</label>
         <div style="isolation:isolate;position:relative;">
-        <ae-navbar color="dark" appearance="block" style="border-radius:6px;overflow:hidden;">
+        <ae-navbar color="dark" appearance="block" style="border-radius:6px;">
           <a slot="brand" href="#" style="color:inherit;text-decoration:none">MyApp</a>
           <a slot="start" href="#">Home</a>
           <a slot="start" href="#">Docs</a>
-          <ae-dropdown slot="end" class="dropdown-demo" placement="bottom-end">
-            <ae-button slot="trigger" size="sm" variant="outlined" color="light">User</ae-button>
+          <ae-dropdown slot="end" class="dropdown-demo" placement="bottom-end" label="User">
             <ae-dropdown-item href="#"><ae-icon name="eye"></ae-icon>Profile</ae-dropdown-item>
             <ae-dropdown-item value="settings"><ae-icon name="settings"></ae-icon>Settings</ae-dropdown-item>
             <ae-dropdown-item value="logout" style="--dropdown-item-color:var(--color-danger,#dc3545)">Sign out</ae-dropdown-item>
