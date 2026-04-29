@@ -11,12 +11,14 @@ import '../icon/icon'
  * Dropdown menu item — used as a direct child of `<ae-dropdown>`.
  *
  * Renders as a `<button>` by default, or as an `<a>` anchor when `href` is set.
+ * Use `<ae-icon>` inside to add icons, and CSS `color` / `--dropdown-item-color`
+ * to apply danger or custom colours.
  *
  * @example
  * ```html
- * <ae-dropdown-item value="edit" icon="edit">Edit</ae-dropdown-item>
- * <ae-dropdown-item value="delete" danger icon="trash">Delete</ae-dropdown-item>
- * <ae-dropdown-item href="/profile" icon="user">Profile</ae-dropdown-item>
+ * <ae-dropdown-item value="edit"><ae-icon name="edit"></ae-icon>Edit</ae-dropdown-item>
+ * <ae-dropdown-item value="delete" style="--dropdown-item-color:var(--color-danger)">Delete</ae-dropdown-item>
+ * <ae-dropdown-item href="/profile">Profile</ae-dropdown-item>
  * ```
  */
 class DropdownItem extends AeicoComponent {
@@ -30,20 +32,12 @@ class DropdownItem extends AeicoComponent {
   @prop({ type: Boolean })
   accessor disabled: boolean = false
 
-  /** Icon name passed to `<ae-icon>`, displayed before the label text. */
-  @prop({ type: String })
-  accessor icon: string | undefined
-
   /**
    * When set, the item renders as an `<a>` anchor element instead of a
    * `<button>`. Useful for navigation items.
    */
   @prop({ type: String })
   accessor href: string | undefined
-
-  /** Applies danger (red) colour styling — intended for destructive actions. */
-  @prop({ type: Boolean })
-  accessor danger: boolean = false
 
   protected static styles = [variables, style]
 
@@ -68,40 +62,21 @@ class DropdownItem extends AeicoComponent {
   }
 
   protected render() {
-    const hasIcon = Boolean(this.icon)
-    return html(({ div, button, a, aeIcon, span, slot }) => {
+    return html(({ button, a, slot }) => {
       if (this.href) {
         a({
           part: 'item',
           className: 'item',
           href: this.disabled ? undefined : this.href,
           'aria-disabled': this.disabled || undefined,
-        }, () => {
-          if (hasIcon) {
-            div({ className: 'icon-wrapper' }, () => {
-              aeIcon({ name: this.icon })
-            })
-          }
-          span({ className: 'label' }, () => {
-            slot()
-          })
-        })
+        }, () => { slot() })
       } else {
         button({
           part: 'item',
           className: 'item',
           type: 'button',
           disabled: this.disabled,
-        }, () => {
-          if (hasIcon) {
-            div({ className: 'icon-wrapper' }, () => {
-              aeIcon({ name: this.icon })
-            })
-          }
-          span({ className: 'label' }, () => {
-            slot()
-          })
-        })
+        }, () => { slot() })
       }
     })
   }

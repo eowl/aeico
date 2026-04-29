@@ -650,9 +650,9 @@
         <div class="demo-row">
           <ae-dropdown class="dropdown-demo">
             <ae-button slot="trigger">Actions</ae-button>
-            <ae-dropdown-item value="edit" icon="edit">Edit</ae-dropdown-item>
-            <ae-dropdown-item value="view" icon="eye">View</ae-dropdown-item>
-            <ae-dropdown-item value="delete" danger icon="trash">Delete</ae-dropdown-item>
+            <ae-dropdown-item value="edit"><ae-icon name="edit"></ae-icon>Edit</ae-dropdown-item>
+            <ae-dropdown-item value="view"><ae-icon name="eye"></ae-icon>View</ae-dropdown-item>
+            <ae-dropdown-item value="delete" style="--dropdown-item-color:var(--color-danger,#dc3545)"><ae-icon name="trash"></ae-icon>Delete</ae-dropdown-item>
           </ae-dropdown>
         </div>
       </div>
@@ -692,9 +692,9 @@
         <div class="demo-row">
           <ae-dropdown class="dropdown-demo">
             <ae-button slot="trigger" color="primary">Navigate</ae-button>
-            <ae-dropdown-item href="#" icon="home">Home</ae-dropdown-item>
-            <ae-dropdown-item href="#" icon="search">Search</ae-dropdown-item>
-            <ae-dropdown-item href="#" icon="settings">Settings</ae-dropdown-item>
+            <ae-dropdown-item href="#"><ae-icon name="home"></ae-icon>Home</ae-dropdown-item>
+            <ae-dropdown-item href="#"><ae-icon name="search"></ae-icon>Search</ae-dropdown-item>
+            <ae-dropdown-item href="#"><ae-icon name="settings"></ae-icon>Settings</ae-dropdown-item>
           </ae-dropdown>
         </div>
       </div>
@@ -706,7 +706,7 @@
             <ae-button slot="trigger" variant="faint">With disabled item</ae-button>
             <ae-dropdown-item value="active">Active item</ae-dropdown-item>
             <ae-dropdown-item value="noop" disabled>Disabled item</ae-dropdown-item>
-            <ae-dropdown-item value="danger" danger>Danger item</ae-dropdown-item>
+            <ae-dropdown-item value="danger" style="--dropdown-item-color:var(--color-danger,#dc3545)">Danger item</ae-dropdown-item>
           </ae-dropdown>
           <ae-dropdown class="dropdown-demo" disabled>
             <ae-button slot="trigger" disabled>Disabled dropdown</ae-button>
@@ -744,9 +744,9 @@
           <a slot="start" href="#">Docs</a>
           <ae-dropdown slot="end" class="dropdown-demo" placement="bottom-end">
             <ae-button slot="trigger" size="sm" variant="outlined" color="light">User</ae-button>
-            <ae-dropdown-item href="#" icon="eye">Profile</ae-dropdown-item>
-            <ae-dropdown-item value="settings" icon="settings">Settings</ae-dropdown-item>
-            <ae-dropdown-item value="logout" danger>Sign out</ae-dropdown-item>
+            <ae-dropdown-item href="#"><ae-icon name="eye"></ae-icon>Profile</ae-dropdown-item>
+            <ae-dropdown-item value="settings"><ae-icon name="settings"></ae-icon>Settings</ae-dropdown-item>
+            <ae-dropdown-item value="logout" style="--dropdown-item-color:var(--color-danger,#dc3545)">Sign out</ae-dropdown-item>
           </ae-dropdown>
         </ae-navbar>
       </div>
