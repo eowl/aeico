@@ -66,9 +66,9 @@ class DropdownButton extends AeicoComponent {
 
   private _dropdownEl: Dropdown | null = null
 
-  show(): void { this._dropdownEl?.show() }
+  show(): void { if (this.disabled) return; this._dropdownEl?.show() }
   hide(): void { this._dropdownEl?.hide() }
-  toggle(): void { this._dropdownEl?.toggle() }
+  toggle(): void { if (this.disabled) return; this._dropdownEl?.toggle() }
 
   get open(): boolean { return this._dropdownEl?.open ?? false }
 
