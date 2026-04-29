@@ -283,5 +283,75 @@ describe('Dropdown', () => {
       const item = await mount<DropdownItem>(`<${ITEM_TAG}>X</${ITEM_TAG}>`)
       expect(item.getAttribute('role')).to.equal('menuitem')
     })
+
+    describe('active prop', () => {
+      it('defaults to false', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG}>X</${ITEM_TAG}>`)
+        expect(item.active).to.equal(false)
+      })
+
+      it('reflects active attribute', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG} active>X</${ITEM_TAG}>`)
+        expect(item.active).to.equal(true)
+        expect(item.hasAttribute('active')).to.be.true
+      })
+    })
+
+    describe('type="checkbox"', () => {
+      it('defaults type to undefined', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG}>X</${ITEM_TAG}>`)
+        expect(item.type).to.be.undefined
+      })
+
+      it('renders .check-indicator when type="checkbox"', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG} type="checkbox">X</${ITEM_TAG}>`)
+        await updated()
+        expect(item.shadowRoot!.querySelector('.check-indicator')).to.exist
+      })
+
+      it('does not render .check-indicator for normal items', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG}>X</${ITEM_TAG}>`)
+        await updated()
+        expect(item.shadowRoot!.querySelector('.check-indicator')).to.not.exist
+      })
+
+      it('sets aria-checked="false" when unchecked', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG} type="checkbox">X</${ITEM_TAG}>`)
+        await updated()
+        const btn = item.shadowRoot!.querySelector('[part="item"]')!
+        expect(btn.getAttribute('aria-checked')).to.equal('false')
+      })
+
+      it('sets aria-checked="true" when checked', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG} type="checkbox" checked>X</${ITEM_TAG}>`)
+        await updated()
+        const btn = item.shadowRoot!.querySelector('[part="item"]')!
+        expect(btn.getAttribute('aria-checked')).to.equal('true')
+      })
+
+      it('toggles checked on click', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG} type="checkbox">X</${ITEM_TAG}>`)
+        expect(item.checked).to.equal(false)
+        item.click()
+        expect(item.checked).to.equal(true)
+        item.click()
+        expect(item.checked).to.equal(false)
+      })
+
+      it('emits _item-select with checked state in detail', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG} type="checkbox" value="notify">Notify</${ITEM_TAG}>`)
+        let detail: Record<string, unknown> = {}
+        item.addEventListener('_item-select', (e) => { detail = (e as CustomEvent).detail })
+        item.click()
+        expect(detail.checked).to.equal(true)
+        expect(detail.value).to.equal('notify')
+      })
+
+      it('does not toggle when disabled', async () => {
+        const item = await mount<DropdownItem>(`<${ITEM_TAG} type="checkbox" disabled>X</${ITEM_TAG}>`)
+        item.click()
+        expect(item.checked).to.equal(false)
+      })
+    })
   })
 })

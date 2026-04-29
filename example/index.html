@@ -649,7 +649,7 @@
         <label>Basic — button trigger with actions</label>
         <div class="demo-row">
           <ae-dropdown class="dropdown-demo">
-            <ae-button slot="trigger">Actions</ae-button>
+            <ae-button slot="trigger">Actions <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="edit"><ae-icon name="edit"></ae-icon>Edit</ae-dropdown-item>
             <ae-dropdown-item value="view"><ae-icon name="eye"></ae-icon>View</ae-dropdown-item>
             <ae-dropdown-item value="delete" style="--dropdown-item-color:var(--color-danger,#dc3545)"><ae-icon name="trash"></ae-icon>Delete</ae-dropdown-item>
@@ -661,25 +661,25 @@
         <label>Placements (bottom-start / bottom-end / top-start / top-end)</label>
         <div class="demo-row">
           <ae-dropdown class="dropdown-demo" placement="bottom-start">
-            <ae-button slot="trigger" variant="outlined">bottom-start</ae-button>
+            <ae-button slot="trigger" variant="outlined">bottom-start <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="a">Item A</ae-dropdown-item>
             <ae-dropdown-item value="b">Item B</ae-dropdown-item>
             <ae-dropdown-item value="c">Item C</ae-dropdown-item>
           </ae-dropdown>
           <ae-dropdown class="dropdown-demo" placement="bottom-end">
-            <ae-button slot="trigger" variant="outlined">bottom-end</ae-button>
+            <ae-button slot="trigger" variant="outlined">bottom-end <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="a">Item A</ae-dropdown-item>
             <ae-dropdown-item value="b">Item B</ae-dropdown-item>
             <ae-dropdown-item value="c">Item C</ae-dropdown-item>
           </ae-dropdown>
           <ae-dropdown class="dropdown-demo" placement="top-start">
-            <ae-button slot="trigger" variant="outlined">top-start</ae-button>
+            <ae-button slot="trigger" variant="outlined">top-start <ae-icon name="chevron-up" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="a">Item A</ae-dropdown-item>
             <ae-dropdown-item value="b">Item B</ae-dropdown-item>
             <ae-dropdown-item value="c">Item C</ae-dropdown-item>
           </ae-dropdown>
           <ae-dropdown class="dropdown-demo" placement="top-end">
-            <ae-button slot="trigger" variant="outlined">top-end</ae-button>
+            <ae-button slot="trigger" variant="outlined">top-end <ae-icon name="chevron-up" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="a">Item A</ae-dropdown-item>
             <ae-dropdown-item value="b">Item B</ae-dropdown-item>
             <ae-dropdown-item value="c">Item C</ae-dropdown-item>
@@ -691,7 +691,7 @@
         <label>With href items (renders as &lt;a&gt; links)</label>
         <div class="demo-row">
           <ae-dropdown class="dropdown-demo">
-            <ae-button slot="trigger" color="primary">Navigate</ae-button>
+            <ae-button slot="trigger" color="primary">Navigate <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item href="#"><ae-icon name="home"></ae-icon>Home</ae-dropdown-item>
             <ae-dropdown-item href="#"><ae-icon name="search"></ae-icon>Search</ae-dropdown-item>
             <ae-dropdown-item href="#"><ae-icon name="settings"></ae-icon>Settings</ae-dropdown-item>
@@ -703,14 +703,39 @@
         <label>disabled item + disabled dropdown</label>
         <div class="demo-row">
           <ae-dropdown class="dropdown-demo">
-            <ae-button slot="trigger" variant="faint">With disabled item</ae-button>
+            <ae-button slot="trigger" variant="faint">With disabled item <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="active">Active item</ae-dropdown-item>
             <ae-dropdown-item value="noop" disabled>Disabled item</ae-dropdown-item>
             <ae-dropdown-item value="danger" style="--dropdown-item-color:var(--color-danger,#dc3545)">Danger item</ae-dropdown-item>
           </ae-dropdown>
           <ae-dropdown class="dropdown-demo" disabled>
-            <ae-button slot="trigger" disabled>Disabled dropdown</ae-button>
+            <ae-button slot="trigger" disabled>Disabled dropdown <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="x">Item</ae-dropdown-item>
+          </ae-dropdown>
+        </div>
+      </div>
+
+      <div class="demo-group">
+        <label>active prop — highlights the current item</label>
+        <div class="demo-row">
+          <ae-dropdown class="dropdown-demo">
+            <ae-button slot="trigger" variant="outlined">Sort by <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
+            <ae-dropdown-item value="name">Name</ae-dropdown-item>
+            <ae-dropdown-item value="date" active>Date modified</ae-dropdown-item>
+            <ae-dropdown-item value="size">Size</ae-dropdown-item>
+          </ae-dropdown>
+        </div>
+      </div>
+
+      <div class="demo-group">
+        <label>type="checkbox" — toggleable items</label>
+        <div class="demo-row">
+          <ae-dropdown class="dropdown-demo" close-on-select="false">
+            <ae-button slot="trigger" variant="outlined">Columns <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
+            <ae-dropdown-item type="checkbox" value="name" checked>Name</ae-dropdown-item>
+            <ae-dropdown-item type="checkbox" value="status" checked>Status</ae-dropdown-item>
+            <ae-dropdown-item type="checkbox" value="priority">Priority</ae-dropdown-item>
+            <ae-dropdown-item type="checkbox" value="assignee">Assignee</ae-dropdown-item>
           </ae-dropdown>
         </div>
       </div>
@@ -719,17 +744,17 @@
         <label>Trigger variants — outlined / text / faint button</label>
         <div class="demo-row">
           <ae-dropdown class="dropdown-demo">
-            <ae-button slot="trigger" color="secondary" variant="outlined" size="sm">Outlined SM</ae-button>
+            <ae-button slot="trigger" color="secondary" variant="outlined" size="sm">Outlined SM <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="copy">Copy</ae-dropdown-item>
             <ae-dropdown-item value="paste">Paste</ae-dropdown-item>
           </ae-dropdown>
           <ae-dropdown class="dropdown-demo">
-            <ae-button slot="trigger" variant="text">Text trigger</ae-button>
+            <ae-button slot="trigger" variant="text">Text trigger <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="copy">Copy</ae-dropdown-item>
             <ae-dropdown-item value="paste">Paste</ae-dropdown-item>
           </ae-dropdown>
           <ae-dropdown class="dropdown-demo">
-            <ae-button slot="trigger" variant="faint" color="primary">Faint</ae-button>
+            <ae-button slot="trigger" variant="faint" color="primary">Faint <ae-icon name="chevron-down" size="sm"></ae-icon></ae-button>
             <ae-dropdown-item value="copy">Copy</ae-dropdown-item>
             <ae-dropdown-item value="paste">Paste</ae-dropdown-item>
           </ae-dropdown>

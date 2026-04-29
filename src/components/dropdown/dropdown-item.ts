@@ -39,6 +39,28 @@ class DropdownItem extends AeicoComponent {
   @prop({ type: String })
   accessor href: string | undefined
 
+  /**
+   * When `type="checkbox"`, the item behaves as a toggle: each click flips
+   * `checked` and includes the new state in the `select` event detail.
+   */
+  @prop({ type: String })
+  accessor type: 'checkbox' | undefined
+
+  /**
+   * Whether the item is checked. Only meaningful when `type="checkbox"`.
+   * Reflects as the `checked` attribute.
+   */
+  @prop({ type: Boolean })
+  accessor checked: boolean = false
+
+  /**
+   * Marks the item as the currently active/selected option (e.g. current route,
+   * current sort order). Purely visual — applies a highlighted background and
+   * accent colour.
+   */
+  @prop({ type: Boolean })
+  accessor active: boolean = false
+
   protected static styles = [variables, style]
 
   connectedCallback() {
@@ -51,32 +73,44 @@ class DropdownItem extends AeicoComponent {
     if (this.disabled) {
       e.preventDefault()
       e.stopPropagation()
+
       return
+    }
+    if (this.type === 'checkbox') {
+      this.checked = !this.checked
     }
     const label = this.textContent?.trim() ?? ''
     this.dispatchEvent(new CustomEvent('_item-select', {
       bubbles: true,
       composed: true,
-      detail: { value: this.value ?? '', label },
+      detail: { value: this.value ?? '', label, checked: this.checked },
     }))
   }
 
   protected render() {
-    return html(({ button, a, slot }) => {
+    const isCheckbox = this.type === 'checkbox'
+    const sharedProps = {
+      part: 'item',
+      className: 'item',
+      'aria-checked': isCheckbox ? String(this.checked) : undefined,
+    }
+    return html(({ button, a, span, slot }) => {
+      const children = () => {
+        if (isCheckbox) span({ className: 'check-indicator', 'aria-hidden': 'true' })
+        slot()
+      }
       if (this.href) {
         a({
-          part: 'item',
-          className: 'item',
+          ...sharedProps,
           href: this.disabled ? undefined : this.href,
           'aria-disabled': this.disabled || undefined,
-        }, () => { slot() })
+        }, children)
       } else {
         button({
-          part: 'item',
-          className: 'item',
+          ...sharedProps,
           type: 'button',
           disabled: this.disabled,
-        }, () => { slot() })
+        }, children)
       }
     })
   }
