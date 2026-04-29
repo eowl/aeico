@@ -50,16 +50,34 @@
   pointer-events: none;
 }
 
-/* Arrow span inside shadow DOM (label mode) */
+/* Bootstrap-style CSS border caret — shadow DOM only, no global injection needed */
 .ae-dropdown-arrow {
   display: inline-block;
-  font-size: .7em;
-  line-height: 1;
-  margin-left: .25em;
-  opacity: .7;
-  pointer-events: none;
-  user-select: none;
-  vertical-align: middle;
+  width: 0;
+  height: 0;
+  margin-left: 0.3em;
+  vertical-align: 0.2em;
+  flex-shrink: 0;
+}
+.ae-dropdown-arrow--bottom {
+  border-top: 0.35em solid;
+  border-right: 0.35em solid transparent;
+  border-left: 0.35em solid transparent;
+}
+.ae-dropdown-arrow--top {
+  border-bottom: 0.35em solid;
+  border-right: 0.35em solid transparent;
+  border-left: 0.35em solid transparent;
+}
+.ae-dropdown-arrow--right {
+  border-left: 0.35em solid;
+  border-top: 0.35em solid transparent;
+  border-bottom: 0.35em solid transparent;
+}
+.ae-dropdown-arrow--left {
+  border-right: 0.35em solid;
+  border-top: 0.35em solid transparent;
+  border-bottom: 0.35em solid transparent;
 }
 
 .panel {

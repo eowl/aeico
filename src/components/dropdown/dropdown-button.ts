@@ -44,7 +44,14 @@ class DropdownButton extends AeicoComponent {
 
   // ae-button and ae-dropdown each carry their own shadow DOM styles.
   // Only the host display is set here so button-group compact layout works.
-  protected static styles = [':host { display: inline-block; }']
+  protected static styles = [
+    ':host { display: inline-block; }',
+    '.caret { display: inline-block; width: 0; height: 0; margin-left: 0.3em; vertical-align: 0.2em; flex-shrink: 0; }',
+    '.caret--bottom { border-top: 0.35em solid; border-right: 0.35em solid transparent; border-left: 0.35em solid transparent; }',
+    '.caret--top { border-bottom: 0.35em solid; border-right: 0.35em solid transparent; border-left: 0.35em solid transparent; }',
+    '.caret--right { border-left: 0.35em solid; border-top: 0.35em solid transparent; border-bottom: 0.35em solid transparent; }',
+    '.caret--left { border-right: 0.35em solid; border-top: 0.35em solid transparent; border-bottom: 0.35em solid transparent; }',
+  ]
 
   @prop({ type: String })
   accessor variant: ButtonVariant = 'filled'
@@ -73,14 +80,12 @@ class DropdownButton extends AeicoComponent {
   get open(): boolean { return this._dropdownEl?.open ?? false }
 
   protected render() {
-    return html(({ aeDropdown, aeButton, slot }) => {
+    const dir = this.placement.split('-')[0]
+    return html(({ aeDropdown, aeButton, slot, span }) => {
       this._dropdownEl = aeDropdown({
         placement: this.placement,
-        // false removes the attribute → ae-dropdown sees no attribute → closeOnSelect = false
         'close-on-select': this.closeOnSelect,
       }, () => {
-        // ae-button in the trigger slot — ae-dropdown handles click-to-toggle and
-        // auto-injects the direction arrow via _injectArrow()
         aeButton({
           slot: 'trigger',
           variant: this.variant,
@@ -89,9 +94,8 @@ class DropdownButton extends AeicoComponent {
           disabled: this.disabled || undefined,
         }, () => {
           slot({ name: 'label' })
+          span({ className: `caret caret--${dir}`, 'aria-hidden': 'true' })
         })
-        // Slot forwarding: ae-dropdown-button's default-slot children (ae-dropdown-item
-        // elements) are re-slotted into ae-dropdown's default slot via this <slot>.
         slot()
       }) as unknown as Dropdown
     })

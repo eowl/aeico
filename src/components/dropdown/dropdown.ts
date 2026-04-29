@@ -34,24 +34,13 @@ import './dropdown-item'
  * <ae-navbar>
  *   <a slot="brand" href="/">MyApp</a>
  *   <ae-dropdown slot="end">
- *     <ae-button slot="trigger" variant="outlined" size="sm">User ▾</ae-button>
+ *     <ae-button slot="trigger" variant="outlined" size="sm">User</ae-button>
  *     <ae-dropdown-item href="/profile" icon="user">Profile</ae-dropdown-item>
  *     <ae-dropdown-item value="logout" danger>Sign out</ae-dropdown-item>
  *   </ae-dropdown>
  * </ae-navbar>
  * ```
  */
-// Inject global styles for .ae-dropdown-arrow (light DOM span inside trigger) once
-if (typeof document !== 'undefined') {
-  const _STYLE_ID = 'ae-dropdown-arrow-styles'
-  if (!document.getElementById(_STYLE_ID)) {
-    const s = document.createElement('style')
-    s.id = _STYLE_ID
-    s.textContent = '.ae-dropdown-arrow{display:inline-block;font-size:.7em;line-height:1;margin-left:.25em;opacity:.7;pointer-events:none;user-select:none;vertical-align:middle;}'
-    document.head.appendChild(s)
-  }
-}
-
 class Dropdown extends AeicoComponent {
   static tagName = 'dropdown'
 
@@ -109,11 +98,6 @@ class Dropdown extends AeicoComponent {
 
   disconnectedCallback() {
     super.disconnectedCallback()
-    // Remove any injected arrow spans from the slotted trigger element (slot mode only)
-    if (!this.label) {
-      const slot = this.shadowRoot?.querySelector<HTMLSlotElement>('slot[name="trigger"]')
-      slot?.assignedElements()[0]?.querySelector('.ae-dropdown-arrow')?.remove()
-    }
     if (this._outsideClickHandler) {
       document.removeEventListener('click', this._outsideClickHandler)
       this._outsideClickHandler = null
@@ -147,25 +131,6 @@ class Dropdown extends AeicoComponent {
     if (this.open) this.hide()
   }
 
-  private _handleSlotChange = (e: Event): void => {
-    const slot = e.target as HTMLSlotElement
-    const trigger = slot.assignedElements()[0]
-    if (trigger) this._injectArrow(trigger)
-  }
-
-  private _injectArrow(el: Element): void {
-    let arrow = el.querySelector<HTMLElement>('.ae-dropdown-arrow')
-    if (!arrow) {
-      arrow = document.createElement('span')
-      arrow.className = 'ae-dropdown-arrow'
-      arrow.setAttribute('aria-hidden', 'true')
-      el.appendChild(arrow)
-    }
-    const dir = this.placement.split('-')[0]
-    const chars: Record<string, string> = { top: '\u25b4', bottom: '\u25be', right: '\u25b8', left: '\u25c2' }
-    arrow.textContent = chars[dir] ?? '\u25be'
-  }
-
   // Called via declarative @click on the trigger-wrapper div inside the shadow DOM.
   // Events from slotted trigger content bubble through the shadow DOM slot path,
   // so this fires for trigger clicks only — not for panel item clicks.
@@ -191,8 +156,6 @@ class Dropdown extends AeicoComponent {
     const placementClass = `placement-${this.placement}`
     const hasLabel = !!this.label
     const dir = this.placement.split('-')[0]
-    const chars: Record<string, string> = { top: '\u25b4', bottom: '\u25be', right: '\u25b8', left: '\u25c2' }
-    const arrowChar = chars[dir] ?? '\u25be'
     return html(({ div, slot, button, span }) => {
       div({
         className: 'trigger-wrapper',
@@ -207,10 +170,10 @@ class Dropdown extends AeicoComponent {
             disabled: this.disabled || undefined,
           }, () => {
             span({ text: this.label })
-            span({ className: 'ae-dropdown-arrow', 'aria-hidden': 'true', text: arrowChar })
+            span({ className: `ae-dropdown-arrow ae-dropdown-arrow--${dir}`, 'aria-hidden': 'true' })
           })
         } else {
-          slot({ name: 'trigger', '@slotchange': this._handleSlotChange })
+          slot({ name: 'trigger' })
         }
       })
       div({

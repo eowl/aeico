@@ -4,6 +4,7 @@
   --dropdown-item-padding: 0.5rem 0.875rem;
   --dropdown-item-bg: transparent;
   --dropdown-item-bg-hover: var(--surface-raised, rgba(0, 0, 0, 0.05));
+  --dropdown-item-bg-active: var(--surface-raised-active, rgba(0, 0, 0, 0.1));
   --dropdown-item-color: var(--color-text-main, inherit);
   --dropdown-item-color-disabled: var(--color-text-disabled, rgba(0, 0, 0, 0.35));
   --dropdown-item-font-size: 0.9375rem;
@@ -36,6 +37,10 @@
 
 .item:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--dropdown-item-bg-hover);
+}
+
+.item:active:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--dropdown-item-bg-active);
 }
 
 .item:focus-visible {
