@@ -738,6 +738,7 @@
 
       <div class="demo-group">
         <label>In Navbar (slot="end")</label>
+        <div style="isolation:isolate;position:relative;">
         <ae-navbar color="dark" appearance="block" style="border-radius:6px;overflow:hidden;">
           <a slot="brand" href="#" style="color:inherit;text-decoration:none">MyApp</a>
           <a slot="start" href="#">Home</a>
@@ -749,6 +750,7 @@
             <ae-dropdown-item value="logout" style="--dropdown-item-color:var(--color-danger,#dc3545)">Sign out</ae-dropdown-item>
           </ae-dropdown>
         </ae-navbar>
+        </div>
       </div>
     </div>
 
