@@ -1,0 +1,114 @@
+:host {
+  display: inline-block;
+  position: relative;
+
+  --dropdown-z-index: 1000;
+  --dropdown-bg: var(--surface-overlay, #fff);
+  --dropdown-border: 1px solid var(--color-border, rgba(0, 0, 0, 0.12));
+  --dropdown-border-radius: var(--ae-radius-md, 6px);
+  --dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --dropdown-min-width: 10rem;
+  --dropdown-padding: 0.25rem 0;
+}
+
+.trigger-wrapper {
+  display: contents;
+}
+
+.panel {
+  display: none;
+  position: absolute;
+  z-index: var(--dropdown-z-index);
+  background: var(--dropdown-bg);
+  border: var(--dropdown-border);
+  border-radius: var(--dropdown-border-radius);
+  box-shadow: var(--dropdown-shadow);
+  min-width: var(--dropdown-min-width);
+  padding: var(--dropdown-padding);
+  box-sizing: border-box;
+  /* Prevent panel from being wider than viewport */
+  max-width: calc(100vw - 16px);
+}
+
+.panel.open {
+  display: block;
+}
+
+/* placement variants */
+.panel.placement-bottom-start {
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+}
+
+.panel.placement-bottom-end {
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+}
+
+.panel.placement-bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+}
+
+.panel.placement-top-start {
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 4px;
+}
+
+.panel.placement-top-end {
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 4px;
+}
+
+.panel.placement-top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 4px;
+}
+
+/* right placements */
+.panel.placement-right-start {
+  top: 0;
+  left: 100%;
+  margin-left: 4px;
+}
+
+.panel.placement-right-end {
+  bottom: 0;
+  left: 100%;
+  margin-left: 4px;
+}
+
+.panel.placement-right {
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 4px;
+}
+
+/* left placements */
+.panel.placement-left-start {
+  top: 0;
+  right: 100%;
+  margin-right: 4px;
+}
+
+.panel.placement-left-end {
+  bottom: 0;
+  right: 100%;
+  margin-right: 4px;
+}
+
+.panel.placement-left {
+  top: 50%;
+  right: 100%;
+  transform: translateY(-50%);
+  margin-right: 4px;
+}

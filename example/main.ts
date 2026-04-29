@@ -17,9 +17,11 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   Navbar,
+  Dropdown,
+  DropdownItem,
 } from '../src/components/index'
 import '../src/components/styles/layout.css'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem, Navbar]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem, Navbar, Dropdown, DropdownItem]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---
@@ -76,6 +78,7 @@ IconRegistry.add({
   // Stroke icons (outline style)
   'edit':    { path: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z', stroke: true, strokeWidth: 2 },
   'search':  { path: 'M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16z M21 21l-4.35-4.35', stroke: true, strokeWidth: 2 },
+  'user':    { path: 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z', stroke: true, strokeWidth: 2 },
   'trash':   { path: 'M3 6h18 M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2 M10 11v6 M14 11v6', stroke: true, strokeWidth: 2 },
   'eye':     { path: 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z', stroke: true, strokeWidth: 2 },
 })
@@ -327,3 +330,12 @@ document.getElementById('lang-zh')?.addEventListener('click', () => switchLang('
 
 // Init button states after DOM is ready
 syncLangButtons()
+
+// --- Dropdown events ---
+document.querySelectorAll<any>('.dropdown-demo').forEach(el => {
+  el.addEventListener('select', (e: CustomEvent) => {
+    appendLog(`dropdown select → value: "${e.detail?.value}", label: "${e.detail?.label}"`)
+  })
+  el.addEventListener('open', () => appendLog('dropdown open'))
+  el.addEventListener('close', () => appendLog('dropdown close'))
+})
