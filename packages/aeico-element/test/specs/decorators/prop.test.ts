@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai'
-import { mount, unmountAll, updated } from '../../test/helpers/mount.js'
-import BaseElement from '../../src/base-element.js'
-import { prop } from '../../src/decorators/index.js'
-import type { Props } from '../../src/types.js'
+import { mount, unmountAll, updated } from '../../helpers/mount.js'
+import BaseElement from '../../../src/base-element.js'
+import { prop } from '../../../src/decorators/index.js'
+import type { Props } from '../../../src/types.js'
 
 afterEach(() => {
   unmountAll()
@@ -289,6 +289,7 @@ describe('@prop decorator', () => {
     })
   })
 })
+
 
 
 

@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai'
-import { mount, unmountAll, updated } from '../../test/helpers/mount.js'
-import BaseElement from '../../src/base-element.js'
-import { prop, watch } from '../../src/decorators/index.js'
-import type { Props, Watchers } from '../../src/types.js'
+import { mount, unmountAll, updated } from '../../helpers/mount.js'
+import BaseElement from '../../../src/base-element.js'
+import { watch } from '../../../src/decorators/index.js'
+import type { Props, Watchers } from '../../../src/types.js'
 
 afterEach(() => {
   unmountAll()
@@ -263,6 +263,7 @@ describe('inheritance', () => {
     expect(calls).to.include('child:extra')
   })
 })
+
 
 
 

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai'
-import { mount, unmountAll, updated } from '../../test/helpers/mount.js'
-import BaseElement from '../../src/base-element.js'
-import { prop, computed } from '../../src/decorators/index.js'
+import { mount, unmountAll, updated } from '../../helpers/mount.js'
+import BaseElement from '../../../src/base-element.js'
+import { prop, computed } from '../../../src/decorators/index.js'
 
 afterEach(() => {
   unmountAll()
@@ -179,6 +179,7 @@ describe('@computed decorator', () => {
     })
   })
 })
+
 
 
 
