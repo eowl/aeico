@@ -7,8 +7,11 @@ import ElementBuilder from './element-builder';
  * consumers — just pass it to `render(result, root)`.
  */
 export declare class RenderResult {
-    readonly _cb: (builder: ElementBuilder) => void;
-    /** @internal */
-    constructor(_cb: (builder: ElementBuilder) => void);
+  readonly _cb: (builder: ElementBuilder) => void;
+  /** @internal */
+  constructor(_cb: (builder: ElementBuilder) => void);
 }
-export declare const html: (cb: (builder: ElementBuilder) => void) => RenderResult, render: (result: RenderResult, root: Node) => void, getActiveBuilder: () => ElementBuilder, tags: ElementBuilder;
+export declare const html: (cb: (builder: ElementBuilder) => void) => RenderResult,
+  render: (result: RenderResult, root: Node) => void,
+  getActiveBuilder: () => ElementBuilder,
+  tags: ElementBuilder;

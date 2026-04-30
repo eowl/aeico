@@ -1,4 +1,4 @@
-import ElementBuilder from './element-builder'
+import ElementBuilder from './element-builder';
 
 /**
  * RenderResult — opaque wrapper produced by `html()`.
@@ -13,8 +13,8 @@ export class RenderResult {
 }
 
 class Renderer {
-  private readonly _builderCache = new WeakMap<Node, ElementBuilder>()
-  private _activeBuilder: ElementBuilder | null = null
+  private readonly _builderCache = new WeakMap<Node, ElementBuilder>();
+  private _activeBuilder: ElementBuilder | null = null;
 
   /**
    * Proxy that delegates all property access to the currently active builder.
@@ -29,7 +29,7 @@ class Renderer {
    */
   readonly tags: ElementBuilder = new Proxy({} as ElementBuilder, {
     get: (_t, prop) => Reflect.get(this.getActiveBuilder(), prop),
-  })
+  });
 
   /**
    * Return the `ElementBuilder` that is currently executing inside a
@@ -40,11 +40,11 @@ class Renderer {
    */
   getActiveBuilder = (): ElementBuilder => {
     if (!this._activeBuilder) {
-      throw new Error('getActiveBuilder() called outside of a render() context.')
+      throw new Error('getActiveBuilder() called outside of a render() context.');
     }
 
-    return this._activeBuilder
-  }
+    return this._activeBuilder;
+  };
 
   /**
    * Create a render structure
@@ -65,8 +65,8 @@ class Renderer {
    * `render(tpl, root)` is called.
    */
   html = (cb: (builder: ElementBuilder) => void): RenderResult => {
-    return new RenderResult(cb)
-  }
+    return new RenderResult(cb);
+  };
 
   /**
    * Apply a `RenderResult` (produced by `html()`) to a DOM root node.
@@ -80,22 +80,22 @@ class Renderer {
    * ```
    */
   render = (result: RenderResult, root: Node): void => {
-    let builder = this._builderCache.get(root)
+    let builder = this._builderCache.get(root);
 
     if (!builder) {
-      builder = new ElementBuilder()
-      this._builderCache.set(root, builder)
+      builder = new ElementBuilder();
+      this._builderCache.set(root, builder);
     }
 
-    const prev = this._activeBuilder
-    this._activeBuilder = builder
+    const prev = this._activeBuilder;
+    this._activeBuilder = builder;
 
     try {
-      builder.build(root, () => result._cb(builder))
+      builder.build(root, () => result._cb(builder));
     } finally {
-      this._activeBuilder = prev
+      this._activeBuilder = prev;
     }
-  }
+  };
 }
 
-export const { html, render, getActiveBuilder, tags } = new Renderer()
+export const { html, render, getActiveBuilder, tags } = new Renderer();
