@@ -211,7 +211,7 @@ describe('BaseElement', () => {
       })
 
       it('formatter serializes property value to attribute string when property is set', async () => {
-        const tag = defineEl({ names: { formatter: (v: string[]) => v.join(',') } })
+        const tag = defineEl({ names: { formatter: (v: unknown) => (v as string[]).join(',') } })
         const el = await mount<BaseElement & { names: string[] }>(`<${tag}></${tag}>`)
         el.names = ['a', 'b', 'c']
         expect(el.getAttribute('names')).to.equal('a,b,c')
@@ -222,9 +222,9 @@ describe('BaseElement', () => {
         const tag = defineEl({
           active: {
             type: Boolean,
-            formatter: (v: boolean, type?: unknown) => {
+            formatter: (v: unknown, type?: unknown) => {
               capturedType = type
-              return v ? 'yes' : 'no'
+              return (v as boolean) ? 'yes' : 'no'
             }
           }
         })
@@ -235,7 +235,7 @@ describe('BaseElement', () => {
       })
 
       it('formatter returning null sets the attribute to an empty string', async () => {
-        const tag = defineEl({ mood: { formatter: (_v: string) => null } })
+        const tag = defineEl({ mood: { formatter: (_v: unknown) => null } })
         const el = await mount<BaseElement & { mood: string }>(`<${tag}></${tag}>`)
         el.mood = 'happy'
         expect(el.getAttribute('mood')).to.equal('')
@@ -244,7 +244,7 @@ describe('BaseElement', () => {
       it('parser and formatter roundtrip: set property → formatter writes attribute → parser reads it back', async () => {
         const tag = defineEl({
           items: {
-            formatter: (v: number[]) => v.join(';'),
+            formatter: (v: unknown) => (v as number[]).join(';'),
             parser: (v: string | null) => (v ? v.split(';').map(Number) : [])
           }
         })
