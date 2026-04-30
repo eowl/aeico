@@ -31,7 +31,6 @@
   "license": "ISC",
   "dependencies": {
     "aeico-element": "*",
-    "aeico-localize": "*",
     "aeico-view": "*"
   },
   "devDependencies": {

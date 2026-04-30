@@ -28,7 +28,3 @@ export { prop, PROP_METADATA_KEY } from 'aeico-element'
 // View — rendering
 export { ElementBuilder, html, render, getActiveBuilder, tags } from 'aeico-view'
 export type { BuilderProps, RenderResult } from 'aeico-view'
-
-// Localize — i18n
-export { t, locale, LocaleStore, localeRegistry } from 'aeico-localize'
-export type { LocaleProvider, LocaleRegistry } from 'aeico-localize'

@@ -36,7 +36,6 @@ export default defineConfig({
     alias: {
       'aeico-element': path.resolve(__dirname, '../aeico-element/src/index.ts'),
       'aeico-view': path.resolve(__dirname, '../aeico-view/src/index.ts'),
-      'aeico-localize': path.resolve(__dirname, '../aeico-localize/src/index.ts'),
     },
   },
 })
