@@ -75,6 +75,13 @@
   outline: 2px solid var(--color-border);
 }
 
+slot[name="summary"] {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
 .label {
   flex: 1;
 }

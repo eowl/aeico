@@ -1859,6 +1859,19 @@
       </div>
 
       <div class="demo-group">
+        <label>Summary slot (rich content)</label>
+        <ae-detail variant="outlined" style="max-width: 480px;">
+          <span slot="summary" style="display:flex;align-items:center;gap:6px;">
+            <ae-icon name="info" style="color:var(--color-primary)"></ae-icon>
+            <strong>Rich summary via <code>slot="summary"</code></strong>
+          </span>
+          <ae-icon name="square-plus" slot="expand"></ae-icon>
+          <ae-icon name="square-minus" slot="collapse"></ae-icon>
+          When <code>slot="summary"</code> is provided it replaces the <code>summary</code> prop fallback text entirely.
+        </ae-detail>
+      </div>
+
+      <div class="demo-group">
         <label>Programmatic control</label>
         <div class="demo-row">
           <ae-button id="detail-open-btn" size="sm" color="primary">open()</ae-button>

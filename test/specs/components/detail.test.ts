@@ -50,6 +50,12 @@ describe('Detail', () => {
       expect(el.shadowRoot!.querySelector('.content')).to.exist
     })
 
+    it('renders a summary named slot inside the button', async () => {
+      const el = await mount<Detail>(`<${TAG}></${TAG}>`)
+      const btn = el.shadowRoot!.querySelector('button.summary')!
+      expect(btn.querySelector('slot[name="summary"]')).to.exist
+    })
+
     it('renders expand and collapse named slots', async () => {
       const el = await mount<Detail>(`<${TAG}></${TAG}>`)
       expect(el.shadowRoot!.querySelector('slot[name="expand"]')).to.exist
@@ -99,7 +105,7 @@ describe('Detail', () => {
   })
 
   describe('summary prop', () => {
-    it('renders summary text in .label span', async () => {
+    it('renders summary text in fallback .label span', async () => {
       const el = await mount<Detail>(`<${TAG} summary="Details"></${TAG}>`)
       await updated()
       const label = el.shadowRoot!.querySelector('.label')
@@ -113,6 +119,28 @@ describe('Detail', () => {
       await updated()
       const label = el.shadowRoot!.querySelector('.label')
       expect(label?.textContent).to.equal('After')
+    })
+  })
+
+  describe('summary slot', () => {
+    it('renders slotted summary content', async () => {
+      const el = await mount<Detail>(
+        `<${TAG}><span slot="summary" id="s">Rich Title</span></${TAG}>`
+      )
+      await updated()
+      expect(el.querySelector('#s')).to.exist
+      expect(el.querySelector('#s')!.textContent).to.equal('Rich Title')
+    })
+
+    it('slotted content overrides the summary prop fallback', async () => {
+      const el = await mount<Detail>(
+        `<${TAG} summary="Prop Text"><span slot="summary">Slot Text</span></${TAG}>`
+      )
+      await updated()
+      const summarySlot = el.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="summary"]')!
+      const assigned = summarySlot.assignedElements()
+      expect(assigned.length).to.equal(1)
+      expect(assigned[0].textContent).to.equal('Slot Text')
     })
   })
 

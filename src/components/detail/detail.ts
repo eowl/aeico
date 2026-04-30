@@ -84,7 +84,9 @@ class Detail extends AeicoComponent {
           disabled: this.disabled || undefined,
           '@click': this._handleSummaryClick,
         }, () => {
-          span({ className: 'label', textContent: this.summary })
+          slot({ name: 'summary' }, () => {
+            span({ className: 'label', textContent: this.summary })
+          })
           slot({ name: 'expand' })
           slot({ name: 'collapse' })
         })
