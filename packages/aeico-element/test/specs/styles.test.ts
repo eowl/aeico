@@ -58,7 +58,7 @@ describe('styleStore', () => {
       expect(result).to.be.instanceOf(StyleResult);
     });
 
-    it('deduplicates by content �?same text returns same StyleResult', () => {
+    it('deduplicates by content same text returns same StyleResult', () => {
       const text = '.dedup { display: block; }';
       const a = css(text);
       const b = css(text);
@@ -147,7 +147,7 @@ describe('StyleAdapter', () => {
   });
 
   describe('initialize() idempotency', () => {
-    it('is idempotent �?second call is a no-op', () => {
+    it('is idempotent second call is a no-op', () => {
       const { shadowRoot, style } = makeShadowRoot();
       const adapter = new StyleAdapter(shadowRoot, style);
       adapter.initialize({

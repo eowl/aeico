@@ -497,7 +497,7 @@ describe('ElementBuilder', () => {
     });
   });
 
-  describe('Custom elements (camelCase �?kebab-case)', () => {
+  describe('Custom elements (camelCase kebab-case)', () => {
     before(() => {
       if (!customElements.get('my-widget'))
         customElements.define('my-widget', class extends HTMLElement {});
@@ -512,12 +512,12 @@ describe('ElementBuilder', () => {
       expect(el.tagName).to.equal('MY-WIDGET');
     });
 
-    it('creates multi-segment custom element (ae-button �?aeButton)', () => {
+    it('creates multi-segment custom element (ae-button aeButton)', () => {
       const el = (builder as any).aeButton();
       expect(el.tagName).to.equal('AE-BUTTON');
     });
 
-    it('creates multi-segment custom element with three parts (aeIconButton �?ae-icon-button)', () => {
+    it('creates multi-segment custom element with three parts (aeIconButton ae-icon-button)', () => {
       const el = (builder as any).aeIconButton();
       expect(el.tagName).to.equal('AE-ICON-BUTTON');
     });

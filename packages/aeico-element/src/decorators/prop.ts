@@ -6,7 +6,7 @@ import type { Prop } from '../types';
 
 export const PROP_METADATA_KEY = Symbol('aeico:props');
 
-/** @internal Names of props declared via `accessor` keyword �?collected per-class and merged up the inheritance chain. */
+/** @internal Names of props declared via `accessor` keyword collected per-class and merged up the inheritance chain. */
 export const ACCESSOR_PROPS_KEY = Symbol('aeico:accessor-props');
 
 type PropMetadata = Record<string | symbol, Prop>;
@@ -53,13 +53,13 @@ function applyProp(
   // executeUpdate() can reflect its inline default value on first render.
   //
   // Execution order:
-  //   super() �?_initializeProps() installs reactive getter/setter on the instance
-  //   �?init(value) writes value to _propName (our backing field, not TC39's)
-  //   �?constructor returns
-  //   �?executeUpdate() (microtask, first render): iterates all accessor props,
+  //   super() _initializeProps() installs reactive getter/setter on the instance
+  //   init(value) writes value to _propName (our backing field, not TC39's)
+  //   constructor returns
+  //   executeUpdate() (microtask, first render): iterates all accessor props,
   //      reads _propName, reflects to attribute if no HTML attr already exists
   //
-  // The `init` only writes to the agreed-upon backing field (_propName) �?all scheduling
+  // The `init` only writes to the agreed-upon backing field (_propName) all scheduling
   // logic lives in BaseElement via the ACCESSOR_PROPS_KEY metadata set, not in the decorator.
   meta[PROP_METADATA_KEY][propName] = options;
   if (!Object.hasOwn(meta, ACCESSOR_PROPS_KEY)) {

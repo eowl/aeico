@@ -20,7 +20,7 @@ export { styleStore, StyleResult, supportAdoptStyle } from 'aeico-element';
 export type { StyleEntry, StyleItem, StyleItems, StyleOptions, StyleScope } from 'aeico-element';
 
 // Core — types
-export type { PropertyType, Prop, Props, InferProps } from 'aeico-element';
+export type { PropertyType, Prop, Props, InferProps, WatcherHandler, Watchers } from 'aeico-element';
 
 // Decorators
 export { prop, PROP_METADATA_KEY } from 'aeico-element';

@@ -73,13 +73,13 @@ describe('@computed decorator', () => {
       await updated();
 
       computeCount = 0;
-      (el as any).greeting; // first access �?computes and caches
-      (el as any).greeting; // second access �?should hit cache
+      (el as any).greeting; // first access computes and caches
+      (el as any).greeting; // second access should hit cache
       expect(computeCount).to.equal(1);
 
       el.unrelated = 'changed';
       await updated();
-      (el as any).greeting; // dep (name) unchanged �?still cached
+      (el as any).greeting; // dep (name) unchanged still cached
       expect(computeCount).to.equal(1);
     });
 

@@ -1,8 +1,0 @@
-:host {
-  display: none;
-  padding: 16px 0;
-}
-
-:host([active]) {
-  display: block;
-}
