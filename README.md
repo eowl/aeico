@@ -1,100 +1,75 @@
 # Aeico
 
-AEICO(Advanced Element Interface for Component Objects)
-Lightweight Web Components library for building form fields and UI elements.
+**A**dvanced **E**lement **I**nterface for **C**omponent **O**bjects — a lightweight Web Components framework with reactive properties, declarative DOM rendering, and i18n support.
+
+## Packages
+
+| Package | Version | Description |
+|---|---|---|
+| [`aeico`](packages/aeico) | 0.1.1 | Meta package — re-exports everything |
+| [`aeico-element`](packages/aeico-element) | 0.1.1 | Reactive base classes and decorators |
+| [`aeico-view`](packages/aeico-view) | 0.1.1 | DOM rendering — `html()`, `render()`, `tags` |
+| [`aeico-localize`](packages/aeico-localize) | 0.1.1 | i18n — `t()`, `locale`, `localeRegistry` |
 
 ## Installation
 
 ```bash
-# npm
+# Install everything at once
 npm install aeico
 
-# yarn
-yarn add aeico
-
-# pnpm
-pnpm add aeico
+# Or install individual packages
+npm install aeico-element aeico-view
+npm install aeico-localize  # optional i18n support
 ```
 
 ## Quick Start
 
 ```typescript
-import { setComponentConfig, SelectField, TextInput } from 'aeico'
+import { AeicoElement } from 'aeico-element';
+import { prop, watch } from 'aeico-element';
+import { tags } from 'aeico-view';
 
-// Configure global settings
-setComponentConfig({
-  theme: 'dark',
-  enableI18n: true,
-  i18nService: {
-    t: (key) => translations[key],
-    subscribe: (callback) => { /* ... */ }
+class MyCounter extends AeicoElement {
+  @prop() accessor count = 0;
+
+  @watch('count')
+  onCountChange(next: number) {
+    console.log('count is now', next);
   }
-})
 
-// Use components
-const select = document.createElement('select-field')
-select.setAttribute('value', 'option1')
-select.setAttribute('options', JSON.stringify(['option1', 'option2']))
-document.body.appendChild(select)
+  override render() {
+    const { button, span } = tags;
+    button({ onclick: () => this.count++, textContent: '+' });
+    span({ textContent: String(this.count) });
+  }
+}
+
+customElements.define('my-counter', MyCounter);
 ```
 
-## Components
-
-### AeicoElement
-
-Base class for all Aeico components. Provides:
-- Props system with type inference
-- Event system with custom prefixes
-- Stylesheet management
-- i18n integration
-
-### AeicoField
-
-Base class for form field components. Extends `AeicoElement` with:
-- Value management
-- Reset/Clear functionality
-- Change event handling
-- Field-specific styling
-
-### Form Fields
-
-- **SelectField**: Dropdown select with options
-- **TextInput**: Text input with placeholder
-- **RangeField**: Range slider with value display
-- **CheckboxField**: Checkbox/toggle with variants
-
-## API Documentation
-
-### Configuration
+## i18n
 
 ```typescript
-setComponentConfig({
-  theme?: 'dark' | 'light',
-  enableI18n?: boolean,
-  i18nService?: {
-    t: (key: string) => string,
-    subscribe: (callback: () => void) => () => void
-  }
-})
+import { locale, t } from 'aeico-localize';
+
+locale.update('zh-CN', { hello: '你好' });
+locale.setLocale('zh-CN');
+
+console.log(t('hello', 'Hello')); // "你好"
 ```
 
-### Component Props
+## Development
 
-All components support:
-- `value`: Current value
-- `defaultValue`: Initial value for reset
-- `disabled`: Disable state
-- `resettable`: Show reset button
-- `clearable`: Show clear button
-- `size`: Size variant ('sm' | 'md' | 'lg')
-- `theme`: Theme override
+```bash
+# Install dependencies
+npm install
 
-### Events
+# Build all packages
+npm run build --workspaces
 
-All field components emit:
-- `field-change`: Value changed
-- `field-reset`: Reset to default
-- `field-clear`: Cleared
+# Test all packages
+npm run test --workspaces --if-present
+```
 
 ## License
 

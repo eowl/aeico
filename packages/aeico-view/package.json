@@ -1,6 +1,6 @@
 {
   "name": "aeico-view",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DOM rendering layer for Aeico — html(), render(), ElementBuilder",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,16 +15,19 @@
   },
   "files": [
     "dist",
+    "!dist/*.tsbuildinfo",
     "src"
   ],
+  "sideEffects": false,
   "scripts": {
     "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist/types -p tsconfig.json",
     "dev": "vite build --watch",
     "type-check": "tsc --noEmit",
     "test": "web-test-runner --config web-test-runner.config.mjs",
-    "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch"
+    "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch",
+    "prepublishOnly": "npm run build"
   },
-  "keywords": [],
+  "keywords": ["web-components", "dom", "rendering", "html", "aeico"],
   "author": "",
   "license": "ISC",
   "devDependencies": {

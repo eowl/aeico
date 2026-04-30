@@ -1,6 +1,6 @@
 {
   "name": "aeico",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight Web Components framework — reactive elements, DOM rendering and i18n",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -15,23 +15,28 @@
   },
   "files": [
     "dist",
+    "!dist/*.tsbuildinfo",
     "src"
   ],
+  "sideEffects": false,
   "scripts": {
     "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist/types -p tsconfig.json",
     "dev": "vite build --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "web-components",
     "custom-elements",
-    "reactive"
+    "reactive",
+    "framework",
+    "aeico"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aeico-element": "*",
-    "aeico-view": "*"
+    "aeico-element": "^0.1.1",
+    "aeico-view": "^0.1.1"
   },
   "devDependencies": {
     "typescript": "^5.7.3",
