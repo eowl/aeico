@@ -1,12 +1,12 @@
-import type { WatcherHandler } from '../types'
+import type { WatcherHandler } from '../types';
 
 // Polyfill Symbol.metadata for runtimes that don't support it yet
 // [TC39 Stage 3 Decorators] Symbol.metadata is the per-class metadata store defined by the Decorators proposal
-;(Symbol as unknown as Record<string, unknown>).metadata ??= Symbol.for('Symbol.metadata')
+(Symbol as unknown as Record<string, unknown>).metadata ??= Symbol.for('Symbol.metadata');
 
-export const WATCHER_METADATA_KEY = Symbol('aeico:watchers')
+export const WATCHER_METADATA_KEY = Symbol('aeico:watchers');
 
-type WatcherMetadata = Record<string, WatcherHandler>
+type WatcherMetadata = Record<string, WatcherHandler>;
 
 /**
  * Decorator for declaring property watchers on Aeico component methods.
@@ -31,16 +31,15 @@ export function watch(...propNames: string[]) {
     _target: Value,
     context: ClassMethodDecoratorContext<This, Value>,
   ): void {
-    const methodName = String(context.name)
-    const meta = context.metadata as Record<symbol, WatcherMetadata>
+    const methodName = String(context.name);
+    const meta = context.metadata as Record<symbol, WatcherMetadata>;
 
     if (!Object.hasOwn(meta, WATCHER_METADATA_KEY)) {
-      meta[WATCHER_METADATA_KEY] = Object.create(null) as WatcherMetadata
+      meta[WATCHER_METADATA_KEY] = Object.create(null) as WatcherMetadata;
     }
 
     for (const propName of propNames) {
-      meta[WATCHER_METADATA_KEY][propName] = methodName
+      meta[WATCHER_METADATA_KEY][propName] = methodName;
     }
-  }
+  };
 }
-

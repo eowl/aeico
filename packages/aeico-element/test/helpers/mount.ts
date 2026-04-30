@@ -4,7 +4,7 @@
  */
 
 /** Wrapper elements created by mount(), tracked for cleanup via unmountAll() */
-const wrappers: Element[] = []
+const wrappers: Element[] = [];
 
 /**
  * Wait for a custom element to be defined, with a 2-second timeout guard.
@@ -12,18 +12,26 @@ const wrappers: Element[] = []
  * caused by typos or missing imports.
  */
 export function whenDefined(tagName: string): Promise<CustomElementConstructor> {
-  let timerId: ReturnType<typeof setTimeout>
+  let timerId: ReturnType<typeof setTimeout>;
   const timeout = new Promise<never>((_, reject) => {
     timerId = setTimeout(
-      () => reject(new Error(`whenDefined(): <${tagName}> was not defined within 2000ms. Check the tag name or ensure the module is imported.`)),
-      2000
-    )
-  })
-  
+      () =>
+        reject(
+          new Error(
+            `whenDefined(): <${tagName}> was not defined within 2000ms. Check the tag name or ensure the module is imported.`,
+          ),
+        ),
+      2000,
+    );
+  });
+
   return Promise.race([
-    customElements.whenDefined(tagName).then(ctor => { clearTimeout(timerId); return ctor }),
+    customElements.whenDefined(tagName).then((ctor) => {
+      clearTimeout(timerId);
+      return ctor;
+    }),
     timeout,
-  ])
+  ]);
 }
 
 /**
@@ -31,29 +39,29 @@ export function whenDefined(tagName: string): Promise<CustomElementConstructor> 
  * Automatically awaits custom element upgrade for hyphenated tag names.
  */
 export async function mount<T extends HTMLElement>(html: string): Promise<T> {
-  const wrapper = document.createElement('div')
-  wrapper.innerHTML = html.trim()
-  document.body.appendChild(wrapper)
-  wrappers.push(wrapper)
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = html.trim();
+  document.body.appendChild(wrapper);
+  wrappers.push(wrapper);
 
-  const el = wrapper.firstElementChild as T
+  const el = wrapper.firstElementChild as T;
   if (el.localName.includes('-')) {
-    await whenDefined(el.localName)
+    await whenDefined(el.localName);
   }
 
-  return el
+  return el;
 }
 
 /**
  * Remove a single mounted element (and its wrapper) from the document.
  */
 export function unmount(el: HTMLElement): void {
-  const wrapper = el.parentElement
+  const wrapper = el.parentElement;
 
   if (wrapper && wrapper.parentElement) {
-    wrapper.parentElement.removeChild(wrapper)
-    const idx = wrappers.indexOf(wrapper)
-    if (idx !== -1) wrappers.splice(idx, 1)
+    wrapper.parentElement.removeChild(wrapper);
+    const idx = wrappers.indexOf(wrapper);
+    if (idx !== -1) wrappers.splice(idx, 1);
   }
 }
 
@@ -63,10 +71,10 @@ export function unmount(el: HTMLElement): void {
  */
 export function unmountAll(): void {
   for (const wrapper of wrappers) {
-    wrapper.parentElement?.removeChild(wrapper)
+    wrapper.parentElement?.removeChild(wrapper);
   }
 
-  wrappers.length = 0
+  wrappers.length = 0;
 }
 
 /**
@@ -74,5 +82,5 @@ export function unmountAll(): void {
  * Matches AeicoElement's queueMicrotask() update scheduling.
  */
 export function updated(): Promise<void> {
-  return new Promise(resolve => queueMicrotask(resolve))
+  return new Promise((resolve) => queueMicrotask(resolve));
 }

@@ -14,20 +14,20 @@
  * Minimal contract for a component that can be scheduled for re-render.
  */
 export interface Updatable {
-  update(): void
-  isConnected: boolean
+  update(): void;
+  isConnected: boolean;
 }
 
-let _current: Updatable | null = null
+let _current: Updatable | null = null;
 
 export function setRenderContext(ctx: Updatable): void {
-  _current = ctx
+  _current = ctx;
 }
 
 export function clearRenderContext(): void {
-  _current = null
+  _current = null;
 }
 
 export function getCurrentContext(): Updatable | null {
-  return _current
+  return _current;
 }

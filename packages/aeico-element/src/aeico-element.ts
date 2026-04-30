@@ -1,9 +1,7 @@
-import { StyleAdapter } from './styles'
-import type { StyleEntry, StyleItems, StyleOptions } from './styles'
-import type {
-  InferProps
-} from './types'
-import BaseElement from './base-element'
+import { StyleAdapter } from './styles';
+import type { StyleEntry, StyleItems, StyleOptions } from './styles';
+import type { InferProps } from './types';
+import BaseElement from './base-element';
 
 /**
  * AeicoElement — styled base class for Aeico's built-in components.
@@ -17,24 +15,24 @@ import BaseElement from './base-element'
  * For components that don't need Aeico styles, use AeicoBase instead.
  */
 class AeicoElement extends BaseElement {
-  private styleOptions?: StyleOptions
+  private styleOptions?: StyleOptions;
 
-  protected static styles?: StyleEntry
+  protected static styles?: StyleEntry;
 
-  protected styleAdapter!: StyleAdapter
+  protected styleAdapter!: StyleAdapter;
 
   constructor() {
-    super()
-    this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style)
+    super();
+    this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style);
   }
 
   static get styleEntries(): StyleItems {
-    return Array.isArray(this.styles) ? this.styles : this.styles ? [this.styles] : []
+    return Array.isArray(this.styles) ? this.styles : this.styles ? [this.styles] : [];
   }
 
   connectedCallback() {
-    super.connectedCallback()
-    this._adaptStyles()
+    super.connectedCallback();
+    this._adaptStyles();
   }
 
   /**
@@ -42,15 +40,15 @@ class AeicoElement extends BaseElement {
    * StyleAdapter internally caches resolved sheets per styles array reference.
    */
   private _adaptStyles() {
-    const ctor = this.constructor as typeof AeicoElement
+    const ctor = this.constructor as typeof AeicoElement;
 
     this.styleAdapter.initialize({
       constructorName: ctor.name,
       styles: ctor.styleEntries,
-      options: this.styleOptions
-    })
+      options: this.styleOptions,
+    });
 
-    this.styleOptions = undefined
+    this.styleOptions = undefined;
   }
 
   /**
@@ -59,25 +57,22 @@ class AeicoElement extends BaseElement {
    * @param config Configuration object (properties will be set directly)
    * @returns New component instance
    */
-  static create<T extends AeicoElement>(
-    this: new () => T,
-    config?: Record<string, unknown>
-  ): T {
-    const instance = new this()
+  static create<T extends AeicoElement>(this: new () => T, config?: Record<string, unknown>): T {
+    const instance = new this();
 
     if (config) {
       Object.entries(config).forEach(([key, value]) => {
         if (key in instance) {
-          (instance as Record<string, unknown>)[key] = value
+          (instance as Record<string, unknown>)[key] = value;
         }
-      })
+      });
       // Style props are applied when the element connects to the DOM
-      instance.styleOptions = config as StyleOptions
+      instance.styleOptions = config as StyleOptions;
     }
 
-    return instance
+    return instance;
   }
 }
 
-export default AeicoElement
-export type AeicoElementProps = InferProps<typeof AeicoElement>
+export default AeicoElement;
+export type AeicoElementProps = InferProps<typeof AeicoElement>;

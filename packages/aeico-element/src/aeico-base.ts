@@ -1,5 +1,5 @@
-import BaseElement from './base-element'
-import type { Props, InferProps } from './types'
+import BaseElement from './base-element';
+import type { Props, InferProps } from './types';
 
 /**
  * AeicoBase — public lightweight base class for building Web Components
@@ -38,10 +38,10 @@ import type { Props, InferProps } from './types'
 class AeicoBase extends BaseElement {
   static props: Props = {
     disabled: { type: Boolean },
-  }
+  };
 
-  declare disabled?: boolean
+  declare disabled?: boolean;
 }
 
-export default AeicoBase
-export type AeicoBaseProps = InferProps<typeof AeicoBase>
+export default AeicoBase;
+export type AeicoBaseProps = InferProps<typeof AeicoBase>;

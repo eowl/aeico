@@ -1,12 +1,12 @@
-import type { ComputedPropertyConfig } from '../types'
+import type { ComputedPropertyConfig } from '../types';
 
 // Polyfill Symbol.metadata for runtimes that don't support it yet
 // [TC39 Stage 3 Decorators] Symbol.metadata is the per-class metadata store defined by the Decorators proposal
-;(Symbol as unknown as Record<string, unknown>).metadata ??= Symbol.for('Symbol.metadata')
+(Symbol as unknown as Record<string, unknown>).metadata ??= Symbol.for('Symbol.metadata');
 
-export const COMPUTED_METADATA_KEY = Symbol('aeico:computed')
+export const COMPUTED_METADATA_KEY = Symbol('aeico:computed');
 
-type ComputedMetadata = Record<string, ComputedPropertyConfig>
+type ComputedMetadata = Record<string, ComputedPropertyConfig>;
 
 /**
  * Decorator for declaring cached computed properties on Aeico components.
@@ -29,17 +29,16 @@ export function computed(...deps: string[]) {
     target: () => Value,
     context: ClassGetterDecoratorContext<This, Value>,
   ): void {
-    const propName = String(context.name)
-    const meta = context.metadata as Record<symbol, ComputedMetadata>
+    const propName = String(context.name);
+    const meta = context.metadata as Record<symbol, ComputedMetadata>;
 
     if (!Object.hasOwn(meta, COMPUTED_METADATA_KEY)) {
-      meta[COMPUTED_METADATA_KEY] = Object.create(null) as ComputedMetadata
+      meta[COMPUTED_METADATA_KEY] = Object.create(null) as ComputedMetadata;
     }
 
     meta[COMPUTED_METADATA_KEY][propName] = {
       deps,
       compute: (self: object) => target.call(self),
-    }
-  }
+    };
+  };
 }
-

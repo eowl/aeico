@@ -1,84 +1,88 @@
 /**
  * Property type constructors (similar to Lit)
  */
-export type PropertyType = 
+export type PropertyType =
   | StringConstructor
   | NumberConstructor
   | BooleanConstructor
   | ArrayConstructor
-  | ObjectConstructor
+  | ObjectConstructor;
 
 /**
  * Property declaration with metadata
  */
 export interface Prop<T = unknown> {
   /** Property type constructor */
-  type?: PropertyType
-  
-  /** Whether to reflect property to attribute (default: true) */
-  reflect?: boolean
+  type?: PropertyType;
 
-  /** Whether to observe attribute changes to property (default: true) 
+  /** Whether to reflect property to attribute (default: true) */
+  reflect?: boolean;
+
+  /** Whether to observe attribute changes to property (default: true)
    * If false, this property will not exist in observedAttributes and attribute changes won't update the property value.
    * change property still triggers render and watchers
-  */
-  observe?: boolean
+   */
+  observe?: boolean;
 
   /** Custom attribute name (default: kebab-case of property name) */
-  attr?: string
-  
+  attr?: string;
+
   /** Custom parser for deserialization (from attribute) */
-  parser?: (value: string | null, type?: PropertyType) => T
-  
+  parser?: (value: string | null, type?: PropertyType) => T;
+
   /** Custom formatter for serialization (to attribute) */
-  formatter?: (value: T, type?: PropertyType) => string | null
+  formatter?: (value: T, type?: PropertyType) => string | null;
 }
 
 /**
  * Properties declaration object
  */
-export type Props = Record<string, Prop>
+export type Props = Record<string, Prop>;
 
 /**
  * Computed property configuration
  */
 export interface ComputedPropertyConfig<T = unknown> {
   /** Dependent property names */
-  deps: string[]
+  deps: string[];
   /** Compute function */
-  compute: (self: object) => T
+  compute: (self: object) => T;
 }
 
 /**
  * Computed properties declaration
  */
-export type Computed = Record<string, ComputedPropertyConfig>
+export type Computed = Record<string, ComputedPropertyConfig>;
 
 /**
  * Watcher handler: a method name string or an inline function
  */
-export type WatcherHandler = string | ((newValue: unknown, oldValue: unknown) => void)
+export type WatcherHandler = string | ((newValue: unknown, oldValue: unknown) => void);
 
 /**
  * Watchers declaration (property name -> method name or inline function)
  */
-export type Watchers = Record<string, WatcherHandler>
+export type Watchers = Record<string, WatcherHandler>;
 
 /**
  * Convert PropertyType to TypeScript type
  */
-export type PropertyTypeToTS<T extends PropertyType | undefined> =
-  T extends StringConstructor ? string :
-  T extends NumberConstructor ? number :
-  T extends BooleanConstructor ? boolean :
-  T extends ArrayConstructor ? unknown[] :
-  T extends ObjectConstructor ? Record<string, unknown> :
-  unknown
+export type PropertyTypeToTS<T extends PropertyType | undefined> = T extends StringConstructor
+  ? string
+  : T extends NumberConstructor
+    ? number
+    : T extends BooleanConstructor
+      ? boolean
+      : T extends ArrayConstructor
+        ? unknown[]
+        : T extends ObjectConstructor
+          ? Record<string, unknown>
+          : unknown;
 
 /**
  * Internal property keys excluded from InferProps output
  */
-type InternalKeys = 'events'
+type InternalKeys = 'events';
 
 /**
  * Helper to exclude function properties and internal properties
@@ -87,26 +91,26 @@ type ExtractProperties<T> = {
   [K in keyof T as K extends InternalKeys
     ? never
     : T[K] extends (...args: never[]) => unknown
-    ? never
-    : K]: T[K]
-}
+      ? never
+      : K]: T[K];
+};
 
 /**
  * Infer complete properties type from class (including inherited)
- * 
+ *
  * Usage: type MyProps = InferProps<typeof MyClass>
- * 
+ *
  * @example
  * class SelectField extends AeicoField {
  *   static props = { options: { type: Array } }
  *   declare options?: any[]
  * }
- * 
+ *
  * type SelectFieldProps = InferProps<typeof SelectField>
  * // Result: { options?: any[], value?: string, defaultValue?: string, ... }
  */
 export type InferProps<T extends new (...args: never[]) => unknown> = ExtractProperties<
   Omit<InstanceType<T>, keyof HTMLElement>
->
+>;
 
-export const SVG_NS = 'http://www.w3.org/2000/svg'
+export const SVG_NS = 'http://www.w3.org/2000/svg';
