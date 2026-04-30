@@ -1,5 +1,5 @@
-import { getCurrentContext } from 'aeico-element'
-import type { Updatable } from 'aeico-element'
+import { getCurrentContext } from 'aeico-element';
+import type { Updatable } from 'aeico-element';
 
 export interface LocaleProvider {
   t(key: string, ...args: unknown[]): string;
@@ -11,7 +11,6 @@ export interface LocaleRegistry {
   readonly provider: LocaleProvider | null;
   setProvider(provider: LocaleProvider): void;
 }
-
 
 class LocaleRegistryImpl implements LocaleRegistry {
   private _provider: LocaleProvider | null = null;
@@ -31,7 +30,6 @@ class LocaleRegistryImpl implements LocaleRegistry {
 
 export const localeRegistry: LocaleRegistry = new LocaleRegistryImpl();
 
-
 type LocaleData = {
   [key: string]: string | LocaleData;
 };
@@ -43,29 +41,31 @@ export class LocaleStore implements LocaleProvider {
   private _components = new Set<Updatable>();
   private _initialized = false;
 
-  get lang() { return this._lang; }
-  get initialized() { return this._initialized; }
+  get lang() {
+    return this._lang;
+  }
+  get initialized() {
+    return this._initialized;
+  }
 
   t(key: string, fallback?: string): string {
     this._subscribeComponent();
 
     if (!this._initialized) return fallback || key;
 
-    const value = key.split('.').reduce<LocaleData | string | undefined>(
-      (current, k) => {
-        if (current && typeof current === 'object' && k in current) {
-          return current[k];
-        }
-        return undefined;
-      }, this._resources
-    );
+    const value = key.split('.').reduce<LocaleData | string | undefined>((current, k) => {
+      if (current && typeof current === 'object' && k in current) {
+        return current[k];
+      }
+      return undefined;
+    }, this._resources);
 
-    return typeof value === 'string' ? value : (fallback || key);
+    return typeof value === 'string' ? value : fallback || key;
   }
 
   subscribe(cb: () => void) {
     this._subscribers.add(cb);
-    
+
     return () => this._subscribers.delete(cb);
   }
 
@@ -73,7 +73,7 @@ export class LocaleStore implements LocaleProvider {
     this._lang = lang;
     this._resources = resources;
     this._initialized = true;
-    this._subscribers.forEach(cb => cb());
+    this._subscribers.forEach((cb) => cb());
 
     this._updateComponents();
   }
