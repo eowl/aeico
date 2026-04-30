@@ -2,7 +2,7 @@ import { getCurrentContext } from 'aeico-element'
 import type { Updatable } from 'aeico-element'
 
 export interface LocaleProvider {
-  t(key: string, ...args: any[]): string;
+  t(key: string, ...args: unknown[]): string;
   subscribe(callback: () => void): () => void;
   lang?: string;
 }
