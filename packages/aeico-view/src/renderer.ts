@@ -91,7 +91,7 @@ class Renderer {
     this._activeBuilder = builder
 
     try {
-      builder.build(root, () => result._cb(builder!))
+      builder.build(root, () => result._cb(builder))
     } finally {
       this._activeBuilder = prev
     }
