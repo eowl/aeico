@@ -493,7 +493,7 @@ describe('ElementBuilder', () => {
     })
   })
 
-  describe('Custom elements (camelCase â†?kebab-case)', () => {
+  describe('Custom elements (camelCase ï¿½?kebab-case)', () => {
     before(() => {
       if (!customElements.get('my-widget'))    customElements.define('my-widget',    class extends HTMLElement {})
       if (!customElements.get('ae-button'))    customElements.define('ae-button',    class extends HTMLElement {})
@@ -505,12 +505,12 @@ describe('ElementBuilder', () => {
       expect(el.tagName).to.equal('MY-WIDGET')
     })
 
-    it('creates multi-segment custom element (ae-button â†?aeButton)', () => {
+    it('creates multi-segment custom element (ae-button ï¿½?aeButton)', () => {
       const el = (builder as any).aeButton()
       expect(el.tagName).to.equal('AE-BUTTON')
     })
 
-    it('creates multi-segment custom element with three parts (aeIconButton â†?ae-icon-button)', () => {
+    it('creates multi-segment custom element with three parts (aeIconButton ï¿½?ae-icon-button)', () => {
       const el = (builder as any).aeIconButton()
       expect(el.tagName).to.equal('AE-ICON-BUTTON')
     })
@@ -879,6 +879,63 @@ describe('ElementBuilder', () => {
       const el = (builder as any)['test-obj-element']({ items: arr }) as HTMLElement & { items: unknown[] | null }
       expect(el.items).to.equal(arr)
       expect(el.getAttribute('items')).to.be.null
+    })
+  })
+
+  describe('text shorthand prop', () => {
+    it('"text" prop sets textContent', () => {
+      const el = builder.span({ text: 'hello' } as any)
+      expect(el.textContent).to.equal('hello')
+    })
+
+    it('"text" and "textContent" are equivalent', () => {
+      const a = builder.span({ text: 'same' } as any)
+      const b = builder.span({ textContent: 'same' })
+      expect(a.textContent).to.equal(b.textContent)
+    })
+  })
+
+  describe('detached()', () => {
+    it('creates element outside the current build context', () => {
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+      let detachedEl: HTMLElement | null = null
+
+      builder.build(container, () => {
+        builder.div({ textContent: 'in context' })
+        detachedEl = builder.detached(() => builder.span({ textContent: 'detached' })) as HTMLElement
+        builder.div({ textContent: 'also in context' })
+      })
+
+      // The detached element was not appended to the container
+      expect(container.children.length).to.equal(2)
+      expect(detachedEl).to.be.instanceOf(HTMLSpanElement)
+      expect(detachedEl!.textContent).to.equal('detached')
+      expect(detachedEl!.parentNode).to.be.null
+
+      container.remove()
+    })
+
+    it('restores the outer build context after detached()', () => {
+      const container = document.createElement('div')
+      document.body.appendChild(container)
+
+      builder.build(container, () => {
+        builder.div({ textContent: 'before' })
+        builder.detached(() => builder.span())
+        builder.div({ textContent: 'after' })
+      })
+
+      expect(container.children.length).to.equal(2)
+      expect(container.children[0].textContent).to.equal('before')
+      expect(container.children[1].textContent).to.equal('after')
+
+      container.remove()
+    })
+
+    it('returns the value produced by the callback', () => {
+      const result = builder.detached(() => 42)
+      expect(result).to.equal(42)
     })
   })
 })
