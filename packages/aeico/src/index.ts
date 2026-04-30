@@ -25,10 +25,6 @@ export type { PropertyType, Prop, Props, InferProps } from 'aeico-element'
 // Decorators
 export { prop, PROP_METADATA_KEY } from 'aeico-element'
 
-// Mixins
-export { compose, Themeable } from 'aeico-element'
-export type { Constructor, Mixin, ThemeableProps } from 'aeico-element'
-
 // View — rendering
 export { ElementBuilder, html, render, getActiveBuilder, tags } from 'aeico-view'
 export type { BuilderProps, RenderResult } from 'aeico-view'

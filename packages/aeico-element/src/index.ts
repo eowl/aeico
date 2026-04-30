@@ -21,9 +21,3 @@ export { prop, PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from './decorators/prop'
 export { watch, WATCHER_METADATA_KEY } from './decorators/watch'
 export { computed, COMPUTED_METADATA_KEY } from './decorators/computed'
 
-// Mixins
-export { compose } from './mixins/compose'
-export type { Constructor, Mixin } from './mixins/compose'
-export { Themeable } from './mixins/themeable'
-export type { ThemeableProps } from './mixins/themeable'
-
