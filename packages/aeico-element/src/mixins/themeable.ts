@@ -1,5 +1,5 @@
 import type { Constructor } from './compose'
-import type { Props } from '../core/types'
+import type { Props } from '../types'
 
 /**
  * Themeable Mixin
@@ -54,3 +54,4 @@ export function Themeable<T extends Constructor>(Base: T) {
 export type ThemeableProps = {
   theme?: string
 }
+

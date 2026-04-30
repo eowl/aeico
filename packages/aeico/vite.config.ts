@@ -34,7 +34,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'aeico-core': path.resolve(__dirname, '../aeico-core/src/index.ts'),
+      'aeico-element': path.resolve(__dirname, '../aeico-element/src/index.ts'),
       'aeico-view': path.resolve(__dirname, '../aeico-view/src/index.ts'),
       'aeico-localize': path.resolve(__dirname, '../aeico-localize/src/index.ts'),
     },

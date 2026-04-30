@@ -11,30 +11,25 @@ export default defineConfig({
       name: 'AeicoLocalize',
     },
     rollupOptions: {
-      external: ['aeico-core'],
+      external: ['aeico-element'],
       output: [
         {
           format: 'es',
           exports: 'named',
           entryFileNames: '[name].js',
           chunkFileNames: 'chunks/[name].js',
-          globals: { 'aeico-core': 'AeicoCore' },
+          globals: { 'aeico-element': 'AeicoElement' },
         },
         {
           format: 'cjs',
           exports: 'named',
           entryFileNames: '[name].cjs',
           chunkFileNames: 'chunks/[name].cjs',
-          globals: { 'aeico-core': 'AeicoCore' },
+          globals: { 'aeico-element': 'AeicoElement' },
         },
       ],
     },
     sourcemap: true,
     minify: false,
-  },
-  resolve: {
-    alias: {
-      'aeico-core': path.resolve(__dirname, '../aeico-core/src/index.ts'),
-    },
   },
 })

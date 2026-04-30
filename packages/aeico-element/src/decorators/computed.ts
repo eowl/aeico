@@ -1,4 +1,4 @@
-import type { ComputedPropertyConfig } from '../core/types'
+import type { ComputedPropertyConfig } from '../types'
 
 // Polyfill Symbol.metadata for runtimes that don't support it yet
 // [TC39 Stage 3 Decorators] Symbol.metadata is the per-class metadata store defined by the Decorators proposal
@@ -42,3 +42,4 @@ export function computed(...deps: string[]) {
     }
   }
 }
+

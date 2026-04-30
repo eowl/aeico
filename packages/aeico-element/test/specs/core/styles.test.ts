@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai'
-import styleStore, { css, StyleResult, StyleAdapter } from '../../src/core/styles.js'
+import styleStore, { css, StyleResult, StyleAdapter } from '../../src/styles.js'
 
 describe('styleStore', () => {
   describe('getStyle() with string', () => {
@@ -175,4 +175,5 @@ describe('StyleAdapter', () => {
     })
   })
 })
+
 

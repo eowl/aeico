@@ -16,7 +16,7 @@
   "exclude": ["node_modules", "dist"],
   "references": [
     { "path": "./packages/aeico-view" },
-    { "path": "./packages/aeico-core" },
+    { "path": "./packages/aeico-element" },
     { "path": "./packages/aeico-localize" },
     { "path": "./packages/aeico" }
   ]

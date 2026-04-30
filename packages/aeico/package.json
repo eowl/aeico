@@ -30,7 +30,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aeico-core": "*",
+    "aeico-element": "*",
     "aeico-localize": "*",
     "aeico-view": "*"
   },

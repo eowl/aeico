@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai'
 import { mount, unmountAll, updated } from '../../test/helpers/mount.js'
-import BaseElement from '../../src/core/base-element.js'
+import BaseElement from '../../src/base-element.js'
 import { prop, computed } from '../../src/decorators/index.js'
 
 afterEach(() => {
@@ -179,5 +179,6 @@ describe('@computed decorator', () => {
     })
   })
 })
+
 
 

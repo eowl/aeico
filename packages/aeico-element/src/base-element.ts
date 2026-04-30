@@ -9,18 +9,18 @@ import type {
 import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
 import { html, render, type RenderResult } from 'aeico-view'
-import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from '../decorators'
-import { WATCHER_METADATA_KEY } from '../decorators/watch'
-import { COMPUTED_METADATA_KEY } from '../decorators/computed'
+import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from './decorators'
+import { WATCHER_METADATA_KEY } from './decorators/watch'
+import { COMPUTED_METADATA_KEY } from './decorators/computed'
 import type { Updatable } from './render-context'
 import { toKebab } from './utils'
 
 /**
- * BaseElement â€” internal reactive foundation for all Aeico elements.
+ * BaseElement â€?internal reactive foundation for all Aeico elements.
  *
  * Provides:
  * - Reactive property system (static props / watchers / computed)
- * - Batched update lifecycle (onPrepare â†’ render â†’ onUpdated (+ onMounted*))
+ * - Batched update lifecycle (onPrepare â†?render â†?onUpdated (+ onMounted*))
  * - Event system (emit / events)
  * - Custom element registration helpers (register / toKebab)
  *
@@ -39,7 +39,7 @@ class BaseElement extends HTMLElement {
   /** Computed property declarations. Automatically cached and invalidated. */
   static computed?: Computed
 
-  /** Property watcher declarations. Maps property name â†’ method name. */
+  /** Property watcher declarations. Maps property name â†?method name. */
   static watchers?: Watchers
 
   static get observedAttributes(): string[] {
@@ -159,7 +159,7 @@ class BaseElement extends HTMLElement {
 
   /**
    * Collect computed declarations from the entire inheritance chain.
-   * Merges static `computed` objects and `@computed` decorator metadata (parent â†’ child override).
+   * Merges static `computed` objects and `@computed` decorator metadata (parent â†?child override).
    * Result is cached on the class.
    */
   private static _collectComputed(): Computed {
@@ -427,7 +427,7 @@ class BaseElement extends HTMLElement {
    * rather than reflecting it immediately, because setAttribute() is forbidden inside the
    * constructor body. This method runs in the first microtask update, past the constructor boundary,
    * so setAttribute() is safe. Setter calls here run while _updatePending is still true, so they
-   * merge into the existing _changedProps without scheduling a second microtask â†’ single render.
+   * merge into the existing _changedProps without scheduling a second microtask â†?single render.
    */
   private _reflectAccessorDefaults(): void {
     const constructor = this.constructor as typeof BaseElement
@@ -454,7 +454,7 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Execute the update cycle: onPrepare â†’ render â†’ onUpdated â†’ onMounted.
+   * Execute the update cycle: onPrepare â†?render â†?onUpdated â†?onMounted.
    * Called automatically after update is triggered.
    * Can be overridden to customize update behavior, but should call super.executeUpdate() if so.
    */
@@ -587,7 +587,7 @@ class BaseElement extends HTMLElement {
       case Boolean:
         // Presence of the attribute is true in Web standards (e.g. <my-el active>).
         // Explicitly setting the string "false" is treated as false for ergonomics
-        // (e.g. <my-el checked="false"> â†’ false).
+        // (e.g. <my-el checked="false"> â†?false).
         return value !== 'false'
 
       case Number:
@@ -732,3 +732,5 @@ class BaseElement extends HTMLElement {
 
 export default BaseElement
 export type BaseElementProps = InferProps<typeof BaseElement>
+
+

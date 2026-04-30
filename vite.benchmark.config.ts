@@ -9,7 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       'aeico-view': path.resolve(__dirname, 'packages/aeico-view/src/index.ts'),
-      'aeico-core': path.resolve(__dirname, 'packages/aeico-core/src/index.ts'),
+      'aeico-element': path.resolve(__dirname, 'packages/aeico-element/src/index.ts'),
       'aeico-localize': path.resolve(__dirname, 'packages/aeico-localize/src/index.ts'),
       'aeico': path.resolve(__dirname, 'packages/aeico/src/index.ts'),
     },

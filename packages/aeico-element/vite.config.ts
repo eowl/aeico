@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'AeicoCore',
+      name: 'AeicoElement',
     },
     rollupOptions: {
       external: ['aeico-view'],
@@ -32,10 +32,5 @@ export default defineConfig({
     sourcemap: true,
     minify: false,
     cssCodeSplit: false,
-  },
-  resolve: {
-    alias: {
-      'aeico-view': path.resolve(__dirname, '../aeico-view/src/index.ts'),
-    },
   },
 })

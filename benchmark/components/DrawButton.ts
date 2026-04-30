@@ -1,5 +1,5 @@
-import AeicoElement from 'aeico-core'
-import type { Props } from 'aeico-core'
+import AeicoElement from 'aeico-element'
+import type { Props } from 'aeico-element'
 import buttonStyle from '../../src/assets/css/common/button.css?inline'
 import variablesStyle from '../../src/assets/css/common/variables.css?inline'
 

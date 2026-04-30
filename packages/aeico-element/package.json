@@ -1,7 +1,7 @@
 {
-  "name": "aeico-core",
+  "name": "aeico-element",
   "version": "0.1.0",
-  "description": "Core reactive element base classes, decorators and mixins for Aeico",
+  "description": "Reactive element base classes, decorators and mixins for Aeico",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
