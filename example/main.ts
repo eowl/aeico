@@ -14,6 +14,7 @@ import {
   Divider,
   Card,
   Badge,
+  Tag,
   Breadcrumb,
   BreadcrumbItem,
   Navbar,
@@ -22,7 +23,7 @@ import {
   Detail,
 } from '../src/components/index'
 import '../src/components/styles/layout.css'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem, Navbar, Dropdown, DropdownItem, Detail]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Tag, Breadcrumb, BreadcrumbItem, Navbar, Dropdown, DropdownItem, Detail]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---
@@ -264,6 +265,11 @@ const demoDetail = document.querySelector<any>('#demo-detail')
 document.getElementById('detail-open-btn')?.addEventListener('click', () => demoDetail?.open())
 document.getElementById('detail-close-btn')?.addEventListener('click', () => demoDetail?.close())
 document.getElementById('detail-toggle-btn')?.addEventListener('click', () => demoDetail?.toggle())
+
+// Tag dismiss demo — remove tag on dismiss
+document.getElementById('tag-dismissible-row')?.addEventListener('dismiss', (e: Event) => {
+  ;(e.target as HTMLElement).remove()
+})
 
 // --- Event logging ---
 const log = document.getElementById('event-log')!

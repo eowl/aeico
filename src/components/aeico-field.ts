@@ -55,7 +55,7 @@ class AeicoField<TValue = string> extends AeicoComponent {
 
   // Declare reactive properties for TypeScript
   declare value?: TValue
-  declare defaultValue?: string
+  declare defaultValue?: TValue | string
   declare resettable?: boolean
   declare resetText?: string
   declare clearable?: boolean

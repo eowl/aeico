@@ -7,6 +7,7 @@ import style from '../styles/components/select.css?inline'
 import variables from '../styles/variables.css?inline'
 import sizeCSS from '../styles/size.css?inline'
 import SelectOptionElement from './select-option'
+import '../tag/tag'
 import { prop } from '../../decorators'
 
 /**
@@ -65,6 +66,24 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
     },
   })
   override value: SelectOptionValue | SelectMultiValue | undefined = undefined
+
+  // Override base class defaultValue so arrays are JSON-serialized to the attribute,
+  // matching the value prop's parser/formatter. Without this override, setting
+  // defaultValue = ['a', 'b'] would be serialized as String(['a','b']) = "a,b",
+  // and reset() would restore a single string "a,b" instead of the array.
+  @prop({
+    type: String,
+    parser: (v) => {
+      if (v === null || v === undefined) return undefined
+      try { return JSON.parse(v) } catch { return v }
+    },
+    formatter: (v) => {
+      if (v === null || v === undefined) return ''
+      if (Array.isArray(v)) return JSON.stringify(v)
+      return String(v)
+    },
+  })
+  override defaultValue: SelectOptionValue | SelectMultiValue | undefined = undefined
 
   protected static styles = [variables, sizeCSS, style]
 
@@ -231,19 +250,20 @@ class Select extends AeicoField<SelectOptionValue | SelectMultiValue> {
               this._selectedListEl = div({ className: `selected-list${!this.expandable ? ' selected-list--clipped' : ''}` }, () => {
                 for (const v of multiValues) {
                   const lbl = this._findLabel(v)
-                  span({ key: `sel-${v}`, className: 'selected-item' }, () => {
-                    span({ className: 'selected-label', textContent: lbl })
-                    span({
-                      className: 'selected-remove',
-                      textContent: '\u00d7',
-                      '@click': (e: Event) => {
-                        e.stopPropagation()
-                        if (isDisabled) return
+                  tags.aeTag({
+                    key: `sel-${v}`,
+                    color: 'default',
+                    variant: 'faint',
+                    dismissible: true,
+                    disabled: isDisabled,
+                    textContent: lbl,
+                    '@dismiss': (e: Event) => {
+                      e.stopPropagation()
+                      if (isDisabled) return
 
-                        const next = multiValues.filter(item => String(item) !== String(v))
-                        this.setValue(next, { silent: false, action: 'change' })
-                      },
-                    })
+                      const next = multiValues.filter(item => String(item) !== String(v))
+                      this.setValue(next, { silent: false, action: 'change' })
+                    },
                   })
                 }
               }) as HTMLElement

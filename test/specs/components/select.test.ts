@@ -295,25 +295,25 @@ describe('Select', () => {
   })
 
   describe('multiple mode', () => {
-    it('renders a badge (.selected-item) for each selected value', async () => {
+    it('renders a tag (ae-tag) for each selected value', async () => {
       const el = await mount<Select>(`<${TAG} multiple></${TAG}>`)
       el.options = FRUITS
       el.value = ['apple', 'cherry']
       await updated()
 
-      const badges = el.shadowRoot!.querySelectorAll('.selected-item')
-      expect(badges.length).to.equal(2)
+      const tags = el.shadowRoot!.querySelectorAll('ae-tag')
+      expect(tags.length).to.equal(2)
     })
 
-    it('badge labels reflect the option labels (not values)', async () => {
+    it('tag labels reflect the option labels (not values)', async () => {
       const el = await mount<Select>(`<${TAG} multiple></${TAG}>`)
       el.options = FRUITS
       el.value = ['apple', 'banana']
       await updated()
 
       const labels = Array.from(
-        el.shadowRoot!.querySelectorAll('.selected-label'),
-      ).map(s => s.textContent)
+        el.shadowRoot!.querySelectorAll('ae-tag'),
+      ).map(t => t.textContent?.trim())
       expect(labels).to.include('Apple')
       expect(labels).to.include('Banana')
     })
@@ -362,15 +362,15 @@ describe('Select', () => {
       expect(getDropdown(el).classList.contains('open')).to.be.true
     })
 
-    it('clicking × on a badge removes that item from the value', async () => {
+    it('clicking × on a tag removes that item from the value', async () => {
       const el = await mount<Select>(`<${TAG} multiple></${TAG}>`)
       el.options = FRUITS
       el.value = ['apple', 'banana']
       await updated()
 
-      // Badges are rendered in order of the value array; first badge = "apple"
-      const removes = el.shadowRoot!.querySelectorAll<HTMLElement>('.selected-remove')
-      removes[0].click()
+      // Tags are rendered in order of the value array; first tag = "apple"
+      const firstTag = el.shadowRoot!.querySelector<HTMLElement>('ae-tag')!
+      firstTag.shadowRoot!.querySelector<HTMLElement>('.tag-dismiss')!.click()
       await updated()
 
       const vals = el.value as string[]
