@@ -13,18 +13,18 @@ export default tseslint.config(
   // TypeScript recommended (type-aware) for src/
   ...tseslint.configs.recommendedTypeChecked.map((cfg) => ({
     ...cfg,
-    files: ['src/**/*.ts'],
+    files: ['packages/*/src/**/*.ts'],
   })),
 
   // TypeScript recommended (syntax-only) for test/
   ...tseslint.configs.recommended.map((cfg) => ({
     ...cfg,
-    files: ['test/**/*.ts'],
+    files: ['packages/*/test/**/*.ts'],
   })),
 
   // Shared language options for all TS files
   {
-    files: ['src/**/*.ts', 'test/**/*.ts'],
+    files: ['packages/*/src/**/*.ts', 'packages/*/test/**/*.ts'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -43,7 +43,7 @@ export default tseslint.config(
 
   // Type-aware parser options for src/ only
   {
-    files: ['src/**/*.ts'],
+    files: ['packages/*/src/**/*.ts'],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -69,7 +69,7 @@ export default tseslint.config(
 
   // Test language options (no type-checking, separate tsconfig)
   {
-    files: ['test/**/*.ts'],
+    files: ['packages/*/test/**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.mocha,
@@ -79,10 +79,11 @@ export default tseslint.config(
 
   // Relax rules for test files
   {
-    files: ['test/**/*.ts'],
+    files: ['packages/*/test/**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
     },
   },
 

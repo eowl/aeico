@@ -14,8 +14,8 @@
     "benchmark:build": "vite build --config vite.benchmark.config.ts",
     "type-check": "npm run type-check --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "lint": "eslint packages/*/src/",
-    "lint:fix": "eslint packages/*/src/ --fix",
+    "lint": "eslint \"packages/*/src/**/*.ts\" \"packages/*/test/**/*.ts\"",
+    "lint:fix": "eslint \"packages/*/src/**/*.ts\" \"packages/*/test/**/*.ts\" --fix",
     "format": "prettier --write \"packages/*/src/**/*.ts\"",
     "format:check": "prettier --check \"packages/*/src/**/*.ts\""
   },

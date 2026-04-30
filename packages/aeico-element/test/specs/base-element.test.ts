@@ -521,7 +521,7 @@ describe('BaseElement', () => {
 
     it('changedProps passed to onPrepare contains changed property names', async () => {
       const tag = `test-lifecycle-changedprops-${++_counter}`
-      let captured: string[] = []
+      let captured!: string[]
 
       class El extends BaseElement {
         static props: Props = { a: { type: String }, b: { type: Number } }
