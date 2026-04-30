@@ -1,4 +1,4 @@
-export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | number
+export type IconSize = '3xs' | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number
 
 export type IconColor = 'default' | 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info'
 
