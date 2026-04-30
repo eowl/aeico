@@ -55,6 +55,7 @@ export { Tabs, Tab, TabPanel } from './tabs'
 export { default as Divider } from './divider'
 export { default as Card } from './card'
 export { default as Navbar } from './navbar'
+export { default as Detail } from './detail'
 
 // Component types
 export type { SelectProps, SelectOption, SelectOptions, SelectOptionValue } from './select'
@@ -74,3 +75,4 @@ export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './icon-
 export type { DividerProps } from './divider'
 export type { CardProps, CardVariant, CardColor } from './card'
 export type { NavbarProps, NavbarColor, NavbarAppearance } from './navbar'
+export type { DetailProps, DetailVariant, DetailColor } from './detail'

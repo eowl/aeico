@@ -19,9 +19,10 @@ import {
   Navbar,
   Dropdown,
   DropdownItem,
+  Detail,
 } from '../src/components/index'
 import '../src/components/styles/layout.css'
-void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem, Navbar, Dropdown, DropdownItem]
+void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Breadcrumb, BreadcrumbItem, Navbar, Dropdown, DropdownItem, Detail]
 import { locale } from '../src/localize'
 
 // --- Localization setup ---
@@ -77,6 +78,8 @@ IconRegistry.add({
   'chevron-right': 'M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z',
   'chevron-down':  'M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z',
   'chevron-up':   'M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z',
+  'square-plus':  'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z',
+  'square-minus': 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z',
   // Stroke icons (outline style)
   'edit':    { path: 'M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7 M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z', stroke: true, strokeWidth: 2 },
   'search':  { path: 'M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16z M21 21l-4.35-4.35', stroke: true, strokeWidth: 2 },
@@ -256,6 +259,12 @@ const openNonModalBtn = document.getElementById('open-dialog-nonmodal-btn')
 const nonModalDialog = document.querySelector<any>('#demo-dialog-nonmodal')
 openNonModalBtn?.addEventListener('click', () => nonModalDialog?.open())
 
+// Detail interaction
+const demoDetail = document.querySelector<any>('#demo-detail')
+document.getElementById('detail-open-btn')?.addEventListener('click', () => demoDetail?.open())
+document.getElementById('detail-close-btn')?.addEventListener('click', () => demoDetail?.close())
+document.getElementById('detail-toggle-btn')?.addEventListener('click', () => demoDetail?.toggle())
+
 // --- Event logging ---
 const log = document.getElementById('event-log')!
 const clearBtn = document.getElementById('clear-log')!
@@ -271,7 +280,7 @@ function appendLog(msg: string) {
 clearBtn.addEventListener('click', () => { log.innerHTML = '' })
 
 // Listen for component events on body (they bubble)
-const events = ['change', 'field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'dialog-open', 'dialog-close', 'tab-change']
+const events = ['change', 'field-change', 'field-reset', 'field-clear', 'button-click', 'alert-close', 'dialog-open', 'dialog-close', 'tab-change', 'open', 'close']
 events.forEach(eventName => {
   document.body.addEventListener(eventName, ((e: CustomEvent) => {
     const tag = (e.target as HTMLElement).tagName.toLowerCase()
