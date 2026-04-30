@@ -8,7 +8,7 @@ import type {
 } from './types'
 import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
-import { render as applyRender, type RenderResult } from '../view'
+import { html, render as applyRender, type RenderResult } from '../view'
 import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from '../decorators'
 import { WATCHER_METADATA_KEY } from '../decorators/watch'
 import { COMPUTED_METADATA_KEY } from '../decorators/computed'
@@ -476,7 +476,7 @@ class BaseElement extends HTMLElement {
     setRenderContext(this as unknown as Updatable)
     try {
       const result = this.render()
-      if (result) applyRender(result, this.container)
+      applyRender(result ?? html(() => {}), this.container)
     } finally {
       clearRenderContext()
     }

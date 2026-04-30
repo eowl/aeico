@@ -34,8 +34,9 @@ class Icon extends AeicoComponent {
     const def = this.name ? IconRegistry.get(this.name) : undefined
 
     // Numeric size: set font-size directly (string sizes are handled by size.css)
-    if (typeof this.size === 'number' && this.size > 0) {
-      this.style.setProperty('font-size', `${this.size}px`)
+    const numericSize = Number(this.size)
+    if (this.size !== undefined && !isNaN(numericSize) && numericSize > 0) {
+      this.style.setProperty('font-size', `${numericSize}px`)
     } else {
       this.style.removeProperty('font-size')
     }
