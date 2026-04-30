@@ -1,0 +1,39 @@
+{
+  "name": "aeico-view",
+  "version": "0.1.0",
+  "description": "DOM rendering layer for Aeico — html(), render(), ElementBuilder",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist/types -p tsconfig.json",
+    "dev": "vite build --watch",
+    "type-check": "tsc --noEmit",
+    "test": "web-test-runner --config web-test-runner.config.mjs",
+    "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@open-wc/testing": "^4.0.0",
+    "@types/mocha": "^10.0.10",
+    "@web/dev-server-esbuild": "^1.0.5",
+    "@web/test-runner": "^0.20.2",
+    "@web/test-runner-playwright": "^0.11.1",
+    "typescript": "^5.7.3",
+    "vite": "^6.2.0"
+  }
+}

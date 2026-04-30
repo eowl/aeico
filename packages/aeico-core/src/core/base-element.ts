@@ -8,7 +8,7 @@ import type {
 } from './types'
 import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events'
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context'
-import { html, render, type RenderResult } from '../view'
+import { html, render, type RenderResult } from 'aeico-view'
 import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from '../decorators'
 import { WATCHER_METADATA_KEY } from '../decorators/watch'
 import { COMPUTED_METADATA_KEY } from '../decorators/computed'

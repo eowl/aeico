@@ -5,17 +5,19 @@
     "lib": ["ES2023", "DOM", "DOM.Iterable", "ESNext.Decorators"],
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "rootDir": "./src",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "declaration": true,
-    "declarationDir": "./dist/types",
-    "emitDeclarationOnly": false
+    "composite": true
   },
-  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
-  "references": [{ "path": "./tsconfig.test.json" }]
+  "references": [
+    { "path": "./packages/aeico-view" },
+    { "path": "./packages/aeico-core" },
+    { "path": "./packages/aeico-localize" },
+    { "path": "./packages/aeico" }
+  ]
 }

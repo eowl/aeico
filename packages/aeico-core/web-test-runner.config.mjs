@@ -12,19 +12,13 @@ export default {
     playwrightLauncher({ product: 'chromium' }),
   ],
   plugins: [
-    // Handle Vite-specific `*.css?inline` imports — must come before esbuild
     cssInlinePlugin(),
-    // Transpile TypeScript
     esbuildPlugin({ ts: true, target: 'es2022' }),
   ],
-  // Mocha timeout: any it() / before() / beforeEach() that hangs is auto-failed
   testFramework: {
     config: {
       timeout: TIMEOUT_MS,
     },
   },
-  // Patch customElements.whenDefined globally so any unresolved tag name
-  // produces a clear error instead of hanging forever — regardless of whether
-  // the test uses the helper or calls the native API directly.
   testRunnerHtml: (testRunnerImport) => buildTestRunnerHtml(testRunnerImport, TIMEOUT_MS),
 }

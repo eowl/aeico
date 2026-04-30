@@ -29,6 +29,5 @@ export type { Updatable } from './render-context'
 // Types
 export type { AeicoBaseProps } from './aeico-base'
 export type { AeicoElementProps } from './aeico-element'
-export type { AeicoFieldProps, FieldAction, FieldElement } from '../components/aeico-field'
 export type { PropertyType, Prop, Props, InferProps, WatcherHandler, Watchers } from './types'
 export type { EmitOptions } from './events'

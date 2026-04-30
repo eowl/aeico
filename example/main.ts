@@ -21,10 +21,10 @@ import {
   Dropdown,
   DropdownItem,
   Detail,
-} from '../src/components/index'
-import '../src/components/styles/layout.css'
+} from '../aeico-components/src/index'
+import '../aeico-components/src/styles/layout.css'
 void [TextInput, Select, Slider, Checkbox, RadioGroup, Icon, Switch, Tabs, Tab, TabPanel, Dialog, Divider, Card, Badge, Tag, Breadcrumb, BreadcrumbItem, Navbar, Dropdown, DropdownItem, Detail]
-import { locale } from '../src/localize'
+import { locale } from 'aeico-localize'
 
 // --- Localization setup ---
 

@@ -1,5 +1,5 @@
-import { getCurrentContext } from '../core/render-context'
-import type { Updatable } from '../core/render-context'
+import { getCurrentContext } from 'aeico-core'
+import type { Updatable } from 'aeico-core'
 
 export interface LocaleProvider {
   t(key: string, ...args: any[]): string;

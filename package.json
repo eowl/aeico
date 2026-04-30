@@ -1,65 +1,23 @@
 {
-  "name": "aeico",
-  "version": "0.1.0",
-  "description": "Lightweight Web Components library for building form fields and UI elements",
+  "name": "aeico-monorepo",
+  "version": "0.0.0",
+  "private": true,
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/types/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./core": {
-      "types": "./dist/types/core/index.d.ts",
-      "import": "./dist/core.js",
-      "require": "./dist/core.cjs"
-    },
-    "./components": {
-      "types": "./dist/types/components/index.d.ts",
-      "import": "./dist/components.js",
-      "require": "./dist/components.cjs"
-    },
-    "./mixins": {
-      "types": "./dist/types/mixins/index.d.ts",
-      "import": "./dist/mixins.js",
-      "require": "./dist/mixins.cjs"
-    },
-    "./decorators": {
-      "types": "./dist/types/decorators/index.d.ts",
-      "import": "./dist/decorators.js",
-      "require": "./dist/decorators.cjs"
-    },
-    "./localize": {
-      "types": "./dist/types/localize/index.d.ts",
-      "import": "./dist/localize.js",
-      "require": "./dist/localize.cjs"
-    },
-    "./view": {
-      "types": "./dist/types/view/index.d.ts",
-      "import": "./dist/view.js",
-      "require": "./dist/view.cjs"
-    }
-  },
-  "files": [
-    "dist",
-    "src"
+  "workspaces": [
+    "packages/*"
   ],
   "scripts": {
-    "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist/types",
-    "dev": "vite build --watch",
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspaces --if-present",
     "example": "vite serve --config vite.example.config.ts",
     "benchmark": "vite --config vite.benchmark.config.ts",
     "benchmark:build": "vite build --config vite.benchmark.config.ts",
-    "type-check": "tsc --noEmit",
-    "test": "web-test-runner --config web-test-runner.config.mjs",
-    "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch",
-    "lint": "eslint src/ test/",
-    "lint:fix": "eslint src/ test/ --fix",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\""
+    "type-check": "npm run type-check --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "eslint packages/*/src/",
+    "lint:fix": "eslint packages/*/src/ --fix",
+    "format": "prettier --write \"packages/*/src/**/*.ts\"",
+    "format:check": "prettier --check \"packages/*/src/**/*.ts\""
   },
   "keywords": [
     "web-components",
