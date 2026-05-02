@@ -1,6 +1,5 @@
 {
   "name": "aeico-monorepo",
-  "version": "0.0.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -9,7 +8,6 @@
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspaces --if-present",
-    "example": "vite serve --config vite.example.config.ts",
     "benchmark": "vite --config vite.benchmark.config.ts",
     "benchmark:build": "vite build --config vite.benchmark.config.ts",
     "type-check": "npm run type-check --workspaces --if-present",
@@ -19,17 +17,8 @@
     "format": "prettier --write \"packages/*/src/**/*.ts\"",
     "format:check": "prettier --check \"packages/*/src/**/*.ts\""
   },
-  "keywords": [
-    "web-components",
-    "ui-components",
-    "form-fields",
-    "custom-elements"
-  ],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@open-wc/testing": "^4.0.0",
     "@types/mocha": "^10.0.10",
     "@web/dev-server-esbuild": "^1.0.5",
     "@web/test-runner": "^0.20.2",
