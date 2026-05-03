@@ -1,6 +1,6 @@
 {
   "name": "aeico-element",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Reactive element base classes and decorators for Aeico",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -27,7 +27,13 @@
     "test:watch": "web-test-runner --config web-test-runner.config.mjs --watch",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["web-components", "custom-elements", "reactive", "decorators", "aeico"],
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "reactive",
+    "decorators",
+    "aeico"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
