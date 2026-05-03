@@ -24,6 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Build
+        run: npm run build
+
       - name: Check formatting
         run: npm run format:check
 
@@ -32,9 +35,6 @@ jobs:
 
       - name: Type-check
         run: npm run type-check
-
-      - name: Build
-        run: npm run build
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
