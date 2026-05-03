@@ -199,6 +199,20 @@ class BaseElement extends HTMLElement {
 
   private _reflecting = false;
 
+  /**
+   * Pre-upgrade property values (set on the element in JS before the class was defined) that need
+   * to be reflected to attributes after construction. Populated by `_initializeProps()`, drained by
+   * `_reflectAccessorDefaults()`. JS values win over HTML attributes, so no `hasAttribute` guard.
+   */
+  private _deferredPreUpgrade?: Map<string, unknown>;
+
+  /**
+   * Prop names whose field-initializer default value must be reflected after construction.
+   * Populated by `_reclaimProp()`, drained by `_reflectAccessorDefaults()`. HTML attributes win,
+   * so the same `hasAttribute` guard used for accessor defaults applies here too.
+   */
+  private _deferredFieldInits?: Set<string>;
+
   protected get container(): ShadowRoot | HTMLElement {
     const ctor = this.constructor as typeof BaseElement;
 
@@ -264,7 +278,11 @@ class BaseElement extends HTMLElement {
       this._defineReactiveProp(propName, propDecl);
 
       if (hasPreUpgrade && preUpgradeValue !== undefined) {
-        self[propName] = preUpgradeValue;
+        // Write directly to the backing store and defer setAttribute to executeUpdate().
+        // Calling setAttribute() from inside the constructor is forbidden by the Custom
+        // Elements spec: https://html.spec.whatwg.org/multipage/custom-elements.html#custom-element-conformance
+        self[internalKey] = preUpgradeValue;
+        (this._deferredPreUpgrade ??= new Map()).set(propName, preUpgradeValue);
       }
     }
   }
@@ -366,9 +384,12 @@ class BaseElement extends HTMLElement {
 
     this._defineReactiveProp(propName, propDecl);
 
-    // Re-apply the value through the new setter so initial value (if any) is picked up.
+    // Write initial value directly to backing store and defer setAttribute to executeUpdate().
+    // Calling setAttribute() from the constructor (addInitializer runs during construction) is
+    // forbidden by the Custom Elements spec.
     if (overriddenValue !== undefined) {
-      self[propName] = overriddenValue;
+      self[internalKey] = overriddenValue;
+      (this._deferredFieldInits ??= new Set()).add(propName);
     }
   }
 
@@ -436,25 +457,43 @@ class BaseElement extends HTMLElement {
    */
   private _reflectAccessorDefaults(): void {
     const constructor = this.constructor as typeof BaseElement;
-    const accessorProps = constructor._accessorPropsCache;
-    if (!accessorProps || accessorProps.size === 0) return;
+    const self = this as Record<string, unknown>;
 
-    const allProps = constructor._propertyCache!;
-    for (const propName of accessorProps) {
-      const propDecl = allProps[propName];
-      if (!propDecl || propDecl.reflect === false) continue;
-      const attrName = propDecl.attr ?? toKebab(propName);
-      // HTML attribute (set by parser or attributeChangedCallback) takes priority.
-      if (!this.hasAttribute(attrName)) {
-        const internalKey = `_${propName}`;
-        const self = this as Record<string, unknown>;
-        const value = self[internalKey];
-        if (value !== undefined) {
-          // Reset backing field so the setter records oldValue = undefined (correct semantics).
-          self[internalKey] = undefined;
-          self[propName] = value;
+    // Accessor defaults + field-init defaults: HTML attribute takes priority
+    // Build a unified set so we only iterate once.
+    const toReflect = new Set<string>(constructor._accessorPropsCache);
+    if (this._deferredFieldInits) {
+      for (const p of this._deferredFieldInits) toReflect.add(p);
+      this._deferredFieldInits = undefined;
+    }
+
+    if (toReflect.size > 0) {
+      const allProps = constructor._propertyCache!;
+      for (const propName of toReflect) {
+        const propDecl = allProps[propName];
+        if (!propDecl || propDecl.reflect === false) continue;
+        const attrName = propDecl.attr ?? toKebab(propName);
+        // HTML attribute (set by parser or attributeChangedCallback) takes priority.
+        if (!this.hasAttribute(attrName)) {
+          const internalKey = `_${propName}`;
+          const value = self[internalKey];
+          if (value !== undefined) {
+            // Reset backing field so the setter records oldValue = undefined (correct semantics).
+            self[internalKey] = undefined;
+            self[propName] = value;
+          }
         }
       }
+    }
+
+    // Pre-upgrade values: JS wins, override any existing HTML attribute
+    if (this._deferredPreUpgrade) {
+      for (const [propName, value] of this._deferredPreUpgrade) {
+        const internalKey = `_${propName}`;
+        self[internalKey] = undefined;
+        self[propName] = value;
+      }
+      this._deferredPreUpgrade = undefined;
     }
   }
 

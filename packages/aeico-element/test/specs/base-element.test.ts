@@ -848,5 +848,40 @@ describe('BaseElement', () => {
       expect(el.count).to.equal(99);
       document.body.removeChild(holder);
     });
+
+    it('does not call setAttribute() synchronously during element upgrade', async () => {
+      const tag = `test-preupgrade-no-attr-${++_counter}`;
+
+      // Create element in a detached tree so upgrade happens on appendChild, not on define.
+      const holder = document.createElement('div');
+      holder.innerHTML = `<${tag}></${tag}>`;
+      const el = holder.firstElementChild as BaseElement & { color: string };
+      el.color = 'red'; // pre-upgrade JS value
+
+      class UpgradeEl extends BaseElement {
+        static props: Props = { color: { type: String } };
+        declare color: string;
+      }
+      customElements.define(tag, UpgradeEl);
+
+      // Spy: track any setAttribute calls on `el` that happen synchronously during upgrade.
+      const setAttrCalls: string[] = [];
+      const orig = Element.prototype.setAttribute;
+      Element.prototype.setAttribute = function (this: Element, name: string, value: string) {
+        if (this === el) setAttrCalls.push(name);
+        return orig.call(this, name, value);
+      };
+
+      // Upgrade fires synchronously inside appendChild.
+      document.body.appendChild(holder);
+      // Restore spy immediately — we only care about synchronous calls during the constructor.
+      Element.prototype.setAttribute = orig;
+
+      expect(setAttrCalls).to.deep.equal([]);
+
+      await updated();
+      expect(el.getAttribute('color')).to.equal('red');
+      document.body.removeChild(holder);
+    });
   });
 });

@@ -288,4 +288,76 @@ describe('@prop decorator', () => {
       expect(el.active).to.equal(false);
     });
   });
+
+  describe('field (non-accessor) decorator initial values', () => {
+    it('field default value is reflected to attribute after first render', async () => {
+      const tag = `test-field-init-str-${++_counter}`;
+
+      class El extends BaseElement {
+        @prop({ type: String }) title = 'hello';
+      }
+      customElements.define(tag, El);
+
+      const el = await mount<El & { title: string }>(`<${tag}></${tag}>`);
+      await updated();
+
+      expect(el.title).to.equal('hello');
+      expect(el.getAttribute('title')).to.equal('hello');
+    });
+
+    it('HTML attribute overrides field default value', async () => {
+      const tag = `test-field-init-override-${++_counter}`;
+
+      class El extends BaseElement {
+        @prop({ type: String }) color = 'blue';
+      }
+      customElements.define(tag, El);
+
+      const el = await mount<El & { color: string }>(`<${tag} color="red"></${tag}>`);
+      await updated();
+
+      expect(el.color).to.equal('red');
+      expect(el.getAttribute('color')).to.equal('red');
+    });
+
+    it('field default with reflect:false stores value without setting attribute', async () => {
+      const tag = `test-field-init-noreflect-${++_counter}`;
+
+      class El extends BaseElement {
+        @prop({ type: Number, reflect: false }) count = 42;
+      }
+      customElements.define(tag, El);
+
+      const el = await mount<El & { count: number }>(`<${tag}></${tag}>`);
+      await updated();
+
+      expect(el.count).to.equal(42);
+      expect(el.getAttribute('count')).to.be.null;
+    });
+
+    it('does not call setAttribute() synchronously during constructor', () => {
+      const tag = `test-field-no-ctor-attr-${++_counter}`;
+
+      class El extends BaseElement {
+        @prop({ type: String }) title = 'hello';
+        @prop({ type: Number }) count = 99;
+      }
+      customElements.define(tag, El);
+
+      const setAttrCalls: string[] = [];
+      const orig = Element.prototype.setAttribute;
+      Element.prototype.setAttribute = function (this: Element, name: string, value: string) {
+        setAttrCalls.push(name);
+        return orig.call(this, name, value);
+      };
+
+      try {
+        document.createElement(tag); // constructor (and addInitializer) run synchronously
+      } finally {
+        Element.prototype.setAttribute = orig;
+      }
+
+      expect(setAttrCalls).to.deep.equal([]);
+    });
+  });
 });
