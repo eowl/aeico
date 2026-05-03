@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w packages/aeico-view && npm run build -w packages/aeico-element && npm run build -w packages/aeico-localize && npm run build -w packages/aeico",
     "dev": "npm run dev --workspaces --if-present",
     "benchmark": "vite --config vite.benchmark.config.ts",
     "benchmark:build": "vite build --config vite.benchmark.config.ts",
