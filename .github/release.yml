@@ -1,0 +1,15 @@
+changelog:
+  exclude:
+    labels:
+      - release
+  categories:
+    - title: aeico-view
+      labels: ['pkg:aeico-view']
+    - title: aeico-element
+      labels: ['pkg:aeico-element']
+    - title: aeico-localize
+      labels: ['pkg:aeico-localize']
+    - title: aeico
+      labels: ['pkg:aeico']
+    - title: Other Changes
+      labels: ['*']
