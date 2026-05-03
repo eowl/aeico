@@ -6,7 +6,7 @@
 
 | Package | Version | Description |
 |---|---|---|
-| [`aeico`](packages/aeico) | 0.1.1 | Meta package — re-exports everything |
+| [`aeico`](packages/aeico) | 0.1.1 | Meta package — re-exports base |
 | [`aeico-element`](packages/aeico-element) | 0.1.1 | Reactive base classes and decorators |
 | [`aeico-view`](packages/aeico-view) | 0.1.1 | DOM rendering — `html()`, `render()`, `tags` |
 | [`aeico-localize`](packages/aeico-localize) | 0.1.1 | i18n — `t()`, `locale`, `localeRegistry` |
