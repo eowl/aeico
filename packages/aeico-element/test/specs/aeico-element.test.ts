@@ -110,7 +110,8 @@ describe('AeicoElement', () => {
       class El extends AeicoElement {}
       customElements.define(tag, El);
 
-      const el = El.create({ cssVars: { '--my-color': 'hotpink' } }) as El;
+      // cssVars is deprecated; prefer style: { '--my-color': 'hotpink' }
+      const el = El.create({ style: { '--my-color': 'hotpink' } }) as El;
       document.body.appendChild(el);
       await updated();
 
@@ -215,10 +216,10 @@ describe('AeicoElement', () => {
         document.body.removeChild(el);
       });
 
-      it('create() with cssVars sets CSS custom properties on the host', async () => {
+      it('create() with style object sets CSS custom properties on the host', async () => {
         const { CardEl } = defineCard();
 
-        const el = CardEl.create({ cssVars: { '--card-color': 'hotpink' } });
+        const el = CardEl.create({ style: { '--card-color': 'hotpink' } });
         document.body.appendChild(el);
         await updated();
 

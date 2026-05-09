@@ -26,7 +26,7 @@ class AeicoElement extends BaseElement {
 
   constructor() {
     super();
-    this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style);
+    this.styleAdapter = new StyleAdapter(this.shadowRoot!);
   }
 
   static get styleEntries(): StyleItems {

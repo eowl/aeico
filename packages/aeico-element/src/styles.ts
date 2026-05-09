@@ -7,7 +7,6 @@ export type StyleOptions = {
   enable?: boolean;
   mode?: StyleMode;
   styles?: StyleItems;
-  cssVars?: Record<string, string>;
 };
 
 export type StyleScope = 'document' | 'shadow';
@@ -131,14 +130,12 @@ export type StyleAdapterContext = {
 
 export class StyleAdapter {
   private shadowRoot: ShadowRoot;
-  private hostStyle: CSSStyleDeclaration;
   private sheets: CSSStyleSheet[] = [];
   private adoptedSet: Set<StyleResult> = new Set();
   private initialized = false;
 
-  constructor(shadowRoot: ShadowRoot, hostStyle: CSSStyleDeclaration) {
+  constructor(shadowRoot: ShadowRoot) {
     this.shadowRoot = shadowRoot;
-    this.hostStyle = hostStyle;
   }
 
   initialize(context: StyleAdapterContext): void {
@@ -182,16 +179,6 @@ export class StyleAdapter {
   private _applyOptions(options: StyleOptions): void {
     if (options.styles) {
       this._adoptStyles(options.styles);
-    }
-
-    if (options.cssVars) {
-      this._setCssVars(options.cssVars);
-    }
-  }
-
-  private _setCssVars(vars: Record<string, string>): void {
-    for (const [key, value] of Object.entries(vars)) {
-      this.hostStyle.setProperty(key, value);
     }
   }
 }

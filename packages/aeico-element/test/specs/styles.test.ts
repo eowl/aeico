@@ -131,21 +131,6 @@ describe('StyleAdapter', () => {
     });
   });
 
-  describe('initialize() with cssVars option', () => {
-    it('writes CSS custom properties to the host element inline style', () => {
-      const { shadowRoot, style } = makeShadowRoot();
-      const adapter = new StyleAdapter(shadowRoot, style);
-      adapter.initialize({
-        constructorName: 'Test',
-        options: {
-          cssVars: { '--my-color': 'hotpink', '--my-size': '16px' },
-        },
-      });
-      expect(style.getPropertyValue('--my-color')).to.equal('hotpink');
-      expect(style.getPropertyValue('--my-size')).to.equal('16px');
-    });
-  });
-
   describe('initialize() idempotency', () => {
     it('is idempotent second call is a no-op', () => {
       const { shadowRoot, style } = makeShadowRoot();
