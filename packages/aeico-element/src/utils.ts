@@ -1,3 +1,9 @@
+import type { RenderResult } from 'aeico-view';
+
+export function isRenderResult(value: unknown): value is RenderResult {
+  return !!value && typeof value === 'object' && typeof (value as RenderResult)._cb === 'function';
+}
+
 /**
  * Convert camelCase or PascalCase to kebab-case.
  * Strips leading underscores/numbers to ensure valid custom element names.

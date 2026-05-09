@@ -2,6 +2,9 @@ import { StyleAdapter } from './styles';
 import type { StyleEntry, StyleItems, StyleOptions } from './styles';
 import type { InferProps } from './types';
 import BaseElement from './base-element';
+import { render } from 'aeico-view';
+import type { RenderResult } from 'aeico-view';
+import { isRenderResult } from './utils';
 
 /**
  * AeicoElement — styled base class for Aeico's built-in components.
@@ -23,7 +26,7 @@ class AeicoElement extends BaseElement {
 
   constructor() {
     super();
-    this.styleAdapter = new StyleAdapter(this.shadowRoot!, this.style);
+    this.styleAdapter = new StyleAdapter(this.shadowRoot!);
   }
 
   static get styleEntries(): StyleItems {
@@ -57,17 +60,45 @@ class AeicoElement extends BaseElement {
    * @param config Configuration object (properties will be set directly)
    * @returns New component instance
    */
-  static create<T extends AeicoElement>(this: new () => T, config?: Record<string, unknown>): T {
+  static create<T extends AeicoElement>(
+    this: new () => T,
+    configOrChildren?: Record<string, unknown> | RenderResult,
+    children?: RenderResult,
+  ): T {
     const instance = new this();
+
+    const config = isRenderResult(configOrChildren) ? undefined : configOrChildren;
+    const childResult = isRenderResult(configOrChildren) ? configOrChildren : children;
 
     if (config) {
       Object.entries(config).forEach(([key, value]) => {
+        if (key === 'style') return; // handled separately below
         if (key in instance) {
           (instance as Record<string, unknown>)[key] = value;
         }
       });
+
+      if (config.style !== undefined) {
+        const s = config.style;
+        if (typeof s === 'string') {
+          instance.style.cssText = s;
+        } else if (s && typeof s === 'object') {
+          for (const [k, v] of Object.entries(s as Record<string, string>)) {
+            if (k.startsWith('--')) {
+              instance.style.setProperty(k, String(v));
+            } else {
+              (instance.style as unknown as Record<string, string>)[k] = String(v);
+            }
+          }
+        }
+      }
+
       // Style props are applied when the element connects to the DOM
       instance.styleOptions = config as StyleOptions;
+    }
+
+    if (childResult) {
+      render(childResult, instance);
     }
 
     return instance;
