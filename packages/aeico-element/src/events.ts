@@ -55,7 +55,11 @@ export class ListenerRegistry {
 
   removeAll(): void {
     for (const { target, event, handler, options } of this._listeners) {
-      target.removeEventListener(event, handler, options ? { capture: options.capture } : undefined);
+      target.removeEventListener(
+        event,
+        handler,
+        options ? { capture: options.capture } : undefined,
+      );
     }
     this._listeners.length = 0;
   }
@@ -127,7 +131,7 @@ export function listenEvent(
  */
 export function cleanupListeners(host: object): void {
   const registry = _registries.get(host);
-  
+
   if (registry) {
     registry.removeAll();
     _registries.delete(host);

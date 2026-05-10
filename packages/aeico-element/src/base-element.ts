@@ -693,8 +693,17 @@ class BaseElement extends HTMLElement {
    * this.listen('click', () => { ... }) // listens for click events on this component
    * this.listen(this.querySelector('button'), 'click', () => { ... }) // listens for click events on a button inside the component
    */
-  protected listen(event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
-  protected listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
+  protected listen(
+    event: string,
+    handler: EventListenerOrEventListenerObject,
+    options?: AddEventListenerOptions,
+  ): void;
+  protected listen(
+    target: EventTarget,
+    event: string,
+    handler: EventListenerOrEventListenerObject,
+    options?: AddEventListenerOptions,
+  ): void;
   protected listen(
     eventOrTarget: string | EventTarget,
     handlerOrEvent: EventListenerOrEventListenerObject | string,
