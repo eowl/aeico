@@ -508,7 +508,7 @@ class BaseElement extends HTMLElement {
     }
 
     const changedProps = this._changedProps;
-    this._changedProps = new Map<string, unknown>();
+    this._changedProps.clear();
     this._updatePending = false;
 
     const shouldUpdate = this.onPrepare(changedProps);
