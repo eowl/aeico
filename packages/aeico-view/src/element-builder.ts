@@ -56,6 +56,7 @@ class ElementBuilder {
   private _stack: Node[] = [];
   private _cursorStack: number[] = [];
   private _propsCache = new WeakMap<Element, Record<string, unknown>>();
+  private _scratchKeys = new Set<string>();
 
   constructor() {
     return new Proxy(this, {
@@ -63,8 +64,10 @@ class ElementBuilder {
         if (prop in target) return Reflect.get(target, prop) as unknown;
 
         const tagName = /[A-Z]/.test(prop) ? camelToKebab(prop) : prop;
+
         return (p?: BuilderProps | (() => void), cb?: () => void) => {
           if (typeof p === 'function') return target._create(tagName, undefined, p);
+          
           return target._create(tagName, p, cb);
         };
       },
@@ -104,6 +107,7 @@ class ElementBuilder {
   private _createElement(tagName: string, parent?: Node): Element {
     const isSVG =
       tagName === 'svg' || (parent instanceof Element && parent.namespaceURI === SVG_NS);
+
     return isSVG ? document.createElementNS(SVG_NS, tagName) : document.createElement(tagName);
   }
 
@@ -200,109 +204,121 @@ class ElementBuilder {
   }
 
   private _applyProps(el: Element, props: BuilderProps, skipTextContent: boolean = false) {
-    const oldCache = this._propsCache.get(el);
-    const newCache = this._normalizeProps(props, skipTextContent);
-
-    // Apply changed props
-    for (const [ck, value] of Object.entries(newCache)) {
-      if (oldCache && oldCache[ck] === value) continue;
-
-      if (value == null || value === false) {
-        this._removeProp(el, ck);
-        continue;
-      }
-
-      if (ck === 'class') {
-        el.setAttribute('class', value as string);
-      } else if (ck === 'textContent') {
-        el.textContent = value as string;
-      } else if (ck === 'style') {
-        if (typeof value === 'object' && 'style' in el) {
-          const s = (el as HTMLElement).style;
-          for (const [k, v] of Object.entries(value as Record<string, string>)) {
-            if (k.startsWith('--')) s.setProperty(k, v);
-            else (s as unknown as Record<string, string>)[k] = v;
-          }
-        }
-      } else if (ck.startsWith('@')) {
-        const eventName = ck.slice(1);
-        if (oldCache?.[ck]) el.removeEventListener(eventName, oldCache[ck] as EventListener);
-        el.addEventListener(eventName, value as EventListener);
-      } else if (typeof value === 'boolean') {
-        el.setAttribute(ck, '');
-      } else if (typeof value === 'object') {
-        (el as unknown as Record<string, unknown>)[ck] = value;
-      } else {
-        el.setAttribute(ck, String(value as string | number | bigint));
-      }
+    let cache = this._propsCache.get(el);
+    if (!cache) {
+      cache = {};
+      this._propsCache.set(el, cache);
     }
-
-    // Remove stale props
-    if (oldCache) {
-      for (const [ck, oldValue] of Object.entries(oldCache)) {
-        if (ck in newCache) continue;
-        if (ck === 'textContent' && skipTextContent) continue;
-        if (ck.startsWith('@') && typeof oldValue === 'function') {
-          el.removeEventListener(ck.slice(1), oldValue as EventListener);
-        } else if (
-          ck === 'style' &&
-          typeof oldValue === 'object' &&
-          oldValue !== null &&
-          'style' in el
-        ) {
-          const s = (el as HTMLElement).style;
-          for (const k of Object.keys(oldValue as Record<string, string>)) {
-            if (k.startsWith('--')) s.removeProperty(k);
-            else (s as unknown as Record<string, string>)[k] = '';
-          }
-        } else if (typeof oldValue === 'object' && oldValue !== null) {
-          (el as unknown as Record<string, unknown>)[ck] = null;
-        } else {
-          this._removeProp(el, ck);
-        }
-      }
-    }
-
-    this._propsCache.set(el, newCache);
-  }
-
-  private _normalizeProps(props: BuilderProps, skipTextContent: boolean): Record<string, unknown> {
-    const cache: Record<string, unknown> = {};
+    const scratch = this._scratchKeys;
 
     for (const [key, value] of Object.entries(props)) {
       if (key === 'key') continue;
 
-      // text → textContent shorthand
-      if (key === 'text' || key === 'textContent') {
-        if (!skipTextContent) cache['textContent'] = value;
-        continue;
-      }
+      const [ck, normalized] = this._normalizeProp(key, value, skipTextContent);
+      if (ck === null) continue;
 
-      // className / class → normalized 'class'
-      if (key === 'className' || key === 'class') {
-        if (value == null || value === false) {
-          cache['class'] = null;
-        } else if (typeof value === 'object') {
-          cache['class'] = Object.entries(value as Record<string, boolean>)
-            .filter(([_, a]) => a)
-            .map(([n]) => n)
-            .join(' ');
-        } else {
-          cache['class'] = String(value as string | number | boolean | bigint);
-        }
-        continue;
-      }
+      scratch.add(ck);
+      if (cache[ck] === normalized) continue;
 
-      // @event handlers → @eventname (no case conversion)
-      if (key.startsWith('@') && typeof value === 'function') {
-        cache[`@${key.slice(1)}`] = value;
-        continue;
-      }
-
-      cache[key] = value;
+      const oldValue = cache[ck];
+      cache[ck] = normalized;
+      this._writePropToDom(el, ck, normalized, oldValue);
     }
 
-    return cache;
+    this._removeStaleProps(el, cache, scratch, skipTextContent);
+    scratch.clear();
+  }
+
+  /** Normalize a single raw prop key/value into a canonical [ck, value] pair.
+   *  Returns [null, null] when the prop should be skipped entirely. */
+  private _normalizeProp(
+    key: string,
+    value: unknown,
+    skipTextContent: boolean,
+  ): [string, unknown] | [null, null] {
+    if (key === 'text' || key === 'textContent') {
+      if (skipTextContent) return [null, null];
+
+      return ['textContent', value];
+    }
+    if (key === 'className' || key === 'class') {
+      if (value == null || value === false) return ['class', null];
+      if (typeof value === 'object') {
+        return ['class', Object.entries(value as Record<string, boolean>)
+          .filter(([_, a]) => a)
+          .map(([n]) => n)
+          .join(' ')];
+      }
+
+      return ['class', String(value as string | number | boolean | bigint)];
+    }
+    if (key.startsWith('@') && typeof value === 'function') {
+      return [`@${key.slice(1)}`, value];
+    }
+
+    return [key, value];
+  }
+
+  /** Write a single already-normalized prop to the DOM. */
+  private _writePropToDom(el: Element, ck: string, value: unknown, oldValue: unknown): void {
+    if (value == null || value === false) {
+      this._removeProp(el, ck);
+      return;
+    }
+    if (ck === 'class') {
+      el.setAttribute('class', value as string);
+    } else if (ck === 'textContent') {
+      el.textContent = value as string;
+    } else if (ck === 'style') {
+      if (typeof value === 'object' && 'style' in el) {
+        const s = (el as HTMLElement).style;
+        for (const [k, v] of Object.entries(value as Record<string, string>)) {
+          if (k.startsWith('--')) s.setProperty(k, v);
+          else (s as unknown as Record<string, string>)[k] = v;
+        }
+      }
+    } else if (ck.startsWith('@')) {
+      const eventName = ck.slice(1);
+      if (oldValue) el.removeEventListener(eventName, oldValue as EventListener);
+      el.addEventListener(eventName, value as EventListener);
+    } else if (typeof value === 'boolean') {
+      el.setAttribute(ck, '');
+    } else if (typeof value === 'object') {
+      (el as unknown as Record<string, unknown>)[ck] = value;
+    } else {
+      el.setAttribute(ck, String(value as string | number | bigint));
+    }
+  }
+
+  /** Remove props that were present in the last render but absent in the current one. */
+  private _removeStaleProps(
+    el: Element,
+    cache: Record<string, unknown>,
+    scratch: Set<string>,
+    skipTextContent: boolean,
+  ): void {
+    for (const ck of Object.keys(cache)) {
+      if (scratch.has(ck)) continue;
+
+      if (ck === 'textContent' && skipTextContent) continue;
+
+      const oldValue = cache[ck];
+      delete cache[ck];
+
+      if (ck.startsWith('@') && typeof oldValue === 'function') {
+        el.removeEventListener(ck.slice(1), oldValue as EventListener);
+      } else if (ck === 'style' && typeof oldValue === 'object' && oldValue !== null && 'style' in el) {
+        const s = (el as HTMLElement).style;
+        for (const k of Object.keys(oldValue as Record<string, string>)) {
+          if (k.startsWith('--')) s.removeProperty(k);
+          else (s as unknown as Record<string, string>)[k] = '';
+        }
+      } else if (typeof oldValue === 'object' && oldValue !== null) {
+        (el as unknown as Record<string, unknown>)[ck] = null;
+      } else {
+        this._removeProp(el, ck);
+      }
+    }
   }
 
   private _removeProp(el: Element, key: string): void {

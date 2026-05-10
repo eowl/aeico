@@ -57,7 +57,6 @@ declare class ElementBuilder {
   build(root: Node, block: () => void): void;
   private _cleanup;
   private _applyProps;
-  private _normalizeProps;
   private _removeProp;
   detached<T>(fn: () => T): T;
   el: <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
