@@ -1,5 +1,5 @@
 import type { Props, Prop, Computed, Watchers, WatcherHandler, InferProps } from './types';
-import { ListenerRegistry, emit as emitEvent, type EmitOptions } from './events';
+import { listenEvent, cleanupListeners, emit as emitEvent, type EmitOptions } from './events';
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context';
 import { html, render, type RenderResult } from 'aeico-view';
 import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from './decorators';
@@ -676,8 +676,6 @@ class BaseElement extends HTMLElement {
     emitEvent(this, eventName, options);
   }
 
-  private _listeners?: ListenerRegistry;
-
   /**
    * Add an event listener to this component or a target element. Automatically tracks listeners for cleanup.
    * Can be called with (event, handler) to listen on this component, or (target, event, handler) to listen on a specific target.
@@ -685,29 +683,35 @@ class BaseElement extends HTMLElement {
    * this.listen('click', () => { ... }) // listens for click events on this component
    * this.listen(this.querySelector('button'), 'click', () => { ... }) // listens for click events on a button inside the component
    */
-  listen(event: string, handler: EventListenerOrEventListenerObject): void;
-  listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject): void;
+  listen(event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
+  listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
   listen(
     eventOrTarget: string | EventTarget,
     handlerOrEvent: EventListenerOrEventListenerObject | string,
-    maybeHandler?: EventListenerOrEventListenerObject,
+    maybeHandlerOrOptions?: EventListenerOrEventListenerObject | AddEventListenerOptions,
+    maybeOptions?: AddEventListenerOptions,
   ): void {
-    if (typeof __DEV__ !== 'undefined' && __DEV__ && getCurrentContext() !== null) {
+    if (typeof __DEV__ !== 'undefined' && __DEV__ && getCurrentContext() === this) {
       throw new Error(
         '[aeico] listen() must not be called inside render(). Use declarative @event syntax instead.',
       );
     }
 
-    if (!this._listeners) this._listeners = new ListenerRegistry();
-
     if (typeof eventOrTarget === 'string') {
-      this._listeners.add(
+      listenEvent(
         this,
         eventOrTarget,
         handlerOrEvent as EventListenerOrEventListenerObject,
+        maybeHandlerOrOptions as AddEventListenerOptions | undefined,
       );
     } else {
-      this._listeners.add(eventOrTarget, handlerOrEvent as string, maybeHandler!);
+      listenEvent(
+        this,
+        eventOrTarget,
+        handlerOrEvent as string,
+        maybeHandlerOrOptions as EventListenerOrEventListenerObject,
+        maybeOptions,
+      );
     }
   }
 
@@ -721,7 +725,7 @@ class BaseElement extends HTMLElement {
   connectedCallback() {}
 
   disconnectedCallback() {
-    this._listeners?.removeAll();
+    cleanupListeners(this);
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {

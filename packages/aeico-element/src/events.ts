@@ -37,20 +37,99 @@ type TrackedListener = {
   target: EventTarget;
   event: string;
   handler: EventListenerOrEventListenerObject;
+  options?: AddEventListenerOptions;
 };
 
 export class ListenerRegistry {
   private _listeners: TrackedListener[] = [];
 
-  add(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject): void {
-    target.addEventListener(event, handler);
-    this._listeners.push({ target, event, handler });
+  add(
+    target: EventTarget,
+    event: string,
+    handler: EventListenerOrEventListenerObject,
+    options?: AddEventListenerOptions,
+  ): void {
+    target.addEventListener(event, handler, options);
+    this._listeners.push({ target, event, handler, options });
   }
 
   removeAll(): void {
-    for (const { target, event, handler } of this._listeners) {
-      target.removeEventListener(event, handler);
+    for (const { target, event, handler, options } of this._listeners) {
+      target.removeEventListener(event, handler, options ? { capture: options.capture } : undefined);
     }
     this._listeners.length = 0;
+  }
+}
+
+const _registries = new WeakMap<object, ListenerRegistry>();
+
+function _getRegistry(host: object): ListenerRegistry {
+  let registry = _registries.get(host);
+  if (!registry) {
+    registry = new ListenerRegistry();
+    _registries.set(host, registry);
+  }
+  return registry;
+}
+
+/**
+ * Add a tracked event listener on behalf of `host`. All listeners registered via this function
+ * can be removed at once by calling `cleanupListeners(host)`, which is called automatically by
+ * BaseElement's disconnectedCallback.
+ *
+ * @example
+ * // Listen on the host element itself
+ * listen(this, 'click', handler);
+ * // Listen on an external target
+ * listen(this, window, 'resize', handler, { passive: true });
+ */
+export function listenEvent(
+  host: object,
+  event: string,
+  handler: EventListenerOrEventListenerObject,
+  options?: AddEventListenerOptions,
+): void;
+export function listenEvent(
+  host: object,
+  target: EventTarget,
+  event: string,
+  handler: EventListenerOrEventListenerObject,
+  options?: AddEventListenerOptions,
+): void;
+export function listenEvent(
+  host: object,
+  eventOrTarget: string | EventTarget,
+  handlerOrEvent: EventListenerOrEventListenerObject | string,
+  maybeHandlerOrOptions?: EventListenerOrEventListenerObject | AddEventListenerOptions,
+  maybeOptions?: AddEventListenerOptions,
+): void {
+  const registry = _getRegistry(host);
+  if (typeof eventOrTarget === 'string') {
+    registry.add(
+      host as EventTarget,
+      eventOrTarget,
+      handlerOrEvent as EventListenerOrEventListenerObject,
+      maybeHandlerOrOptions as AddEventListenerOptions | undefined,
+    );
+  } else {
+    registry.add(
+      eventOrTarget,
+      handlerOrEvent as string,
+      maybeHandlerOrOptions as EventListenerOrEventListenerObject,
+      maybeOptions,
+    );
+  }
+}
+
+/**
+ * Remove all event listeners previously registered via `listen(host, ...)` for the given host.
+ * Called automatically by BaseElement's disconnectedCallback.
+ */
+export function cleanupListeners(host: object): void {
+  const registry = _registries.get(host);
+  
+  if (registry) {
+    registry.removeAll();
+    _registries.delete(host);
   }
 }
