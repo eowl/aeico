@@ -6,7 +6,7 @@ import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from './decorators';
 import { WATCHER_METADATA_KEY } from './decorators/watch';
 import { COMPUTED_METADATA_KEY } from './decorators/computed';
 import type { Updatable } from './render-context';
-import { toKebab } from './utils';
+import { toKebab, SwapBuffer } from './utils';
 
 /**
  * BaseElement internal reactive foundation for all Aeico elements.
@@ -22,7 +22,7 @@ import { toKebab } from './utils';
  */
 class BaseElement extends HTMLElement {
   private _updatePending = false;
-  private _changedProps = new Map<string, unknown>();
+  private _changedProps = new SwapBuffer(() => new Map<string, unknown>());
   private _hasMounted = false;
   private _computedCache = new Map<string, { deps: string; value: unknown }>();
 
@@ -431,7 +431,7 @@ class BaseElement extends HTMLElement {
    */
   update(name?: string, oldValue?: unknown): void {
     if (name !== undefined) {
-      this._changedProps.set(name, oldValue);
+      this._changedProps.current.set(name, oldValue);
     }
 
     if (!this._updatePending) {
@@ -502,13 +502,12 @@ class BaseElement extends HTMLElement {
    * Called automatically after update is triggered.
    * Can be overridden to customize update behavior, but should call super.executeUpdate() if so.
    */
-  protected async executeUpdate(): Promise<void> {
+  protected executeUpdate(): void {
     if (!this._hasMounted) {
       this._reflectAccessorDefaults();
     }
 
-    const changedProps = this._changedProps;
-    this._changedProps.clear();
+    const changedProps = this._changedProps.swap();
     this._updatePending = false;
 
     const shouldUpdate = this.onPrepare(changedProps);
