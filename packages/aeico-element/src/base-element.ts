@@ -672,8 +672,18 @@ class BaseElement extends HTMLElement {
    * @param eventName The name of the event to emit
    * @param options Optional configuration for the event (detail payload, bubbles, composed)
    */
-  protected emit(eventName: string, options?: EmitOptions): void {
-    emitEvent(this, eventName, options);
+  protected emit(eventName: string, options?: EmitOptions): void;
+  protected emit(target: EventTarget, eventName: string, options?: EmitOptions): void;
+  protected emit(
+    eventNameOrTarget: string | EventTarget,
+    optionsOrEventName?: EmitOptions | string,
+    maybeOptions?: EmitOptions,
+  ): void {
+    if (typeof eventNameOrTarget === 'string') {
+      emitEvent(this, eventNameOrTarget, optionsOrEventName as EmitOptions | undefined);
+    } else {
+      emitEvent(eventNameOrTarget, optionsOrEventName as string, maybeOptions);
+    }
   }
 
   /**
@@ -683,9 +693,9 @@ class BaseElement extends HTMLElement {
    * this.listen('click', () => { ... }) // listens for click events on this component
    * this.listen(this.querySelector('button'), 'click', () => { ... }) // listens for click events on a button inside the component
    */
-  listen(event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
-  listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
-  listen(
+  protected listen(event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
+  protected listen(target: EventTarget, event: string, handler: EventListenerOrEventListenerObject, options?: AddEventListenerOptions): void;
+  protected listen(
     eventOrTarget: string | EventTarget,
     handlerOrEvent: EventListenerOrEventListenerObject | string,
     maybeHandlerOrOptions?: EventListenerOrEventListenerObject | AddEventListenerOptions,
