@@ -11,6 +11,7 @@ export type { Updatable } from './render-context';
 // Types
 export type { PropertyType, Prop, Props, InferProps, WatcherHandler, Watchers } from './types';
 export type { EmitOptions } from './events';
+export { listenEvent, cleanupListeners } from './events';
 
 // Styles
 export { default as styleStore, StyleResult, supportAdoptStyle } from './styles';
