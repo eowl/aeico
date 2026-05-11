@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { html, render, getActiveBuilder, tags, RenderResult } from '../../src/renderer.js';
-import ElementBuilder from '../../src/element-builder.js';
+import Reconciler from '../../src/reconciler.js';
 
 describe('html()', () => {
   it('returns a RenderResult', () => {
@@ -9,7 +9,7 @@ describe('html()', () => {
   });
 
   it('stores the callback as _cb', () => {
-    const cb = (b: ElementBuilder) => {
+    const cb = (b: Reconciler) => {
       b.div();
     };
     const result = html(cb);
@@ -118,7 +118,7 @@ describe('render()', () => {
     expect(container.firstElementChild?.id).to.equal('a');
   });
 
-  it('passes an ElementBuilder to the callback', () => {
+  it('passes a Reconciler to the callback', () => {
     let captured: unknown;
     render(
       html((b) => {
@@ -126,7 +126,7 @@ describe('render()', () => {
       }),
       container,
     );
-    expect(captured).to.be.instanceOf(ElementBuilder);
+    expect(captured).to.be.instanceOf(Reconciler);
   });
 
   it('supports shadow root as render target', () => {
@@ -156,7 +156,7 @@ describe('getActiveBuilder()', () => {
   it('returns the active builder during render()', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
-    let captured: ElementBuilder | null = null;
+    let captured: Reconciler | null = null;
 
     render(
       html(() => {
@@ -165,7 +165,7 @@ describe('getActiveBuilder()', () => {
       container,
     );
 
-    expect(captured).to.be.instanceOf(ElementBuilder);
+    expect(captured).to.be.instanceOf(Reconciler);
     container.remove();
   });
 
