@@ -4,12 +4,12 @@ changelog:
       - release
   categories:
     - title: aeico-view
-      labels: ['pkg:aeico-view']
+      labels: ['aeico-view']
     - title: aeico-element
-      labels: ['pkg:aeico-element']
+      labels: ['aeico-element']
     - title: aeico-localize
-      labels: ['pkg:aeico-localize']
+      labels: ['aeico-localize']
     - title: aeico
-      labels: ['pkg:aeico']
+      labels: ['aeico']
     - title: Other Changes
       labels: ['*']
