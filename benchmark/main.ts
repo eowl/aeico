@@ -51,6 +51,38 @@ class BenchRow extends AeicoBase {
 customElements.define('bench-row', BenchRow)
 
 // ---------------------------------------------------------------------------
+// Compare: OLD implementation — per-instance Object.defineProperty
+// Mirrors the pre-optimization _defineReactiveProp path. All 3 props have
+// reflect:false so the setter only writes the backing store (no setAttribute).
+// ---------------------------------------------------------------------------
+
+class OldBenchRow extends HTMLElement {
+  _reflecting = false
+
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+    for (const propName of ['rowId', 'label', 'selected']) {
+      const internalKey = `_${propName}`
+      const self = this as unknown as Record<string, unknown>
+      self[internalKey] = undefined
+      // ← This is the OLD per-instance defineProperty path (3× per constructor call)
+      Object.defineProperty(this, propName, {
+        get: () => self[internalKey],
+        set: (value: unknown) => { self[internalKey] = value },
+        enumerable: true,
+        configurable: true,
+      })
+    }
+  }
+
+  declare rowId?: number
+  declare label?: string
+  declare selected?: boolean
+}
+customElements.define('compare-row-old', OldBenchRow)
+
+// ---------------------------------------------------------------------------
 // Native-DOM baseline — same structure (div > span + span + button)
 // ---------------------------------------------------------------------------
 
@@ -281,6 +313,105 @@ const suites: Record<string, SuiteFn> = {
         { setup: async () => { aeicoClear(); await aeicoCreate(seed.slice()) } }),
     ]
   },
+
+  // Measures the cost of constructing + writing initial props WITHOUT mounting to DOM or rendering.
+  // This directly isolates the _initializeProps / accessor-definition path.
+  'instantiation only (no mount)': async () => {
+    const data = buildData(COUNT)
+    return [
+      await bench('Native createElement ×1000', () => {
+        for (const d of data) {
+          const el = document.createElement('div')
+          el.dataset['rowId'] = String(d.id)
+          el.dataset['label'] = d.label
+        }
+      }),
+      await bench('AeicoBase createElement ×1000', () => {
+        for (const d of data) {
+          const el = document.createElement('bench-row') as BenchRow
+          el.rowId = d.id
+          el.label = d.label
+        }
+      }),
+    ]
+  },
+
+  // Measures accessor read speed: 1000 elements × 100 reads each = 100 000 property reads.
+  'prop read tight loop': async () => {
+    const seed = buildData(COUNT)
+    const nativeEls: HTMLElement[] = []
+    const aeicoEls: BenchRow[] = []
+    for (const d of seed) {
+      const n = document.createElement('div')
+      n.dataset['label'] = d.label
+      nativeEls.push(n)
+      const a = document.createElement('bench-row') as BenchRow
+      a.label = d.label
+      aeicoEls.push(a)
+    }
+    const READS = 100
+    return [
+      await bench(`Native dataset read ×${COUNT * READS}`, () => {
+        let s = ''
+        for (let r = 0; r < READS; r++)
+          for (const el of nativeEls) s = el.dataset['label']!
+        void s
+      }),
+      await bench(`AeicoBase prop read ×${COUNT * READS}`, () => {
+        let s = ''
+        for (let r = 0; r < READS; r++)
+          for (const el of aeicoEls) s = el.label!
+        void s
+      }),
+    ]
+  },
+}
+
+// ---------------------------------------------------------------------------
+// Compare runner
+// ---------------------------------------------------------------------------
+
+const COMPARE_COUNT = 1000
+
+async function runCompare() {
+  const compareProgress = document.getElementById('compare-progress')!
+  const compareOutput   = document.getElementById('compare-output')!
+
+  compareProgress.textContent = 'Warming up…'
+  compareOutput.textContent   = ''
+
+  const oldResult = await bench(`OLD  per-instance defineProperty ×${COMPARE_COUNT}`, () => {
+    for (let i = 0; i < COMPARE_COUNT; i++) {
+      const el = document.createElement('compare-row-old') as OldBenchRow
+      el.rowId = i
+      el.label = 'bench'
+    }
+  }, { warmup: 5, runs: 30 })
+
+  compareProgress.textContent = 'Running NEW…'
+
+  const newResult = await bench(`NEW  prototype accessor (BaseElement) ×${COMPARE_COUNT}`, () => {
+    for (let i = 0; i < COMPARE_COUNT; i++) {
+      const el = document.createElement('bench-row') as BenchRow
+      el.rowId = i
+      el.label = 'bench'
+    }
+  }, { warmup: 5, runs: 30 })
+
+  const fmtMs  = (n: number) => `${n.toFixed(3)}ms`
+  const fmtRow = (r: Result) =>
+    `  ${r.name.padEnd(48)}  mean ${fmtMs(r.mean).padStart(9)}  min ${fmtMs(r.min).padStart(9)}  ±${fmtMs(r.stddev)}\n`
+
+  const speedup = (oldResult.mean / newResult.mean).toFixed(2)
+  const pct     = ((1 - newResult.mean / oldResult.mean) * 100).toFixed(1)
+
+  compareOutput.textContent =
+    `── Construction cost (×${COMPARE_COUNT} elements, 30 runs, no DOM mount) ──────────\n\n` +
+    fmtRow(oldResult) +
+    fmtRow(newResult) +
+    `\n  Speedup: ${speedup}×  —  prototype accessor is ${pct}% faster\n`
+
+  compareProgress.textContent = 'Done.'
 }
 
 // ---------------------------------------------------------------------------
@@ -317,3 +448,5 @@ document.getElementById('btn-run-all')!.addEventListener('click', runAll)
 for (const name of Object.keys(suites)) {
   document.getElementById(`btn-suite-${name}`)?.addEventListener('click', () => runSuite(name))
 }
+
+document.getElementById('btn-run-compare')!.addEventListener('click', runCompare)
