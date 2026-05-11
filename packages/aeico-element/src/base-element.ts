@@ -297,20 +297,11 @@ class BaseElement extends HTMLElement {
     const self = this as Record<string, unknown>;
 
     Object.defineProperty(this, propName, {
-      get: () => {
-        if (propDecl.observe === false) {
-          // if observe is disabled, just return the internal value without trying to read from attribute
-          return self[internalKey];
-        }
-
-        const attrName = propDecl.attr ?? kebabName;
-        const attrValue = this.getAttribute(attrName);
-        if (attrValue === null) {
-          return self[internalKey];
-        }
-
-        return this.deserializeAttribute(attrValue, propDecl);
-      },
+      // Read directly from the internal backing field.
+      // `attributeChangedCallback` keeps `internalKey` in sync whenever the DOM
+      // attribute changes externally, so there is no need to call `getAttribute`
+      // on every property read.
+      get: () => self[internalKey],
       set: (value: unknown) => {
         const oldValue = self[propName];
 
