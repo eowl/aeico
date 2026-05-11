@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aeico Benchmark</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 760px;
+        margin: 32px auto;
+        padding: 0 20px;
+        color: #1a1a1a;
+      }
+      h1 { margin-bottom: 4px; font-size: 1.4rem; }
+      p.note { margin: 0 0 16px; font-size: .85rem; color: #666; }
+      .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+      button {
+        padding: 6px 14px;
+        border: 1px solid #bbb;
+        border-radius: 4px;
+        background: #f5f5f5;
+        cursor: pointer;
+        font-size: .85rem;
+      }
+      button:hover { background: #e8e8e8; }
+      button#btn-run-all {
+        background: #1a73e8;
+        color: #fff;
+        border-color: #1a73e8;
+        font-weight: 600;
+      }
+      button#btn-run-all:hover { background: #1557b0; }
+      #progress {
+        font-size: .85rem;
+        color: #555;
+        min-height: 1.4em;
+        margin-bottom: 8px;
+      }
+      #output {
+        white-space: pre;
+        font-family: 'Menlo', 'Consolas', monospace;
+        font-size: .8rem;
+        line-height: 1.6;
+        background: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 16px;
+        min-height: 120px;
+      }
+      #container { display: none; }
+    </style>
+  </head>
+  <body>
+    <h1>Aeico Benchmark</h1>
+    <p class="note">Each suite runs 3 warmup rounds then 8 measured rounds (create-many: 2+5). Times include microtask flush. No CPU throttle.</p>
+
+    <div class="toolbar">
+      <button id="btn-run-all">Run all suites</button>
+      <button id="btn-suite-create rows">create rows</button>
+      <button id="btn-suite-replace all rows">replace all rows</button>
+      <button id="btn-suite-partial update">partial update</button>
+      <button id="btn-suite-select row">select row</button>
+      <button id="btn-suite-swap rows">swap rows</button>
+      <button id="btn-suite-remove row">remove row</button>
+      <button id="btn-suite-create many rows">create many rows</button>
+      <button id="btn-suite-append rows">append rows</button>
+      <button id="btn-suite-clear rows">clear rows</button>
+    </div>
+
+    <div id="progress">Ready.</div>
+    <div id="output">Results will appear here…</div>
+
+    <!-- off-screen mount target for benchmark elements -->
+    <div id="container" aria-hidden="true"></div>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
