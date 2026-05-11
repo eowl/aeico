@@ -183,6 +183,77 @@ describe('BaseElement', () => {
         );
         expect(el.score).to.equal(42);
       });
+
+      it('external setAttribute syncs to property immediately', async () => {
+        const tag = defineEl({ count: { type: Number } });
+        const el = await mount<BaseElement & { count: number }>(`<${tag} count="1"></${tag}>`);
+        expect(el.count).to.equal(1);
+
+        el.setAttribute('count', '99');
+        await updated();
+        expect(el.count).to.equal(99);
+      });
+
+      it('external removeAttribute resets Boolean prop to false', async () => {
+        const tag = defineEl({ active: { type: Boolean } });
+        const el = await mount<BaseElement & { active: boolean }>(`<${tag} active></${tag}>`);
+        expect(el.active).to.be.true;
+
+        el.removeAttribute('active');
+        await updated();
+        expect(el.active).to.be.false;
+      });
+
+      it('external removeAttribute resets non-Boolean prop to undefined', async () => {
+        const tag = defineEl({ label: { type: String } });
+        const el = await mount<BaseElement & { label: string | undefined }>(
+          `<${tag} label="hello"></${tag}>`,
+        );
+        expect(el.label).to.equal('hello');
+
+        el.removeAttribute('label');
+        await updated();
+        expect(el.label).to.be.undefined;
+      });
+
+      it('HTML parser preset attribute is readable before first JS interaction', async () => {
+        const tag = defineEl({ count: { type: Number } });
+        const el = await mount<BaseElement & { count: number }>(`<${tag} count="7"></${tag}>`);
+        // No JS setter was called — value must come from attributeChangedCallback initialisation.
+        expect(el.count).to.equal(7);
+      });
+
+      it('observe:false prop ignores external setAttribute', async () => {
+        const tag = defineEl({ active: { type: Boolean, observe: false } });
+        const el = await mount<BaseElement & { active: boolean }>(`<${tag}></${tag}>`);
+        el.setAttribute('active', '');
+        await updated();
+        // observe:false — attributeChangedCallback is never called, internalKey stays undefined.
+        expect(el.active).to.be.undefined;
+      });
+
+      it('Array prop deserialized value is stored in internalKey, not re-parsed on re-read', async () => {
+        let parseCount = 0;
+        const tag = defineEl({
+          items: {
+            type: Array,
+            parser: (v: string | null) => {
+              if (v !== null) parseCount++;
+              return v ? JSON.parse(v) : [];
+            },
+          },
+        });
+        const el = await mount<BaseElement & { items: number[] }>(
+          `<${tag} items="[1,2,3]"></${tag}>`,
+        );
+        // Read the property three times
+        void el.items;
+        void el.items;
+        void el.items;
+        // Parser is invoked once (during attributeChangedCallback), never during getter reads.
+        expect(parseCount).to.equal(1);
+        expect(el.items).to.deep.equal([1, 2, 3]);
+      });
     });
 
     describe('custom parser and formatter', () => {
