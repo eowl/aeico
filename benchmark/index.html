@@ -50,6 +50,49 @@
         min-height: 120px;
       }
       #container { display: none; }
+
+      /* ── Compare section ──────────────────────────────────── */
+      .compare-divider {
+        border: none;
+        border-top: 2px solid #e0e0e0;
+        margin: 36px 0 24px;
+      }
+      #compare-section h2 {
+        margin: 0 0 4px;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      #compare-section .badge {
+        display: inline-block;
+        font-size: .72rem;
+        font-weight: 600;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        background: #e8f0fe;
+        color: #1a73e8;
+        border: 1px solid #b8d4ff;
+        border-radius: 4px;
+        padding: 1px 7px;
+        margin-left: 8px;
+        vertical-align: middle;
+      }
+      #compare-progress {
+        font-size: .85rem;
+        color: #555;
+        min-height: 1.4em;
+        margin-bottom: 8px;
+      }
+      #compare-output {
+        white-space: pre;
+        font-family: 'Menlo', 'Consolas', monospace;
+        font-size: .8rem;
+        line-height: 1.6;
+        background: #f0f6ff;
+        border: 1px solid #b8d4ff;
+        border-radius: 6px;
+        padding: 16px;
+        min-height: 80px;
+      }
     </style>
   </head>
   <body>
@@ -74,6 +117,24 @@
 
     <!-- off-screen mount target for benchmark elements -->
     <div id="container" aria-hidden="true"></div>
+
+    <!-- ── Compare section ─────────────────────────────────────────────── -->
+    <hr class="compare-divider" />
+    <section id="compare-section">
+      <h2>Accessor Strategy Compare <span class="badge">optimization</span></h2>
+      <p class="note">
+        Compares <strong>per-instance</strong> <code>Object.defineProperty</code> (old approach) against
+        <strong>prototype-level accessor</strong> (current <code>BaseElement</code>).<br>
+        Constructs 1 000 elements × 30 runs without mounting to DOM — isolates the accessor-installation path.
+      </p>
+
+      <div class="toolbar">
+        <button id="btn-run-compare">Run compare</button>
+      </div>
+
+      <div id="compare-progress">Ready.</div>
+      <div id="compare-output">Results will appear here…</div>
+    </section>
 
     <script type="module" src="./main.ts"></script>
   </body>
