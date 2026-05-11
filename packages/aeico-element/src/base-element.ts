@@ -51,6 +51,9 @@ class BaseElement extends HTMLElement {
   private static _computedDecls?: Computed;
   private static _accessorPropsCache?: Set<string>;
 
+  /** @internal Tracks which subclass prototypes have already had reactive accessors installed. */
+  private static readonly _initializedPrototypes = new WeakSet<typeof BaseElement>();
+
   /**
    * Collect props from the entire inheritance chain, starting from the current class up to HTMLElement.
    * Child class props override parent class props. Also builds a map of attribute names to property names for efficient lookup in attributeChangedCallback.
@@ -194,6 +197,65 @@ class BaseElement extends HTMLElement {
     return collected;
   }
 
+  /**
+   * Installs reactive property accessors on the class prototype once per class.
+   * All instances of the same class share the same getter/setter objects, avoiding
+   * per-instance `Object.defineProperty()` calls and keeping the accessor
+   * monomorphic so V8 can inline the access path.
+   */
+  private static _initializePrototypeProps(): void {
+    if (BaseElement._initializedPrototypes.has(this)) return;
+    BaseElement._initializedPrototypes.add(this);
+
+    const allProps = this._collectProps();
+
+    for (const [propName, propDecl] of Object.entries(allProps)) {
+      const internalKey = `_${propName}`;
+      const kebabName = toKebab(propName);
+
+      Object.defineProperty(this.prototype, propName, {
+        get(this: BaseElement) {
+          return (this as unknown as Record<string, unknown>)[internalKey];
+        },
+        set(this: BaseElement, value: unknown) {
+          const self = this as unknown as Record<string, unknown>;
+          const oldValue = self[internalKey];
+
+          if (propDecl.observe === false) {
+            self[internalKey] = value;
+            this.update(propName, oldValue);
+            
+            return;
+          }
+
+          self[internalKey] = value;
+
+          const shouldReflect = propDecl.reflect !== false;
+          const attrName = propDecl.attr ?? kebabName;
+
+          if (shouldReflect) {
+            this._reflecting = true;
+            if (
+              value === null ||
+              value === undefined ||
+              (propDecl.type === Boolean && value === false)
+            ) {
+              this.removeAttribute(attrName);
+            } else {
+              const serialized = this.serializeAttribute(value, propDecl);
+              this.setAttribute(attrName, serialized);
+            }
+            this._reflecting = false;
+          }
+
+          this.update(propName, oldValue);
+        },
+        enumerable: true,
+        configurable: true,
+      });
+    }
+  }
+
   static useShadowDOM: boolean = true;
   static shadowOptions: ShadowRootInit = { mode: 'open', delegatesFocus: true };
 
@@ -260,8 +322,9 @@ class BaseElement extends HTMLElement {
   private _initializeProps() {
     const constructor = this.constructor as typeof BaseElement;
     const allProps = constructor._collectProps();
+    constructor._initializePrototypeProps();
 
-    for (const [propName, propDecl] of Object.entries(allProps)) {
+    for (const [propName] of Object.entries(allProps)) {
       const internalKey = `_${String(propName)}`;
       const self = this as Record<string, unknown>;
 
@@ -275,7 +338,6 @@ class BaseElement extends HTMLElement {
       }
 
       self[internalKey] = undefined;
-      this._defineReactiveProp(propName, propDecl);
 
       if (hasPreUpgrade && preUpgradeValue !== undefined) {
         // Write directly to the backing store and defer setAttribute to executeUpdate().
@@ -285,59 +347,6 @@ class BaseElement extends HTMLElement {
         (this._deferredPreUpgrade ??= new Map()).set(propName, preUpgradeValue);
       }
     }
-  }
-
-  /**
-   * Defines a reactive getter/setter for a single prop on this instance.
-   * Extracted so it can be called both from `_initializeProps()` and `_reclaimProp()`.
-   */
-  private _defineReactiveProp(propName: string, propDecl: Prop) {
-    const kebabName = toKebab(propName);
-    const internalKey = `_${propName}`;
-    const self = this as Record<string, unknown>;
-
-    Object.defineProperty(this, propName, {
-      // Read directly from the internal backing field.
-      // `attributeChangedCallback` keeps `internalKey` in sync whenever the DOM
-      // attribute changes externally, so there is no need to call `getAttribute`
-      // on every property read.
-      get: () => self[internalKey],
-      set: (value: unknown) => {
-        const oldValue = self[propName];
-
-        if (propDecl.observe === false) {
-          // if observe is disabled, just update the internal value without reflecting to attribute
-          self[internalKey] = value;
-          this.update(propName, oldValue);
-
-          return;
-        }
-
-        self[internalKey] = value;
-
-        const shouldReflect = propDecl.reflect !== false;
-        const attrName = propDecl.attr ?? kebabName;
-
-        if (shouldReflect) {
-          this._reflecting = true;
-          if (
-            value === null ||
-            value === undefined ||
-            (propDecl.type === Boolean && value === false)
-          ) {
-            this.removeAttribute(attrName);
-          } else {
-            const serialized = this.serializeAttribute(value, propDecl);
-            this.setAttribute(attrName, serialized);
-          }
-          this._reflecting = false;
-        }
-
-        this.update(propName, oldValue);
-      },
-      enumerable: true,
-      configurable: true,
-    });
   }
 
   /**
@@ -372,8 +381,6 @@ class BaseElement extends HTMLElement {
     if (!Object.prototype.hasOwnProperty.call(this, internalKey)) {
       self[internalKey] = undefined;
     }
-
-    this._defineReactiveProp(propName, propDecl);
 
     // Write initial value directly to backing store and defer setAttribute to executeUpdate().
     // Calling setAttribute() from the constructor (addInitializer runs during construction) is

@@ -254,6 +254,31 @@ describe('BaseElement', () => {
         expect(parseCount).to.equal(1);
         expect(el.items).to.deep.equal([1, 2, 3]);
       });
+
+      it('reactive accessor lives on the prototype, not the instance', async () => {
+        const tag = defineEl({ count: { type: Number } });
+        const el = await mount<BaseElement & { count: number }>(`<${tag}></${tag}>`);
+        // The own property should not be an accessor — the instance stores only the backing field.
+        expect(Object.getOwnPropertyDescriptor(el, 'count')).to.be.undefined;
+        // The prototype carries the shared accessor.
+        const proto = Object.getPrototypeOf(el);
+        const descriptor = Object.getOwnPropertyDescriptor(proto, 'count');
+        expect(descriptor).to.exist;
+        expect(descriptor!.get).to.be.a('function');
+        expect(descriptor!.set).to.be.a('function');
+      });
+
+      it('all instances of the same class share the identical accessor functions', async () => {
+        const tag = defineEl({ value: { type: String } });
+        const el1 = await mount<BaseElement & { value: string }>(`<${tag}></${tag}>`);
+        const el2 = await mount<BaseElement & { value: string }>(`<${tag}></${tag}>`);
+        const proto = Object.getPrototypeOf(el1);
+        const d1 = Object.getOwnPropertyDescriptor(proto, 'value')!;
+        const d2 = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el2), 'value')!;
+        // Same prototype → identical function references.
+        expect(d1.get).to.equal(d2.get);
+        expect(d1.set).to.equal(d2.set);
+      });
     });
 
     describe('custom parser and formatter', () => {
