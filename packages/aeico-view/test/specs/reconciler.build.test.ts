@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import ElementBuilder from '../../src/element-builder.js';
+import Reconciler from '../../src/reconciler.js';
 
-describe('ElementBuilder - build()', () => {
-  let builder: ElementBuilder;
+describe('Reconciler - build()', () => {
+  let builder: Reconciler;
   let container: HTMLDivElement;
 
   beforeEach(() => {
-    builder = new ElementBuilder();
+    builder = new Reconciler();
     container = document.createElement('div');
     document.body.appendChild(container);
   });

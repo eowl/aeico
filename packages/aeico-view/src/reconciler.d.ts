@@ -38,8 +38,8 @@ type CustomHTMLTags = {
     (cb: () => void): HTMLElementTagNameMap[K];
   };
 };
-interface ElementBuilder extends HTMLTags, SVGOnlyTags, CustomHTMLTags {}
-declare class ElementBuilder {
+interface Reconciler extends HTMLTags, SVGOnlyTags, CustomHTMLTags {}
+declare class Reconciler {
   private _stack;
   private _cursorStack;
   private _propsCache;
@@ -72,5 +72,5 @@ declare class ElementBuilder {
   node: (existingNode: Node) => Node;
   fragment: (cb: () => void) => DocumentFragment;
 }
-export default ElementBuilder;
+export default Reconciler;
 export type { BuilderProps, HTMLTags, SVGOnlyTags };

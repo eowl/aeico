@@ -1,4 +1,4 @@
-import ElementBuilder from './element-builder';
+import Reconciler from './reconciler';
 /**
  * RenderResult — opaque wrapper produced by `html()`.
  *
@@ -7,11 +7,11 @@ import ElementBuilder from './element-builder';
  * consumers — just pass it to `render(result, root)`.
  */
 export declare class RenderResult {
-  readonly _cb: (builder: ElementBuilder) => void;
+  readonly _cb: (builder: Reconciler) => void;
   /** @internal */
-  constructor(_cb: (builder: ElementBuilder) => void);
+  constructor(_cb: (builder: Reconciler) => void);
 }
-export declare const html: (cb: (builder: ElementBuilder) => void) => RenderResult,
+export declare const html: (cb: (builder: Reconciler) => void) => RenderResult,
   render: (result: RenderResult, root: Node) => void,
-  getActiveBuilder: () => ElementBuilder,
-  tags: ElementBuilder;
+  getActiveBuilder: () => Reconciler,
+  tags: Reconciler;

@@ -1,13 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import ElementBuilder from '../../src/element-builder.js';
+import Reconciler from '../../src/reconciler.js';
 
-describe('ElementBuilder', () => {
-  let builder: ElementBuilder;
+describe('Reconciler', () => {
+  let builder: Reconciler;
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
 
   beforeEach(() => {
-    builder = new ElementBuilder();
+    builder = new Reconciler();
   });
 
   describe('HTML element creation', () => {
