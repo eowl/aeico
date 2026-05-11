@@ -460,10 +460,13 @@ class Reconciler {
       if (value == null || value === false) return ['class', null];
       if (typeof value === 'object') {
         // Object map form: { active: true, hidden: false } → 'active'
-        return ['class', Object.entries(value as Record<string, boolean>)
-          .filter(([_, a]) => a)
-          .map(([n]) => n)
-          .join(' ')];
+        return [
+          'class',
+          Object.entries(value as Record<string, boolean>)
+            .filter(([_, a]) => a)
+            .map(([n]) => n)
+            .join(' '),
+        ];
       }
       return ['class', String(value as string | number | boolean | bigint)];
     }
@@ -571,7 +574,12 @@ class Reconciler {
 
       if (ck.startsWith('@') && typeof oldValue === 'function') {
         el.removeEventListener(ck.slice(1), oldValue as EventListener);
-      } else if (ck === 'style' && typeof oldValue === 'object' && oldValue !== null && 'style' in el) {
+      } else if (
+        ck === 'style' &&
+        typeof oldValue === 'object' &&
+        oldValue !== null &&
+        'style' in el
+      ) {
         const s = (el as HTMLElement).style;
         for (const k of Object.keys(oldValue as Record<string, string>)) {
           if (k.startsWith('--')) s.removeProperty(k);
