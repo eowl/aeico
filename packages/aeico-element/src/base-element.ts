@@ -224,7 +224,7 @@ class BaseElement extends HTMLElement {
           if (propDecl.observe === false) {
             self[internalKey] = value;
             this.update(propName, oldValue);
-            
+
             return;
           }
 
