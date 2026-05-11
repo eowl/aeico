@@ -83,6 +83,52 @@ class OldBenchRow extends HTMLElement {
 customElements.define('compare-row-old', OldBenchRow)
 
 // ---------------------------------------------------------------------------
+// Compare: NEW implementation — prototype-level accessor (one-time per class)
+// Structurally identical to OldBenchRow; only difference is WHERE defineProperty
+// is called: once on the prototype vs once per instance.
+// ---------------------------------------------------------------------------
+
+const COMPARE_PROPS = ['rowId', 'label', 'selected'] as const
+
+class NewBenchRowCompare extends HTMLElement {
+  private static _ready = false
+
+  constructor() {
+    super()
+    this.attachShadow({ mode: 'open' })
+
+    // Install accessors on the prototype exactly once across all instances
+    if (!NewBenchRowCompare._ready) {
+      NewBenchRowCompare._ready = true
+      for (const propName of COMPARE_PROPS) {
+        const internalKey = `_${propName}`
+        Object.defineProperty(NewBenchRowCompare.prototype, propName, {
+          get(this: NewBenchRowCompare) {
+            return (this as unknown as Record<string, unknown>)[internalKey]
+          },
+          set(this: NewBenchRowCompare, value: unknown) {
+            ;(this as unknown as Record<string, unknown>)[internalKey] = value
+          },
+          enumerable: true,
+          configurable: true,
+        })
+      }
+    }
+
+    // Per-instance: only initialize backing stores (no defineProperty)
+    const self = this as unknown as Record<string, unknown>
+    self['_rowId'] = undefined
+    self['_label'] = undefined
+    self['_selected'] = undefined
+  }
+
+  declare rowId?: number
+  declare label?: string
+  declare selected?: boolean
+}
+customElements.define('compare-row-new', NewBenchRowCompare)
+
+// ---------------------------------------------------------------------------
 // Native-DOM baseline — same structure (div > span + span + button)
 // ---------------------------------------------------------------------------
 
@@ -390,9 +436,9 @@ async function runCompare() {
 
   compareProgress.textContent = 'Running NEW…'
 
-  const newResult = await bench(`NEW  prototype accessor (BaseElement) ×${COMPARE_COUNT}`, () => {
+  const newResult = await bench(`NEW  prototype accessor ×${COMPARE_COUNT}`, () => {
     for (let i = 0; i < COMPARE_COUNT; i++) {
-      const el = document.createElement('bench-row') as BenchRow
+      const el = document.createElement('compare-row-new') as NewBenchRowCompare
       el.rowId = i
       el.label = 'bench'
     }
