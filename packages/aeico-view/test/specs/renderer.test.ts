@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { html, render, getActiveBuilder, tags, RenderResult } from '../../src/renderer.js';
+import { html, render, getReconciler, tags, RenderResult } from '../../src/renderer.js';
 import Reconciler from '../../src/reconciler.js';
 
 describe('html()', () => {
@@ -146,10 +146,10 @@ describe('render()', () => {
   });
 });
 
-describe('getActiveBuilder()', () => {
+describe('getReconciler()', () => {
   it('throws when called outside a render() context', () => {
-    expect(() => getActiveBuilder()).to.throw(
-      'getActiveBuilder() called outside of a render() context.',
+    expect(() => getReconciler()).to.throw(
+      'getReconciler() called outside of a render() context.',
     );
   });
 
@@ -160,7 +160,7 @@ describe('getActiveBuilder()', () => {
 
     render(
       html(() => {
-        captured = getActiveBuilder();
+        captured = getReconciler();
       }),
       container,
     );
@@ -176,7 +176,7 @@ describe('getActiveBuilder()', () => {
       html(() => {}),
       container,
     );
-    expect(() => getActiveBuilder()).to.throw();
+    expect(() => getReconciler()).to.throw();
     container.remove();
   });
 });
@@ -184,7 +184,7 @@ describe('getActiveBuilder()', () => {
 describe('tags', () => {
   it('throws when accessed outside a render() context', () => {
     expect(() => (tags as any).div()).to.throw(
-      'getActiveBuilder() called outside of a render() context.',
+      'getReconciler() called outside of a render() context.',
     );
   });
 

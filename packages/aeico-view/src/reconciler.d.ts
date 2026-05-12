@@ -9,16 +9,16 @@ type _Props = {
   style?: _Style;
   key?: string;
 };
-type BuilderProps = _Props & Record<string, unknown>;
+type TagProps = _Props & Record<string, unknown>;
 type TagFunction<K extends keyof HTMLElementTagNameMap> = {
-  (props?: BuilderProps, cb?: () => void): HTMLElementTagNameMap[K];
+  (props?: TagProps, cb?: () => void): HTMLElementTagNameMap[K];
   (cb: () => void): HTMLElementTagNameMap[K];
 };
 type HTMLTags = {
   readonly [K in keyof HTMLElementTagNameMap]: TagFunction<K>;
 };
 type SVGTagFunction<K extends keyof SVGElementTagNameMap> = {
-  (props?: BuilderProps, cb?: () => void): SVGElementTagNameMap[K];
+  (props?: TagProps, cb?: () => void): SVGElementTagNameMap[K];
   (cb: () => void): SVGElementTagNameMap[K];
 };
 type SVGOnlyTags = {
@@ -34,7 +34,7 @@ type CustomHTMLTags = {
   readonly [K in keyof HTMLElementTagNameMap as K extends `${string}-${string}`
     ? KebabToCamel<K>
     : never]: {
-    (props?: BuilderProps, cb?: () => void): HTMLElementTagNameMap[K];
+    (props?: TagProps, cb?: () => void): HTMLElementTagNameMap[K];
     (cb: () => void): HTMLElementTagNameMap[K];
   };
 };
@@ -61,7 +61,7 @@ declare class Reconciler {
   detached<T>(fn: () => T): T;
   el: <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
     tagName: T,
-    propsOrCb?: BuilderProps | (() => void),
+    propsOrCb?: TagProps | (() => void),
     cb?: () => void,
   ) => T extends keyof HTMLElementTagNameMap
     ? HTMLElementTagNameMap[T]
@@ -73,4 +73,4 @@ declare class Reconciler {
   fragment: (cb: () => void) => DocumentFragment;
 }
 export default Reconciler;
-export type { BuilderProps, HTMLTags, SVGOnlyTags };
+export type { TagProps, HTMLTags, SVGOnlyTags };

@@ -2,7 +2,7 @@
 
 Cursor-based DOM reconciler for the browser — framework-free, zero virtual DOM.  
 Works in plain HTML pages, vanilla web components, and as the rendering layer of the [Aeico](https://github.com/eowl/aeico) framework.  
-Provides `html()`, `render()`, `tags`, `getActiveBuilder()`, and the `Reconciler` class.
+Provides `html()`, `render()`, `tags`, `getReconciler()`, and the `Reconciler` class.
 
 ## How it works
 
@@ -233,16 +233,16 @@ render(html(() => {
 }), root);
 ```
 
-## `getActiveBuilder()`
+## `getReconciler()`
 
 Returns the `Reconciler` that is currently executing inside a `render()` call.  
 Throws outside a render context.  Useful in helper functions that need builder access without receiving it as a parameter:
 
 ```typescript
-import { getActiveBuilder } from 'aeico-view';
+import { getReconciler } from 'aeico-view';
 
 function badge(label: string) {
-  const b = getActiveBuilder();
+  const b = getReconciler();
   b.span({ className: 'badge', text: label });
 }
 
@@ -282,9 +282,9 @@ render(html(({ div }) => { div({ text: 'shadow content' }); }), shadow);
 | `html` | `(cb: (r: Reconciler) => void) => RenderResult` | Creates a deferred render template |
 | `render` | `(result: RenderResult, root: Node) => void` | Applies a template to a root node |
 | `tags` | `Reconciler` (proxy) | Delegates to the active Reconciler |
-| `getActiveBuilder` | `() => Reconciler` | Returns the active Reconciler (throws if none) |
+| `getReconciler` | `() => Reconciler` | Returns the active Reconciler (throws if none) |
 | `Reconciler` | class | Core cursor-based DOM reconciler |
-| `BuilderProps` | type | Prop bag accepted by all tag helpers |
+| `TagProps` | type | Prop bag accepted by all tag helpers |
 | `RenderResult` | class | Opaque wrapper returned by `html()` |
 
 ## License
