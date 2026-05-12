@@ -1,4 +1,4 @@
-import type { ComputedPropertyConfig } from '../types';
+import type { ComputedProp } from '../types';
 
 // Polyfill Symbol.metadata for runtimes that don't support it yet
 // [TC39 Stage 3 Decorators] Symbol.metadata is the per-class metadata store defined by the Decorators proposal
@@ -6,7 +6,7 @@ import type { ComputedPropertyConfig } from '../types';
 
 export const COMPUTED_METADATA_KEY = Symbol('aeico:computed');
 
-type ComputedMetadata = Record<string, ComputedPropertyConfig>;
+type ComputedMetadata = Record<string, ComputedProp>;
 
 /**
  * Decorator for declaring cached computed properties on Aeico components.
