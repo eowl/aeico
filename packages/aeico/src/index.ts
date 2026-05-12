@@ -33,5 +33,5 @@ export type {
 export { prop, PROP_METADATA_KEY } from 'aeico-element';
 
 // View — rendering
-export { Reconciler, html, render, getActiveBuilder, tags } from 'aeico-view';
-export type { BuilderProps, RenderResult } from 'aeico-view';
+export { Reconciler, html, render, getReconciler, tags } from 'aeico-view';
+export type { TagProps, RenderResult } from 'aeico-view';
