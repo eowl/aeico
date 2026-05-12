@@ -1,5 +1,5 @@
 import BaseElement from './base-element';
-import type { Props, InferProps } from './types';
+import type { InferProps } from './types';
 
 /**
  * AeicoBase — public lightweight base class for building Web Components
@@ -10,7 +10,6 @@ import type { Props, InferProps } from './types';
  * - Batched update lifecycle (onPrepare → render → onUpdated (+ onMounted*))
  * - Event system (emit / events)
  * - Custom element registration (register / toKebab)
- * - `disabled` property (common to all UI components)
  *
  * Use this when you want the Aeico reactivity engine but manage styles yourself,
  * or when building utility components with no visual output.
@@ -35,13 +34,7 @@ import type { Props, InferProps } from './types';
  * MyCounter.register()  // registers as 'my-counter'
  * ```
  */
-class AeicoBase extends BaseElement {
-  static props: Props = {
-    disabled: { type: Boolean },
-  };
-
-  declare disabled?: boolean;
-}
+class AeicoBase extends BaseElement {}
 
 export default AeicoBase;
 export type AeicoBaseProps = InferProps<typeof AeicoBase>;
