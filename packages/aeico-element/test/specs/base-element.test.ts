@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { mount, unmountAll, updated } from '../helpers/mount.js';
 import BaseElement from '../../src/base-element.js';
-import { html, render as applyRender, getActiveBuilder } from 'aeico-view';
+import { html, render as applyRender, getReconciler } from 'aeico-view';
 import type { Props } from '../../src/types.js';
 
 afterEach(() => {
@@ -121,15 +121,15 @@ describe('BaseElement', () => {
       expect(el.shadowRoot!.querySelector('span')!.textContent).to.equal('auto');
     });
 
-    it('getActiveBuilder() works inside render context', async () => {
+    it('getReconciler() works inside render context', async () => {
       const tag = `test-active-builder-${++_counter}`;
-      let builderInside: unknown = null;
+      let reconcilerInside: unknown = null;
       class TestEl extends BaseElement {
         protected render() {
-          return html((builder) => {
-            builderInside = getActiveBuilder();
-            expect(builderInside).to.equal(builder);
-            builder.div({ textContent: 'ok' });
+          return html((reconciler) => {
+            reconcilerInside = getReconciler();
+            expect(reconcilerInside).to.equal(reconciler);
+            reconciler.div({ textContent: 'ok' });
           });
         }
       }
@@ -138,11 +138,11 @@ describe('BaseElement', () => {
       await mount<TestEl>(`<${tag}></${tag}>`);
       await updated();
 
-      expect(builderInside).to.not.be.null;
+      expect(reconcilerInside).to.not.be.null;
     });
 
-    it('getActiveBuilder() throws outside render context', () => {
-      expect(() => getActiveBuilder()).to.throw('outside of a render() context');
+    it('getReconciler() throws outside render context', () => {
+      expect(() => getReconciler()).to.throw('outside of a render() context');
     });
   });
 
