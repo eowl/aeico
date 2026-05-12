@@ -31,7 +31,6 @@ function buildData(count: number): RowData[] {
 
 class BenchRow extends AeicoBase {
   static override props = {
-    ...AeicoBase.props,
     rowId:    { type: Number, reflect: false, observe: false },
     label:    { type: String, reflect: false },
     selected: { type: Boolean, reflect: false },

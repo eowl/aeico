@@ -11,46 +11,11 @@ afterEach(() => {
 let _counter = 0;
 
 describe('AeicoBase', () => {
-  it('has a disabled prop defined with type Boolean', () => {
-    expect(AeicoBase.props).to.have.property('disabled');
-    expect(AeicoBase.props.disabled).to.deep.include({ type: Boolean });
-  });
-
-  it('disabled prop reflects to attribute', async () => {
-    const tag = `test-aeico-base-disabled-${++_counter}`;
-    class El extends AeicoBase {}
-    customElements.define(tag, El);
-
-    const el = await mount<El>(`<${tag}></${tag}>`);
-    el.disabled = true;
-    expect(el.getAttribute('disabled')).to.equal('true');
-  });
-
-  it('disabled attribute initializes property', async () => {
-    const tag = `test-aeico-base-attr-${++_counter}`;
-    class El extends AeicoBase {}
-    customElements.define(tag, El);
-
-    const el = await mount<El>(`<${tag} disabled="true"></${tag}>`);
-    expect(el.disabled).to.be.true;
-  });
-
-  it('disabled=false removes the attribute', async () => {
-    const tag = `test-aeico-base-disabled-false-${++_counter}`;
-    class El extends AeicoBase {}
-    customElements.define(tag, El);
-
-    const el = await mount<El>(`<${tag} disabled="true"></${tag}>`);
-    el.disabled = false;
-    expect(el.hasAttribute('disabled')).to.be.false;
-  });
-
-  it('subclass can extend props alongside disabled', async () => {
+  it('subclass can define its own props', async () => {
     const tag = `test-aeico-base-extend-${++_counter}`;
 
     class MyEl extends AeicoBase {
       static override props: Props = {
-        ...AeicoBase.props,
         label: { type: String },
       };
       declare label: string | undefined;
@@ -59,7 +24,6 @@ describe('AeicoBase', () => {
 
     const el = await mount<MyEl>(`<${tag} label="hello"></${tag}>`);
     expect(el.label).to.equal('hello');
-    expect(el.disabled).to.be.undefined;
   });
 
   it('inherits register() from BaseElement', () => {
