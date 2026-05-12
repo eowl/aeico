@@ -40,9 +40,9 @@ export interface Prop<T = unknown> {
 export type Props = Record<string, Prop>;
 
 /**
- * Computed property configuration
+ * Computed property declaration (single entry)
  */
-export interface ComputedPropertyConfig<T = unknown> {
+export interface ComputedProp<T = unknown> {
   /** Dependent property names */
   deps: string[];
   /** Compute function */
@@ -52,7 +52,7 @@ export interface ComputedPropertyConfig<T = unknown> {
 /**
  * Computed properties declaration
  */
-export type Computed = Record<string, ComputedPropertyConfig>;
+export type Computed = Record<string, ComputedProp>;
 
 /**
  * Watcher handler: a method name string or an inline function
