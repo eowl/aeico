@@ -19,9 +19,8 @@ npm install aeico-localize
 ## Quick Start
 
 ```typescript
-import { AeicoElement } from 'aeico';
-import { prop, watch } from 'aeico';
-import { tags } from 'aeico';
+import { AeicoElement, prop, html } from 'aeico';
+import { watch } from 'aeico-element';
 
 class MyCounter extends AeicoElement {
   @prop() accessor count = 0;
@@ -32,13 +31,14 @@ class MyCounter extends AeicoElement {
   }
 
   override render() {
-    const { button, span } = tags;
-    button({ onclick: () => this.count++, textContent: '+' });
-    span({ textContent: String(this.count) });
+    return html(({ button, span }) => {
+      button({ onclick: () => this.count++, textContent: '+' });
+      span({ textContent: String(this.count) });
+    });
   }
 }
 
-customElements.define('my-counter', MyCounter);
+MyCounter.register('my-counter');
 ```
 
 ## i18n
@@ -46,8 +46,8 @@ customElements.define('my-counter', MyCounter);
 ```typescript
 import { locale, t } from 'aeico-localize';
 
+// update() sets the language and loads translations in one call
 locale.update('zh-CN', { save: '保存' });
-locale.setLocale('zh-CN');
 
 console.log(t('save', 'Save')); // "保存"
 ```

@@ -6,10 +6,11 @@
 
 | Package | Version | Description |
 |---|---|---|
-| [`aeico`](packages/aeico) | 0.1.1 | Meta package — re-exports base |
-| [`aeico-element`](packages/aeico-element) | 0.1.1 | Reactive base classes and decorators |
-| [`aeico-view`](packages/aeico-view) | 0.1.1 | DOM rendering — `html()`, `render()`, `tags` |
+| [`aeico`](packages/aeico) | 0.1.4 | Meta package — re-exports base |
+| [`aeico-element`](packages/aeico-element) | 0.1.3 | Reactive base classes and decorators |
+| [`aeico-view`](packages/aeico-view) | 0.1.2 | DOM rendering — `html()`, `render()`, `tags` |
 | [`aeico-localize`](packages/aeico-localize) | 0.1.1 | i18n — `t()`, `locale`, `localeRegistry` |
+| [`aeico-ssr`](packages/aeico-ssr) | 0.1.0 | Server-side rendering — `renderHtml()`, `renderToString()` |
 
 ## Installation
 
@@ -25,9 +26,8 @@ npm install aeico-localize  # optional i18n support
 ## Quick Start
 
 ```typescript
-import { AeicoElement } from 'aeico-element';
-import { prop, watch } from 'aeico-element';
-import { tags } from 'aeico-view';
+import { AeicoElement, prop, watch } from 'aeico-element';
+import { html } from 'aeico-view';
 
 class MyCounter extends AeicoElement {
   @prop() accessor count = 0;
@@ -38,13 +38,14 @@ class MyCounter extends AeicoElement {
   }
 
   override render() {
-    const { button, span } = tags;
-    button({ onclick: () => this.count++, textContent: '+' });
-    span({ textContent: String(this.count) });
+    return html(({ button, span }) => {
+      button({ onclick: () => this.count++, textContent: '+' });
+      span({ textContent: String(this.count) });
+    });
   }
 }
 
-customElements.define('my-counter', MyCounter);
+MyCounter.register('my-counter');
 ```
 
 ## i18n
@@ -52,8 +53,8 @@ customElements.define('my-counter', MyCounter);
 ```typescript
 import { locale, t } from 'aeico-localize';
 
+// update() sets the language and loads translations in one call
 locale.update('zh-CN', { hello: '你好' });
-locale.setLocale('zh-CN');
 
 console.log(t('hello', 'Hello')); // "你好"
 ```
