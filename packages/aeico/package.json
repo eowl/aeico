@@ -20,8 +20,8 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "vite build && tsc --declaration --emitDeclarationOnly --outDir dist/types -p tsconfig.json",
-    "dev": "vite build --watch",
+    "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly --outDir dist/types -p tsconfig.json",
+    "dev": "rollup -c rollup.config.js --watch",
     "type-check": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
@@ -39,7 +39,8 @@
     "aeico-view": "^0.1.1"
   },
   "devDependencies": {
-    "typescript": "^5.7.3",
-    "vite": "^6.2.0"
+    "@rollup/plugin-alias": "^6.0.0",
+    "@rollup/plugin-replace": "^6.0.3",
+    "typescript": "^5.7.3"
   }
 }
