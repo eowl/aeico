@@ -14,10 +14,10 @@ type _Props = {
   key?: string;
 };
 
-type BuilderProps = _Props & Record<string, unknown>;
+type TagProps = _Props & Record<string, unknown>;
 
 type TagFunction<K extends keyof HTMLElementTagNameMap> = {
-  (props?: BuilderProps, cb?: () => void): HTMLElementTagNameMap[K];
+  (props?: TagProps, cb?: () => void): HTMLElementTagNameMap[K];
   (cb: () => void): HTMLElementTagNameMap[K];
 };
 
@@ -26,7 +26,7 @@ type HTMLTags = {
 };
 
 type SVGTagFunction<K extends keyof SVGElementTagNameMap> = {
-  (props?: BuilderProps, cb?: () => void): SVGElementTagNameMap[K];
+  (props?: TagProps, cb?: () => void): SVGElementTagNameMap[K];
   (cb: () => void): SVGElementTagNameMap[K];
 };
 
@@ -45,7 +45,7 @@ type CustomHTMLTags = {
   readonly [K in keyof HTMLElementTagNameMap as K extends `${string}-${string}`
     ? KebabToCamel<K>
     : never]: {
-    (props?: BuilderProps, cb?: () => void): HTMLElementTagNameMap[K];
+    (props?: TagProps, cb?: () => void): HTMLElementTagNameMap[K];
     (cb: () => void): HTMLElementTagNameMap[K];
   };
 };
@@ -99,7 +99,7 @@ class Reconciler {
         const tagName = /[A-Z]/.test(prop) ? camelToKebab(prop) : prop;
 
         // Return a tag function that accepts (props?, cb?) or (cb) overloads.
-        return (p?: BuilderProps | (() => void), cb?: () => void) => {
+        return (p?: TagProps | (() => void), cb?: () => void) => {
           if (typeof p === 'function') return target._create(tagName, undefined, p);
           return target._create(tagName, p, cb);
         };
@@ -153,7 +153,7 @@ class Reconciler {
    * Inside a build context the element is *resolved* (reused or inserted via diffing);
    * outside a build context it is always freshly created and appended to the current parent.
    */
-  private _create(tagName: string, props?: BuilderProps, cb?: () => void): Element {
+  private _create(tagName: string, props?: TagProps, cb?: () => void): Element {
     const parent = this._parent;
 
     const el = this._inBuildContext
@@ -273,7 +273,7 @@ class Reconciler {
   private _mountChildren(
     el: Element,
     parent: Node | undefined,
-    props?: BuilderProps,
+    props?: TagProps,
     cb?: () => void,
   ): void {
     if (cb) {
@@ -400,7 +400,7 @@ class Reconciler {
    *   call; it tracks which normalized keys were visited so that {@link _removeStaleProps}
    *   can identify keys to delete.
    */
-  private _applyProps(el: Element, props: BuilderProps, skipTextContent: boolean = false) {
+  private _applyProps(el: Element, props: TagProps, skipTextContent: boolean = false) {
     let cache = this._propsCache.get(el);
     if (!cache) {
       // First render for this element: initialize an empty cache object.
@@ -665,7 +665,7 @@ class Reconciler {
    */
   el = <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
     tagName: T,
-    propsOrCb?: BuilderProps | (() => void),
+    propsOrCb?: TagProps | (() => void),
     cb?: () => void,
   ): T extends keyof HTMLElementTagNameMap
     ? HTMLElementTagNameMap[T]
@@ -787,4 +787,4 @@ class Reconciler {
 }
 
 export default Reconciler;
-export type { BuilderProps, HTMLTags, SVGOnlyTags };
+export type { TagProps, HTMLTags, SVGOnlyTags };

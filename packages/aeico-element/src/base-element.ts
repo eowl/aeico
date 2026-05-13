@@ -297,7 +297,11 @@ class BaseElement extends HTMLElement {
     super();
 
     const ctor = this.constructor as typeof BaseElement;
-    if (ctor.useShadowDOM) {
+    // Guard against DSR (Declarative Shadow DOM): when the SSR-rendered HTML already
+    // contains a <template shadowrootmode> the browser attaches the shadow root before
+    // the element upgrades, so `this.shadowRoot` will be non-null. Calling
+    // `attachShadow()` a second time would throw a NotSupportedError.
+    if (ctor.useShadowDOM && !this.shadowRoot) {
       this.attachShadow(ctor.shadowOptions);
     }
 
@@ -802,6 +806,10 @@ class BaseElement extends HTMLElement {
     if (!customElements.get(tagName)) {
       customElements.define(tagName, this as unknown as CustomElementConstructor);
     }
+
+    // Persist the resolved tag name so SSR (renderToString) can read it without
+    // having to re-derive it from the class name.
+    this.tagName = tagName;
   }
 }
 

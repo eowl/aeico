@@ -7,11 +7,11 @@ import Reconciler from './reconciler';
  * consumers — just pass it to `render(result, root)`.
  */
 export declare class RenderResult {
-  readonly _cb: (builder: Reconciler) => void;
+  readonly _cb: (reconciler: Reconciler) => void;
   /** @internal */
-  constructor(_cb: (builder: Reconciler) => void);
+  constructor(_cb: (reconciler: Reconciler) => void);
 }
-export declare const html: (cb: (builder: Reconciler) => void) => RenderResult,
+export declare const html: (cb: (reconciler: Reconciler) => void) => RenderResult,
   render: (result: RenderResult, root: Node) => void,
-  getActiveBuilder: () => Reconciler,
+  getReconciler: () => Reconciler,
   tags: Reconciler;
