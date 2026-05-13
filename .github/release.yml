@@ -9,6 +9,8 @@ changelog:
       labels: ['aeico-element']
     - title: aeico-localize
       labels: ['aeico-localize']
+    - title: aeico-ssr
+      labels: ['aeico-ssr']
     - title: aeico
       labels: ['aeico']
     - title: Other Changes

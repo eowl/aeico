@@ -18,6 +18,7 @@
     { "path": "./packages/aeico-view" },
     { "path": "./packages/aeico-element" },
     { "path": "./packages/aeico-localize" },
+    { "path": "./packages/aeico-ssr" },
     { "path": "./packages/aeico" }
   ]
 }
