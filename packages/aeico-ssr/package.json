@@ -1,0 +1,51 @@
+{
+  "name": "aeico-ssr",
+  "version": "0.1.0",
+  "description": "Server-side rendering for Aeico — renderHtml() and renderToString()",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./shim": {
+      "types": "./dist/types/shim.d.ts",
+      "import": "./dist/shim.js",
+      "require": "./dist/shim.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "!dist/*.tsbuildinfo",
+    "src"
+  ],
+  "sideEffects": ["./dist/shim.js", "./dist/shim.cjs"],
+  "scripts": {
+    "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly --outDir dist/types -p tsconfig.json",
+    "dev": "rollup -c rollup.config.js --watch",
+    "type-check": "tsc --noEmit",
+    "test": "npm run build && node --test test/*.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["web-components", "ssr", "server-side-rendering", "aeico"],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "aeico-view": ">=0.1.1",
+    "aeico-element": ">=0.1.2"
+  },
+  "peerDependenciesMeta": {
+    "aeico-element": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "aeico-element": "^0.1.2",
+    "aeico-view": "^0.1.1",
+    "typescript": "^5.7.3"
+  }
+}
