@@ -17,9 +17,8 @@ npm install aeico-element
 ### Define a custom element
 
 ```typescript
-import { AeicoElement } from 'aeico-element';
-import { prop, watch } from 'aeico-element';
-import { tags } from 'aeico-view';
+import { AeicoElement, prop, watch } from 'aeico-element';
+import { html } from 'aeico-view';
 
 class MyCounter extends AeicoElement {
   @prop() accessor count = 0;
@@ -30,13 +29,14 @@ class MyCounter extends AeicoElement {
   }
 
   override render() {
-    const { button, span } = tags;
-    button({ onclick: () => this.count++, textContent: '+' });
-    span({ textContent: String(this.count) });
+    return html(({ button, span }) => {
+      button({ onclick: () => this.count++, textContent: '+' });
+      span({ textContent: String(this.count) });
+    });
   }
 }
 
-MyCounter.register('my-counter')
+MyCounter.register('my-counter');
 ```
 
 ### `@computed` accessor
@@ -95,7 +95,9 @@ class MyCounter extends AeicoElement {
   }
 
   override render() {
-    // ...
+    return html(({ span }) => {
+      span({ textContent: String(this.count) });
+    });
   }
 }
 
