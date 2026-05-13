@@ -32,7 +32,7 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": ["web-components", "ssr", "server-side-rendering", "aeico"],
-  "author": "",
+  "author": "Eowl",
   "license": "ISC",
   "peerDependencies": {
     "aeico-view": ">=0.1.1",
