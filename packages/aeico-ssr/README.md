@@ -85,7 +85,7 @@ When `static useShadowDOM = true` (the default for `AeicoElement`), the inner ma
 </my-counter>
 ```
 
-The browser attaches the shadow root declaratively before the custom element upgrades.  Paired with the `attachShadow` guard in `BaseElement`, hydration requires zero extra configuration — the `Reconciler` reuses the existing DSR nodes on first render.
+The browser attaches the shadow root declaratively before the custom element upgrades.  `AeicoElement` and `AeicoBase` guard `attachShadow` so they do not overwrite a DSR shadow root that the browser has already created, meaning hydration requires zero extra configuration — the `Reconciler` reuses the existing DSR nodes on first render.
 
 If `static styles` is declared on the component, a `<style>` tag is injected inside the template immediately before the inner markup.
 
