@@ -653,19 +653,83 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Render method to override in subclasses. Called during the update cycle after onPrepare and before onUpdated.
-   * Should contain the logic to update the component's DOM based on its props/state.
+   * Override to produce the component's DOM output.
+   *
+   * Called on every update cycle after `onPrepare` (and watchers). The returned
+   * `RenderResult` is applied to the shadow root (or light DOM when
+   * `useShadowDOM = false`) via the incremental Reconciler — only changed nodes
+   * are touched.
+   *
+   * Returning `void` / `undefined` renders an empty root.
+   *
+   * @example
+   * ```typescript
+   * override render() {
+   *   return html(({ ul, li }) => {
+   *     ul({}, () => {
+   *       this.items.forEach(item =>
+   *         li({ textContent: item.label, className: { active: item.active } })
+   *       )
+   *     })
+   *   })
+   * }
+   * ```
    */
   protected render(): RenderResult | void {}
 
   /**
-   * Lifecycle methods to override in subclasses:
-   * - onPrepare(changedProps): called before update, can return false to skip update
-   * - onUpdated(changedProps): called after update
-   * - onMounted(changedProps): called after the first update
+   * Called before each render cycle.
+   *
+   * Return `false` to abort the current update entirely (watchers and `render()`
+   * will not run). Useful for validation or debounce-style guards.
+   *
+   * @param changedProps - Map of property names → **old** values for this cycle.
+   *
+   * @example
+   * ```typescript
+   * override onPrepare(changedProps: Map<string, unknown>) {
+   *   // Skip render when only an irrelevant internal flag changed
+   *   if (changedProps.size === 1 && changedProps.has('_loading')) return false
+   * }
+   * ```
    */
   protected onPrepare(_changedProps: Map<string, unknown>): boolean | void {}
+
+  /**
+   * Called after every render cycle.
+   *
+   * Safe place to read updated DOM measurements or dispatch events.
+   *
+   * @param changedProps - Map of property names → **old** values for this cycle.
+   *
+   * @example
+   * ```typescript
+   * override onUpdated(changedProps: Map<string, unknown>) {
+   *   if (changedProps.has('open')) {
+   *     this.emit('toggle', { detail: { open: this.open } })
+   *   }
+   * }
+   * ```
+   */
   protected onUpdated(_changedProps: Map<string, unknown>): void {}
+
+  /**
+   * Called once after the **first** render cycle.
+   *
+   * By this point the shadow DOM is populated and the element is guaranteed to
+   * be in the document. Use for one-time setup that requires a live DOM node
+   * (focus, ResizeObserver, third-party library init, etc.).
+   *
+   * @param changedProps - Map of property names → **old** values (all `undefined` on first mount).
+   *
+   * @example
+   * ```typescript
+   * override onMounted() {
+   *   this.listen('resize', this._onResize, { passive: true })
+   *   this.queryElement<HTMLInputElement>('input')?.focus()
+   * }
+   * ```
+   */
   protected onMounted(_changedProps: Map<string, unknown>): void {}
 
   /**

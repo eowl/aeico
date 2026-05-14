@@ -7,15 +7,53 @@ import type { RenderResult } from 'aeico-view';
 import { isRenderResult } from './utils';
 
 /**
- * AeicoElement — styled base class for Aeico's built-in components.
+ * Full-featured base class for Aeico Web Components.
  *
- * Extends BaseElement with the full Aeico style system:
- * - StyleAdapter integration (adoptedStyleSheets)
- * - Component stylesheets (static styles / useStyles)
- * - CSS variable generation (styleGenerator)
- * - Global component config (setComponentConfig)
+ * Extends `AeicoBase` with the Aeico style system (adoptedStyleSheets / shadow DOM styles).
+ * Use this for any component that needs scoped CSS. For style-free utility components,
+ * extend {@link AeicoBase} instead.
  *
- * For components that don't need Aeico styles, use AeicoBase instead.
+ * **Lifecycle order (per update):**
+ * `onPrepare` → watchers → `render()` → `onUpdated` → `onMounted` (first render only)
+ *
+ * @example
+ * ```typescript
+ * import { AeicoElement, prop, watch, computed } from 'aeico-element'
+ * import { html } from 'aeico-view'
+ *
+ * class MyCounter extends AeicoElement {
+ *   // Reactive prop — reflects to HTML attribute automatically
+ *   @prop({ type: Number }) accessor count = 0
+ *
+ *   // Cached computed property — recalculated only when `count` changes
+ *   @computed('count')
+ *   get doubled() { return this.count * 2 }
+ *
+ *   // Watcher — called with (newValue, oldValue) after each change
+ *   @watch('count')
+ *   onCountChange(next: number, prev: number) {
+ *     console.log(`${prev} → ${next}`)
+ *   }
+ *
+ *   override render() {
+ *     return html(({ div, button, span }) => {
+ *       div({}, () => {
+ *         button({ onclick: () => this.count--, textContent: '-' })
+ *         span({ textContent: String(this.count) })
+ *         button({ onclick: () => this.count++, textContent: '+' })
+ *       })
+ *     })
+ *   }
+ *
+ *   static override styles = `
+ *     button { padding: 4px 8px; cursor: pointer; }
+ *     span   { min-width: 2ch; text-align: center; }
+ *   `
+ * }
+ *
+ * MyCounter.register('my-counter')
+ * // <my-counter count="0"></my-counter>
+ * ```
  */
 class AeicoElement extends BaseElement {
   private styleOptions?: StyleOptions;

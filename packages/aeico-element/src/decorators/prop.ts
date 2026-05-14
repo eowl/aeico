@@ -80,22 +80,50 @@ function applyProp(
 }
 
 /**
- * Decorator for defining reactive properties on Aeico components.
+ * Decorator for declaring a reactive property on an Aeico component.
  *
- * Supports both class field and class auto-accessor declarations.
+ * Supports both class field (`@prop label?: string`) and class auto-accessor
+ * (`@prop accessor label: string | undefined`) declarations. Prefer `accessor`
+ * when an explicit default value is needed, since it participates in the
+ * attribute-reflection cycle on first render.
  *
- * Field usage (no `accessor`):
- * - `@prop label?: string`
- * - `@prop() name?: string`
- * - `@prop({ type: String }) title?: string`
+ * Each reactive prop:
+ * - Triggers a batched re-render when its value changes.
+ * - Reflects to an HTML attribute by default (`reflect: true`).
+ * - Responds to attribute mutations from HTML / `setAttribute()` by default (`observe: true`).
  *
- * Auto-accessor usage (with `accessor`):
- * - `@prop accessor label: string | undefined`
- * - `@prop() accessor name: string | undefined`
- * - `@prop({ type: String }) accessor title: string | undefined`
+ * @example Basic usage — type inferred from TypeScript
+ * ```typescript
+ * class MyEl extends AeicoElement {
+ *   @prop accessor label: string | undefined   // reflects to `label` attr
+ *   @prop() accessor count = 0                 // reflects to `count` attr
+ *   @prop label?: string                       // field form (no default value)
+ * }
+ * ```
  *
- * Note: `accessor` declarations cannot use `?` optional syntax in TypeScript.
- * Use `T | undefined` instead.
+ * @example All {@link Prop} options
+ * ```typescript
+ * class MyEl extends AeicoElement {
+ *   // Custom attribute name (default: kebab-case of property name)
+ *   @prop({ type: Number, attr: 'max-val' }) accessor maxVal = 100
+ *
+ *   // Boolean prop: reflects as attribute presence (<my-el disabled>)
+ *   @prop({ type: Boolean }) accessor disabled = false
+ *
+ *   // Do not reflect to attribute (JS-only state)
+ *   @prop({ reflect: false }) accessor _internalFlag = false
+ *
+ *   // Do not react to attribute changes (write-only from JS)
+ *   @prop({ observe: false }) accessor writeOnly = ''
+ *
+ *   // Custom serialiser / deserialiser
+ *   @prop({
+ *     type: String,
+ *     parser:    (raw) => raw?.toUpperCase() ?? '',
+ *     formatter: (val) => val.toLowerCase(),
+ *   }) accessor code = ''
+ * }
+ * ```
  */
 export function prop<This, Value>(
   target: ClassAccessorDecoratorTarget<This, Value>,
