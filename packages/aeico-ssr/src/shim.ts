@@ -50,9 +50,15 @@ if (typeof (globalThis as any).HTMLElement === 'undefined') {
 }
 
 if (typeof (globalThis as any).customElements === 'undefined') {
+  const _reverseRegistry = new Map<unknown, string>();
   (globalThis as any).customElements = {
-    define: () => {},
+    define(name: string, ctor: unknown) {
+      _reverseRegistry.set(ctor, name);
+    },
     get: () => undefined,
+    getName(ctor: unknown): string | null {
+      return _reverseRegistry.get(ctor) ?? null;
+    },
     whenDefined: () => Promise.resolve(undefined),
   };
 }
