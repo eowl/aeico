@@ -183,7 +183,10 @@ export function renderToString(
   ComponentClass: ComponentConstructor,
   props: Record<string, unknown> = {},
 ): string {
-  const tagName = ComponentClass.tagName ?? toKebab(ComponentClass.name);
+  const registeredTagName = (
+    globalThis as unknown as { customElements?: { getName(ctor: unknown): string | null } }
+  ).customElements?.getName(ComponentClass);
+  const tagName = registeredTagName ?? ComponentClass.tagName ?? toKebab(ComponentClass.name);
 
   if (!tagName || !tagName.includes('-')) {
     throw new Error(

@@ -148,3 +148,81 @@ describe('renderToString with AeicoElement', () => {
     assert.ok(out.includes('<style>:host { color: red }\np { margin: 0 }</style>'), `got: ${out}`);
   });
 });
+
+describe('register() tag name resolution', () => {
+  test('customElements.getName() returns the registered tag after register()', () => {
+    class GetNameEl extends AeicoBase {
+      static tagName = 'get-name-el';
+    }
+    GetNameEl.register();
+    assert.equal((globalThis as any).customElements.getName(GetNameEl), 'get-name-el');
+  });
+
+  test('renderToString resolves tag via getName() when register() was called', () => {
+    class RegisteredSsrEl extends AeicoBase {
+      static tagName = 'registered-ssr-el';
+      static useShadowDOM = false;
+
+      render() {
+        return html(({ span }: any) => span({ text: 'ok' }));
+      }
+    }
+    RegisteredSsrEl.register();
+    const out = renderToString(RegisteredSsrEl as any, {});
+    assert.ok(out.startsWith('<registered-ssr-el>'), `got: ${out}`);
+  });
+
+  test('child without own tagName gets its own class-derived name, not parent tagName', () => {
+    // Regression: before the fix, register() read this.tagName through the prototype chain,
+    // so InhSsrChild would inherit InhSsrParent.tagName = 'inh-ssr-parent' and register itself
+    // under the parent's tag name instead of deriving 'inh-ssr-child' from its class name.
+    class InhSsrParent extends AeicoBase {
+      static tagName = 'inh-ssr-parent';
+    }
+    InhSsrParent.register();
+
+    class InhSsrChild extends InhSsrParent {}
+    InhSsrChild.register();
+
+    const getName = (globalThis as any).customElements.getName;
+    assert.equal(getName(InhSsrChild), 'inh-ssr-child');
+    assert.notEqual(getName(InhSsrChild), 'inh-ssr-parent');
+  });
+
+  test('child with own tagName uses its own, not parent tagName', () => {
+    class InhOwnParent extends AeicoBase {
+      static tagName = 'inh-own-parent';
+    }
+    InhOwnParent.register();
+
+    class InhOwnChild extends InhOwnParent {
+      static tagName = 'inh-own-child';
+    }
+    InhOwnChild.register();
+
+    assert.equal((globalThis as any).customElements.getName(InhOwnChild), 'inh-own-child');
+  });
+
+  test('renderToString of child class renders with child tag, not parent tag', () => {
+    class InhRenderParent extends AeicoBase {
+      static tagName = 'inh-render-parent';
+      static useShadowDOM = false;
+
+      render() {
+        return html(({ span }: any) => span({ text: 'parent' }));
+      }
+    }
+    InhRenderParent.register();
+
+    class InhRenderChild extends InhRenderParent {
+      render() {
+        return html(({ span }: any) => span({ text: 'child' }));
+      }
+    }
+    InhRenderChild.register();
+
+    const out = renderToString(InhRenderChild as any, {});
+    assert.ok(out.startsWith('<inh-render-child>'), `got: ${out}`);
+    assert.ok(out.includes('<span>child</span>'), `got: ${out}`);
+  });
+});

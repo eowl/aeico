@@ -861,7 +861,12 @@ class BaseElement extends HTMLElement {
    * ```
    */
   static register(name?: string) {
-    const tagName = name || this.tagName || toKebab(this.name);
+    // Read only the own tagName (not inherited from parent class) to avoid accidentally
+    // picking up a parent's already-registered name when a subclass calls register().
+    const _tagName = Object.prototype.hasOwnProperty.call(this, 'tagName')
+      ? this.tagName
+      : undefined;
+    const tagName = name || _tagName || toKebab(this.name);
 
     if (!tagName || !tagName.includes('-')) {
       throw new Error(`Invalid registration: ${tagName} must contain a dash.`);
@@ -870,10 +875,6 @@ class BaseElement extends HTMLElement {
     if (!customElements.get(tagName)) {
       customElements.define(tagName, this as unknown as CustomElementConstructor);
     }
-
-    // Persist the resolved tag name so SSR (renderToString) can read it without
-    // having to re-derive it from the class name.
-    this.tagName = tagName;
   }
 }
 
