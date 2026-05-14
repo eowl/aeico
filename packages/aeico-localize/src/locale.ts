@@ -41,13 +41,36 @@ export class LocaleStore implements LocaleProvider {
   private _components = new Set<Updatable>();
   private _initialized = false;
 
+  /** Currently active locale code (e.g. `'en-US'`, `'zh-CN'`). Empty string before first `update()`. */
   get lang() {
     return this._lang;
   }
+
+  /** `true` after the first `update()` call; `false` means translations haven't loaded yet. */
   get initialized() {
     return this._initialized;
   }
 
+  /**
+   * Look up a translation by dot-separated key.
+   *
+   * When called during a component's `render()`, the component is automatically
+   * subscribed to locale changes and will re-render when `update()` is called.
+   *
+   * @param key      - Dot-separated path into the translations object (e.g. `'buttons.save'`).
+   * @param fallback - Returned when the key is not found or the store is not yet initialized.
+   *                   Defaults to `key` itself.
+   *
+   * @example
+   * ```typescript
+   * // In a component render()
+   * span({ textContent: locale.t('errors.notFound', 'Not found') })
+   *
+   * // Or via the shorthand export
+   * import { t } from 'aeico-localize'
+   * span({ textContent: t('errors.notFound', 'Not found') })
+   * ```
+   */
   t(key: string, fallback?: string): string {
     this._subscribeComponent();
 
@@ -63,12 +86,45 @@ export class LocaleStore implements LocaleProvider {
     return typeof value === 'string' ? value : fallback || key;
   }
 
+  /**
+   * Subscribe to locale changes.
+   *
+   * The callback is invoked every time `update()` is called. Returns an
+   * unsubscribe function.
+   *
+   * @example
+   * ```typescript
+   * const unsubscribe = locale.subscribe(() => {
+   *   console.log('Locale changed to', locale.lang)
+   * })
+   * // Later:
+   * unsubscribe()
+   * ```
+   */
   subscribe(cb: () => void) {
     this._subscribers.add(cb);
 
     return () => this._subscribers.delete(cb);
   }
 
+  /**
+   * Load a translation bundle and switch the active locale.
+   *
+   * Triggers a re-render on all components that called `t()` during their last
+   * render cycle, and notifies all `subscribe()` callbacks.
+   *
+   * @param lang      - BCP 47 locale code (e.g. `'en-US'`, `'zh-CN'`).
+   * @param resources - Nested translation object. Dot-path keys in `t()` map to
+   *                    nested properties here.
+   *
+   * @example
+   * ```typescript
+   * locale.update('zh-CN', {
+   *   buttons: { save: '保存', cancel: '取消' },
+   *   errors:  { notFound: '未找到' },
+   * })
+   * ```
+   */
   update(lang: string, resources: LocaleData) {
     this._lang = lang;
     this._resources = resources;

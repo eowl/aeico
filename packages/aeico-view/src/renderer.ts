@@ -47,37 +47,77 @@ class Renderer {
   };
 
   /**
-   * Create a render structure
-   * html is a DSL function, is not a template literal tag
+   * Declare a render structure as a reusable `RenderResult`.
    *
-   * The callback receives a `Reconciler` whose tag helpers
-   * (`div`, `span`, …) can be destructured for convenience.
+   * `html` is a **callback DSL**, not a tagged template literal. The callback
+   * receives the active {@link Reconciler} whose tag helpers (`div`, `span`, …)
+   * can be destructured. The callback is **not** executed immediately — it is
+   * deferred until {@link render} applies it to a DOM root.
    *
-   * ```ts
-   * const tpl = html(({ div, span }) => {
-   *   div({ className: 'box' }, () => {
-   *     span({ text: 'hello' })
+   * **Prop syntax cheat-sheet:**
+   * ```typescript
+   * html(({ div, button, input, svg, circle }) => {
+   *   // Static string class
+   *   div({ className: 'card' }, () => {
+   *
+   *     // Conditional class map: keys whose value is true are included
+   *     div({ className: { active: isActive, disabled: isDisabled } })
+   *
+   *     // Text content shorthand
+   *     div({ textContent: label })
+   *
+   *     // Inline styles as a camelCase object
+   *     div({ style: { color: 'red', fontSize: '14px' } })
+   *
+   *     // Native event handlers (direct assignment)
+   *     button({ onclick: () => doSomething(), textContent: 'Click me' })
+   *
+   *     // Any HTML attribute (pass-through)
+   *     input({ type: 'number', min: '0', max: '100', value: String(val) })
+   *
+   *     // SVG works too
+   *     svg({ viewBox: '0 0 24 24' }, () => {
+   *       circle({ cx: '12', cy: '12', r: '10' })
+   *     })
    *   })
    * })
    * ```
    *
-   * The callback is **not** executed immediately — it is deferred until
-   * `render(tpl, root)` is called.
+   * @param cb - Builder callback that describes the desired DOM tree.
+   * @returns An opaque {@link RenderResult} to pass to {@link render}.
    */
   html = (cb: (reconciler: Reconciler) => void): RenderResult => {
     return new RenderResult(cb);
   };
 
   /**
-   * Apply a `RenderResult` (produced by `html()`) to a DOM root node.
+   * Apply a `RenderResult` (produced by {@link html}) to a DOM root node.
    *
-   * A dedicated `Reconciler` instance is cached per root, so repeated
-   * calls to `render(…, root)` reuse the same builder and benefit from
-   * its DOM-diffing.
+   * A `Reconciler` instance is cached per root, so repeated calls with the
+   * same root reuse the same instance and only patch nodes that changed
+   * (cursor-based diffing — no virtual DOM).
    *
-   * ```ts
-   * render(html(({ div }) => { div({ text: 'hi' }) }), document.body)
+   * Typically called inside an Aeico component's `render()` method, but can
+   * also be used standalone to drive any DOM node:
+   *
+   * ```typescript
+   * import { html, render } from 'aeico-view'
+   *
+   * const app = (count: number) =>
+   *   html(({ div, button, span }) => {
+   *     div({}, () => {
+   *       button({ onclick: () => render(app(count - 1), root), textContent: '-' })
+   *       span({ textContent: String(count) })
+   *       button({ onclick: () => render(app(count + 1), root), textContent: '+' })
+   *     })
+   *   })
+   *
+   * const root = document.getElementById('app')!
+   * render(app(0), root)
    * ```
+   *
+   * @param result - The `RenderResult` to apply.
+   * @param root   - Target DOM node (shadow root, element, or `document.body`).
    */
   render = (result: RenderResult, root: Node): void => {
     let reconciler = this._reconcilerCache.get(root);
