@@ -184,9 +184,8 @@ export function renderToString(
   props: Record<string, unknown> = {},
 ): string {
   const registeredTagName = (
-    (globalThis as unknown as { customElements?: { getName(ctor: unknown): string | null } })
-      .customElements
-  )?.getName(ComponentClass);
+    globalThis as unknown as { customElements?: { getName(ctor: unknown): string | null } }
+  ).customElements?.getName(ComponentClass);
   const tagName = registeredTagName ?? ComponentClass.tagName ?? toKebab(ComponentClass.name);
 
   if (!tagName || !tagName.includes('-')) {

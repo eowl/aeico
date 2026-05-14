@@ -863,7 +863,9 @@ class BaseElement extends HTMLElement {
   static register(name?: string) {
     // Read only the own tagName (not inherited from parent class) to avoid accidentally
     // picking up a parent's already-registered name when a subclass calls register().
-    const _tagName = Object.prototype.hasOwnProperty.call(this, 'tagName') ? this.tagName : undefined;
+    const _tagName = Object.prototype.hasOwnProperty.call(this, 'tagName')
+      ? this.tagName
+      : undefined;
     const tagName = name || _tagName || toKebab(this.name);
 
     if (!tagName || !tagName.includes('-')) {
