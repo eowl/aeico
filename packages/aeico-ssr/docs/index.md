@@ -13,7 +13,7 @@ npm install aeico-ssr
 | Export | Description |
 |---|---|
 | `renderHtml(result)` | Serialize an `html()` `RenderResult` to an HTML string |
-| `renderToString(ComponentClass, props?)` | Serialize a full component class to an HTML string |
+| `renderToString(ComponentClass, props?, slotContent?)` | Serialize a full component class to an HTML string |
 | `HtmlSerializer` | Low-level serializer (Reconciler-compatible, for advanced use) |
 
 Both functions are safe to call in **Node.js**, **Edge Runtime** (Cloudflare Workers, Vercel Edge), and at **build time** (SSG).
@@ -56,6 +56,40 @@ renderToString(MyCounter, { count: 5 })
 // Props are coerced to declared types and reflected to attributes
 renderToString(MyCounter, { count: '10' })  // count attr on host + prop coerced to Number
 ```
+
+### Slot content
+
+Pass an `html()` template as the optional third argument to inject light DOM children into the host element. These children are distributed into the component's `<slot>` elements by the browser.
+
+```typescript
+import { html } from 'aeico-view'
+import { renderToString } from 'aeico-ssr'
+import { AeNavbar } from './ae-navbar'
+
+// Inline
+renderToString(AeNavbar, { siteTitle: 'Docs' }, html(({ a }) => {
+  a({ slot: 'brand', href: '/', text: 'Docs' })
+  a({ slot: 'start', href: '/guide', text: 'Guide' })
+}))
+// '<ae-navbar site-title="Docs"><template shadowrootmode="open">...</template>
+//   <a slot="brand" href="/">Docs</a>
+//   <a slot="start" href="/guide">Guide</a>
+// </ae-navbar>'
+
+// Reusable — define once, pass to many renderToString calls
+const navSlot = html(({ a }) => {
+  a({ slot: 'brand', href: '/', text: siteTitle })
+  for (const item of navItems) {
+    a({ slot: 'start', href: item.href, text: item.label })
+  }
+})
+
+for (const page of pages) {
+  renderToString(PageLayout, page, navSlot)
+}
+```
+
+Named slots use the `slot="name"` attribute on the top-level element, matching the browser's native slot-assignment convention. Default slot content (no `slot` attribute) fills the component's unnamed `<slot>`.
 
 ### Declarative Shadow Root (DSR) & hydration
 
