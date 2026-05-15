@@ -1,6 +1,6 @@
 {
   "name": "aeico-ssr",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Server-side rendering for Aeico — renderHtml() and renderToString()",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -23,7 +23,10 @@
     "!dist/*.tsbuildinfo",
     "src"
   ],
-  "sideEffects": ["./dist/shim.js", "./dist/shim.cjs"],
+  "sideEffects": [
+    "./dist/shim.js",
+    "./dist/shim.cjs"
+  ],
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly --outDir dist/types -p tsconfig.json",
     "dev": "rollup -c rollup.config.js --watch",
@@ -31,7 +34,12 @@
     "test": "npm run build && node --test test/*.test.ts",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["web-components", "ssr", "server-side-rendering", "aeico"],
+  "keywords": [
+    "web-components",
+    "ssr",
+    "server-side-rendering",
+    "aeico"
+  ],
   "author": "Eowl",
   "license": "ISC",
   "peerDependencies": {
