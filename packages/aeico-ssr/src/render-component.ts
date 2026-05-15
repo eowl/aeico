@@ -182,6 +182,7 @@ interface ComponentConstructorWithStyles extends ComponentConstructor {
 export function renderToString(
   ComponentClass: ComponentConstructor,
   props: Record<string, unknown> = {},
+  slotContent?: RenderResult,
 ): string {
   const registeredTagName = (
     globalThis as unknown as { customElements?: { getName(ctor: unknown): string | null } }
@@ -219,13 +220,21 @@ export function renderToString(
   const styleTag = extractStyleTag(ComponentClass);
   const useShadow = ComponentClass.useShadowDOM !== false;
 
+  let slotHtml = '';
+  if (slotContent) {
+    const slotSerializer = new HtmlSerializer();
+    const slotCb = getCallback(slotContent);
+    slotCb(slotSerializer as unknown as Parameters<typeof slotCb>[0]);
+    slotHtml = slotSerializer.toString();
+  }
+
   if (useShadow) {
     return (
       `<${tagName}${hostAttrs}>` +
       `<template shadowrootmode="open">${styleTag}${innerHTML}</template>` +
-      `</${tagName}>`
+      `${slotHtml}</${tagName}>`
     );
   }
 
-  return `<${tagName}${hostAttrs}>${styleTag}${innerHTML}</${tagName}>`;
+  return `<${tagName}${hostAttrs}>${styleTag}${innerHTML}${slotHtml}</${tagName}>`;
 }

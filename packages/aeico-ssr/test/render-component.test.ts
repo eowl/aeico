@@ -167,4 +167,56 @@ describe('renderToString', () => {
     const out = renderToString(ComputedEl as any, { a: 3, b: 4 });
     assert.equal(out, '<computed-el a="3" b="4"><span>7</span></computed-el>');
   });
+
+  test('slotContent injects default slot content into shadow DOM host light DOM', () => {
+    const out = renderToString(
+      MyCounter as any,
+      { count: 1 },
+      html(({ p }: any) => { p({ text: 'slot content' }); }),
+    );
+    assert.equal(
+      out,
+      '<my-counter count="1"><template shadowrootmode="open"><div>1</div></template><p>slot content</p></my-counter>',
+    );
+  });
+
+  test('slotContent injects named slot content via slot attribute', () => {
+    const out = renderToString(
+      MyCounter as any,
+      { count: 2 },
+      html(({ p, span }: any) => {
+        p({ text: 'default' });
+        span({ slot: 'footer', text: 'footer text' });
+      }),
+    );
+    assert.equal(
+      out,
+      '<my-counter count="2"><template shadowrootmode="open"><div>2</div></template><p>default</p><span slot="footer">footer text</span></my-counter>',
+    );
+  });
+
+  test('slotContent works with light DOM component', () => {
+    const out = renderToString(
+      MyLight as any,
+      { label: 'hi' },
+      html(({ span }: any) => { span({ text: 'extra' }); }),
+    );
+    assert.equal(out, '<my-light label="hi"><p>hi</p><span>extra</span></my-light>');
+  });
+
+  test('slotContent can be defined once and reused', () => {
+    const slot = html(({ p }: any) => { p({ text: 'reused' }); });
+    const a = renderToString(MyCounter as any, { count: 1 }, slot);
+    const b = renderToString(MyCounter as any, { count: 2 }, slot);
+    assert.ok(a.endsWith('<p>reused</p></my-counter>'));
+    assert.ok(b.endsWith('<p>reused</p></my-counter>'));
+  });
+
+  test('omitting slotContent produces same output as before', () => {
+    const withoutSlot = renderToString(MyCounter as any, { count: 3 });
+    assert.equal(
+      withoutSlot,
+      '<my-counter count="3"><template shadowrootmode="open"><div>3</div></template></my-counter>',
+    );
+  });
 });

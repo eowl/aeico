@@ -61,7 +61,7 @@ renderHtml(result);
 
 ---
 
-### `renderToString(ComponentClass, props?)`
+### `renderToString(ComponentClass, props?, slotContent?)`
 
 Serializes an Aeico component class to a complete HTML string including the host element tag, reflected attributes, and inner markup — **without instantiating the element or touching the DOM**.
 
@@ -124,6 +124,43 @@ If the component declares `static computed`, those properties are wired up as la
 2. `ComponentClass.name` converted to kebab-case (e.g. `MyCounter` → `my-counter`)
 
 A tag name without a hyphen (invalid custom element name) causes `renderToString` to throw.
+
+#### Slot content
+
+Pass an `html()` `RenderResult` as the optional third argument to inject light DOM children into the host element.  These children are distributed into the component's `<slot>` elements by the browser at parse time.
+
+```ts
+import { html } from 'aeico-view';
+import { renderToString } from 'aeico-ssr';
+import { AeNavbar } from './ae-navbar';
+
+renderToString(AeNavbar, { siteTitle: 'Docs' }, html(({ a }) => {
+  a({ slot: 'brand', href: '/', text: 'Docs' });
+  a({ slot: 'start', href: '/guide', text: 'Guide' });
+}));
+// '<ae-navbar site-title="Docs">
+//   <template shadowrootmode="open">...</template>
+//   <a slot="brand" href="/">Docs</a>
+//   <a slot="start" href="/guide">Guide</a>
+// </ae-navbar>'
+```
+
+Because the third argument is a plain `RenderResult`, it can be defined once and reused across many `renderToString` calls:
+
+```ts
+const navSlot = html(({ a }) => {
+  a({ slot: 'brand', href: '/', text: siteTitle });
+  for (const item of navItems) {
+    a({ slot: 'start', href: item.href, text: item.label });
+  }
+});
+
+for (const page of pages) {
+  renderToString(PageLayout, page, navSlot);
+}
+```
+
+Named slots use the `slot="name"` attribute on the top-level element, matching the browser's native slot-assignment convention.  Content without a `slot` attribute fills the unnamed default `<slot>`.
 
 ---
 
@@ -287,6 +324,7 @@ Event handlers (`@…` props) are stripped entirely and never appear in the outp
 | Reflected attrs | No | Yes |
 | Shadow / Light DOM | No | Yes |
 | `static styles` | No | Yes |
+| Slot content | No | Yes (3rd arg) |
 | Requires `aeico-element` | No | Yes (peer dep) |
 
 ---
