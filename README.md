@@ -7,7 +7,7 @@
 | Package | Version | Description |
 |---|---|---|
 | [`aeico`](packages/aeico) | 0.1.5 | Meta package — re-exports base |
-| [`aeico-element`](packages/aeico-element) | 0.1.4 | Reactive base classes and decorators |
+| [`aeico-element`](packages/aeico-element) | 0.1.5 | Reactive base classes and decorators |
 | [`aeico-view`](packages/aeico-view) | 0.1.2 | DOM rendering — `html()`, `render()`, `tags` |
 | [`aeico-localize`](packages/aeico-localize) | 0.1.1 | i18n — `t()`, `locale`, `localeRegistry` |
 | [`aeico-ssr`](packages/aeico-ssr) | 0.1.3 | Server-side rendering — `renderHtml()`, `renderToString()` |

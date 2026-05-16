@@ -1,6 +1,6 @@
 {
   "name": "aeico-element",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Reactive element base classes and decorators for Aeico",
   "type": "module",
   "main": "./dist/index.cjs",
