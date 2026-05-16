@@ -1,6 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 
-const external = ['aeico-view', 'aeico-element'];
+const external = ['aeico-view', 'aeico-element', 'aeico-element/constants'];
 
 const outputs = (name) => [
   {
