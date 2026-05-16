@@ -110,7 +110,7 @@ function collectProps(ComponentClass: ComponentConstructor): Props {
     chain.push(cur);
     cur = Object.getPrototypeOf(cur) as object | null;
   }
-  
+
   const collected: Props = {};
   for (let i = chain.length - 1; i >= 0; i--) {
     const cls = chain[i] as ComponentConstructor & ClassWithMetadata;
