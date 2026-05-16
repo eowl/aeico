@@ -10,7 +10,7 @@
 | [`aeico-element`](packages/aeico-element) | 0.1.4 | Reactive base classes and decorators |
 | [`aeico-view`](packages/aeico-view) | 0.1.2 | DOM rendering — `html()`, `render()`, `tags` |
 | [`aeico-localize`](packages/aeico-localize) | 0.1.1 | i18n — `t()`, `locale`, `localeRegistry` |
-| [`aeico-ssr`](packages/aeico-ssr) | 0.1.2 | Server-side rendering — `renderHtml()`, `renderToString()` |
+| [`aeico-ssr`](packages/aeico-ssr) | 0.1.3 | Server-side rendering — `renderHtml()`, `renderToString()` |
 
 ## Installation
 
