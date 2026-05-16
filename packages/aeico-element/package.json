@@ -11,6 +11,11 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./constants": {
+      "types": "./dist/types/constants.d.ts",
+      "import": "./dist/constants.js",
+      "require": "./dist/constants.cjs"
     }
   },
   "files": [

@@ -4,7 +4,7 @@ import type { WatcherHandler } from '../types';
 // [TC39 Stage 3 Decorators] Symbol.metadata is the per-class metadata store defined by the Decorators proposal
 (Symbol as unknown as Record<string, unknown>).metadata ??= Symbol.for('Symbol.metadata');
 
-export const WATCHER_METADATA_KEY = Symbol('aeico:watchers');
+export const WATCHER_METADATA_KEY = Symbol.for('aeico:watchers');
 
 type WatcherMetadata = Record<string, WatcherHandler>;
 

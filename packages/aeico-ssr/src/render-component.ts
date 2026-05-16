@@ -1,5 +1,6 @@
 import { getCallback, type RenderResult } from 'aeico-view';
 import type { Props, Prop, Computed, StyleEntry } from 'aeico-element';
+import { PROP_METADATA_KEY, COMPUTED_METADATA_KEY } from 'aeico-element/constants';
 import { HtmlSerializer, escapeAttr } from './html-serializer';
 
 /** Converts a PascalCase or camelCase class name to a kebab-case custom element tag name. */
@@ -92,6 +93,67 @@ function serializeHostAttrs(propDecls: Props, props: Record<string, unknown>): s
   return s;
 }
 
+type ClassWithMetadata = { [Symbol.metadata]?: Record<PropertyKey, unknown> };
+
+/**
+ * Walks the prototype chain of a component class and merges prop declarations from
+ * both `static props` and `@prop` decorator metadata (`Symbol.metadata`).
+ *
+ * Mirrors `BaseElement._collectProps()` so decorator-declared props are visible to
+ * `renderToString` without requiring a DOM environment.
+ * Child-class declarations override parent-class declarations.
+ */
+function collectProps(ComponentClass: ComponentConstructor): Props {
+  const chain: object[] = [];
+  let cur: object | null = ComponentClass;
+  while (cur && cur !== Object.prototype) {
+    chain.push(cur);
+    cur = Object.getPrototypeOf(cur) as object | null;
+  }
+
+  const collected: Props = {};
+  for (let i = chain.length - 1; i >= 0; i--) {
+    const cls = chain[i] as ComponentConstructor & ClassWithMetadata;
+    if (Object.prototype.hasOwnProperty.call(cls, 'props') && cls.props) {
+      Object.assign(collected, cls.props);
+    }
+    const meta = cls[Symbol.metadata];
+    if (meta && Object.hasOwn(meta, PROP_METADATA_KEY)) {
+      Object.assign(collected, meta[PROP_METADATA_KEY] as Props);
+    }
+  }
+
+  return collected;
+}
+
+/**
+ * Walks the prototype chain of a component class and merges computed declarations
+ * from both `static computed` and `@computed` decorator metadata (`Symbol.metadata`).
+ *
+ * Mirrors `BaseElement._collectComputed()`.
+ */
+function collectComputed(ComponentClass: ComponentConstructor): Computed {
+  const chain: object[] = [];
+  let cur: object | null = ComponentClass;
+  while (cur && cur !== Object.prototype) {
+    chain.push(cur);
+    cur = Object.getPrototypeOf(cur) as object | null;
+  }
+  const collected: Computed = {};
+  for (let i = chain.length - 1; i >= 0; i--) {
+    const cls = chain[i] as ComponentConstructor & ClassWithMetadata;
+    if (Object.prototype.hasOwnProperty.call(cls, 'computed') && cls.computed) {
+      Object.assign(collected, cls.computed);
+    }
+    const meta = cls[Symbol.metadata];
+    if (meta && Object.hasOwn(meta, COMPUTED_METADATA_KEY)) {
+      Object.assign(collected, meta[COMPUTED_METADATA_KEY] as Computed);
+    }
+  }
+
+  return collected;
+}
+
 /**
  * Constructs a plain object that acts as `this` inside the component's `render()` call.
  *
@@ -108,7 +170,7 @@ function createRenderContext(
     unknown
   >;
 
-  const propDecls: Props = ComponentClass.props ?? {};
+  const propDecls = collectProps(ComponentClass);
   for (const [key, decl] of Object.entries(propDecls)) {
     const attrName = decl.attr ?? toKebab(key);
     let value = props[key] ?? props[attrName];
@@ -119,8 +181,8 @@ function createRenderContext(
   }
 
   // Wire up computed properties so render() can access them.
-  const computed: Computed | undefined = ComponentClass.computed;
-  if (computed) {
+  const computed = collectComputed(ComponentClass);
+  if (Object.keys(computed).length > 0) {
     for (const [key, decl] of Object.entries(computed)) {
       Object.defineProperty(ctx, key, {
         get() {
@@ -197,7 +259,7 @@ export function renderToString(
     );
   }
 
-  const propDecls: Props = ComponentClass.props ?? {};
+  const propDecls = collectProps(ComponentClass);
   const hostAttrs = serializeHostAttrs(propDecls, props);
   const ctx = createRenderContext(ComponentClass, props);
 

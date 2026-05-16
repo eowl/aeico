@@ -4,10 +4,10 @@ import type { Prop } from '../types';
 // [TC39 Stage 3 Decorators] Symbol.metadata is the per-class metadata store defined by the Decorators proposal
 (Symbol as unknown as Record<string, unknown>).metadata ??= Symbol.for('Symbol.metadata');
 
-export const PROP_METADATA_KEY = Symbol('aeico:props');
+export const PROP_METADATA_KEY = Symbol.for('aeico:props');
 
 /** @internal Names of props declared via `accessor` keyword collected per-class and merged up the inheritance chain. */
-export const ACCESSOR_PROPS_KEY = Symbol('aeico:accessor-props');
+export const ACCESSOR_PROPS_KEY = Symbol.for('aeico:accessor-props');
 
 type PropMetadata = Record<string | symbol, Prop>;
 
