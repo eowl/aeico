@@ -775,7 +775,7 @@ class BaseElement extends HTMLElement {
     maybeHandlerOrOptions?: EventListenerOrEventListenerObject | AddEventListenerOptions,
     maybeOptions?: AddEventListenerOptions,
   ): void {
-    if (typeof __DEV__ !== 'undefined' && __DEV__ && getCurrentContext() === this) {
+    if (__DEV__ && getCurrentContext() === this) {
       throw new Error(
         '[aeico] listen() must not be called inside render(). Use declarative @event syntax instead.',
       );

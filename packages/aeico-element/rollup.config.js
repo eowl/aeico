@@ -4,7 +4,7 @@ import replace from '@rollup/plugin-replace';
 const plugins = [
   replace({
     preventAssignment: true,
-    values: { __DEV__: 'import.meta.env.DEV' },
+    values: { __DEV__: "(process.env.NODE_ENV !== 'production')" },
   }),
   typescript({ tsconfig: './tsconfig.build.json' }),
 ];
