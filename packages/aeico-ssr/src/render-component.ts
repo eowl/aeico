@@ -203,7 +203,6 @@ interface ComponentConstructor {
   props: Props;
   computed?: Computed;
   useShadowDOM: boolean;
-  tagName?: string;
   name: string;
   prototype: { render?: () => RenderResult | null | undefined };
 }
@@ -246,16 +245,14 @@ export function renderToString(
   props: Record<string, unknown> = {},
   slotContent?: RenderResult,
 ): string {
-  const registeredTagName = (
+  const tagName = (
     globalThis as unknown as { customElements?: { getName(ctor: unknown): string | null } }
   ).customElements?.getName(ComponentClass);
-  const tagName = registeredTagName ?? ComponentClass.tagName ?? toKebab(ComponentClass.name);
 
-  if (!tagName || !tagName.includes('-')) {
+  if (!tagName) {
     throw new Error(
-      `renderToString: cannot determine tag name for "${ComponentClass.name}". ` +
-        `Call ${ComponentClass.name}.register() before renderToString, ` +
-        `or set static tagName = '...' explicitly.`,
+      `renderToString: "${ComponentClass.name}" is not registered. ` +
+        `Call ${ComponentClass.name}.register() before renderToString().`,
     );
   }
 

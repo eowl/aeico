@@ -32,6 +32,7 @@ describe('renderToString with AeicoBase', () => {
       return html(({ h1 }: any) => h1({ text: this.heading ?? '' }));
     }
   }
+  MyBase.register();
 
   test('Shadow DOM output', () => {
     const out = renderToString(MyBase as any, { heading: 'hello' });
@@ -52,6 +53,7 @@ describe('renderToString with AeicoBase', () => {
         return html(({ p }: any) => p({ text: this.msg ?? '' }));
       }
     }
+    LightBase.register();
     const out = renderToString(LightBase as any, { msg: 'world' });
     assert.equal(out, '<light-aeico-base msg="world"><p>world</p></light-aeico-base>');
   });
@@ -78,6 +80,7 @@ describe('renderToString with AeicoBase', () => {
         return html(({ span }: any) => span({ text: (this as any).fullName }));
       }
     }
+    FullName.register();
     const out = renderToString(FullName as any, { first: 'John', last: 'Doe' });
     assert.ok(out.includes('<span>John Doe</span>'), `got: ${out}`);
   });
@@ -93,6 +96,7 @@ describe('renderToString with AeicoBase', () => {
         return html(({ span }: any) => span({ text: String((this as any).active) }));
       }
     }
+    FlagEl.register();
     const out = renderToString(FlagEl as any, { active: true });
     assert.ok(out.startsWith('<flag-el-base active>'), `got: ${out}`);
     assert.ok(out.includes('<span>true</span>'), `got: ${out}`);
@@ -110,6 +114,7 @@ describe('renderToString with AeicoElement', () => {
       return html(({ div }: any) => div({ text: this.label ?? '' }));
     }
   }
+  Card.register();
 
   test('Shadow DOM with static styles', () => {
     const out = renderToString(Card as any, { label: 'test' });
@@ -129,6 +134,7 @@ describe('renderToString with AeicoElement', () => {
         return html(({ span }: any) => span({ text: this.val ?? '' }));
       }
     }
+    Bare.register();
     const out = renderToString(Bare as any, { val: 'x' });
     assert.ok(!out.includes('<style>'), `unexpected <style> in: ${out}`);
     assert.ok(out.includes('<span>x</span>'), `got: ${out}`);
@@ -144,6 +150,7 @@ describe('renderToString with AeicoElement', () => {
         return html(({ p }: any) => p({ text: 'hi' }));
       }
     }
+    MultiStyle.register();
     const out = renderToString(MultiStyle as any);
     assert.ok(out.includes('<style>:host { color: red }\np { margin: 0 }</style>'), `got: ${out}`);
   });
@@ -254,6 +261,7 @@ describe('renderToString with @prop accessor decorators', () => {
     count: { type: Number, reflect: true },
     label: { type: String, reflect: true },
   });
+  DecoratorCounter.register();
 
   test('@prop accessor props are rendered into the template', () => {
     const out = renderToString(DecoratorCounter as any, { count: 7, label: 'hits' });
@@ -291,6 +299,7 @@ describe('renderToString with @prop accessor decorators', () => {
       a: { type: Number },
       b: { type: Number },
     });
+    DecoratorComputed.register();
 
     const out = renderToString(DecoratorComputed as any, { a: 4, b: 6 });
     assert.ok(out.includes('<span>10</span>'), `got: ${out}`);
@@ -311,6 +320,7 @@ describe('renderToString with @prop accessor decorators', () => {
     class ChildOfBase extends BaseWithProp {
       static tagName = 'child-of-base';
     }
+    ChildOfBase.register();
 
     const out = renderToString(ChildOfBase as any, { title: 'inherited' });
     assert.ok(out.includes('<h2>inherited</h2>'), `got: ${out}`);
