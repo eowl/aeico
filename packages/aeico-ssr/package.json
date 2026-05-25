@@ -1,6 +1,6 @@
 {
   "name": "aeico-ssr",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Server-side rendering for Aeico — renderHtml() and renderToString()",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -44,7 +44,7 @@
   "license": "ISC",
   "peerDependencies": {
     "aeico-view": ">=0.1.2",
-    "aeico-element": ">=0.1.5"
+    "aeico-element": ">=0.1.6"
   },
   "peerDependenciesMeta": {
     "aeico-element": {
@@ -52,7 +52,7 @@
     }
   },
   "devDependencies": {
-    "aeico-element": "^0.1.5",
+    "aeico-element": "^0.1.6",
     "aeico-view": "^0.1.2",
     "typescript": "^5.7.3"
   }
