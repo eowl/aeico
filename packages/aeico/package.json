@@ -33,7 +33,7 @@
     "aeico"
   ],
   "author": "Eowl",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "aeico-element": "^0.1.5",
     "aeico-view": "^0.1.2"

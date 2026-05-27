@@ -33,8 +33,8 @@
     "localization",
     "aeico"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Eowl",
+  "license": "MIT",
   "dependencies": {
     "aeico-element": "^0.1.1"
   },
