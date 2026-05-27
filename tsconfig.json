@@ -19,6 +19,7 @@
     { "path": "./packages/aeico-element" },
     { "path": "./packages/aeico-localize" },
     { "path": "./packages/aeico-ssr" },
-    { "path": "./packages/aeico" }
+    { "path": "./packages/aeico" },
+    { "path": "./packages/aeico-signals" }
   ]
 }
