@@ -40,7 +40,7 @@
     "aeico"
   ],
   "author": "Eowl",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "aeico-view": "^0.1.2"
   },

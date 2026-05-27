@@ -41,7 +41,7 @@
     "aeico"
   ],
   "author": "Eowl",
-  "license": "ISC",
+  "license": "MIT",
   "peerDependencies": {
     "aeico-view": ">=0.1.2",
     "aeico-element": ">=0.1.6"

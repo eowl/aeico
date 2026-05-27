@@ -34,8 +34,8 @@
     "html",
     "aeico"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "Eowl",
+  "license": "MIT",
   "devDependencies": {
     "@open-wc/testing": "^4.0.0",
     "@types/mocha": "^10.0.10",
