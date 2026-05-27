@@ -286,7 +286,3 @@ render(html(({ div }) => { div({ text: 'shadow content' }); }), shadow);
 | `Reconciler` | class | Core cursor-based DOM reconciler |
 | `TagProps` | type | Prop bag accepted by all tag helpers |
 | `RenderResult` | class | Opaque wrapper returned by `html()` |
-
-## License
-
-ISC

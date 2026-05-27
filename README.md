@@ -71,7 +71,3 @@ npm run build --workspaces
 # Test all packages
 npm run test --workspaces --if-present
 ```
-
-## License
-
-ISC

@@ -174,7 +174,3 @@ class MyForm extends AeicoElement {
 | `listenEvent` | Attach a tracked event listener (auto-cleaned up on disconnect) |
 | `cleanupListeners` | Manually clean up all tracked listeners on an element |
 | `getCurrentContext` | Returns the current render context |
-
-## License
-
-ISC
