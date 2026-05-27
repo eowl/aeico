@@ -6,9 +6,7 @@ export let computing: ComputedSignal<unknown> | null = null;
 // Disallow Signal reads/writes while a Watcher notify fires.
 export let frozen = false;
 
-export function setComputing(
-  next: ComputedSignal<unknown> | null,
-): ComputedSignal<unknown> | null {
+export function setComputing(next: ComputedSignal<unknown> | null): ComputedSignal<unknown> | null {
   const prev = computing;
   computing = next;
   return prev;

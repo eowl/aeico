@@ -42,11 +42,7 @@ export class StateSignal<T> {
 }
 
 /** Returns true if value changed (equals returned false). */
-export function setSignalValue<T>(
-  signal: StateSignal<T>,
-  newValue: T,
-  isError: boolean,
-): boolean {
+export function setSignalValue<T>(signal: StateSignal<T>, newValue: T, isError: boolean): boolean {
   if (!isError) {
     let equal: boolean;
     try {
@@ -86,11 +82,7 @@ export function propagateAndNotify(sinks: Set<Sink>): void {
   notifyWatchers(watchersToNotify);
 }
 
-function markSinksDirty(
-  sinks: Set<Sink>,
-  isDirect: boolean,
-  watchersToNotify: Watcher[],
-): void {
+function markSinksDirty(sinks: Set<Sink>, isDirect: boolean, watchersToNotify: Watcher[]): void {
   for (const sink of sinks) {
     if (isWatcher(sink)) {
       if (sink._state === 'watching') {
@@ -124,7 +116,8 @@ function notifyWatchers(watchers: Watcher[]): void {
     watcher._state = 'waiting';
   }
   if (errors.length === 1) throw errors[0];
-  if (errors.length > 1) throw new AggregateError(errors, 'Multiple Watcher notify callbacks threw');
+  if (errors.length > 1)
+    throw new AggregateError(errors, 'Multiple Watcher notify callbacks threw');
 }
 
 /** Type guard: distinguishes Watcher from ComputedSignal in a Sink union. */

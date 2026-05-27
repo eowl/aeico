@@ -1,16 +1,7 @@
 import { computing, frozen, setComputing } from './context';
-import {
-  ErrorWrapper,
-  type SignalOptions,
-  type Sink,
-  type Source,
-} from './types';
+import { ErrorWrapper, type SignalOptions, type Sink, type Source } from './types';
 import { watched as watchedSym, unwatched as unwatchedSym } from './symbols';
-import {
-  trackSource,
-  callWatchedCallback,
-  callUnwatchedCallback,
-} from './state';
+import { trackSource, callWatchedCallback, callUnwatchedCallback } from './state';
 import type { Watcher } from './watcher';
 
 /** The four lifecycle states of a Computed signal. */
@@ -36,9 +27,7 @@ export class ComputedSignal<T> {
     this._callback = cb;
     this._equals = options?.equals ?? Object.is;
     this._watchedCb = options?.[watchedSym] as unknown as ((this: object) => void) | undefined;
-    this._unwatchedCb = options?.[unwatchedSym] as unknown as
-      | ((this: object) => void)
-      | undefined;
+    this._unwatchedCb = options?.[unwatchedSym] as unknown as ((this: object) => void) | undefined;
   }
 
   /** Read the current (possibly cached) value. Re-evaluates if stale; re-throws cached errors. */
@@ -67,7 +56,7 @@ export class ComputedSignal<T> {
 
     const v = this._value;
     if (v instanceof ErrorWrapper) throw v.value;
-    return v as T;
+    return v;
   }
 
   _checkStaleness(): void {
@@ -151,15 +140,15 @@ function recalculate(node: ComputedSignal<unknown>): void {
   } else {
     let equal: boolean;
     try {
-      equal = oldValue instanceof ErrorWrapper
-        ? false
-        : node._equals.call(node, oldValue as never, newValue as never);
+      equal =
+        oldValue instanceof ErrorWrapper
+          ? false
+          : node._equals.call(node, oldValue as never, newValue as never);
     } catch (e) {
-      equal = false;
       node._value = new ErrorWrapper(e);
       node._state = 'clean';
       node._version++;
-      node._sourceVersions = node._sources.map(src => src._version);
+      node._sourceVersions = node._sources.map((src) => src._version);
       propagateDirtyToSinks(node._sinks);
       return;
     }
@@ -170,7 +159,7 @@ function recalculate(node: ComputedSignal<unknown>): void {
   }
 
   node._state = 'clean';
-  node._sourceVersions = node._sources.map(src => src._version);
+  node._sourceVersions = node._sources.map((src) => src._version);
 
   if (changed) {
     node._version++;
@@ -228,10 +217,7 @@ function promoteCheckedSinks(sinks: Set<Sink>): void {
 }
 
 /** Propagate watched status up through the source graph when a Watcher starts watching. */
-export function markSignalWatched(
-  signal: ComputedSignal<unknown>,
-  watcher: Watcher,
-): void {
+export function markSignalWatched(signal: ComputedSignal<unknown>, watcher: Watcher): void {
   const wasEmpty = signal._sinks.size === 0;
   signal._sinks.add(watcher);
   signal._watcherCount++;
@@ -251,10 +237,7 @@ export function markSignalWatched(
 }
 
 /** Propagate unwatched status up through the source graph when a Watcher stops watching. */
-export function markSignalUnwatched(
-  signal: ComputedSignal<unknown>,
-  watcher: Watcher,
-): void {
+export function markSignalUnwatched(signal: ComputedSignal<unknown>, watcher: Watcher): void {
   signal._sinks.delete(watcher);
   signal._watcherCount = Math.max(0, signal._watcherCount - 1);
 

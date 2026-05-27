@@ -46,11 +46,22 @@ export const Signal = {
 } as const;
 
 export { StateSignal, ComputedSignal, Watcher };
-export { watched, unwatched, untrack, currentComputed, introspectSources, introspectSinks, hasSinks, hasSources };
+export {
+  watched,
+  unwatched,
+  untrack,
+  currentComputed,
+  introspectSources,
+  introspectSinks,
+  hasSinks,
+  hasSources,
+};
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace Signal {
   export type State<T> = StateSignal<T>;
   export type Computed<T> = ComputedSignal<T>;
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   export namespace subtle {
     export type Watcher = import('./watcher.js').Watcher;
   }

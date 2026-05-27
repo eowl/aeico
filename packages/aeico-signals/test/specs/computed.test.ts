@@ -170,8 +170,7 @@ describe('Signal.Computed', () => {
 
   describe('cycle detection', () => {
     it('throws when a Computed reads itself', () => {
-      let c: Signal.Computed<number>;
-      c = new Signal.Computed(() => c.get() + 1);
+      const c: Signal.Computed<number> = new Signal.Computed(() => c.get() + 1);
       expect(() => c.get()).to.throw();
     });
   });
