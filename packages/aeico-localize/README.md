@@ -79,7 +79,3 @@ localeRegistry.register('fr-FR', () => import('./locales/fr-FR.json'));
 | `localeRegistry` | Registry for lazy-loading locale bundles |
 | `LocaleRegistry` | Type — registry interface |
 | `LocaleProvider` | Type — translation provider interface |
-
-## License
-
-ISC

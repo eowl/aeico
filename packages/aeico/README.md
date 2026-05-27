@@ -59,7 +59,3 @@ console.log(t('save', 'Save')); // "保存"
 | [`aeico-element`](https://www.npmjs.com/package/aeico-element) | Reactive base classes and decorators |
 | [`aeico-view`](https://www.npmjs.com/package/aeico-view) | DOM rendering — `html()`, `render()`, `tags` |
 | [`aeico-localize`](https://www.npmjs.com/package/aeico-localize) | i18n — `t()`, `locale`, `localeRegistry` |
-
-## License
-
-ISC
