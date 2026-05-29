@@ -18,6 +18,15 @@ const VOID_ELEMENTS = new Set([
   'wbr',
 ]);
 
+// HTML5 raw text elements and escapable raw text elements — their text content
+// is not parsed as HTML, so entity escaping (&amp; &lt; &gt;) must not be applied.
+const RAW_TEXT_ELEMENTS = new Set([
+  'script',
+  'style',
+  'textarea',
+  'title',
+]);
+
 /** Escapes `&` and `"` for safe use inside a double-quoted HTML attribute value. */
 function escapeAttr(s: string): string {
   return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
@@ -173,7 +182,11 @@ class HtmlSerializer {
       cb();
     } else if (props) {
       const t = props.text ?? props.textContent;
-      if (t != null) this._parts.push(escapeText(String(t)));
+      if (t != null) {
+        this._parts.push(
+          RAW_TEXT_ELEMENTS.has(tagName) ? String(t) : escapeText(String(t)),
+        );
+      }
     }
 
     this._parts.push(`</${tagName}>`);

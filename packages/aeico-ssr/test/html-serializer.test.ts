@@ -110,4 +110,29 @@ describe('HtmlSerializer', () => {
     (s as any).myCounter({ text: 'x' });
     assert.equal(s.toString(), '<my-counter>x</my-counter>');
   });
+
+  // Raw text elements — content must NOT be HTML-entity-escaped.
+  test('script text content is not HTML-escaped', () => {
+    const s = new HtmlSerializer();
+    (s as any).script({ text: 'if (a && b) { return a < b; }' });
+    assert.equal(s.toString(), '<script>if (a && b) { return a < b; }</script>');
+  });
+
+  test('style text content is not HTML-escaped', () => {
+    const s = new HtmlSerializer();
+    (s as any).style({ text: 'p > span { color: red; }' });
+    assert.equal(s.toString(), '<style>p > span { color: red; }</style>');
+  });
+
+  test('textarea text content is not HTML-escaped', () => {
+    const s = new HtmlSerializer();
+    (s as any).textarea({ text: 'a < b && c > d' });
+    assert.equal(s.toString(), '<textarea>a < b && c > d</textarea>');
+  });
+
+  test('title text content is not HTML-escaped', () => {
+    const s = new HtmlSerializer();
+    (s as any).title({ text: 'Price < $10 & > $5' });
+    assert.equal(s.toString(), '<title>Price < $10 & > $5</title>');
+  });
 });
