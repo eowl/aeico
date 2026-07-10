@@ -113,6 +113,25 @@ describe('Reconciler', () => {
       });
     });
 
+    describe('innerHTML', () => {
+      it('sets innerHTML from string', () => {
+        const el = builder.div({ innerHTML: '<span>hello</span>' });
+        expect(el.innerHTML).to.equal('<span>hello</span>');
+        expect(el.children.length).to.equal(1);
+        expect(el.children[0].tagName).to.equal('SPAN');
+        expect(el.children[0].textContent).to.equal('hello');
+      });
+
+      it('innerHTML is overridden by children callback', () => {
+        const el = builder.div({ innerHTML: '<ignored>' }, () => {
+          builder.span({ textContent: 'visible' });
+        });
+        expect(el.children.length).to.equal(1);
+        expect(el.children[0].textContent).to.equal('visible');
+        expect(el.innerHTML).to.equal('<span>visible</span>');
+      });
+    });
+
     describe('id and common attributes', () => {
       it('sets id, part, role, and aria attributes', () => {
         const el = builder.button({

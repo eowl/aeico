@@ -7,6 +7,7 @@ type _Props = {
   className?: string | Record<string, boolean>;
   text?: string;
   textContent?: string;
+  innerHTML?: string;
   id?: string;
   part?: string;
   role?: string;
@@ -456,6 +457,9 @@ class Reconciler {
       if (skipTextContent) return [null, null];
       return ['textContent', value];
     }
+    if (key === 'innerHTML') {
+      return ['innerHTML', value];
+    }
     if (key === 'className' || key === 'class') {
       if (value == null || value === false) return ['class', null];
       if (typeof value === 'object') {
@@ -512,6 +516,8 @@ class Reconciler {
       el.setAttribute('class', value as string);
     } else if (ck === 'textContent') {
       el.textContent = value as string;
+    } else if (ck === 'innerHTML') {
+      el.innerHTML = value as string;
     } else if (ck === 'style') {
       if (typeof value === 'object' && 'style' in el) {
         const s = (el as HTMLElement).style;

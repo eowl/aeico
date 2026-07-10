@@ -88,7 +88,7 @@ function serializeAttrs(props: TagProps): string {
 
   for (const [key, value] of Object.entries(props)) {
     // Pure rendering hints — not emitted as attributes.
-    if (key === 'text' || key === 'textContent') continue;
+    if (key === 'text' || key === 'textContent' || key === 'innerHTML') continue;
     // Events are client-only; skip entirely.
     if (key.startsWith('@')) continue;
     if (value == null || value === false) continue;
@@ -179,6 +179,9 @@ class HtmlSerializer {
       const t = props.text ?? props.textContent;
       if (t != null) {
         this._parts.push(RAW_TEXT_ELEMENTS.has(tagName) ? String(t) : escapeText(String(t)));
+      }
+      if (props.innerHTML != null) {
+        this._parts.push(String(props.innerHTML));
       }
     }
 
