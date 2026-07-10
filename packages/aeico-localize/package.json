@@ -35,10 +35,11 @@
   ],
   "author": "Eowl",
   "license": "MIT",
-  "dependencies": {
-    "aeico-element": "^0.1.1"
+  "peerDependencies": {
+    "aeico-element": ">=0.1.6"
   },
   "devDependencies": {
+    "aeico-element": "^0.1.6",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/mocha": "^10.0.10",
     "@web/dev-server-esbuild": "^1.0.5",
