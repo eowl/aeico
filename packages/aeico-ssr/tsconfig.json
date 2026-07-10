@@ -8,6 +8,7 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
   "references": [
-    { "path": "../aeico-view" }
+    { "path": "../aeico-view" },
+    { "path": "../aeico-element" }
   ]
 }
