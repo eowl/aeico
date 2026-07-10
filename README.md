@@ -6,28 +6,34 @@
 
 | Package | Version | Description |
 |---|---|---|
-| [`aeico`](packages/aeico) | 0.1.6 | Meta package — re-exports base |
+| [`aeico`](packages/aeico) | 0.1.6 | **Main entry** — bundles `aeico-element` + `aeico-view` |
 | [`aeico-element`](packages/aeico-element) | 0.1.6 | Reactive base classes and decorators |
-| [`aeico-view`](packages/aeico-view) | 0.1.2 | DOM rendering — `html()`, `render()`, `tags` |
-| [`aeico-localize`](packages/aeico-localize) | 0.1.1 | i18n — `t()`, `locale`, `localeRegistry` |
-| [`aeico-ssr`](packages/aeico-ssr) | 0.1.6 | Server-side rendering — `renderHtml()`, `renderToString()` |
+| [`aeico-view`](packages/aeico-view) | 0.1.3 | DOM rendering — `html()`, `render()`, `tags` |
+| [`aeico-localize`](packages/aeico-localize) | 0.1.1 | *(optional)* i18n — `t()`, `locale`, `localeRegistry` |
+| [`aeico-ssr`](packages/aeico-ssr) | 0.1.7 | *(optional)* Server-side rendering — `renderHtml()`, `renderToString()` |
+| [`aeico-signals`](packages/aeico-signals) | 0.1.0 | *(optional)* TC39 Signals proposal polyfill |
+
+`aeico-element` depends on `aeico-view`. `aeico-localize` depends on `aeico-element`. `aeico-ssr` requires `aeico-view` (+ optional `aeico-element`). `aeico-signals` is standalone.
 
 ## Installation
 
 ```bash
-# Install everything at once
+# Recommended: install everything at once
 npm install aeico
 
-# Or install individual packages
+# Or pick individual core packages
 npm install aeico-element aeico-view
-npm install aeico-localize  # optional i18n support
+
+# Optional extensions
+npm install aeico-localize   # i18n
+npm install aeico-ssr        # server-side rendering
+npm install aeico-signals    # TC39 Signals polyfill
 ```
 
 ## Quick Start
 
 ```typescript
-import { AeicoElement, prop, watch } from 'aeico-element';
-import { html } from 'aeico-view';
+import { AeicoElement, prop, watch, html } from 'aeico';
 
 class MyCounter extends AeicoElement {
   @prop() accessor count = 0;
