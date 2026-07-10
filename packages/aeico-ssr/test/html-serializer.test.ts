@@ -135,4 +135,25 @@ describe('HtmlSerializer', () => {
     (s as any).title({ text: 'Price < $10 & > $5' });
     assert.equal(s.toString(), '<title>Price < $10 & > $5</title>');
   });
+
+  // innerHTML — content is injected raw, without any escaping.
+  test('innerHTML prop injects raw HTML without escaping', () => {
+    const s = new HtmlSerializer();
+    (s as any).div({ innerHTML: '<span>raw &amp; unescaped</span>' });
+    assert.equal(s.toString(), '<div><span>raw &amp; unescaped</span></div>');
+  });
+
+  test('innerHTML does not appear as an attribute', () => {
+    const s = new HtmlSerializer();
+    (s as any).div({ innerHTML: '<em>hi</em>', className: 'box' });
+    assert.equal(s.toString(), '<div class="box"><em>hi</em></div>');
+  });
+
+  test('innerHTML combined with children callback — callback wins', () => {
+    const s = new HtmlSerializer();
+    (s as any).div({ innerHTML: '<ignored>' }, () => {
+      (s as any).span({ text: 'visible' });
+    });
+    assert.equal(s.toString(), '<div><span>visible</span></div>');
+  });
 });
