@@ -1,19 +1,19 @@
 # Aeico
 
-**A**dvanced **E**lement **I**nterface for **C**omponent **O**bjects — a lightweight Web Components framework with reactive properties, declarative DOM rendering, and i18n support.
+**A**bstract **E**lement **I**nterface for **C**omponent **O**bjects — a lightweight Web Components framework with reactive properties, declarative DOM rendering, and i18n support.
 
 ## Packages
 
-| Package | Version | Description |
-|---|---|---|
-| [`aeico`](packages/aeico) | 0.1.6 | **Main entry** — bundles `aeico-element` + `aeico-view` |
-| [`aeico-element`](packages/aeico-element) | 0.1.6 | Reactive base classes and decorators |
-| [`aeico-view`](packages/aeico-view) | 0.1.3 | DOM rendering — `html()`, `render()`, `tags` |
-| [`aeico-localize`](packages/aeico-localize) | 0.1.1 | *(optional)* i18n — `t()`, `locale`, `localeRegistry` |
-| [`aeico-ssr`](packages/aeico-ssr) | 0.1.7 | *(optional)* Server-side rendering — `renderHtml()`, `renderToString()` |
-| [`aeico-signals`](packages/aeico-signals) | 0.1.0 | *(optional)* TC39 Signals proposal polyfill |
+| Package | Version | Description | Dependencies | Docs |
+|---|---|---|---|---|
+| [`aeico`](packages/aeico) | 0.1.6 | **Main entry** — bundles `aeico-element` + `aeico-view` | `aeico-element`, `aeico-view` | [docs](packages/aeico/docs/index.md) |
+| [`aeico-element`](packages/aeico-element) | 0.1.6 | Reactive base classes and decorators | `aeico-view` | [docs](packages/aeico-element/docs/index.md) |
+| [`aeico-view`](packages/aeico-view) | 0.1.3 | DOM rendering — `html()`, `render()`, `tags` | *(none)* | [docs](packages/aeico-view/docs/index.md) |
+| [`aeico-localize`](packages/aeico-localize) | 0.1.1 | *(optional)* i18n — `t()`, `locale`, `localeRegistry` | `aeico-element` | [docs](packages/aeico-localize/docs/index.md) |
+| [`aeico-ssr`](packages/aeico-ssr) | 0.1.7 | *(optional)* Server-side rendering — `renderHtml()`, `renderToString()` | `aeico-view` (+ optional `aeico-element`) | [docs](packages/aeico-ssr/docs/index.md) |
+| [`aeico-signals`](packages/aeico-signals) | 0.1.0 | *(optional)* TC39 Signals proposal polyfill | *(none)* | [docs](packages/aeico-signals/docs/index.md) |
 
-`aeico-element` depends on `aeico-view`. `aeico-localize` depends on `aeico-element`. `aeico-ssr` requires `aeico-view` (+ optional `aeico-element`). `aeico-signals` is standalone.
+
 
 ## Installation
 
@@ -77,3 +77,6 @@ npm run build --workspaces
 # Test all packages
 npm run test --workspaces --if-present
 ```
+
+## License
+[MIT](LICENSE) © 2026 Eowl
