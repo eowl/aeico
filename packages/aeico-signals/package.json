@@ -36,6 +36,11 @@
   ],
   "author": "Eowl",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eowl/aeico.git",
+    "directory": "packages/aeico-signals"
+  },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@types/mocha": "^10.0.10",

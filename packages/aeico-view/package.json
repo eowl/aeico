@@ -36,6 +36,11 @@
   ],
   "author": "Eowl",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eowl/aeico.git",
+    "directory": "packages/aeico-view"
+  },
   "devDependencies": {
     "@open-wc/testing": "^4.0.0",
     "@types/mocha": "^10.0.10",

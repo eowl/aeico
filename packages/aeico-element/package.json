@@ -41,6 +41,11 @@
   ],
   "author": "Eowl",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eowl/aeico.git",
+    "directory": "packages/aeico-element"
+  },
   "peerDependencies": {
     "aeico-view": ">=0.1.3"
   },
