@@ -1,6 +1,6 @@
 {
   "name": "aeico-signals",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TC39 Signals proposal polyfill for JavaScript",
   "type": "module",
   "main": "./dist/index.cjs",
