@@ -35,6 +35,11 @@
   ],
   "author": "Eowl",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eowl/aeico.git",
+    "directory": "packages/aeico-localize"
+  },
   "peerDependencies": {
     "aeico-element": ">=0.1.6"
   },
