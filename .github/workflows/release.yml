@@ -26,6 +26,9 @@ jobs:
           node-version: 22
           cache: npm
           registry-url: https://registry.npmjs.org
+      
+      - name: Install latest npm
+        run: npm install -g npm@latest
 
       - name: Verify tag is on main branch
         run: |
