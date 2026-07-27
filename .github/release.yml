@@ -11,6 +11,8 @@ changelog:
       labels: ['aeico-localize']
     - title: aeico-ssr
       labels: ['aeico-ssr']
+    - title: aeico-signals
+      labels: ['aeico-signals']
     - title: aeico
       labels: ['aeico']
     - title: Other Changes

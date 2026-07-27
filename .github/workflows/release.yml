@@ -68,7 +68,9 @@ jobs:
         run: npm run build
 
       - name: Publish to npm
-        run: npm publish -w ${{ steps.parse.outputs.pkg_dir }} --access public --provenance
+        run: |
+          cd ${{ steps.parse.outputs.pkg_dir }}
+          npm publish --access public --provenance
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
