@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write  # for creating GitHub Release
+  id-token: write  # required for npm OIDC (Trusted Publishers)
 
 jobs:
   release:
@@ -67,9 +68,7 @@ jobs:
         run: npm run build
 
       - name: Publish to npm
-        run: npm publish -w ${{ steps.parse.outputs.pkg_dir }} --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish -w ${{ steps.parse.outputs.pkg_dir }} --access public --provenance
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
