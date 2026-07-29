@@ -1,5 +1,5 @@
 /**
- * Aeico — Lightweight Web Components Framework
+ * Aeico - Lightweight Web Components Framework
  *
  * ```typescript
  * import { AeicoElement, html, render } from 'aeico'
@@ -7,19 +7,19 @@
  * ```
  */
 
-// Core — base classes
+// Core - base classes
 export { AeicoBase, AeicoElement } from 'aeico-element';
 export type { AeicoBaseProps, AeicoElementProps } from 'aeico-element';
 
-// Core — render context
+// Core - render context
 export { getCurrentContext } from 'aeico-element';
 export type { Updatable } from 'aeico-element';
 
-// Core — styles
+// Core - styles
 export { styleStore, StyleResult, supportAdoptStyle } from 'aeico-element';
 export type { StyleEntry, StyleItem, StyleItems, StyleOptions, StyleScope } from 'aeico-element';
 
-// Core — types
+// Core - types
 export type {
   PropertyType,
   Prop,
@@ -32,6 +32,6 @@ export type {
 // Decorators
 export { prop, PROP_METADATA_KEY } from 'aeico-element';
 
-// View — rendering
+// View - rendering
 export { Reconciler, html, render, getReconciler, tags } from 'aeico-view';
 export type { TagProps, RenderResult } from 'aeico-view';

@@ -2,12 +2,12 @@ import BaseElement from './base-element';
 import type { InferProps } from './types';
 
 /**
- * AeicoBase — public lightweight base class for building Web Components
+ * AeicoBase - public lightweight base class for building Web Components
  * without the Aeico style system.
  *
  * Provides:
  * - Reactive property system (static props / watchers / computed)
- * - Batched update lifecycle (onPrepare → render → onUpdated (+ onMounted*))
+ * - Batched update lifecycle (onPrepare, then render, then onUpdated (+ onMounted*))
  * - Event system (emit / events)
  * - Custom element registration (register / toKebab)
  *

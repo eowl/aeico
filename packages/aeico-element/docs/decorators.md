@@ -3,7 +3,7 @@
 Aeico uses TC39 Stage 3 decorators. All three decorators also have a static class field
 equivalent for environments where decorators are unavailable.
 
-## @prop — Reactive property
+## @prop - Reactive property
 
 Declares a reactive property that triggers a batched re-render when its value changes.
 By default the value is reflected to an HTML attribute and attribute changes are observed.
@@ -12,7 +12,7 @@ By default the value is reflected to an HTML attribute and attribute changes are
 import { AeicoElement, prop } from 'aeico-element'
 
 class MyEl extends AeicoElement {
-  // Minimal — type inferred from TypeScript, reflects to `label` attribute
+  // Minimal - type inferred from TypeScript, reflects to `label` attribute
   @prop accessor label: string | undefined
 
   // With explicit type constructor
@@ -24,7 +24,7 @@ class MyEl extends AeicoElement {
   // Custom attribute name (default is kebab-case of the property name)
   @prop({ type: Number, attr: 'max-val' }) accessor maxVal = 100
 
-  // JS-only state — not reflected to or observed from an attribute
+  // JS-only state - not reflected to or observed from an attribute
   @prop({ reflect: false, observe: false }) accessor _draft = ''
 
   // Custom serialiser and deserialiser
@@ -61,10 +61,10 @@ class MyEl extends AeicoElement {
 | `reflect` | `boolean` | `true` | Reflect the JS value to the HTML attribute |
 | `observe` | `boolean` | `true` | React to attribute changes from HTML or `setAttribute()` |
 | `attr` | `string` | kebab-case of property name | Custom HTML attribute name |
-| `parser` | `(raw: string \| null, type?) => T` | — | Custom attribute-to-value converter |
-| `formatter` | `(val: T, type?) => string \| null` | — | Custom value-to-attribute converter |
+| `parser` | `(raw: string \| null, type?) => T` | - | Custom attribute-to-value converter |
+| `formatter` | `(val: T, type?) => string \| null` | - | Custom value-to-attribute converter |
 
-## @watch — Property observer
+## @watch - Property observer
 
 Registers a method to be called with `(newValue, oldValue)` whenever any of the listed
 properties change. The method is called before `render()` in the same update cycle.
@@ -83,7 +83,7 @@ class MyEl extends AeicoElement {
     console.log(`${oldValue} -> ${newValue}`)
   }
 
-  // Observe multiple props — called when any one of them changes.
+  // Observe multiple props - called when any one of them changes.
   // newValue / oldValue refer to the specific prop that triggered the call.
   @watch('min', 'max')
   onRangeChange(newValue: number, oldValue: number) {
@@ -92,7 +92,7 @@ class MyEl extends AeicoElement {
 }
 ```
 
-## @computed — Cached computed property
+## @computed - Cached computed property
 
 Applied to a getter. The return value is cached and recomputed only when one of the
 declared dependency props changes.

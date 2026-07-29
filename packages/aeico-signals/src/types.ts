@@ -3,7 +3,7 @@ import type { ComputedSignal } from './computed.js';
 import type { Watcher } from './watcher.js';
 import type { watched as watchedSym, unwatched as unwatchedSym } from './symbols.js';
 
-/** Any readable Signal — the common interface for State and Computed. */
+/** Any readable Signal - the common interface for State and Computed. */
 export interface AnySignal<T> {
   get(): T;
 }

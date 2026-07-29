@@ -75,7 +75,7 @@ localeRegistry.register('fr-FR', () => import('./locales/fr-FR.json'));
 |---|---|
 | `t(key, fallback?)` | Look up a translation key; returns `fallback` if not found |
 | `locale` | The global `LocaleStore` instance |
-| `LocaleStore` | Class — `update()`, `setLocale()`, `subscribe()` |
+| `LocaleStore` | Class - `update()`, `setLocale()`, `subscribe()` |
 | `localeRegistry` | Registry for lazy-loading locale bundles |
-| `LocaleRegistry` | Type — registry interface |
-| `LocaleProvider` | Type — translation provider interface |
+| `LocaleRegistry` | Type - registry interface |
+| `LocaleProvider` | Type - translation provider interface |

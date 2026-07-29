@@ -1,6 +1,6 @@
 # aeico-localize
 
-Reactive i18n for Aeico components — automatic re-render on locale change.
+Reactive i18n for Aeico components - automatic re-render on locale change.
 
 ## Installation
 
@@ -14,7 +14,7 @@ npm install aeico-localize
 |---|---|
 | `t(key, fallback?)` | Translate a dot-path key; auto-subscribes the current component |
 | `locale` | Global `LocaleStore` instance |
-| `LocaleStore` | Class — create isolated stores if needed |
+| `LocaleStore` | Class - create isolated stores if needed |
 | `localeRegistry` | Register a custom `LocaleProvider` implementation |
 
 ## Quick start
@@ -56,7 +56,7 @@ locale.update('en-US', {
   buttons: { save: 'Save', cancel: 'Cancel' },
 })
 
-// Switch language at runtime — all components re-render automatically
+// Switch language at runtime - all components re-render automatically
 locale.update('zh-CN', {
   nav:     { home: '首页', about: '关于' },
   buttons: { save: '保存', cancel: '取消' },
@@ -86,7 +86,7 @@ if (!locale.initialized) {
 console.log(locale.lang) // e.g. 'zh-CN'
 ```
 
-## `t()` — shorthand
+## `t()` - shorthand
 
 `t` is bound to the global `locale` instance:
 
@@ -97,7 +97,7 @@ t('buttons.save')          // returns translation or key itself
 t('buttons.save', 'Save')  // returns translation or fallback
 ```
 
-Key notation: dot-separated path into the resources object. `t('a.b.c')` → `resources.a.b.c`.
+Key notation: dot-separated path into the resources object. `t('a.b.c')` accesses `resources.a.b.c`.
 
 ## Custom `LocaleProvider`
 
@@ -121,4 +121,4 @@ localeRegistry.setProvider({
 
 ## How automatic re-render works
 
-`t()` internally calls `getCurrentContext()` from `aeico-element` to detect the component currently executing `render()`. If a context is active, the component is added to an internal `Set`. When `locale.update()` runs, every component in the set has `.update()` called — triggering a new render cycle. Disconnected components are automatically pruned.
+`t()` internally calls `getCurrentContext()` from `aeico-element` to detect the component currently executing `render()`. If a context is active, the component is added to an internal `Set`. When `locale.update()` runs, every component in the set has `.update()` called - triggering a new render cycle. Disconnected components are automatically pruned.

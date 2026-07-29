@@ -1,11 +1,11 @@
 import Reconciler from './reconciler';
 
 /**
- * RenderResult — opaque wrapper produced by `html()`.
+ * RenderResult - opaque wrapper produced by `html()`.
  *
  * Holds the render callback that will be executed when `render()` applies
  * the template to a DOM root.  This object is intentionally opaque to
- * consumers — just pass it to `render(result, root)`.
+ * consumers - just pass it to `render(result, root)`.
  */
 export class RenderResult {
   /** @internal */
@@ -51,7 +51,7 @@ class Renderer {
    *
    * `html` is a **callback DSL**, not a tagged template literal. The callback
    * receives the active {@link Reconciler} whose tag helpers (`div`, `span`, …)
-   * can be destructured. The callback is **not** executed immediately — it is
+   * can be destructured. The callback is **not** executed immediately - it is
    * deferred until {@link render} applies it to a DOM root.
    *
    * **Prop syntax cheat-sheet:**
@@ -95,7 +95,7 @@ class Renderer {
    *
    * A `Reconciler` instance is cached per root, so repeated calls with the
    * same root reuse the same instance and only patch nodes that changed
-   * (cursor-based diffing — no virtual DOM).
+   * (cursor-based diffing - no virtual DOM).
    *
    * Typically called inside an Aeico component's `render()` method, but can
    * also be used standalone to drive any DOM node:
@@ -141,7 +141,7 @@ class Renderer {
 export const { html, render, getReconciler, tags } = new Renderer();
 
 /**
- * @internal — Returns the render callback stored inside a {@link RenderResult}.
+ * @internal - Returns the render callback stored inside a {@link RenderResult}.
  *
  * Used by `aeico-ssr` to execute the callback against a non-DOM serializer
  * implementation without accessing the private `_cb` field directly.

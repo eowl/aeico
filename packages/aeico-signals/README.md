@@ -25,7 +25,7 @@ console.log(doubled.get()); // 6
 
 ## Building effects
 
-A `Watcher` is the primitive for running side effects in response to signal changes. It fires its `notify` callback synchronously on the first change after each `watch()` call — use it to _schedule_ work, not to do it:
+A `Watcher` is the primitive for running side effects in response to signal changes. It fires its `notify` callback synchronously on the first change after each `watch()` call - use it to _schedule_ work, not to do it:
 
 ```typescript
 function effect(cb: () => void): () => void {

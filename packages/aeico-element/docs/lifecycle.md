@@ -17,7 +17,7 @@ value is the **old** value before the change.
 
 ## onPrepare
 
-Called before each render cycle. Return `false` to abort the update — watchers and
+Called before each render cycle. Return `false` to abort the update - watchers and
 `render()` will not run for this cycle.
 
 ```typescript
@@ -63,7 +63,7 @@ class MyEl extends AeicoElement {
     button { padding: 4px 8px; }
   `
 
-  // Array — items are merged in order, useful for sharing base styles
+  // Array - items are merged in order, useful for sharing base styles
   static styles = [baseButtonStyles, `button { color: red; }`]
 }
 ```
@@ -123,8 +123,8 @@ Full type for a single prop declaration:
 interface Prop<T = unknown> {
   type?:      StringConstructor | NumberConstructor | BooleanConstructor
             | ArrayConstructor  | ObjectConstructor
-  reflect?:   boolean   // default: true  — reflect value to HTML attribute
-  observe?:   boolean   // default: true  — react to attribute changes
+  reflect?:   boolean   // default: true  - reflect value to HTML attribute
+  observe?:   boolean   // default: true  - react to attribute changes
   attr?:      string    // custom attribute name (default: kebab-case)
   parser?:    (value: string | null, type?: PropertyType) => T
   formatter?: (value: T, type?: PropertyType) => string | null

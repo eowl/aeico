@@ -1,6 +1,6 @@
 # aeico-signals API Reference
 
-`aeico-signals` is a polyfill for the [TC39 Signals proposal](https://github.com/tc39/proposal-signals) (Stage 1). It provides reactive primitives — `Signal.State`, `Signal.Computed`, and `Signal.subtle.Watcher` — that can be composed to build reactive data flows without coupling to any rendering framework.
+`aeico-signals` is a polyfill for the [TC39 Signals proposal](https://github.com/tc39/proposal-signals) (Stage 1). It provides reactive primitives - `Signal.State`, `Signal.Computed`, and `Signal.subtle.Watcher` - that can be composed to build reactive data flows without coupling to any rendering framework.
 
 ## Architecture
 
@@ -52,7 +52,7 @@ const doubled = new Signal.Computed(() => count.get() * 2);
 doubled.get(); // runs callback, caches result
 doubled.get(); // returns cache (count hasn't changed)
 count.set(5);
-doubled.get(); // re-runs callback → 10
+doubled.get(); // re-runs callback, yielding 10
 ```
 
 ### Constructor
@@ -80,7 +80,7 @@ const c = new Signal.Computed(() => {
 
 try { c.get(); } catch (e) { /* Error: zero! */ }
 s.set(3);
-c.get(); // 30 — error cleared
+c.get(); // 30 - error cleared
 ```
 
 ---
@@ -89,7 +89,7 @@ c.get(); // 30 — error cleared
 
 The low-level primitive for building effect systems. A `Watcher` observes a set of signals and fires its `notify` callback **synchronously** the first time any watched dependency changes (after each `watch()` call).
 
-> **Important:** Do not read or write any Signal inside `notify`. Its only job is to schedule work — e.g. push to a queue or call `queueMicrotask`.
+> **Important:** Do not read or write any Signal inside `notify`. Its only job is to schedule work - e.g. push to a queue or call `queueMicrotask`.
 
 ```typescript
 const watcher = new Signal.subtle.Watcher(function notify() {

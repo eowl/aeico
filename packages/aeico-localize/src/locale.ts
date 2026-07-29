@@ -153,7 +153,7 @@ export class LocaleStore implements LocaleProvider {
 export const locale = new LocaleStore();
 
 /**
- * Shorthand for `locale.t()` — translates a key using the global locale store.
+ * Shorthand for `locale.t()` - translates a key using the global locale store.
  *
  * When called during a component's `render()`, the component is automatically
  * subscribed to locale changes.

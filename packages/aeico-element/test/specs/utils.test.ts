@@ -26,7 +26,7 @@ describe('SwapBuffer', () => {
     expect(buf.current.size).to.equal(0);
   });
 
-  it('swap() does not allocate new objects — only 2 instances after two swaps', () => {
+  it('swap() does not allocate new objects - only 2 instances after two swaps', () => {
     const instances: Map<string, number>[] = [];
     const buf = new SwapBuffer(() => {
       const m = new Map<string, number>();
@@ -89,7 +89,7 @@ describe('SwapBuffer', () => {
     expect(buf.current.size).to.equal(0);
   });
 
-  it('snapshot is only valid until the next swap() — next swap will reuse and clear it', () => {
+  it('snapshot is only valid until the next swap() - next swap will reuse and clear it', () => {
     const buf = new SwapBuffer(() => new Map<string, number>());
 
     buf.current.set('round', 1);
@@ -147,7 +147,7 @@ describe('toKebab()', () => {
   });
 
   it('handles adjacent uppercase letters', () => {
-    // regex only breaks on lowercase→uppercase boundary, consecutive caps stay together
+    // regex only breaks on lowercase-to-uppercase boundary, consecutive caps stay together
     expect(toKebab('AeicoUI')).to.equal('aeico-ui');
   });
 });

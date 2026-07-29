@@ -1,12 +1,12 @@
 # aeico-view
 
-Cursor-based DOM reconciler for the browser — framework-free, zero virtual DOM.  
+Cursor-based DOM reconciler for the browser - framework-free, zero virtual DOM.  
 Works in plain HTML pages, vanilla web components, and as the rendering layer of the [Aeico](https://github.com/eowl/aeico) framework.  
 Provides `html()`, `render()`, `tags`, `getReconciler()`, and the `Reconciler` class.
 
 ## How it works
 
-aeico-view uses a **cursor-based reconciler** rather than a virtual DOM.  On each render pass the `Reconciler` walks the existing child list in lock-step with the render callback.  Nodes at the right position with the right tag are reused; only props that changed are written to the DOM.  Nodes no longer visited are removed.  No diffing tree is allocated — reconciliation happens directly against the live DOM.
+aeico-view uses a **cursor-based reconciler** rather than a virtual DOM.  On each render pass the `Reconciler` walks the existing child list in lock-step with the render callback.  Nodes at the right position with the right tag are reused; only props that changed are written to the DOM.  Nodes no longer visited are removed.  No diffing tree is allocated - reconciliation happens directly against the live DOM.
 
 ## Installation
 
@@ -18,12 +18,12 @@ npm install aeico-view
 
 ### Plain HTML page
 
-Drop it into any project — no framework, no build tool required beyond a bundler or native ES modules:
+Drop it into any project - no framework, no build tool required beyond a bundler or native ES modules:
 
 ```typescript
 import { html, render } from 'aeico-view';
 
-// html() accepts a callback — it is NOT a template literal tag.
+// html() accepts a callback - it is NOT a template literal tag.
 const tpl = html(({ div, span, button }) => {
   div({ className: 'card' }, () => {
     span({ text: 'Hello world' });
@@ -38,7 +38,7 @@ render(tpl, document.querySelector('#app')!);
 
 ### Vanilla web component (no base class required)
 
-aeico-view works with any `HTMLElement` subclass.  Use `html()` + `render()` directly inside your component methods — there is no required lifecycle adapter or mixin:
+aeico-view works with any `HTMLElement` subclass.  Use `html()` + `render()` directly inside your component methods - there is no required lifecycle adapter or mixin:
 
 ```typescript
 import { html, render } from 'aeico-view';
@@ -118,8 +118,8 @@ camelCase property names are automatically converted to kebab-case tag names:
 
 ```typescript
 html(({ myWidget, benchRow }) => {
-  myWidget();    // → <my-widget>
-  benchRow();    // → <bench-row>
+  myWidget();    // yields <my-widget>
+  benchRow();    // yields <bench-row>
 });
 ```
 
@@ -175,18 +175,18 @@ html((b) => {
 | `text` / `textContent` | `string` | Sets `element.textContent` |
 | `className` / `class` | `string` or `Record<string, boolean>` | Sets the `class` attribute |
 | `style` | `Record<string, string>` | Merges into inline style; supports `--custom-props` |
-| `key` | `string` | Keyed reconciliation hint — not written to the DOM |
+| `key` | `string` | Keyed reconciliation hint - not written to the DOM |
 | `@click`, `@input`, … | `EventListener` | Adds event listener; old listener removed on change |
 | `disabled`, `hidden`, … | `true` | Presence-only attribute (`setAttribute(k, '')`) |
 | any other key | `object` | Assigned as a JS property |
 | any other key | `string \| number` | Set via `setAttribute` |
-| `null \| false` | — | Removes the attribute / listener |
+| `null \| false` | - | Removes the attribute / listener |
 
 ### Class object map
 
 ```typescript
 div({ class: { active: isActive, hidden: !isVisible } });
-// → class="active" when isActive=true, isVisible=true
+// yields class="active" when isActive=true, isVisible=true
 ```
 
 ### Style object
@@ -216,7 +216,7 @@ html(({ ul, li }) => {
 });
 ```
 
-## `tags` — destructure outside the callback
+## `tags` - destructure outside the callback
 
 `tags` is a proxy that always delegates to the currently active `Reconciler`.  
 Useful when you want to destructure helpers at the top of a method rather than in the callback:
@@ -253,7 +253,7 @@ render(html(() => {
 
 ## `detached()`
 
-Run builder calls outside the active build context.  Use this inside event handlers or async callbacks that fire while a `render()` pass is in progress — without detaching, those calls would incorrectly advance the parent cursor:
+Run builder calls outside the active build context.  Use this inside event handlers or async callbacks that fire while a `render()` pass is in progress - without detaching, those calls would incorrectly advance the parent cursor:
 
 ```typescript
 html((b) => {

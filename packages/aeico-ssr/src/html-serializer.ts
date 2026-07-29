@@ -1,6 +1,6 @@
 import type { TagProps } from 'aeico-view';
 
-// HTML5 void elements — they have no closing tag and cannot have children.
+// HTML5 void elements - they have no closing tag and cannot have children.
 const VOID_ELEMENTS = new Set([
   'area',
   'base',
@@ -18,7 +18,7 @@ const VOID_ELEMENTS = new Set([
   'wbr',
 ]);
 
-// HTML5 raw text elements and escapable raw text elements — their text content
+// HTML5 raw text elements and escapable raw text elements - their text content
 // is not parsed as HTML, so entity escaping (&amp; &lt; &gt;) must not be applied.
 const RAW_TEXT_ELEMENTS = new Set(['script', 'style', 'textarea', 'title']);
 
@@ -32,7 +32,7 @@ function escapeText(s: string): string {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/** Converts a camelCase identifier to kebab-case (e.g. `myWidget` → `my-widget`). */
+/** Converts a camelCase identifier to kebab-case (e.g. `myWidget` yields `my-widget`). */
 function camelToKebab(str: string): string {
   return str.replace(/[A-Z]/g, (c) => `-${c.toLowerCase()}`);
 }
@@ -41,7 +41,7 @@ function camelToKebab(str: string): string {
  * Resolves a `className` / `class` prop value to a space-separated class string.
  *
  * Accepts a plain string (returned as-is) or an object map where truthy keys
- * become class names: `{ active: true, hidden: false }` → `'active'`.
+ * become class names: `{ active: true, hidden: false }` produces `'active'`.
  */
 function serializeClass(value: unknown): string {
   if (typeof value === 'string') return value;
@@ -58,7 +58,7 @@ function serializeClass(value: unknown): string {
  * Serializes a style object to an inline CSS declaration string.
  *
  * camelCase property names are converted to kebab-case; CSS custom properties
- * (`--foo`) are kept verbatim.  Example: `{ color: 'red', '--x': '1' }` → `'color:red;--x:1'`.
+ * (`--foo`) are kept verbatim.  Example: `{ color: 'red', '--x': '1' }` produces `'color:red;--x:1'`.
  */
 function serializeStyle(style: Record<string, string>): string {
   return Object.entries(style)
@@ -73,21 +73,21 @@ function serializeStyle(style: Record<string, string>): string {
  * Converts a `TagProps` bag to an HTML attribute string (with a leading space).
  *
  * Serialization rules:
- * - `text` / `textContent` — rendering hints, not emitted as attributes
- * - `@…` event handlers — client-only, stripped entirely
- * - `key` → `data-key="…"`
- * - `className` / `class` — resolved via {@link serializeClass}
- * - `style` object — serialized via {@link serializeStyle}
- * - `true` boolean — presence-only attribute (e.g. `disabled`)
- * - `false` / `null` / `undefined` — attribute omitted
- * - Complex object props — skipped; will be set by the client on upgrade
- * - Everything else — `key="String(value)"`
+ * - `text` / `textContent` - rendering hints, not emitted as attributes
+ * - `@…` event handlers - client-only, stripped entirely
+ * - `key` becomes `data-key="…"`
+ * - `className` / `class` - resolved via {@link serializeClass}
+ * - `style` object - serialized via {@link serializeStyle}
+ * - `true` boolean - presence-only attribute (e.g. `disabled`)
+ * - `false` / `null` / `undefined` - attribute omitted
+ * - Complex object props - skipped; will be set by the client on upgrade
+ * - Everything else - `key="String(value)"`
  */
 function serializeAttrs(props: TagProps): string {
   let s = '';
 
   for (const [key, value] of Object.entries(props)) {
-    // Pure rendering hints — not emitted as attributes.
+    // Pure rendering hints - not emitted as attributes.
     if (key === 'text' || key === 'textContent' || key === 'innerHTML') continue;
     // Events are client-only; skip entirely.
     if (key.startsWith('@')) continue;
@@ -104,7 +104,7 @@ function serializeAttrs(props: TagProps): string {
         if (styleStr) s += ` style="${escapeAttr(styleStr)}"`;
       }
     } else if (value === true) {
-      // Boolean attribute — presence only (e.g. `disabled`, `checked`).
+      // Boolean attribute - presence only (e.g. `disabled`, `checked`).
       s += ` ${key}`;
     } else if (typeof value === 'object') {
       // Complex object props (arrays, DOM refs) cannot be serialized as attributes.
@@ -189,7 +189,7 @@ class HtmlSerializer {
   }
 
   /**
-   * Dynamic-tag entry point — equivalent to the Proxy shorthand for statically known tags.
+   * Dynamic-tag entry point - equivalent to the Proxy shorthand for statically known tags.
    *
    * Supports the same `(props?, children?)` / `(children)` overloads.
    */
@@ -209,7 +209,7 @@ class HtmlSerializer {
   };
 
   /**
-   * Client-only — inserts a pre-existing DOM node into the render tree.
+   * Client-only - inserts a pre-existing DOM node into the render tree.
    * No-op in SSR; the node will be hydrated on the client after upgrade.
    */
   node = (_existingNode: unknown): unknown => undefined;

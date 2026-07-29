@@ -1,6 +1,6 @@
 # aeico-view
 
-Cursor-based DOM rendering — no virtual DOM, zero dependencies.
+Cursor-based DOM rendering - no virtual DOM, zero dependencies.
 
 ## Installation
 
@@ -17,7 +17,7 @@ npm install aeico-view
 | `tags` | Proxy giving access to tag helpers outside a callback |
 | `getReconciler()` | Access the active `Reconciler` inside a `render()` context |
 
-## `html()` — declare structure
+## `html()` - declare structure
 
 ```typescript
 import { html } from 'aeico-view'
@@ -32,7 +32,7 @@ const tpl = html(({ div, span, button }) => {
 
 The callback is **not** executed immediately. It runs when passed to `render()`.
 
-## `render()` — apply to DOM
+## `render()` - apply to DOM
 
 ```typescript
 import { html, render } from 'aeico-view'
@@ -55,14 +55,14 @@ function update(count: number) {
 update(0)
 ```
 
-Repeated `render()` calls on the **same root** reuse the cached `Reconciler` — only changed nodes are patched.
+Repeated `render()` calls on the **same root** reuse the cached `Reconciler` - only changed nodes are patched.
 
 ## Prop syntax reference
 
 See [props-syntax.md](./props-syntax.md) for the full reference covering className maps,
 style objects, event handlers, SVG, and custom elements.
 
-## `tags` — outside callback
+## `tags` - outside callback
 
 ```typescript
 import { tags } from 'aeico-view'
@@ -72,7 +72,7 @@ import { tags } from 'aeico-view'
 const { div, span } = tags
 ```
 
-## `getReconciler()` — helper access
+## `getReconciler()` - helper access
 
 ```typescript
 import { getReconciler } from 'aeico-view'
@@ -86,10 +86,10 @@ function renderList(items: string[]) {
 
 ## Design notes
 
-- No virtual DOM — a cursor tracks position in the real DOM; reconciliation is O(n) with
+- No virtual DOM - a cursor tracks position in the real DOM; reconciliation is O(n) with
   the rendered node count, not the full tree.
-- Per-root caching — each root node gets its own `Reconciler` stored in a `WeakMap`; GC
+- Per-root caching - each root node gets its own `Reconciler` stored in a `WeakMap`; GC
   handles cleanup automatically.
-- Not a tagged template literal — `html` is a callback DSL with full TypeScript type safety.
+- Not a tagged template literal - `html` is a callback DSL with full TypeScript type safety.
 - Event handlers are assigned via direct property assignment (`el.onclick = fn`), not
   `addEventListener`. Use `this.listen()` inside lifecycle hooks for managed listeners.

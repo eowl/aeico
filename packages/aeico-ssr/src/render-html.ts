@@ -4,7 +4,7 @@ import { HtmlSerializer } from './html-serializer';
 /**
  * Serialize a `RenderResult` (produced by `html()`) to an HTML string.
  *
- * Runs entirely in the current environment without any DOM API dependency —
+ * Runs entirely in the current environment without any DOM API dependency -
  * safe to call in Node.js, Edge Runtime, or at build time (SSG).
  *
  * ```ts

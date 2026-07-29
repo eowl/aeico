@@ -1,12 +1,12 @@
 /**
- * Render Context — generic "who is rendering" tracking.
+ * Render Context - generic "who is rendering" tracking.
  *
  * During a component's render cycle, the current component is stored
  * as the render context. Any reactive source (locale, theme, config…)
  * can call `getCurrentContext()` to discover which component is reading
  * it, and subscribe that component to future changes.
  *
- * This module is intentionally minimal — it only tracks the context.
+ * This module is intentionally minimal - it only tracks the context.
  * Subscription management is the responsibility of each consumer.
  */
 

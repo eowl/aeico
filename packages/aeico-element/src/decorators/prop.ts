@@ -92,7 +92,7 @@ function applyProp(
  * - Reflects to an HTML attribute by default (`reflect: true`).
  * - Responds to attribute mutations from HTML / `setAttribute()` by default (`observe: true`).
  *
- * @example Basic usage — type inferred from TypeScript
+ * @example Basic usage - type inferred from TypeScript
  * ```typescript
  * class MyEl extends AeicoElement {
  *   @prop accessor label: string | undefined   // reflects to `label` attr

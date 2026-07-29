@@ -66,7 +66,7 @@ describe('Signal.Computed', () => {
       flag.set(false); // now depends on `b`, not `a`
       expect(c.get()).to.equal(100);
 
-      // `a` should no longer be tracked — changing it must not re-run callback
+      // `a` should no longer be tracked - changing it must not re-run callback
       const callsAfterFlagChange = callCount;
       a.set(999);
       c.get(); // should be a cache hit
@@ -97,7 +97,7 @@ describe('Signal.Computed', () => {
       expect(c.get()).to.equal(4); // (1+1) + (1+1)
       s.set(2);
       expect(c.get()).to.equal(6); // (2+1) + (2+1)
-      // Each distinct value of `c` should only appear once — no glitchy
+      // Each distinct value of `c` should only appear once - no glitchy
       // intermediate state where a was updated but b was not yet.
       for (const v of observed) {
         expect(v % 2).to.equal(0); // always even (a === b so sum is always even)

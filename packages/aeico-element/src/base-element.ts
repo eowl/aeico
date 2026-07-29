@@ -659,7 +659,7 @@ class BaseElement extends HTMLElement {
    *
    * Called on every update cycle after `onPrepare` (and watchers). The returned
    * `RenderResult` is applied to the shadow root (or light DOM when
-   * `useShadowDOM = false`) via the incremental Reconciler — only changed nodes
+   * `useShadowDOM = false`) via the incremental Reconciler - only changed nodes
    * are touched.
    *
    * Returning `void` / `undefined` renders an empty root.
@@ -685,7 +685,7 @@ class BaseElement extends HTMLElement {
    * Return `false` to abort the current update entirely (watchers and `render()`
    * will not run). Useful for validation or debounce-style guards.
    *
-   * @param changedProps - Map of property names → **old** values for this cycle.
+   * @param changedProps - Map of property names to **old** values for this cycle.
    *
    * @example
    * ```typescript
@@ -702,7 +702,7 @@ class BaseElement extends HTMLElement {
    *
    * Safe place to read updated DOM measurements or dispatch events.
    *
-   * @param changedProps - Map of property names → **old** values for this cycle.
+   * @param changedProps - Map of property names to **old** values for this cycle.
    *
    * @example
    * ```typescript
@@ -722,7 +722,7 @@ class BaseElement extends HTMLElement {
    * be in the document. Use for one-time setup that requires a live DOM node
    * (focus, ResizeObserver, third-party library init, etc.).
    *
-   * @param changedProps - Map of property names → **old** values (all `undefined` on first mount).
+   * @param changedProps - Map of property names to **old** values (all `undefined` on first mount).
    *
    * @example
    * ```typescript
@@ -851,7 +851,7 @@ class BaseElement extends HTMLElement {
    * Define the component as a custom element.
    *
    * @param name The custom element tag name (must contain a dash).
-   * Must be unique — calling define() with the same name twice for the same
+   * Must be unique - calling define() with the same name twice for the same
    * class is safe (the second call is a no-op), but trying to define a
    * different class under an already-used name will throw.
    *

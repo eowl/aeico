@@ -2,7 +2,7 @@ import { AeicoBase } from 'aeico'
 import { html } from 'aeico-view'
 
 // ---------------------------------------------------------------------------
-// Data helpers — same word lists as js-framework-benchmark
+// Data helpers - same word lists as js-framework-benchmark
 // ---------------------------------------------------------------------------
 
 const ADJECTIVES = ['pretty','large','big','small','tall','short','long','handsome',
@@ -25,7 +25,7 @@ function buildData(count: number): RowData[] {
 }
 
 // ---------------------------------------------------------------------------
-// Component — mirrors benchmark row: id + label + delete button
+// Component - mirrors benchmark row: id + label + delete button
 // AeicoBase (no adoptedStyleSheets) for fairness with other WC impls
 // ---------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ class BenchRow extends AeicoBase {
 customElements.define('bench-row', BenchRow)
 
 // ---------------------------------------------------------------------------
-// Compare: OLD implementation — per-instance Object.defineProperty
+// Compare: OLD implementation - per-instance Object.defineProperty
 // Mirrors the pre-optimization _defineReactiveProp path. All 3 props have
 // reflect:false so the setter only writes the backing store (no setAttribute).
 // ---------------------------------------------------------------------------
@@ -82,7 +82,7 @@ class OldBenchRow extends HTMLElement {
 customElements.define('compare-row-old', OldBenchRow)
 
 // ---------------------------------------------------------------------------
-// Compare: NEW implementation — prototype-level accessor (one-time per class)
+// Compare: NEW implementation - prototype-level accessor (one-time per class)
 // Structurally identical to OldBenchRow; only difference is WHERE defineProperty
 // is called: once on the prototype vs once per instance.
 // ---------------------------------------------------------------------------
@@ -128,7 +128,7 @@ class NewBenchRowCompare extends HTMLElement {
 customElements.define('compare-row-new', NewBenchRowCompare)
 
 // ---------------------------------------------------------------------------
-// Native-DOM baseline — same structure (div > span + span + button)
+// Native-DOM baseline - same structure (div > span + span + button)
 // ---------------------------------------------------------------------------
 
 function createNativeRow(d: RowData): HTMLElement {
@@ -217,7 +217,7 @@ async function aeicoCreate(data: RowData[]) {
 }
 
 // ---------------------------------------------------------------------------
-// Suites — matching js-framework-benchmark scenarios
+// Suites - matching js-framework-benchmark scenarios
 // ---------------------------------------------------------------------------
 
 type SuiteFn = () => Promise<Result[]>
@@ -327,14 +327,14 @@ const suites: Record<string, SuiteFn> = {
   'append rows': async () => {
     const seed = buildData(COUNT)
     return [
-      await bench('Native append 1000→2000', async () => {
+      await bench('Native append 1000 to 2000', async () => {
         const frag = document.createDocumentFragment()
         const extra = buildData(COUNT)
         extra.forEach(d => { const el = createNativeRow(d); frag.appendChild(el); nativeRows.push(el) })
         nativeData.push(...extra)
         container.appendChild(frag)
       }, { setup: async () => { nativeClear(); nativeCreate(seed.slice()) } }),
-      await bench('AeicoBase append 1000→2000', async () => {
+      await bench('AeicoBase append 1000 to 2000', async () => {
         const frag = document.createDocumentFragment()
         const extra = buildData(COUNT)
         for (const d of extra) {
@@ -454,7 +454,7 @@ async function runCompare() {
     `── Construction cost (×${COMPARE_COUNT} elements, 30 runs, no DOM mount) ──────────\n\n` +
     fmtRow(oldResult) +
     fmtRow(newResult) +
-    `\n  Speedup: ${speedup}×  —  prototype accessor is ${pct}% faster\n`
+    `\n  Speedup: ${speedup}×  -  prototype accessor is ${pct}% faster\n`
 
   compareProgress.textContent = 'Done.'
 }

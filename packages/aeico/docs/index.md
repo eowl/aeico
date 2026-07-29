@@ -1,6 +1,6 @@
 # aeico
 
-Meta-package — re-exports `aeico-element` and `aeico-view` for one-line installation.
+Meta-package - re-exports `aeico-element` and `aeico-view` for one-line installation.
 
 ## Installation
 
@@ -32,7 +32,7 @@ class MyCounter extends AeicoElement {
 
   @watch('count')
   onCountChange(next: number, prev: number) {
-    console.log(`${prev} → ${next}`)
+    console.log(`${prev} changed to ${next}`);
   }
 
   override render() {
@@ -61,10 +61,10 @@ MyCounter.define('my-counter')
 
 ## Per-package docs
 
-- [aeico-element](../aeico-element/docs/index.md) — Overview, registration, shadow DOM
-  - [Decorators](../aeico-element/docs/decorators.md) — @prop, @watch, @computed, static config
-  - [Lifecycle, styles and events](../aeico-element/docs/lifecycle.md) — hooks, styles, events, TypeScript types
-- [aeico-view](../aeico-view/docs/index.md) — html(), render(), design notes
-  - [Prop syntax reference](../aeico-view/docs/props-syntax.md) — className, style, events, SVG, custom elements
-- [aeico-localize](../aeico-localize/docs/index.md) — i18n, t(), locale
-- [aeico-ssr](../aeico-ssr/docs/index.md) — Server-side rendering, DSR hydration
+- [aeico-element](../aeico-element/docs/index.md) - Overview, registration, shadow DOM
+  - [Decorators](../aeico-element/docs/decorators.md) - @prop, @watch, @computed, static config
+  - [Lifecycle, styles and events](../aeico-element/docs/lifecycle.md) - hooks, styles, events, TypeScript types
+- [aeico-view](../aeico-view/docs/index.md) - html(), render(), design notes
+  - [Prop syntax reference](../aeico-view/docs/props-syntax.md) - className, style, events, SVG, custom elements
+- [aeico-localize](../aeico-localize/docs/index.md) - i18n, t(), locale
+- [aeico-ssr](../aeico-ssr/docs/index.md) - Server-side rendering, DSR hydration
