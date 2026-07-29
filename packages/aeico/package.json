@@ -8,6 +8,7 @@
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
+      "development": "./development/index.js",
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
@@ -15,6 +16,7 @@
   },
   "files": [
     "dist",
+    "development",
     "!dist/*.tsbuildinfo",
     "src"
   ],
