@@ -31,7 +31,7 @@ import type { InferProps } from './types';
  *     this.shadowRoot!.innerHTML = `<span>${this.count ?? 0}</span>`
  *   }
  * }
- * MyCounter.register()  // registers as 'my-counter'
+ * MyCounter.define('my-counter')
  * ```
  */
 class AeicoBase extends BaseElement {}
