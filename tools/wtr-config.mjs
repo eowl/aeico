@@ -22,7 +22,7 @@ export function createWtrConfig({ extraPlugins = [], useTestRunnerHtml = false }
     browsers: [playwrightLauncher({ product: 'chromium' })],
     plugins: [
       ...extraPlugins,
-      esbuildPlugin({ ts: true, target: 'es2022', define: { '__DEV__': 'false' } }),
+      esbuildPlugin({ ts: true, target: 'es2022', define: { 'AEICO_DEV': 'false' } }),
     ],
     testFramework: {
       config: { timeout: TIMEOUT_MS },
