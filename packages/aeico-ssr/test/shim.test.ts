@@ -25,14 +25,13 @@ describe('shim', () => {
 describe('renderToString with AeicoBase', () => {
   class MyBase extends AeicoBase {
     static props = { heading: { type: String, reflect: true } };
-    static tagName = 'my-aeico-base';
     declare heading?: string;
 
     render() {
       return html(({ h1 }: any) => h1({ text: this.heading ?? '' }));
     }
   }
-  MyBase.register();
+  MyBase.define('my-aeico-base');
 
   test('Shadow DOM output', () => {
     const out = renderToString(MyBase as any, { heading: 'hello' });
@@ -46,14 +45,13 @@ describe('renderToString with AeicoBase', () => {
     class LightBase extends AeicoBase {
       static props = { msg: { type: String, reflect: true } };
       static useShadowDOM = false;
-      static tagName = 'light-aeico-base';
       declare msg?: string;
 
       render() {
         return html(({ p }: any) => p({ text: this.msg ?? '' }));
       }
     }
-    LightBase.register();
+    LightBase.define('light-aeico-base');
     const out = renderToString(LightBase as any, { msg: 'world' });
     assert.equal(out, '<light-aeico-base msg="world"><p>world</p></light-aeico-base>');
   });
@@ -71,7 +69,6 @@ describe('renderToString with AeicoBase', () => {
         },
       };
       static useShadowDOM = false;
-      static tagName = 'full-name-el';
       declare first?: string;
       declare last?: string;
       declare fullName: string;
@@ -80,7 +77,7 @@ describe('renderToString with AeicoBase', () => {
         return html(({ span }: any) => span({ text: (this as any).fullName }));
       }
     }
-    FullName.register();
+    FullName.define('full-name-el');
     const out = renderToString(FullName as any, { first: 'John', last: 'Doe' });
     assert.ok(out.includes('<span>John Doe</span>'), `got: ${out}`);
   });
@@ -89,14 +86,13 @@ describe('renderToString with AeicoBase', () => {
     class FlagEl extends AeicoBase {
       static props = { active: { type: Boolean, reflect: true } };
       static useShadowDOM = false;
-      static tagName = 'flag-el-base';
       declare active?: boolean;
 
       render() {
         return html(({ span }: any) => span({ text: String((this as any).active) }));
       }
     }
-    FlagEl.register();
+    FlagEl.define('flag-el-base');
     const out = renderToString(FlagEl as any, { active: true });
     assert.ok(out.startsWith('<flag-el-base active>'), `got: ${out}`);
     assert.ok(out.includes('<span>true</span>'), `got: ${out}`);
@@ -106,7 +102,6 @@ describe('renderToString with AeicoBase', () => {
 describe('renderToString with AeicoElement', () => {
   class Card extends AeicoElement {
     static props = { label: { type: String, reflect: true } };
-    static tagName = 'my-ae-card';
     static styles = ':host { display: block }';
     declare label?: string;
 
@@ -114,7 +109,7 @@ describe('renderToString with AeicoElement', () => {
       return html(({ div }: any) => div({ text: this.label ?? '' }));
     }
   }
-  Card.register();
+  Card.define('my-ae-card');
 
   test('Shadow DOM with static styles', () => {
     const out = renderToString(Card as any, { label: 'test' });
@@ -127,14 +122,13 @@ describe('renderToString with AeicoElement', () => {
   test('no <style> tag when styles not declared', () => {
     class Bare extends AeicoElement {
       static props = { val: { type: String, reflect: true } };
-      static tagName = 'bare-ae-el';
       declare val?: string;
 
       render() {
         return html(({ span }: any) => span({ text: this.val ?? '' }));
       }
     }
-    Bare.register();
+    Bare.define('bare-ae-el');
     const out = renderToString(Bare as any, { val: 'x' });
     assert.ok(!out.includes('<style>'), `unexpected <style> in: ${out}`);
     assert.ok(out.includes('<span>x</span>'), `got: ${out}`);
@@ -143,90 +137,66 @@ describe('renderToString with AeicoElement', () => {
   test('array styles are merged into single <style> tag', () => {
     class MultiStyle extends AeicoElement {
       static props = {};
-      static tagName = 'multi-style-el';
       static styles = [':host { color: red }', 'p { margin: 0 }'];
 
       render() {
         return html(({ p }: any) => p({ text: 'hi' }));
       }
     }
-    MultiStyle.register();
+    MultiStyle.define('multi-style-el');
     const out = renderToString(MultiStyle as any);
     assert.ok(out.includes('<style>:host { color: red }\np { margin: 0 }</style>'), `got: ${out}`);
   });
 });
 
-describe('register() tag name resolution', () => {
-  test('customElements.getName() returns the registered tag after register()', () => {
-    class GetNameEl extends AeicoBase {
-      static tagName = 'get-name-el';
-    }
-    GetNameEl.register();
+describe('define() tag name resolution', () => {
+  test('customElements.getName() returns the registered tag after define()', () => {
+    class GetNameEl extends AeicoBase {}
+    GetNameEl.define('get-name-el');
     assert.equal((globalThis as any).customElements.getName(GetNameEl), 'get-name-el');
   });
 
-  test('renderToString resolves tag via getName() when register() was called', () => {
+  test('renderToString resolves tag via getName() when define() was called', () => {
     class RegisteredSsrEl extends AeicoBase {
-      static tagName = 'registered-ssr-el';
       static useShadowDOM = false;
 
       render() {
         return html(({ span }: any) => span({ text: 'ok' }));
       }
     }
-    RegisteredSsrEl.register();
+    RegisteredSsrEl.define('registered-ssr-el');
     const out = renderToString(RegisteredSsrEl as any, {});
     assert.ok(out.startsWith('<registered-ssr-el>'), `got: ${out}`);
   });
 
-  test('child without own tagName gets its own class-derived name, not parent tagName', () => {
-    // Regression: before the fix, register() read this.tagName through the prototype chain,
-    // so InhSsrChild would inherit InhSsrParent.tagName = 'inh-ssr-parent' and register itself
-    // under the parent's tag name instead of deriving 'inh-ssr-child' from its class name.
-    class InhSsrParent extends AeicoBase {
-      static tagName = 'inh-ssr-parent';
-    }
-    InhSsrParent.register();
+  test('child class registers under its own name, independent of parent', () => {
+    class InhSsrParent extends AeicoBase {}
+    InhSsrParent.define('inh-ssr-parent');
 
     class InhSsrChild extends InhSsrParent {}
-    InhSsrChild.register();
+    InhSsrChild.define('inh-ssr-child');
 
     const getName = (globalThis as any).customElements.getName;
     assert.equal(getName(InhSsrChild), 'inh-ssr-child');
-    assert.notEqual(getName(InhSsrChild), 'inh-ssr-parent');
-  });
-
-  test('child with own tagName uses its own, not parent tagName', () => {
-    class InhOwnParent extends AeicoBase {
-      static tagName = 'inh-own-parent';
-    }
-    InhOwnParent.register();
-
-    class InhOwnChild extends InhOwnParent {
-      static tagName = 'inh-own-child';
-    }
-    InhOwnChild.register();
-
-    assert.equal((globalThis as any).customElements.getName(InhOwnChild), 'inh-own-child');
+    assert.equal(getName(InhSsrParent), 'inh-ssr-parent');
   });
 
   test('renderToString of child class renders with child tag, not parent tag', () => {
     class InhRenderParent extends AeicoBase {
-      static tagName = 'inh-render-parent';
       static useShadowDOM = false;
 
       render() {
         return html(({ span }: any) => span({ text: 'parent' }));
       }
     }
-    InhRenderParent.register();
+    InhRenderParent.define('inh-render-parent');
 
     class InhRenderChild extends InhRenderParent {
       render() {
         return html(({ span }: any) => span({ text: 'child' }));
       }
     }
-    InhRenderChild.register();
+    InhRenderChild.define('inh-render-child');
 
     const out = renderToString(InhRenderChild as any, {});
     assert.ok(out.startsWith('<inh-render-child>'), `got: ${out}`);
@@ -247,7 +217,6 @@ describe('renderToString with @prop accessor decorators', () => {
   }
 
   class DecoratorCounter extends AeicoBase {
-    static tagName = 'decorator-counter';
     declare count: number;
     declare label: string;
 
@@ -261,7 +230,7 @@ describe('renderToString with @prop accessor decorators', () => {
     count: { type: Number, reflect: true },
     label: { type: String, reflect: true },
   });
-  DecoratorCounter.register();
+  DecoratorCounter.define('decorator-counter');
 
   test('@prop accessor props are rendered into the template', () => {
     const out = renderToString(DecoratorCounter as any, { count: 7, label: 'hits' });
@@ -282,7 +251,6 @@ describe('renderToString with @prop accessor decorators', () => {
 
   test('@computed accessor is accessible in render() alongside @prop accessor', () => {
     class DecoratorComputed extends AeicoBase {
-      static tagName = 'decorator-computed';
       static useShadowDOM = false;
       static computed = {
         sum: { deps: ['a', 'b'], compute: (ctx: any) => (ctx.a ?? 0) + (ctx.b ?? 0) },
@@ -299,7 +267,7 @@ describe('renderToString with @prop accessor decorators', () => {
       a: { type: Number },
       b: { type: Number },
     });
-    DecoratorComputed.register();
+    DecoratorComputed.define('decorator-computed');
 
     const out = renderToString(DecoratorComputed as any, { a: 4, b: 6 });
     assert.ok(out.includes('<span>10</span>'), `got: ${out}`);
@@ -307,7 +275,6 @@ describe('renderToString with @prop accessor decorators', () => {
 
   test('@prop accessor props inherited from parent class are resolved', () => {
     class BaseWithProp extends AeicoBase {
-      static tagName = 'base-with-prop';
       static useShadowDOM = false;
       declare title: string;
 
@@ -317,10 +284,8 @@ describe('renderToString with @prop accessor decorators', () => {
     }
     setMetaProps(BaseWithProp, { title: { type: String, reflect: true } });
 
-    class ChildOfBase extends BaseWithProp {
-      static tagName = 'child-of-base';
-    }
-    ChildOfBase.register();
+    class ChildOfBase extends BaseWithProp {}
+    ChildOfBase.define('child-of-base');
 
     const out = renderToString(ChildOfBase as any, { title: 'inherited' });
     assert.ok(out.includes('<h2>inherited</h2>'), `got: ${out}`);
