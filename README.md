@@ -79,4 +79,4 @@ npm run test --workspaces --if-present
 ```
 
 ## License
-[MIT](LICENSE) © 2026 Eowl
+[MIT](LICENSE) 2026 Eowl
