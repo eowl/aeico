@@ -823,80 +823,28 @@ describe('BaseElement', () => {
     });
   });
 
-  describe('register() static method', () => {
-    it('auto-derives tag name from class name in kebab-case', () => {
+  describe('define() static method', () => {
+    it('defines the element under the given tag name', () => {
       class MyTestWidget extends BaseElement {}
-      MyTestWidget.register();
+      MyTestWidget.define('my-test-widget');
       expect(customElements.get('my-test-widget')).to.equal(MyTestWidget);
     });
 
     it('uses explicit name argument when provided', () => {
       class RegisterExplicit extends BaseElement {}
-      RegisterExplicit.register('reg-explicit-el');
+      RegisterExplicit.define('reg-explicit-el');
       expect(customElements.get('reg-explicit-el')).to.equal(RegisterExplicit);
-    });
-
-    it('uses static tagName property when no argument given', () => {
-      class RegisterTagName extends BaseElement {
-        static tagName = 'reg-tagname-el';
-      }
-      RegisterTagName.register();
-      expect(customElements.get('reg-tagname-el')).to.equal(RegisterTagName);
     });
 
     it('throws for a name without a dash', () => {
       class BadTag extends BaseElement {}
-      expect(() => BadTag.register('nodash')).to.throw();
+      expect(() => BadTag.define('nodash')).to.throw();
     });
 
-    it('does not throw when the same tag is registered twice', () => {
+    it('does not throw when the same tag is defined twice', () => {
       class DoubleReg extends BaseElement {}
-      DoubleReg.register('double-reg-el');
-      expect(() => DoubleReg.register('double-reg-el')).to.not.throw();
-    });
-
-    it('child without own tagName derives its tag from class name, not inherited parent tagName', () => {
-      // Regression: before the fix, register() read this.tagName through the prototype chain,
-      // so ChildNoTagName would inherit ParentWithTagName.tagName = 'reg-inh-parent'
-      // and register itself under the parent's tag name instead of 'reg-inh-child-no-tag'.
-      class RegInhParent extends BaseElement {
-        static tagName = 'reg-inh-parent';
-      }
-      RegInhParent.register();
-
-      class RegInhChildNoTag extends RegInhParent {}
-      RegInhChildNoTag.register();
-
-      expect(customElements.get('reg-inh-child-no-tag')).to.equal(RegInhChildNoTag);
-      expect(customElements.get('reg-inh-parent')).to.equal(RegInhParent);
-    });
-
-    it('child with own tagName uses its own tagName, not the parent tagName', () => {
-      class RegInhParentOwn extends BaseElement {
-        static tagName = 'reg-inh-parent-own';
-      }
-      RegInhParentOwn.register();
-
-      class RegInhChildOwn extends RegInhParentOwn {
-        static tagName = 'reg-inh-child-own';
-      }
-      RegInhChildOwn.register();
-
-      expect(customElements.get('reg-inh-child-own')).to.equal(RegInhChildOwn);
-    });
-
-    it('explicit name argument wins over own tagName and parent tagName', () => {
-      class RegInhParentExplicit extends BaseElement {
-        static tagName = 'reg-inh-parent-explicit';
-      }
-      RegInhParentExplicit.register();
-
-      class RegInhChildExplicit extends RegInhParentExplicit {
-        static tagName = 'reg-inh-child-declared';
-      }
-      RegInhChildExplicit.register('reg-inh-child-explicit');
-
-      expect(customElements.get('reg-inh-child-explicit')).to.equal(RegInhChildExplicit);
+      DoubleReg.define('double-reg-el');
+      expect(() => DoubleReg.define('double-reg-el')).to.not.throw();
     });
   });
 

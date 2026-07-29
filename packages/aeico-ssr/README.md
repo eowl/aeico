@@ -118,10 +118,7 @@ If the component declares `static computed`, those properties are wired up as la
 
 #### Tag name resolution
 
-`renderToString` derives the tag name from (in priority order):
-
-1. `static tagName` — explicitly set on the class
-2. `ComponentClass.name` converted to kebab-case (e.g. `MyCounter` → `my-counter`)
+`renderToString` derives the tag name from `customElements.getName()` (the name passed to `define()`).
 
 A tag name without a hyphen (invalid custom element name) causes `renderToString` to throw.
 

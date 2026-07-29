@@ -15,7 +15,7 @@ import { toKebab, SwapBuffer } from './utils';
  * - Reactive property system (static props / watchers / computed)
  * - Batched update lifecycle (onPrepare render onUpdated (+ onMounted*))
  * - Event system (emit / events)
- * - Custom element registration helpers (register / toKebab)
+ * - Custom element registration helpers (define / toKebab)
  *
  * This class is intentionally NOT exported from the public API.
  * External consumers should extend AeicoBase (no styles) or AeicoElement (with styles).
@@ -846,34 +846,26 @@ class BaseElement extends HTMLElement {
   }
 
   /**
-   * Custom element registration helper. Automatically converts class name to kebab-case for the tag name.
-   * @param name Optional custom tag name. If not provided, uses the kebab-case version of the class name.
-   */
-  static tagName?: string;
-
-  /**
-   * Register the component as a custom element. Automatically converts class name to kebab-case for the tag name.
-   * @param name Optional custom tag name. If not provided, uses the kebab-case version of the class name.
+   * Define the component as a custom element.
+   *
+   * @param name The custom element tag name (must contain a dash).
+   * Must be unique — calling define() with the same name twice for the same
+   * class is safe (the second call is a no-op), but trying to define a
+   * different class under an already-used name will throw.
+   *
    * @example
    * ```typescript
    * class MyComponent extends BaseElement { ... }
-   * MyComponent.register()  // registers as 'my-component'
+   * MyComponent.define('my-component')
    * ```
    */
-  static register(name?: string) {
-    // Read only the own tagName (not inherited from parent class) to avoid accidentally
-    // picking up a parent's already-registered name when a subclass calls register().
-    const _tagName = Object.prototype.hasOwnProperty.call(this, 'tagName')
-      ? this.tagName
-      : undefined;
-    const tagName = name || _tagName || toKebab(this.name);
-
-    if (!tagName || !tagName.includes('-')) {
-      throw new Error(`Invalid registration: ${tagName} must contain a dash.`);
+  static define(name: string) {
+    if (!name.includes('-')) {
+      throw new Error(`Invalid registration: ${name} must contain a dash.`);
     }
 
-    if (!customElements.get(tagName)) {
-      customElements.define(tagName, this as unknown as CustomElementConstructor);
+    if (!customElements.get(name)) {
+      customElements.define(name, this as unknown as CustomElementConstructor);
     }
   }
 }

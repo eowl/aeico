@@ -252,7 +252,7 @@ export function renderToString(
   if (!tagName) {
     throw new Error(
       `renderToString: "${ComponentClass.name}" is not registered. ` +
-        `Call ${ComponentClass.name}.register() before renderToString().`,
+        `Call ${ComponentClass.name}.define() before renderToString().`,
     );
   }
 

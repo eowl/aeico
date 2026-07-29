@@ -38,7 +38,7 @@ class MyCounter extends AeicoElement {
   }
 }
 
-MyCounter.register('my-counter');
+MyCounter.define('my-counter');
 ```
 
 ## i18n

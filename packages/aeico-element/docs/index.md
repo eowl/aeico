@@ -51,23 +51,14 @@ class MyCounter extends AeicoElement {
   `
 }
 
-MyCounter.register('my-counter')
+MyCounter.define('my-counter')
 ```
 
 ## Registration
 
 ```typescript
-MyEl.register()           // auto: 'my-el' (kebab-case of class name)
-MyEl.register('x-button') // explicit tag name
-```
-
-Set a static `tagName` to override the default without passing an argument:
-
-```typescript
-class XButton extends AeicoElement {
-  static tagName = 'x-button'
-}
-XButton.register()
+MyEl.define('my-el')      // custom element tag name (must contain a dash)
+MyEl.define('x-button')   // explicit tag name
 ```
 
 ## Shadow DOM options

@@ -36,7 +36,7 @@ class MyCounter extends AeicoElement {
   }
 }
 
-MyCounter.register('my-counter');
+MyCounter.define('my-counter');
 ```
 
 ### `@computed` accessor
@@ -101,7 +101,7 @@ class MyCounter extends AeicoElement {
   }
 }
 
-MyCounter.register('my-counter');
+MyCounter.define('my-counter');
 ```
 
 ### Using `html()` from aeico-view

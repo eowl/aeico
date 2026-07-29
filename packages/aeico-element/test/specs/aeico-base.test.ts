@@ -26,9 +26,9 @@ describe('AeicoBase', () => {
     expect(el.label).to.equal('hello');
   });
 
-  it('inherits register() from BaseElement', () => {
+  it('inherits define() from BaseElement', () => {
     class AutoRegBase extends AeicoBase {}
-    AutoRegBase.register();
+    AutoRegBase.define('auto-reg-base');
     expect(customElements.get('auto-reg-base')).to.equal(AutoRegBase);
   });
 

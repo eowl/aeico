@@ -51,7 +51,7 @@ import { isRenderResult } from './utils';
  *   `
  * }
  *
- * MyCounter.register('my-counter')
+ * MyCounter.define('my-counter')
  * // <my-counter count="0"></my-counter>
  * ```
  */
