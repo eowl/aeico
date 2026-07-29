@@ -8,6 +8,8 @@ import { COMPUTED_METADATA_KEY } from './decorators/computed';
 import type { Updatable } from './render-context';
 import { toKebab, SwapBuffer } from './utils';
 
+const AEICO_DEV = true;
+
 /**
  * BaseElement internal reactive foundation for all Aeico elements.
  *
@@ -775,7 +777,7 @@ class BaseElement extends HTMLElement {
     maybeHandlerOrOptions?: EventListenerOrEventListenerObject | AddEventListenerOptions,
     maybeOptions?: AddEventListenerOptions,
   ): void {
-    if (__DEV__ && getCurrentContext() === this) {
+    if (AEICO_DEV && getCurrentContext() === this) {
       throw new Error(
         '[aeico] listen() must not be called inside render(). Use declarative @event syntax instead.',
       );

@@ -8,11 +8,13 @@
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
+      "development": "./development/index.js",
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
     "./constants": {
+      "development": "./development/constants.js",
       "types": "./dist/types/constants.d.ts",
       "import": "./dist/constants.js",
       "require": "./dist/constants.cjs"
@@ -20,6 +22,7 @@
   },
   "files": [
     "dist",
+    "development",
     "!dist/*.tsbuildinfo",
     "src"
   ],

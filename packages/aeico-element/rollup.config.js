@@ -1,32 +1,45 @@
 import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
 
-const plugins = [
-  replace({
-    preventAssignment: true,
-    values: { __DEV__: "(process.env.NODE_ENV !== 'production')" },
-  }),
-  typescript({ tsconfig: './tsconfig.build.json' }),
+/** Builds a single output entry (ES + CJS) for the given file name under a target directory. */
+const outputs = (name, dir) => [
+  { file: `${dir}/${name}.js`, format: 'es', exports: 'named', sourcemap: true },
+  { file: `${dir}/${name}.cjs`, format: 'cjs', exports: 'named', sourcemap: true },
 ];
+
+const entries = ['index', 'constants'];
 
 /** @type {import('rollup').RollupOptions[]} */
 export default [
-  {
-    input: 'src/index.ts',
+  // Dev build
+  ...entries.map((name) => ({
+    input: `src/${name}.ts`,
     external: ['aeico-view'],
-    plugins,
-    output: [
-      { file: 'dist/index.js', format: 'es', exports: 'named', sourcemap: true },
-      { file: 'dist/index.cjs', format: 'cjs', exports: 'named', sourcemap: true },
+    plugins: [
+      typescript({
+        tsconfig: './tsconfig.build.json',
+        compilerOptions: { outDir: './development' },
+      }),
     ],
-  },
-  {
-    input: 'src/constants.ts',
+    output: outputs(name, 'development'),
+  })),
+
+  // Prod build
+  ...entries.map((name) => ({
+    input: `src/${name}.ts`,
     external: ['aeico-view'],
-    plugins,
-    output: [
-      { file: 'dist/constants.js', format: 'es', exports: 'named', sourcemap: true },
-      { file: 'dist/constants.cjs', format: 'cjs', exports: 'named', sourcemap: true },
+    plugins: [
+      replace({
+        preventAssignment: true,
+        values: {
+          'const AEICO_DEV = true': 'const AEICO_DEV = false',
+        },
+      }),
+      typescript({
+        tsconfig: './tsconfig.build.json',
+        compilerOptions: { outDir: './dist' },
+      }),
     ],
-  },
+    output: outputs(name, 'dist'),
+  })),
 ];
