@@ -1,5 +1,5 @@
 /**
- * aeico-ssr — Server-side rendering utilities for Aeico components.
+ * aeico-ssr - Server-side rendering utilities for Aeico components.
  *
  * All exports are safe to use in Node.js, Edge Runtime, or at build time (SSG/SSR).
  * No DOM API is required.

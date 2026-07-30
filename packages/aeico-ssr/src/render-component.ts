@@ -30,17 +30,17 @@ function coercePropValue(value: unknown, type: NonNullable<Prop['type']>): unkno
 /**
  * Recursively flattens a `StyleEntry` tree to a single CSS string.
  *
- * - `string` — returned as-is
- * - array — items joined with newlines
- * - object with `cssText` — extracts the `cssText` property (covers `StyleResult`)
- * - `CSSStyleSheet` instances (browser-only) — skipped; cannot be serialized in SSR
+ * - `string` - returned as-is
+ * - array - items joined with newlines
+ * - object with `cssText` - extracts the `cssText` property (covers `StyleResult`)
+ * - `CSSStyleSheet` instances (browser-only) - skipped; cannot be serialized in SSR
  */
 function flattenStyleItems(entry: StyleEntry): string {
   if (typeof entry === 'string') return entry;
   if (Array.isArray(entry)) {
     return entry.map((e) => flattenStyleItems(e as StyleEntry)).join('\n');
   }
-  // StyleResult (has cssText) — covers both StyleResult and any cssText-shaped object.
+  // StyleResult (has cssText) - covers both StyleResult and any cssText-shaped object.
   // Raw CSSStyleSheet instances (browser-only) cannot be serialized in SSR context
   // and are intentionally skipped.
   if (entry !== null && typeof entry === 'object' && 'cssText' in entry) {
@@ -215,7 +215,7 @@ interface ComponentConstructorWithStyles extends ComponentConstructor {
 /**
  * Serialize an Aeico component to an HTML string without instantiating it.
  *
- * No DOM API is invoked — safe to call in Node.js, Edge Runtime, or at build
+ * No DOM API is invoked - safe to call in Node.js, Edge Runtime, or at build
  * time (SSG).
  *
  * ```ts
@@ -230,7 +230,7 @@ interface ComponentConstructorWithStyles extends ComponentConstructor {
  * The inner HTML is wrapped in `<template shadowrootmode="open">` so the browser
  * attaches the shadow root declaratively before the element upgrades (DSR).
  * Paired with the `attachShadow` guard in `BaseElement`, Hydration requires
- * zero extra configuration — the Reconciler reuses the existing DSR nodes on
+ * zero extra configuration - the Reconciler reuses the existing DSR nodes on
  * first render.
  *
  * **Light DOM** (`static useShadowDOM = false`):

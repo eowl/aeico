@@ -111,7 +111,7 @@ describe('HtmlSerializer', () => {
     assert.equal(s.toString(), '<my-counter>x</my-counter>');
   });
 
-  // Raw text elements — content must NOT be HTML-entity-escaped.
+  // Raw text elements - content must NOT be HTML-entity-escaped.
   test('script text content is not HTML-escaped', () => {
     const s = new HtmlSerializer();
     (s as any).script({ text: 'if (a && b) { return a < b; }' });
@@ -136,7 +136,7 @@ describe('HtmlSerializer', () => {
     assert.equal(s.toString(), '<title>Price < $10 & > $5</title>');
   });
 
-  // innerHTML — content is injected raw, without any escaping.
+  // innerHTML - content is injected raw, without any escaping.
   test('innerHTML prop injects raw HTML without escaping', () => {
     const s = new HtmlSerializer();
     (s as any).div({ innerHTML: '<span>raw &amp; unescaped</span>' });
@@ -149,7 +149,7 @@ describe('HtmlSerializer', () => {
     assert.equal(s.toString(), '<div class="box"><em>hi</em></div>');
   });
 
-  test('innerHTML combined with children callback — callback wins', () => {
+  test('innerHTML combined with children callback - callback wins', () => {
     const s = new HtmlSerializer();
     (s as any).div({ innerHTML: '<ignored>' }, () => {
       (s as any).span({ text: 'visible' });

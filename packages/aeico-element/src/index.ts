@@ -1,3 +1,12 @@
+const AEICO_DEV = true;
+
+if (AEICO_DEV) {
+  console.warn(
+    '[aeico] Development mode. Not recommended for production! ' +
+      'See https://github.com/eowl/aeico/blob/main/packages/aeico-element/docs/development-mode.md',
+  );
+}
+
 // Base classes
 export { default as AeicoBase } from './aeico-base';
 export { default as AeicoElement } from './aeico-element';

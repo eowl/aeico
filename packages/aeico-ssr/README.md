@@ -1,6 +1,6 @@
 # aeico-ssr
 
-Server-side rendering for [Aeico](../../README.md) — serialize `html()` templates and Aeico components to HTML strings without any DOM dependency.
+Server-side rendering for [Aeico](../../README.md) - serialize `html()` templates and Aeico components to HTML strings without any DOM dependency.
 
 Safe to use in Node.js, Edge Runtime (Cloudflare Workers, Vercel Edge Functions), and at build time (SSG).
 
@@ -12,7 +12,7 @@ Safe to use in Node.js, Edge Runtime (Cloudflare Workers, Vercel Edge Functions)
 npm install aeico-ssr
 ```
 
-`aeico-ssr` is a standalone optional package.  The core `aeico-view` package has **zero** dependency on it — install it only when you need server-side or build-time HTML generation.
+`aeico-ssr` is a standalone optional package.  The core `aeico-view` package has **zero** dependency on it - install it only when you need server-side or build-time HTML generation.
 
 ### Peer dependencies
 
@@ -49,13 +49,13 @@ renderHtml(result);
 |---|---|
 | `text` / `textContent` | Emitted as HTML-escaped text content |
 | `className` / `class` (string) | Emitted as `class="…"` |
-| `className` / `class` (object) | Truthy keys are joined: `{ active: true, hidden: false }` → `class="active"` |
-| `style` (object) | Serialized as inline style: `{ color: 'red' }` → `style="color:red"` — camelCase keys are converted to kebab-case; CSS custom properties (`--foo`) are kept as-is |
+| `className` / `class` (object) | Truthy keys are joined: `{ active: true, hidden: false }` produces `class="active"` |
+| `style` (object) | Serialized as inline style: `{ color: 'red' }` produces `style="color:red"` - camelCase keys are converted to kebab-case; CSS custom properties (`--foo`) are kept as-is |
 | `key` | Emitted as `data-key="…"` |
 | `disabled: true` / boolean `true` | Presence-only attribute (e.g. `disabled`) |
 | `disabled: false` / `null` / `undefined` | Attribute omitted entirely |
-| `@click` / any `@…` event handler | **Stripped** — events are client-only |
-| Complex object props (arrays, DOM refs) | **Skipped** — cannot be serialized as HTML attributes |
+| `@click` / any `@…` event handler | **Stripped** - events are client-only |
+| Complex object props (arrays, DOM refs) | **Skipped** - cannot be serialized as HTML attributes |
 | Void elements (`br`, `hr`, `input`, …) | No closing tag |
 | camelCase tag name (e.g. `myCounter`) | Converted to kebab-case: `<my-counter>` |
 
@@ -63,7 +63,7 @@ renderHtml(result);
 
 ### `renderToString(ComponentClass, props?, slotContent?)`
 
-Serializes an Aeico component class to a complete HTML string including the host element tag, reflected attributes, and inner markup — **without instantiating the element or touching the DOM**.
+Serializes an Aeico component class to a complete HTML string including the host element tag, reflected attributes, and inner markup - **without instantiating the element or touching the DOM**.
 
 ```ts
 import { renderToString } from 'aeico-ssr';
@@ -85,7 +85,7 @@ When `static useShadowDOM = true` (the default for `AeicoElement`), the inner ma
 </my-counter>
 ```
 
-The browser attaches the shadow root declaratively before the custom element upgrades.  `AeicoElement` and `AeicoBase` guard `attachShadow` so they do not overwrite a DSR shadow root that the browser has already created, meaning hydration requires zero extra configuration — the `Reconciler` reuses the existing DSR nodes on first render.
+The browser attaches the shadow root declaratively before the custom element upgrades.  `AeicoElement` and `AeicoBase` guard `attachShadow` so they do not overwrite a DSR shadow root that the browser has already created, meaning hydration requires zero extra configuration - the `Reconciler` reuses the existing DSR nodes on first render.
 
 If `static styles` is declared on the component, a `<style>` tag is injected inside the template immediately before the inner markup.
 
@@ -187,24 +187,24 @@ Because `HtmlSerializer` is typed separately from `Reconciler` (to avoid DOM dep
 | `reset()` | Clears the buffer so the instance can be reused |
 | `text(content)` | Appends an HTML-escaped text node |
 | `fragment(cb)` | Runs `cb` inline without wrapping in a tag |
-| `detached(fn)` | Executes `fn` directly (no-op context switch — SSR has no stateful render context) |
-| `node(_existingNode)` | No-op — client-only operation; node will be rendered on upgrade |
+| `detached(fn)` | Executes `fn` directly (no-op context switch - SSR has no stateful render context) |
+| `node(_existingNode)` | No-op - client-only operation; node will be rendered on upgrade |
 | `el(tagName, props?, cb?)` | Explicit dynamic-tag API (same as client-side `Reconciler.el`) |
 
 ---
 
 ## SSR constraints
 
-`renderToString` constructs a **plain render context** via `Object.create(ComponentClass.prototype)` and assigns props directly — it never calls `new ComponentClass()`. As a result, **lifecycle methods do not run during SSR**. The table below shows what this means in practice:
+`renderToString` constructs a **plain render context** via `Object.create(ComponentClass.prototype)` and assigns props directly - it never calls `new ComponentClass()`. As a result, **lifecycle methods do not run during SSR**. The table below shows what this means in practice:
 
 | Lifecycle | Runs in SSR? | Notes |
 |---|---|---|
-| `render()` | Yes | Always called — this is what generates the HTML |
+| `render()` | Yes | Always called - this is what generates the HTML |
 | `static computed` | Yes | Installed as lazy getters on the render context |
 | `onPrepare()` | No | See below |
-| `onMounted()` | No | Correct — browser-only (DOM queries, event listeners, animations) |
-| `onUpdated()` | No | Correct — reactive update cycle is browser-only |
-| `connectedCallback()` | No | Correct — browser-only |
+| `onMounted()` | No | Correct - browser-only (DOM queries, event listeners, animations) |
+| `onUpdated()` | No | Correct - reactive update cycle is browser-only |
+| `connectedCallback()` | No | Correct - browser-only |
 
 ### `onPrepare` and state derived from props
 
@@ -215,7 +215,7 @@ The most common pitfall is using `onPrepare` to compute values that `render()` t
 class ProductCard extends AeicoBase {
   static props = { rawPrice: { type: Number } };
   rawPrice?: number;
-  formattedPrice?: string; // not a prop — invisible to renderToString
+  formattedPrice?: string; // not a prop - invisible to renderToString
 
   protected onPrepare() {
     this.formattedPrice = `¥${((this.rawPrice ?? 0) / 100).toFixed(2)}`;
@@ -229,7 +229,7 @@ class ProductCard extends AeicoBase {
 
 The fix is to make `render()` a **pure function of props**. Two idiomatic approaches:
 
-**Option A — derive inline in `render()`:**
+**Option A - derive inline in `render()`:**
 
 ```ts
 protected render() {
@@ -238,7 +238,7 @@ protected render() {
 }
 ```
 
-**Option B — declare as `static computed`:**
+**Option B - declare as `static computed`:**
 
 ```ts
 static computed = {
@@ -254,7 +254,7 @@ protected render() {
 }
 ```
 
-**Option B (decorator syntax) — use `@computed`:**
+**Option B (decorator syntax) - use `@computed`:**
 
 ```ts
 import { computed } from 'aeico-element/decorators';
@@ -281,7 +281,7 @@ const user = await fetchUser(req.params.id);
 const html = renderToString(UserCard, { name: user.name, avatar: user.avatar });
 ```
 
-This is the same constraint as React Server Components, Nuxt `asyncData`, and SvelteKit `load` — SSR-friendly components receive all initial data through their public interface rather than fetching it internally.
+This is the same constraint as React Server Components, Nuxt `asyncData`, and SvelteKit `load` - SSR-friendly components receive all initial data through their public interface rather than fetching it internally.
 
 ### Summary rule
 
@@ -302,10 +302,10 @@ On the client, `AeicoElement` / `AeicoBase` guard `attachShadow` so they do not 
 
 All text content and attribute values are HTML-escaped before being emitted:
 
-- `&` → `&amp;`
-- `<` → `&lt;` (text only)
-- `>` → `&gt;` (text only)
-- `"` → `&quot;` (attributes only)
+- `&` becomes `&amp;`
+- `<` becomes `&lt;` (text only)
+- `>` becomes `&gt;` (text only)
+- `"` becomes `&quot;` (attributes only)
 
 Event handlers (`@…` props) are stripped entirely and never appear in the output.
 

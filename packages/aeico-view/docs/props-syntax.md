@@ -9,7 +9,7 @@ All props are passed as a plain object to any tag helper inside an `html()` call
 div({ className: 'card' })
 div({ className: 'card active selected' })
 
-// Conditional map — keys whose value is truthy are included, joined with a space
+// Conditional map - keys whose value is truthy are included, joined with a space
 div({ className: { card: true, active: isActive, disabled: isDisabled } })
 ```
 

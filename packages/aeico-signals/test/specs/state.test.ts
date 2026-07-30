@@ -30,7 +30,7 @@ describe('Signal.State', () => {
       expect(notified).to.equal(1); // callback ran once, not twice
     });
 
-    it('set() with NaN → NaN is a no-op (Object.is(NaN, NaN) === true)', () => {
+    it('set() with NaN to NaN is a no-op (Object.is(NaN, NaN) === true)', () => {
       let notified = 0;
       const s = new Signal.State(NaN);
       const c = new Signal.Computed(() => { notified++; return s.get(); });

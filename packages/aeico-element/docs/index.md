@@ -75,5 +75,5 @@ class MyEl extends AeicoElement {
 
 ## Further reading
 
-- [Decorators](./decorators.md) — @prop, @watch, @computed, static config alternative
-- [Lifecycle, styles and events](./lifecycle.md) — hooks, styles, events, TypeScript types
+- [Decorators](./decorators.md) - @prop, @watch, @computed, static config alternative
+- [Lifecycle, styles and events](./lifecycle.md) - hooks, styles, events, TypeScript types

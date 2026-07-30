@@ -14,7 +14,7 @@ import { isRenderResult } from './utils';
  * extend {@link AeicoBase} instead.
  *
  * **Lifecycle order (per update):**
- * `onPrepare` → watchers → `render()` → `onUpdated` → `onMounted` (first render only)
+ * `onPrepare`, then watchers, then `render()`, then `onUpdated`, then `onMounted` (first render only)
  *
  * @example
  * ```typescript
@@ -22,17 +22,17 @@ import { isRenderResult } from './utils';
  * import { html } from 'aeico-view'
  *
  * class MyCounter extends AeicoElement {
- *   // Reactive prop — reflects to HTML attribute automatically
+ *   // Reactive prop - reflects to HTML attribute automatically
  *   @prop({ type: Number }) accessor count = 0
  *
- *   // Cached computed property — recalculated only when `count` changes
+ *   // Cached computed property - recalculated only when `count` changes
  *   @computed('count')
  *   get doubled() { return this.count * 2 }
  *
- *   // Watcher — called with (newValue, oldValue) after each change
+ *   // Watcher - called with (newValue, oldValue) after each change
  *   @watch('count')
  *   onCountChange(next: number, prev: number) {
- *     console.log(`${prev} → ${next}`)
+ *     console.log(`${prev} changed to ${next}`);
  *   }
  *
  *   override render() {

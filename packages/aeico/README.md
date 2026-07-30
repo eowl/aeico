@@ -1,6 +1,6 @@
 # aeico
 
-Lightweight Web Components framework — reactive elements, declarative DOM rendering, and i18n support.
+Lightweight Web Components framework - reactive elements, declarative DOM rendering, and i18n support.
 
 `aeico` is a meta package that re-exports everything from [`aeico-element`](https://www.npmjs.com/package/aeico-element) and [`aeico-view`](https://www.npmjs.com/package/aeico-view).
 
@@ -57,5 +57,5 @@ console.log(t('save', 'Save')); // "保存"
 | Package | Description |
 |---|---|
 | [`aeico-element`](https://www.npmjs.com/package/aeico-element) | Reactive base classes and decorators |
-| [`aeico-view`](https://www.npmjs.com/package/aeico-view) | DOM rendering — `html()`, `render()`, `tags` |
-| [`aeico-localize`](https://www.npmjs.com/package/aeico-localize) | i18n — `t()`, `locale`, `localeRegistry` |
+| [`aeico-view`](https://www.npmjs.com/package/aeico-view) | DOM rendering - `html()`, `render()`, `tags` |
+| [`aeico-localize`](https://www.npmjs.com/package/aeico-localize) | i18n - `t()`, `locale`, `localeRegistry` |

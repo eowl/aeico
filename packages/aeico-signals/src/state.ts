@@ -58,7 +58,7 @@ export function setSignalValue<T>(signal: StateSignal<T>, newValue: T, isError: 
   return true;
 }
 
-/** Record source→consumer dependency. Only adds to sinks when the consumer is watched. */
+/** Record source-to-consumer dependency. Only adds to sinks when the consumer is watched. */
 export function trackSource(
   source: StateSignal<unknown> | ComputedSignal<unknown>,
   consumer: ComputedSignal<unknown>,

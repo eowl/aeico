@@ -4,7 +4,7 @@
  * Import this module BEFORE importing aeico-element so that `class BaseElement extends HTMLElement`
  * does not throw a ReferenceError at module load time.
  *
- * This shim is intentionally minimal — it only stubs globals that are accessed at module
+ * This shim is intentionally minimal - it only stubs globals that are accessed at module
  * evaluation time. Globals accessed only at runtime (attachShadow, adoptedStyleSheets, etc.)
  * are not needed because renderToString() never instantiates components.
  *

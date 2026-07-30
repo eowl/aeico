@@ -1,4 +1,4 @@
-# aeico — Developer Architecture Guide
+# aeico - Developer Architecture Guide
 
 This document is for contributors to the aeico monorepo. It covers internal design decisions, package relationships, and how the core systems work.
 
@@ -49,7 +49,7 @@ npm run test
 npm run test:watch -w packages/aeico-element
 ```
 
-Tests run in a real browser environment via `@web/test-runner`. There is no jsdom or happy-dom — the real Custom Elements registry is exercised.
+Tests run in a real browser environment via `@web/test-runner`. There is no jsdom or happy-dom - the real Custom Elements registry is exercised.
 
 ---
 
@@ -57,8 +57,8 @@ Tests run in a real browser environment via `@web/test-runner`. There is no jsdo
 
 The `Reconciler` is a cursor-based DOM builder. It maintains two parallel stacks:
 
-- `_stack: Node[]` — ancestor nodes; the tail is the current parent
-- `_cursorStack: number[]` — child-index cursor per stack level
+- `_stack: Node[]` - ancestor nodes; the tail is the current parent
+- `_cursorStack: number[]` - child-index cursor per stack level
 
 **Build pass:**
 1. `build(root, cb)` sets `root` as the initial parent and calls `cb()`
@@ -78,7 +78,7 @@ The `Reconciler` is a cursor-based DOM builder. It maintains two parallel stacks
 
 ### Property initialization
 
-1. `_collectProps()` walks the prototype chain (child → HTMLElement) merging `static props` and `@prop` decorator metadata stored in `Symbol.metadata`
+1. `_collectProps()` walks the prototype chain (child up to HTMLElement) merging `static props` and `@prop` decorator metadata stored in `Symbol.metadata`
 2. `_initializePrototypeProps()` installs shared getter/setter pairs on the **prototype** (once per class, guarded by `_initializedPrototypes` WeakSet)
 3. Each setter writes to `_propName` (backing field), calls `setAttribute()` for reflected props, then schedules `update()`
 
@@ -116,7 +116,7 @@ The `accessor` keyword triggers a TC39 `init()` callback synchronously inside th
 
 `LocaleStore.t()` calls `getCurrentContext()` from `aeico-element` to detect the component currently executing `render()`. If a context is active, the component is added to `_components: Set<Updatable>`. When `locale.update()` runs, every component in the set has `.update()` called.
 
-`getCurrentContext()` / `setRenderContext()` / `clearRenderContext()` use a module-level variable (not a global) — safe for concurrent SSR if each request runs in its own module scope (e.g. Edge Runtime isolates).
+`getCurrentContext()` / `setRenderContext()` / `clearRenderContext()` use a module-level variable (not a global) - safe for concurrent SSR if each request runs in its own module scope (e.g. Edge Runtime isolates).
 
 ---
 
@@ -134,5 +134,5 @@ The `accessor` keyword triggers a TC39 `init()` callback synchronously inside th
 2. Update `package.json`: `name`, `description`, peer/dependencies
 3. Add `rollup.config.js` pointing to your entry
 4. Add a `tsconfig.json` and `tsconfig.build.json`
-5. No workspace registration needed — the root `package.json` already has `"workspaces": ["packages/*"]` which picks up any new directory under `packages/` automatically
+5. No workspace registration needed - the root `package.json` already has `"workspaces": ["packages/*"]` which picks up any new directory under `packages/` automatically
 6. Add a `web-test-runner.config.mjs` if the package needs browser tests

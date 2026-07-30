@@ -1,13 +1,14 @@
 {
   "name": "aeico",
   "version": "0.1.7",
-  "description": "Lightweight Web Components framework — reactive elements, DOM rendering and i18n",
+  "description": "Lightweight Web Components framework - reactive elements, DOM rendering and i18n",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
+      "development": "./development/index.js",
       "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
@@ -15,6 +16,7 @@
   },
   "files": [
     "dist",
+    "development",
     "!dist/*.tsbuildinfo",
     "src"
   ],

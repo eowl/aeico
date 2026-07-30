@@ -1,6 +1,6 @@
 # aeico-ssr
 
-Server-side rendering for Aeico components — no DOM API required.
+Server-side rendering for Aeico components - no DOM API required.
 
 ## Installation
 
@@ -18,7 +18,7 @@ npm install aeico-ssr
 
 Both functions are safe to call in **Node.js**, **Edge Runtime** (Cloudflare Workers, Vercel Edge), and at **build time** (SSG).
 
-## `renderHtml()` — render a template
+## `renderHtml()` - render a template
 
 Serializes an `html()` template without any component context:
 
@@ -41,7 +41,7 @@ renderHtml(result)
 
 Event handlers (`onclick`, etc.) are silently dropped in the SSR output.
 
-## `renderToString()` — render a component
+## `renderToString()` - render a component
 
 Serializes a full component class including props, styles, and shadow DOM:
 
@@ -49,7 +49,7 @@ Serializes a full component class including props, styles, and shadow DOM:
 import { renderToString } from 'aeico-ssr'
 import { MyCounter } from './my-counter'
 
-// With Shadow DOM (default) — wraps content in <template shadowrootmode="open">
+// With Shadow DOM (default) - wraps content in <template shadowrootmode="open">
 renderToString(MyCounter, { count: 5 })
 // '<my-counter count="5"><template shadowrootmode="open"><style>...</style><div>5</div></template></my-counter>'
 
@@ -76,7 +76,7 @@ renderToString(AeNavbar, { siteTitle: 'Docs' }, html(({ a }) => {
 //   <a slot="start" href="/guide">Guide</a>
 // </ae-navbar>'
 
-// Reusable — define once, pass to many renderToString calls
+// Reusable - define once, pass to many renderToString calls
 const navSlot = html(({ a }) => {
   a({ slot: 'brand', href: '/', text: siteTitle })
   for (const item of navItems) {
@@ -93,7 +93,7 @@ Named slots use the `slot="name"` attribute on the top-level element, matching t
 
 ### Declarative Shadow Root (DSR) & hydration
 
-The `<template shadowrootmode="open">` output is parsed by modern browsers **before** JavaScript executes. When the Aeico component class upgrades, `BaseElement` detects the pre-existing shadow root and skips `attachShadow()`. The `Reconciler` reuses the existing DSR nodes on first render — **zero extra hydration code required**.
+The `<template shadowrootmode="open">` output is parsed by modern browsers **before** JavaScript executes. When the Aeico component class upgrades, `BaseElement` detects the pre-existing shadow root and skips `attachShadow()`. The `Reconciler` reuses the existing DSR nodes on first render - **zero extra hydration code required**.
 
 ### Light DOM components
 

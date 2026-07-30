@@ -1,27 +1,32 @@
 import typescript from '@rollup/plugin-typescript';
-import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 
-/** @type {import('rollup').RollupOptions} */
-export default {
-  input: 'src/index.ts',
-  // Bundle everything — aeico-element and aeico-view are inlined via node-resolve
-  external: [],
-  plugins: [
-    resolve({ exportConditions: ['import'] }),
-    typescript({ tsconfig: './tsconfig.build.json' }),
-  ],
-  output: [
-    {
-      file: 'dist/index.js',
-      format: 'es',
-      exports: 'named',
-      sourcemap: true,
-    },
-    {
-      file: 'dist/index.cjs',
-      format: 'cjs',
-      exports: 'named',
-      sourcemap: true,
-    },
-  ],
-};
+/** @type {import('rollup').RollupOptions[]} */
+export default [
+  // Dev build
+  {
+    input: 'src/index.ts',
+    external: ['aeico-element', 'aeico-element/constants', 'aeico-view'],
+    plugins: [typescript({ tsconfig: './tsconfig.build.json', compilerOptions: { outDir: './development' } })],
+    output: [
+      { file: 'development/index.js', format: 'es', exports: 'named', sourcemap: true },
+      { file: 'development/index.cjs', format: 'cjs', exports: 'named', sourcemap: true },
+    ],
+  },
+  // Prod build
+  {
+    input: 'src/index.ts',
+    external: ['aeico-element', 'aeico-element/constants', 'aeico-view'],
+    plugins: [
+      replace({
+        preventAssignment: true,
+        values: { 'const AEICO_DEV = true': 'const AEICO_DEV = false' },
+      }),
+      typescript({ tsconfig: './tsconfig.build.json', compilerOptions: { outDir: './dist' } }),
+    ],
+    output: [
+      { file: 'dist/index.js', format: 'es', exports: 'named', sourcemap: true },
+      { file: 'dist/index.cjs', format: 'cjs', exports: 'named', sourcemap: true },
+    ],
+  },
+];

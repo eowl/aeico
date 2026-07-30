@@ -25,7 +25,7 @@ class MyCounter extends AeicoElement {
 
   @watch('count')
   onCountChange(next: number, prev: number) {
-    console.log(`${prev} → ${next}`);
+    console.log(`${prev} changed to ${next}`);
   }
 
   override render() {
@@ -91,7 +91,7 @@ class MyCounter extends AeicoElement {
   };
 
   onCountChange(next, prev) {
-    console.log(`${prev} → ${next}`);
+    console.log(`${prev} changed to ${next}`);
   }
 
   override render() {
@@ -106,7 +106,7 @@ MyCounter.define('my-counter');
 
 ### Using `html()` from aeico-view
 
-`html()` accepts a callback that receives a `Reconciler` — tag functions return the actual DOM element directly, so you can capture references without `querySelector`. You can also split the template across multiple methods:
+`html()` accepts a callback that receives a `Reconciler` - tag functions return the actual DOM element directly, so you can capture references without `querySelector`. You can also split the template across multiple methods:
 
 ```typescript
 import { AeicoElement } from 'aeico-element';
@@ -130,7 +130,7 @@ class MyForm extends AeicoElement {
   private _renderInput() {
     const { label, input } = tags;
     label({ textContent: 'Name' });
-    // tag functions return the element directly — no querySelector needed
+    // tag functions return the element directly - no querySelector needed
     this._input = input({
       type: 'text',
       value: this.value,
@@ -163,7 +163,7 @@ class MyForm extends AeicoElement {
 
 | Export | Description |
 |---|---|
-| `AeicoElement` | Full reactive element — props, rendering, styles, events |
+| `AeicoElement` | Full reactive element - props, rendering, styles, events |
 | `AeicoBase` | Minimal base without rendering helpers |
 | `prop` | Decorator to declare a reactive property |
 | `watch` | Decorator to watch a reactive property for changes |

@@ -13,7 +13,7 @@ describe('Signal.subtle', () => {
 
       expect(c.get()).to.equal(1);
       s.set(2);
-      expect(c.get()).to.equal(1); // stale — dependency was not tracked
+      expect(c.get()).to.equal(1); // stale - dependency was not tracked
       expect(evalCount).to.equal(1); // callback not re-run
     });
 

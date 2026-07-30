@@ -219,7 +219,7 @@ describe('BaseElement', () => {
       it('HTML parser preset attribute is readable before first JS interaction', async () => {
         const tag = defineEl({ count: { type: Number } });
         const el = await mount<BaseElement & { count: number }>(`<${tag} count="7"></${tag}>`);
-        // No JS setter was called — value must come from attributeChangedCallback initialisation.
+        // No JS setter was called - value must come from attributeChangedCallback initialisation.
         expect(el.count).to.equal(7);
       });
 
@@ -228,7 +228,7 @@ describe('BaseElement', () => {
         const el = await mount<BaseElement & { active: boolean }>(`<${tag}></${tag}>`);
         el.setAttribute('active', '');
         await updated();
-        // observe:false — attributeChangedCallback is never called, internalKey stays undefined.
+        // observe:false - attributeChangedCallback is never called, internalKey stays undefined.
         expect(el.active).to.be.undefined;
       });
 
@@ -258,7 +258,7 @@ describe('BaseElement', () => {
       it('reactive accessor lives on the prototype, not the instance', async () => {
         const tag = defineEl({ count: { type: Number } });
         const el = await mount<BaseElement & { count: number }>(`<${tag}></${tag}>`);
-        // The own property should not be an accessor — the instance stores only the backing field.
+        // The own property should not be an accessor - the instance stores only the backing field.
         expect(Object.getOwnPropertyDescriptor(el, 'count')).to.be.undefined;
         // The prototype carries the shared accessor.
         const proto = Object.getPrototypeOf(el);
@@ -275,7 +275,7 @@ describe('BaseElement', () => {
         const proto = Object.getPrototypeOf(el1);
         const d1 = Object.getOwnPropertyDescriptor(proto, 'value')!;
         const d2 = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el2), 'value')!;
-        // Same prototype → identical function references.
+        // Same prototype yields identical function references.
         expect(d1.get).to.equal(d2.get);
         expect(d1.set).to.equal(d2.set);
       });
@@ -962,7 +962,7 @@ describe('BaseElement', () => {
 
       // Upgrade fires synchronously inside appendChild.
       document.body.appendChild(holder);
-      // Restore spy immediately — we only care about synchronous calls during the constructor.
+      // Restore spy immediately - we only care about synchronous calls during the constructor.
       Element.prototype.setAttribute = orig;
 
       expect(setAttrCalls).to.deep.equal([]);

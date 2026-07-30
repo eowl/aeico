@@ -1,9 +1,9 @@
 /**
- * Standalone usage tests — no aeico-element or any other framework dependency.
+ * Standalone usage tests - no aeico-element or any other framework dependency.
  *
  * Two scenarios are covered:
- *  1. Plain DOM target  — html() + render() / Reconciler used against an ordinary <div>.
- *  2. Vanilla web component — a plain HTMLElement subclass that manages its own
+ *  1. Plain DOM target  - html() + render() / Reconciler used against an ordinary <div>.
+ *  2. Vanilla web component - a plain HTMLElement subclass that manages its own
  *     rendering lifecycle with aeico-view, without any base class from aeico-element.
  */
 
@@ -51,7 +51,7 @@ describe('Standalone: plain DOM target (no framework)', () => {
     label = 'updated';
     render(tpl(), container);
 
-    // Same node reference — no recreation
+    // Same node reference - no recreation
     expect(container.querySelector('button')).to.equal(btn);
     expect(btn.textContent).to.equal('updated');
   });

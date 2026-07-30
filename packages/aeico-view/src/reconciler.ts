@@ -89,7 +89,7 @@ class Reconciler {
    * Any property access that does not correspond to an existing member is intercepted
    * and treated as a tag-name shorthand (e.g. `builder.div`, `builder.benchRow`).
    * camelCase property names are converted to kebab-case tag names so that custom
-   * elements can be addressed without quoting (e.g. `builder.myWidget` → `<my-widget>`).
+   * elements can be addressed without quoting (e.g. `builder.myWidget` yields `<my-widget>`).
    */
   constructor() {
     return new Proxy(this, {
@@ -203,9 +203,9 @@ class Reconciler {
    *
    * @remarks
    * Two resolution strategies are applied:
-   * - **Keyed** — searches forward from the cursor for a child whose `data-key` matches,
+   * - **Keyed** - searches forward from the cursor for a child whose `data-key` matches,
    *   then moves it to the cursor position (preserves identity across list reorders).
-   * - **Unkeyed** — accepts the child already sitting at the cursor if its tag name
+   * - **Unkeyed** - accepts the child already sitting at the cursor if its tag name
    *   matches and it carries no `data-key` (prevents mixing keyed/unkeyed siblings).
    *
    * A fresh element is created and inserted whenever no suitable match is found.
@@ -305,7 +305,7 @@ class Reconciler {
    *
    * @remarks
    * The search begins at the cursor position rather than index 0 because keyed nodes
-   * are always expected to appear at or after the current render position — searching
+   * are always expected to appear at or after the current render position - searching
    * behind the cursor would risk claiming a node that has already been reconciled.
    */
   private _findChildByKey(parent: Node, key: string, start: number): Element | null {
@@ -357,7 +357,7 @@ class Reconciler {
 
     block();
 
-    // Remove any children that the block did not visit — they are no longer part of
+    // Remove any children that the block did not visit - they are no longer part of
     // the intended output.  _cursorStack[0] holds the final cursor value for root.
     this._cleanup(root, this._cursorStack[0]);
 
@@ -394,7 +394,7 @@ class Reconciler {
    *   because a children callback owns the text rendering for this element.
    *
    * @remarks
-   * **Allocation strategy — zero heap objects per call after the first render:**
+   * **Allocation strategy - zero heap objects per call after the first render:**
    * - `cache` is the long-lived `Record` stored in `_propsCache`; created once per
    *   element and mutated in-place on every subsequent call.
    * - `_scratchKeys` is an instance-level `Set` cleared (not recreated) after each
@@ -417,7 +417,7 @@ class Reconciler {
       if (ck === null) continue; // Prop was intentionally skipped (e.g. textContent when suppressed).
 
       scratch.add(ck);
-      if (cache[ck] === normalized) continue; // Value unchanged — skip DOM write.
+      if (cache[ck] === normalized) continue; // Value unchanged - skip DOM write.
 
       const oldValue = cache[ck];
       cache[ck] = normalized; // Update cache before writing to DOM so it reflects reality on throw.
@@ -425,7 +425,7 @@ class Reconciler {
     }
 
     this._removeStaleProps(el, cache, scratch, skipTextContent);
-    scratch.clear(); // Reset for the next _applyProps call — avoids re-allocating the Set.
+    scratch.clear(); // Reset for the next _applyProps call - avoids re-allocating the Set.
   }
 
   /**
@@ -440,9 +440,9 @@ class Reconciler {
    *
    * @remarks
    * Normalization rules (first match wins):
-   * - `text` | `textContent` → `'textContent'` (shorthand alias)
-   * - `className` | `class` → `'class'`; object maps are collapsed to a space-separated string
-   * - `@eventName` → stored with the `@` prefix to distinguish handlers from attributes
+   * - `text` | `textContent` becomes `'textContent'` (shorthand alias)
+   * - `className` | `class` becomes `'class'`; object maps are collapsed to a space-separated string
+   * - `@eventName` becomes stored with the `@` prefix to distinguish handlers from attributes
    *   and prevent `setAttribute` / `removeEventListener` conflicts
    * - All other keys pass through unchanged.
    *
@@ -463,7 +463,7 @@ class Reconciler {
     if (key === 'className' || key === 'class') {
       if (value == null || value === false) return ['class', null];
       if (typeof value === 'object') {
-        // Object map form: { active: true, hidden: false } → 'active'
+        // Object map form: { active: true, hidden: false } produces 'active'
         return [
           'class',
           Object.entries(value as Record<string, boolean>)
@@ -495,14 +495,14 @@ class Reconciler {
    *
    * @remarks
    * Dispatch order (first match wins):
-   * 1. `null | false` → remove the prop via {@link _removeProp}
-   * 2. `'class'`      → `setAttribute('class', …)`
-   * 3. `'textContent'`→ `el.textContent`
-   * 4. `'style'`      → merge individual CSS / custom properties
-   * 5. `'@…'`         → remove old listener, add new listener
-   * 6. `boolean`      → presence-only attribute (`setAttribute(ck, '')`)
-   * 7. `object`       → assign as a JS property (supports arrays, DOM refs, etc.)
-   * 8. anything else  → `setAttribute` with string coercion
+   * 1. `null | false` becomes remove the prop via {@link _removeProp}
+   * 2. `'class'`      becomes `setAttribute('class', …)`
+   * 3. `'textContent'` becomes `el.textContent`
+   * 4. `'style'`      becomes merge individual CSS / custom properties
+   * 5. `'@…'`         becomes remove old listener, add new listener
+   * 6. `boolean`      becomes presence-only attribute (`setAttribute(ck, '')`)
+   * 7. `object`       becomes assign as a JS property (supports arrays, DOM refs, etc.)
+   * 8. anything else  becomes `setAttribute` with string coercion
    *
    * `oldValue` is required for event handlers because the browser does not
    * deduplicate `addEventListener` calls when the function reference changes.
@@ -535,7 +535,7 @@ class Reconciler {
       if (oldValue) el.removeEventListener(eventName, oldValue as EventListener);
       el.addEventListener(eventName, value as EventListener);
     } else if (typeof value === 'boolean') {
-      // Boolean `true` → presence-only attribute (e.g. `disabled`, `checked`).
+      // Boolean `true` becomes presence-only attribute (e.g. `disabled`, `checked`).
       el.setAttribute(ck, '');
     } else if (typeof value === 'object') {
       // Set as a JS property to support complex values (arrays, objects, DOM nodes).
@@ -569,7 +569,7 @@ class Reconciler {
     skipTextContent: boolean,
   ): void {
     for (const ck of Object.keys(cache)) {
-      if (scratch.has(ck)) continue; // Key still present in this render — leave it alone.
+      if (scratch.has(ck)) continue; // Key still present in this render - leave it alone.
 
       // When the children callback owns text rendering, leave `textContent` in the cache;
       // it was never set by _applyProps and should not be cleared here.
