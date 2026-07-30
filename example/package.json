@@ -1,0 +1,15 @@
+{
+  "name": "aeico-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "aeico": "^0.1.8"
+  },
+  "devDependencies": {
+    "vite": "^6.4.0"
+  }
+}
