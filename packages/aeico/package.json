@@ -1,6 +1,6 @@
 {
   "name": "aeico",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Lightweight Web Components framework - reactive elements, DOM rendering and i18n",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -42,7 +42,7 @@
     "directory": "packages/aeico"
   },
   "dependencies": {
-    "aeico-element": "^0.1.7",
+    "aeico-element": "^0.1.8",
     "aeico-view": "^0.1.3"
   },
   "devDependencies": {
