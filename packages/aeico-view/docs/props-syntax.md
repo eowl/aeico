@@ -22,6 +22,14 @@ span({ textContent: 'Hello world' })
 span({ textContent: String(this.count) })
 ```
 
+## innerHTML
+
+Sets the `innerHTML` of an element directly. Use with caution — no sanitization is performed:
+
+```typescript
+div({ innerHTML: '<strong>Bold text</strong>' })
+```
+
 ## style
 
 Style values are a plain object with camelCase CSS property names:
