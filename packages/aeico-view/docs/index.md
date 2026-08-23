@@ -17,6 +17,120 @@ npm install aeico-view
 | `tags` | Proxy giving access to tag helpers outside a callback |
 | `getReconciler()` | Access the active `Reconciler` inside a `render()` context |
 
+## Reconciler methods
+
+Beyond tag helpers (`div`, `span`, `button`, …), the reconciler also exposes utility
+methods that are available inside any `html()` callback:
+
+| Method | Description |
+|---|---|
+| `text(content)` | Create or reconcile a `Text` node at the cursor position |
+| `node(existingNode)` | Insert a pre-built `Node` or `DocumentFragment` into the tree |
+| `fragment(cb)` | Build a one-time `DocumentFragment` (no reconciliation, append-only) |
+| `detached(fn)` | Run builder calls outside the current build context |
+| `el(tagName, props?, cb?)` | Create/reconcile an element with a dynamic tag name string |
+
+### `text(content)` — text nodes
+
+Inserts or reconciles a `Text` node. Inside a build context, the existing text node at
+the cursor is reused and its content is updated only when changed:
+
+```typescript
+html(({ div, span, text }) => {
+  div({}, () => {
+    span({ className: 'label' })
+    text('Hello world')  // appends a Text node as sibling of the span
+    span({ className: 'suffix' })
+  })
+})
+```
+
+Use `text()` when you need to mix text nodes with element siblings — for example,
+inline text between two `<span>` elements or text inside a `<pre>` block.
+
+### `node(existingNode)` — insert existing DOM
+
+Inserts a pre-built `Node` (or `DocumentFragment`) into the current parent and advances
+the cursor by the correct number of top-level nodes:
+
+```typescript
+html(({ div, node }) => {
+  div({}, () => {
+    const prebuilt = document.createElement('span')
+    prebuilt.textContent = 'Injected'
+    node(prebuilt)  // inserts the pre-built element at the cursor
+  })
+})
+```
+
+When a `DocumentFragment` is passed, all of its children are transferred and the cursor
+skips over all of them. Use this to portal pre-built subtrees or adopt externally
+created nodes into the reconciled tree.
+
+### `fragment(cb)` — one-time fragment construction
+
+Runs `cb` inside a bare `DocumentFragment` and returns the populated fragment.
+Elements inside the callback are always freshly appended — no cursor-based reconciliation:
+
+```typescript
+html(({ div, fragment, span }) => {
+  const frag = fragment(() => {
+    span({ textContent: 'Static' })
+    span({ textContent: 'Content' })
+  })
+  div({}, () => {
+    node(frag)  // insert the populated fragment
+  })
+})
+```
+
+Use `fragment()` for one-time subtree construction (e.g. initial content, template
+cloning). Not suitable for re-renderable components — use an `html()` callback instead.
+
+### `detached(fn)` — escape the build context
+
+Executes `fn` without advancing the parent build's cursor, then restores the previous
+context. Useful when builder calls must be made inside event handlers or async
+callbacks that fire while a `build()` pass is in progress:
+
+```typescript
+html(({ div, button, detached }) => {
+  div({}, () => {
+    button({
+      textContent: 'Add',
+      onclick: () => {
+        detached(() => {
+          // builder calls here won't corrupt the parent build's cursor
+          const { div: d, span } = getReconciler()
+          d({ className: 'toast' }, () => {
+            span({ textContent: 'Added!' })
+          })
+        })
+      },
+    })
+  })
+})
+```
+
+### `el(tagName, props?, cb?)` — dynamic tag names
+
+Creates or reconciles an element when the tag name is not known at compile time.
+Supports the same `(props?, cb?)` / `(cb)` overloads as the Proxy tag helpers:
+
+```typescript
+html(({ el, div }) => {
+  const tag = isHeading ? 'h1' : 'p'
+  el(tag, { textContent: 'Dynamic heading' })
+
+  div({}, () => {
+    items.forEach(item => el(item.tag, { textContent: item.label }))
+  })
+})
+```
+
+Prefer the Proxy shorthand (`builder.div(…)`) for statically known tags. Use `el()`
+only when the tag name is determined at runtime.
+
 ## `html()` - declare structure
 
 ```typescript
