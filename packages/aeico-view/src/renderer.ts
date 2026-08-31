@@ -1,4 +1,4 @@
-import Reconciler from './reconciler';
+import Reconciler, { type Tags } from './reconciler';
 
 /**
  * RenderResult - opaque wrapper produced by `html()`.
@@ -9,7 +9,7 @@ import Reconciler from './reconciler';
  */
 export class RenderResult {
   /** @internal */
-  constructor(readonly _cb: (reconciler: Reconciler) => void) {}
+  constructor(readonly _cb: (tags: Tags) => void) {}
 }
 
 class Renderer {
@@ -17,7 +17,8 @@ class Renderer {
   private _activeReconciler: Reconciler | null = null;
 
   /**
-   * Proxy that delegates all property access to the currently active builder.
+   * Proxy that exposes the {@link Tags} view of the currently active
+   * {@link Reconciler}.
    *
    * Lets you destructure tag helpers without explicitly calling `getReconciler()`:
    *
@@ -27,14 +28,17 @@ class Renderer {
    *
    * Must be used inside a `render()` / `html()` context, same as `getReconciler()`.
    */
-  readonly tags: Reconciler = new Proxy({} as Reconciler, {
+  readonly tags: Tags = new Proxy({} as Tags, {
     get: (_t, prop) => Reflect.get(this.getReconciler(), prop),
   });
 
   /**
-   * Return the `Reconciler` that is currently executing inside a
-   * `render()` call.  Useful for helper methods that need builder access
-   * without receiving it as a parameter.
+   * Return the {@link Reconciler} that is currently executing inside a
+   * `render()` call.  Useful for helper methods that need engine-level
+   * access (e.g. `detached()`) without receiving it as a parameter.
+   *
+   * Unlike the {@link tags} proxy, this returns the full engine - use `tags`
+   * instead when only the tag helpers are needed.
    *
    * Throws if called outside a `render()` execution context.
    */
@@ -50,7 +54,7 @@ class Renderer {
    * Declare a render structure as a reusable `RenderResult`.
    *
    * `html` is a **callback DSL**, not a tagged template literal. The callback
-   * receives the active {@link Reconciler} whose tag helpers (`div`, `span`, …)
+   * receives the active {@link Tags} view whose tag helpers (`div`, `span`, …)
    * can be destructured. The callback is **not** executed immediately - it is
    * deferred until {@link render} applies it to a DOM root.
    *
@@ -83,10 +87,10 @@ class Renderer {
    * })
    * ```
    *
-   * @param cb - Builder callback that describes the desired DOM tree.
+   * @param cb - Tags callback that describes the desired DOM tree.
    * @returns An opaque {@link RenderResult} to pass to {@link render}.
    */
-  html = (cb: (reconciler: Reconciler) => void): RenderResult => {
+  html = (cb: (tags: Tags) => void): RenderResult => {
     return new RenderResult(cb);
   };
 
@@ -146,6 +150,6 @@ export const { html, render, getReconciler, tags } = new Renderer();
  * Used by `aeico-ssr` to execute the callback against a non-DOM serializer
  * implementation without accessing the private `_cb` field directly.
  */
-export function getCallback(r: RenderResult): (reconciler: Reconciler) => void {
+export function getCallback(r: RenderResult): (tags: Tags) => void {
   return r._cb;
 }

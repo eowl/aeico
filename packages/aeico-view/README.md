@@ -279,10 +279,11 @@ render(html(({ div }) => { div({ text: 'shadow content' }); }), shadow);
 
 | Export | Signature | Description |
 |---|---|---|
-| `html` | `(cb: (r: Reconciler) => void) => RenderResult` | Creates a deferred render template |
+| `html` | `(cb: (t: Tags) => void) => RenderResult` | Creates a deferred render template |
 | `render` | `(result: RenderResult, root: Node) => void` | Applies a template to a root node |
-| `tags` | `Reconciler` (proxy) | Delegates to the active Reconciler |
+| `tags` | `Tags` (proxy) | Tag view of the active Reconciler |
 | `getReconciler` | `() => Reconciler` | Returns the active Reconciler (throws if none) |
-| `Reconciler` | class | Core cursor-based DOM reconciler |
+| `Reconciler` | class | Core cursor-based DOM reconciler (`Tags` superset) |
+| `Tags` | type | Tag vocabulary passed to `html()` callbacks |
 | `TagProps` | type | Prop bag accepted by all tag helpers |
 | `RenderResult` | class | Opaque wrapper returned by `html()` |

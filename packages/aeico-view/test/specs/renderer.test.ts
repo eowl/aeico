@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { html, render, getReconciler, tags, RenderResult } from '../../src/renderer.js';
-import Reconciler from '../../src/reconciler.js';
+import Reconciler, { type Tags } from '../../src/reconciler.js';
 
 describe('html()', () => {
   it('returns a RenderResult', () => {
@@ -9,7 +9,7 @@ describe('html()', () => {
   });
 
   it('stores the callback as _cb', () => {
-    const cb = (b: Reconciler) => {
+    const cb = (b: Tags) => {
       b.div();
     };
     const result = html(cb);
