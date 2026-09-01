@@ -30,7 +30,7 @@ class MyCounter extends AeicoElement {
 
   override render() {
     return html(({ button, span }) => {
-      button({ onclick: () => this.count++, textContent: '+' });
+      button({ '@click': () => this.count++, textContent: '+' });
       span({ textContent: String(this.count) });
     });
   }
@@ -146,7 +146,7 @@ class MyForm extends AeicoElement {
       this._submit = button({
         type: 'submit',
         textContent: 'Submit',
-        onclick: () => this._onSubmit(),
+        '@click': () => this._onSubmit(),
       });
     });
   }

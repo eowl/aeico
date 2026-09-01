@@ -1,7 +1,7 @@
 import type { Props, Prop, Computed, Watchers, WatcherHandler, InferProps } from './types';
 import { listenEvent, cleanupListeners, emit as emitEvent, type EmitOptions } from './events';
 import { setRenderContext, clearRenderContext, getCurrentContext } from './render-context';
-import { html, render, type RenderResult } from 'aeico-view';
+import { html, render, type Renderable } from 'aeico-view';
 import { PROP_METADATA_KEY, ACCESSOR_PROPS_KEY } from './decorators';
 import { WATCHER_METADATA_KEY } from './decorators/watch';
 import { COMPUTED_METADATA_KEY } from './decorators/computed';
@@ -658,7 +658,7 @@ class BaseElement extends HTMLElement {
    * Override to produce the component's DOM output.
    *
    * Called on every update cycle after `onPrepare` (and watchers). The returned
-   * `RenderResult` is applied to the shadow root (or light DOM when
+   * `Renderable` is applied to the shadow root (or light DOM when
    * `useShadowDOM = false`) via the incremental Reconciler - only changed nodes
    * are touched.
    *
@@ -677,7 +677,7 @@ class BaseElement extends HTMLElement {
    * }
    * ```
    */
-  protected render(): RenderResult | void {}
+  protected render(): Renderable | void {}
 
   /**
    * Called before each render cycle.
