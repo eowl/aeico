@@ -1,13 +1,13 @@
 import Reconciler, { type Tags } from './reconciler';
 
 /**
- * RenderResult - opaque wrapper produced by `html()`.
+ * Renderable - opaque wrapper produced by `html()`.
  *
  * Holds the render callback that will be executed when `render()` applies
  * the template to a DOM root.  This object is intentionally opaque to
- * consumers - just pass it to `render(result, root)`.
+ * consumers - just pass it to `render(renderable, root)`.
  */
-export class RenderResult {
+export class Renderable {
   /** @internal */
   constructor(readonly _cb: (tags: Tags) => void) {}
 }
@@ -51,7 +51,7 @@ class Renderer {
   };
 
   /**
-   * Declare a render structure as a reusable `RenderResult`.
+   * Declare a render structure as a reusable {@link Renderable}.
    *
    * `html` is a **callback DSL**, not a tagged template literal. The callback
    * receives the active {@link Tags} view whose tag helpers (`div`, `span`, …)
@@ -73,8 +73,11 @@ class Renderer {
    *     // Inline styles as a camelCase object
    *     div({ style: { color: 'red', fontSize: '14px' } })
    *
-   *     // Native event handlers (direct assignment)
-   *     button({ onclick: () => doSomething(), textContent: 'Click me' })
+   *     // Event handlers via the '@event' syntax (addEventListener).
+   *     // A bare `onclick: fn` prop does NOT bind a listener - a function
+   *     // value without the '@' prefix falls through to setAttribute and is
+   *     // stringified.  Always use '@' + the DOM event name (e.g. '@click').
+   *     button({ '@click': () => doSomething(), textContent: 'Click me' })
    *
    *     // Any HTML attribute (pass-through)
    *     input({ type: 'number', min: '0', max: '100', value: String(val) })
@@ -88,14 +91,14 @@ class Renderer {
    * ```
    *
    * @param cb - Tags callback that describes the desired DOM tree.
-   * @returns An opaque {@link RenderResult} to pass to {@link render}.
+   * @returns An opaque {@link Renderable} to pass to {@link render}.
    */
-  html = (cb: (tags: Tags) => void): RenderResult => {
-    return new RenderResult(cb);
+  html = (cb: (tags: Tags) => void): Renderable => {
+    return new Renderable(cb);
   };
 
   /**
-   * Apply a `RenderResult` (produced by {@link html}) to a DOM root node.
+   * Apply a {@link Renderable} (produced by {@link html}) to a DOM root node.
    *
    * A `Reconciler` instance is cached per root, so repeated calls with the
    * same root reuse the same instance and only patch nodes that changed
@@ -120,10 +123,10 @@ class Renderer {
    * render(app(0), root)
    * ```
    *
-   * @param result - The `RenderResult` to apply.
+   * @param renderable - The {@link Renderable} to apply.
    * @param root   - Target DOM node (shadow root, element, or `document.body`).
    */
-  render = (result: RenderResult, root: Node): void => {
+  render = (renderable: Renderable, root: Node): void => {
     let reconciler = this._reconcilerCache.get(root);
 
     if (!reconciler) {
@@ -135,7 +138,7 @@ class Renderer {
     this._activeReconciler = reconciler;
 
     try {
-      reconciler.build(root, () => result._cb(reconciler));
+      reconciler.build(root, () => renderable._cb(reconciler));
     } finally {
       this._activeReconciler = prev;
     }
@@ -145,11 +148,11 @@ class Renderer {
 export const { html, render, getReconciler, tags } = new Renderer();
 
 /**
- * @internal - Returns the render callback stored inside a {@link RenderResult}.
+ * @internal - Returns the render callback stored inside a {@link Renderable}.
  *
  * Used by `aeico-ssr` to execute the callback against a non-DOM serializer
  * implementation without accessing the private `_cb` field directly.
  */
-export function getCallback(r: RenderResult): (tags: Tags) => void {
+export function getCallback(r: Renderable): (tags: Tags) => void {
   return r._cb;
 }

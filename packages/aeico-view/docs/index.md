@@ -12,8 +12,8 @@ npm install aeico-view
 
 | Export | Description |
 |---|---|
-| `html(cb)` | Declare a render structure; returns a `RenderResult` |
-| `render(result, root)` | Apply a `RenderResult` to a DOM node (incremental) |
+| `html(cb)` | Declare a render structure; returns a `Renderable` |
+| `render(renderable, root)` | Apply a `Renderable` to a DOM node (incremental) |
 | `tags` | Proxy giving access to tag helpers outside a callback |
 | `getReconciler()` | Access the active `Reconciler` inside a `render()` context |
 
