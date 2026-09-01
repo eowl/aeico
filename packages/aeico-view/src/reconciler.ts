@@ -82,11 +82,29 @@ interface Tags extends HTMLTags, SVGOnlyTags, CustomHTMLTags {
  *
  * @remarks
  * A `Reconciler` is a {@link Tags} superset: everything a template callback
- * needs, plus the engine methods `build()` / `detached()` that drive render
- * passes.  Obtain instances via `new Reconciler()` (low-level) or
- * `getReconciler()` (inside a render context).
+ * needs, plus the engine methods below that drive render passes.  Obtain
+ * instances via `new Reconciler()` (low-level) or `getReconciler()` (inside
+ * a render context).
  */
-interface Reconciler extends Tags {}
+interface Reconciler extends Tags {
+  /**
+   * Executes a declarative render `block` against `root`, reconciling the
+   * resulting structure with the existing DOM children of `root`.
+   *
+   * @param root - The stable container node to render into.  Must be the same
+   *   node across re-renders so the cursor-based diffing can recycle children.
+   * @param block - A callback describing the desired child structure.
+   */
+  build(root: Node, block: () => void): void;
+
+  /**
+   * Executes `fn` outside of any active build context, then restores the
+   * previous context unconditionally.
+   *
+   * @param fn - The function to execute in a detached (context-free) state.
+   */
+  detached<T>(fn: () => T): T;
+}
 
 class Reconciler {
   /** @internal Ancestor node stack; the last entry is the current parent during a build pass. */
