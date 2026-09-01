@@ -25,9 +25,9 @@ npm install aeico-ssr
 
 ## API
 
-### `renderHtml(result)`
+### `renderHtml(renderable)`
 
-Serializes a `RenderResult` (produced by `html()`) to an HTML string.
+Serializes a `Renderable` (produced by `html()`) to an HTML string.
 
 ```ts
 import { html } from 'aeico-view';
@@ -124,7 +124,7 @@ A tag name without a hyphen (invalid custom element name) causes `renderToString
 
 #### Slot content
 
-Pass an `html()` `RenderResult` as the optional third argument to inject light DOM children into the host element.  These children are distributed into the component's `<slot>` elements by the browser at parse time.
+Pass an `html()` `Renderable` as the optional third argument to inject light DOM children into the host element.  These children are distributed into the component's `<slot>` elements by the browser at parse time.
 
 ```ts
 import { html } from 'aeico-view';
@@ -142,7 +142,7 @@ renderToString(AeNavbar, { siteTitle: 'Docs' }, html(({ a }) => {
 // </ae-navbar>'
 ```
 
-Because the third argument is a plain `RenderResult`, it can be defined once and reused across many `renderToString` calls:
+Because the third argument is a plain `Renderable`, it can be defined once and reused across many `renderToString` calls:
 
 ```ts
 const navSlot = html(({ a }) => {
@@ -315,7 +315,7 @@ Event handlers (`@…` props) are stripped entirely and never appear in the outp
 
 | | `renderHtml` | `renderToString` |
 |---|---|---|
-| Input | `RenderResult` (from `html()`) | Component class + props |
+| Input | `Renderable` (from `html()`) | Component class + props |
 | Output | HTML fragment | Complete host element HTML |
 | Host tag | not included | Yes included |
 | Reflected attrs | No | Yes |

@@ -121,7 +121,7 @@ function serializeAttrs(props: TagProps): string {
 /**
  * Server-side HTML string builder that structurally mirrors the `Reconciler` API.
  *
- * Executes any `RenderResult` callback (`html(() => { … })`) in Node.js or an
+ * Executes any `Renderable` callback (`html(() => { … })`) in Node.js or an
  * Edge Runtime without touching the DOM.  The constructor returns a `Proxy` so
  * that arbitrary camelCase property accesses (e.g. `s.myWidget`) are intercepted
  * and serialized as kebab-case HTML elements (`<my-widget>`), matching the
