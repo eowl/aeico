@@ -89,23 +89,29 @@ cloning). Not suitable for re-renderable components — use an `html()` callback
 
 ### `detached(fn)` — escape the build context
 
-Executes `fn` without advancing the parent build's cursor, then restores the previous
-context. Useful when builder calls must be made inside event handlers or async
-callbacks that fire while a `build()` pass is in progress:
+An engine method on `Reconciler` (not part of `Tags` - access it via `getReconciler()`).
+Executes `fn` with the build context temporarily cleared (fresh-append mode, no
+cursor advancement), then restores the previous context.  Elements created inside
+are not reconciled and not attached - `fn`'s return value hands them to you:
 
 ```typescript
-html(({ div, button, detached }) => {
+import { getReconciler, html, render } from 'aeico-view'
+
+html(({ div, button }) => {
   div({}, () => {
     button({
       textContent: 'Add',
       '@click': () => {
-        detached(() => {
-          // builder calls here won't corrupt the parent build's cursor
+        // Click handlers run after the render pass, so the context is already
+        // empty and plain tag calls would work too - detached() is shown for
+        // helpers that may also run *during* a build pass.
+        const toast = getReconciler().detached(() => {
           const { div: d, span } = getReconciler()
-          d({ className: 'toast' }, () => {
+          return d({ className: 'toast' }, () => {
             span({ textContent: 'Added!' })
           })
         })
+        document.body.appendChild(toast)
       },
     })
   })

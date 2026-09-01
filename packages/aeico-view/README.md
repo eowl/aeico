@@ -44,14 +44,14 @@ aeico-view works with any `HTMLElement` subclass.  Use `html()` + `render()` dir
 import { html, render } from 'aeico-view';
 
 class MyCounter extends HTMLElement {
-  count = 0;
+  #count = 0;
   shadow = this.attachShadow({ mode: 'open' });
 
-  connectedCallback() { this.render(); }
+  connectedCallback() { this.#render(); }
 
-  increment() { this.#count++; this.render(); }
+  increment() { this.#count++; this.#render(); }
 
-  render() {
+  #render() {
     render(
       html(({ div, span, button }) => {
         div(() => {
@@ -59,7 +59,7 @@ class MyCounter extends HTMLElement {
           button({ text: '+', '@click': () => this.increment() });
         });
       }),
-      this.#shadow,
+      this.shadow,
     );
   }
 }
@@ -219,14 +219,14 @@ html(({ ul, li }) => {
 ## `tags` - destructure outside the callback
 
 `tags` is a proxy that always delegates to the currently active `Reconciler`.  
-Useful when you want to destructure helpers at the top of a method rather than in the callback:
+Useful when you want to destructure helpers rather than taking them from the callback parameter.  
+Destructure **inside** a `render()` execution - resolving `tags` outside one throws:
 
 ```typescript
 import { html, render, tags } from 'aeico-view';
 
-const { div, span } = tags; // Must be used inside a render() call
-
 render(html(() => {
+  const { div, span } = tags; // resolve inside the render context
   div(() => {
     span({ text: 'hello' });
   });
@@ -253,18 +253,31 @@ render(html(() => {
 
 ## `detached()`
 
-Run builder calls outside the active build context.  Use this inside event handlers or async callbacks that fire while a `render()` pass is in progress - without detaching, those calls would incorrectly advance the parent cursor:
+`detached()` is an **engine method** on `Reconciler` (not part of `Tags`), so access it via `getReconciler()`:
 
 ```typescript
+import { getReconciler } from 'aeico-view';
+
 html((b) => {
-  b.button({
-    '@click': () => b.detached(() => {
-      // Safe to call builder methods here even if the click fires mid-render.
-      b.div({ text: 'appended' });
-    }),
+  b.div(() => {
+    const tip = getReconciler().detached(() =>
+      b.span({ className: 'tooltip', text: 'built off-cursor' }),
+    );
+    // `tip` was created fresh - NOT reconciled into b.div's children and
+    // NOT appended anywhere.  Attach it manually wherever needed.
+    document.body.appendChild(tip);
   });
 });
 ```
+
+What it does: temporarily clears the build context (parent stack + cursor), runs the callback in "fresh append" mode, then restores the previous context - even if the callback throws.
+
+When you need it:
+
+- **Shared helper code that may run during a render pass.**  Normal tag calls inside a build pass advance the cursor and get reconciled against existing children; code that must not disturb the in-progress traversal wraps its calls in `detached()`.
+- **Building a subtree to attach manually.**  Inside `detached()`, created elements have no parent - the callback's return value hands them to you for manual mounting (as shown above).
+
+When you do **not** need it: event handlers like `'@click'`.  A render pass is synchronous, so by the time a click fires the build context is already empty - builder calls there are already in fresh-append mode.
 
 ## ShadowRoot support
 
