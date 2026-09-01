@@ -12,7 +12,7 @@ npm install aeico-ssr
 
 | Export | Description |
 |---|---|
-| `renderHtml(result)` | Serialize an `html()` `RenderResult` to an HTML string |
+| `renderHtml(renderable)` | Serialize an `html()` `Renderable` to an HTML string |
 | `renderToString(ComponentClass, props?, slotContent?)` | Serialize a full component class to an HTML string |
 | `HtmlSerializer` | Low-level serializer (Reconciler-compatible, for advanced use) |
 

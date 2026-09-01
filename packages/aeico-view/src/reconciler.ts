@@ -51,7 +51,60 @@ type CustomHTMLTags = {
   };
 };
 
-interface Reconciler extends HTMLTags, SVGOnlyTags, CustomHTMLTags {}
+/**
+ * Tags - the user-facing tag vocabulary passed to `html()` callbacks.
+ *
+ * @remarks
+ * Aggregates every HTML / SVG / custom-element tag helper plus the four
+ * auxiliary methods (`el`, `text`, `node`, `fragment`).  Engine-level
+ * capabilities (`build`, `detached`) are deliberately excluded - they belong
+ * to {@link Reconciler} only, so a render callback can never accidentally
+ * mutate the traversal state it is running inside.
+ *
+ */
+interface Tags extends HTMLTags, SVGOnlyTags, CustomHTMLTags {
+  el: <T extends keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap>(
+    tagName: T,
+    propsOrCb?: TagProps | (() => void),
+    cb?: () => void,
+  ) => T extends keyof HTMLElementTagNameMap
+    ? HTMLElementTagNameMap[T]
+    : T extends keyof SVGElementTagNameMap
+      ? SVGElementTagNameMap[T]
+      : Element;
+  text: (content: string) => Text;
+  node: (existingNode: Node) => Node;
+  fragment: (cb: () => void) => DocumentFragment;
+}
+
+/**
+ * Cursor-based incremental DOM reconciler exposing the {@link Tags} DSL.
+ *
+ * @remarks
+ * A `Reconciler` is a {@link Tags} superset: everything a template callback
+ * needs, plus the engine methods below that drive render passes.  Obtain
+ * instances via `new Reconciler()` (low-level) or `getReconciler()` (inside
+ * a render context).
+ */
+interface Reconciler extends Tags {
+  /**
+   * Executes a declarative render `block` against `root`, reconciling the
+   * resulting structure with the existing DOM children of `root`.
+   *
+   * @param root - The stable container node to render into.  Must be the same
+   *   node across re-renders so the cursor-based diffing can recycle children.
+   * @param block - A callback describing the desired child structure.
+   */
+  build(root: Node, block: () => void): void;
+
+  /**
+   * Executes `fn` outside of any active build context, then restores the
+   * previous context unconditionally.
+   *
+   * @param fn - The function to execute in a detached (context-free) state.
+   */
+  detached<T>(fn: () => T): T;
+}
 
 class Reconciler {
   /** @internal Ancestor node stack; the last entry is the current parent during a build pass. */
@@ -87,9 +140,9 @@ class Reconciler {
    *
    * @remarks
    * Any property access that does not correspond to an existing member is intercepted
-   * and treated as a tag-name shorthand (e.g. `builder.div`, `builder.benchRow`).
+   * and treated as a tag-name shorthand (e.g. `tags.div`, `tags.myWidget`).
    * camelCase property names are converted to kebab-case tag names so that custom
-   * elements can be addressed without quoting (e.g. `builder.myWidget` yields `<my-widget>`).
+   * elements can be addressed without quoting (e.g. `tags.myWidget` yields `<my-widget>`).
    */
   constructor() {
     return new Proxy(this, {
@@ -344,10 +397,10 @@ class Reconciler {
    * @param root - The stable container node to render into.  Must be the same node
    *   across re-renders so that the cursor-based diffing algorithm can recycle children.
    * @param block - A function that imperatively describes the desired child structure
-   *   by calling builder tag helpers (e.g. `builder.div(…)`).
+   *   by calling tag helpers (e.g. `tags.div(…)`).
    *
    * @remarks
-   * This is the primary public entry point for the builder.  Each call constitutes one
+   * This is the primary public entry point for the reconciler.  Each call constitutes one
    * full render pass: props that changed are updated, new nodes are inserted, and nodes
    * that the block no longer visits are removed.
    */
@@ -793,4 +846,4 @@ class Reconciler {
 }
 
 export default Reconciler;
-export type { TagProps, HTMLTags, SVGOnlyTags };
+export type { TagProps, HTMLTags, SVGOnlyTags, Tags };

@@ -1,4 +1,4 @@
-import type { RenderResult } from 'aeico-view';
+import type { Renderable } from 'aeico-view';
 
 /**
  * Double-buffer swap utility. Keeps two instances of a clearable object and alternates between
@@ -41,8 +41,8 @@ export class SwapBuffer<T extends { clear(): void }> {
   }
 }
 
-export function isRenderResult(value: unknown): value is RenderResult {
-  return !!value && typeof value === 'object' && typeof (value as RenderResult)._cb === 'function';
+export function isRenderable(value: unknown): value is Renderable {
+  return !!value && typeof value === 'object' && typeof (value as Renderable)._cb === 'function';
 }
 
 /**

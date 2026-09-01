@@ -3,8 +3,8 @@ import type { StyleEntry, StyleItems, StyleOptions } from './styles';
 import type { InferProps } from './types';
 import BaseElement from './base-element';
 import { render } from 'aeico-view';
-import type { RenderResult } from 'aeico-view';
-import { isRenderResult } from './utils';
+import type { Renderable } from 'aeico-view';
+import { isRenderable } from './utils';
 
 /**
  * Full-featured base class for Aeico Web Components.
@@ -38,9 +38,9 @@ import { isRenderResult } from './utils';
  *   override render() {
  *     return html(({ div, button, span }) => {
  *       div({}, () => {
- *         button({ onclick: () => this.count--, textContent: '-' })
+ *         button({ '@click': () => this.count--, textContent: '-' })
  *         span({ textContent: String(this.count) })
- *         button({ onclick: () => this.count++, textContent: '+' })
+ *         button({ '@click': () => this.count++, textContent: '+' })
  *       })
  *     })
  *   }
@@ -100,13 +100,13 @@ class AeicoElement extends BaseElement {
    */
   static create<T extends AeicoElement>(
     this: new () => T,
-    configOrChildren?: Record<string, unknown> | RenderResult,
-    children?: RenderResult,
+    configOrChildren?: Record<string, unknown> | Renderable,
+    children?: Renderable,
   ): T {
     const instance = new this();
 
-    const config = isRenderResult(configOrChildren) ? undefined : configOrChildren;
-    const childResult = isRenderResult(configOrChildren) ? configOrChildren : children;
+    const config = isRenderable(configOrChildren) ? undefined : configOrChildren;
+    const childResult = isRenderable(configOrChildren) ? configOrChildren : children;
 
     if (config) {
       Object.entries(config).forEach(([key, value]) => {

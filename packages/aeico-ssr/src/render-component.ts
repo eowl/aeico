@@ -1,4 +1,4 @@
-import { getCallback, type RenderResult } from 'aeico-view';
+import { getCallback, type Renderable } from 'aeico-view';
 import type { Props, Prop, Computed, StyleEntry } from 'aeico-element';
 import { PROP_METADATA_KEY, COMPUTED_METADATA_KEY } from 'aeico-element/constants';
 import { HtmlSerializer, escapeAttr } from './html-serializer';
@@ -204,7 +204,7 @@ interface ComponentConstructor {
   computed?: Computed;
   useShadowDOM: boolean;
   name: string;
-  prototype: { render?: () => RenderResult | null | undefined };
+  prototype: { render?: () => Renderable | null | undefined };
 }
 
 /** Extends {@link ComponentConstructor} with optional `static styles` support. */
@@ -243,7 +243,7 @@ interface ComponentConstructorWithStyles extends ComponentConstructor {
 export function renderToString(
   ComponentClass: ComponentConstructor,
   props: Record<string, unknown> = {},
-  slotContent?: RenderResult,
+  slotContent?: Renderable,
 ): string {
   const tagName = (
     globalThis as unknown as { customElements?: { getName(ctor: unknown): string | null } }
@@ -265,14 +265,14 @@ export function renderToString(
     return `<${tagName}${hostAttrs}></${tagName}>`;
   }
 
-  const result = renderFn.call(ctx) as RenderResult | undefined;
+  const renderable = renderFn.call(ctx) as Renderable | undefined;
 
-  if (!result) {
+  if (!renderable) {
     return `<${tagName}${hostAttrs}></${tagName}>`;
   }
 
   const serializer = new HtmlSerializer();
-  const cb = getCallback(result);
+  const cb = getCallback(renderable);
   cb(serializer as unknown as Parameters<typeof cb>[0]);
   const innerHTML = serializer.toString();
 

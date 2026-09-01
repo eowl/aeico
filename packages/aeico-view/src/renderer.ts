@@ -1,15 +1,15 @@
-import Reconciler from './reconciler';
+import Reconciler, { type Tags } from './reconciler';
 
 /**
- * RenderResult - opaque wrapper produced by `html()`.
+ * Renderable - opaque wrapper produced by `html()`.
  *
  * Holds the render callback that will be executed when `render()` applies
  * the template to a DOM root.  This object is intentionally opaque to
- * consumers - just pass it to `render(result, root)`.
+ * consumers - just pass it to `render(renderable, root)`.
  */
-export class RenderResult {
+export class Renderable {
   /** @internal */
-  constructor(readonly _cb: (reconciler: Reconciler) => void) {}
+  constructor(readonly _cb: (tags: Tags) => void) {}
 }
 
 class Renderer {
@@ -17,7 +17,8 @@ class Renderer {
   private _activeReconciler: Reconciler | null = null;
 
   /**
-   * Proxy that delegates all property access to the currently active builder.
+   * Proxy that exposes the {@link Tags} view of the currently active
+   * {@link Reconciler}.
    *
    * Lets you destructure tag helpers without explicitly calling `getReconciler()`:
    *
@@ -27,14 +28,17 @@ class Renderer {
    *
    * Must be used inside a `render()` / `html()` context, same as `getReconciler()`.
    */
-  readonly tags: Reconciler = new Proxy({} as Reconciler, {
+  readonly tags: Tags = new Proxy({} as Tags, {
     get: (_t, prop) => Reflect.get(this.getReconciler(), prop),
   });
 
   /**
-   * Return the `Reconciler` that is currently executing inside a
-   * `render()` call.  Useful for helper methods that need builder access
-   * without receiving it as a parameter.
+   * Return the {@link Reconciler} that is currently executing inside a
+   * `render()` call.  Useful for helper methods that need engine-level
+   * access (e.g. `detached()`) without receiving it as a parameter.
+   *
+   * Unlike the {@link tags} proxy, this returns the full engine - use `tags`
+   * instead when only the tag helpers are needed.
    *
    * Throws if called outside a `render()` execution context.
    */
@@ -47,10 +51,10 @@ class Renderer {
   };
 
   /**
-   * Declare a render structure as a reusable `RenderResult`.
+   * Declare a render structure as a reusable {@link Renderable}.
    *
    * `html` is a **callback DSL**, not a tagged template literal. The callback
-   * receives the active {@link Reconciler} whose tag helpers (`div`, `span`, …)
+   * receives the active {@link Tags} view whose tag helpers (`div`, `span`, …)
    * can be destructured. The callback is **not** executed immediately - it is
    * deferred until {@link render} applies it to a DOM root.
    *
@@ -69,8 +73,10 @@ class Renderer {
    *     // Inline styles as a camelCase object
    *     div({ style: { color: 'red', fontSize: '14px' } })
    *
-   *     // Native event handlers (direct assignment)
-   *     button({ onclick: () => doSomething(), textContent: 'Click me' })
+   *     // Event handlers via the '@event' syntax (addEventListener).
+   *     // value without the '@' prefix falls through to setAttribute and is
+   *     // stringified.  Always use '@' + the DOM event name (e.g. '@click').
+   *     button({ '@click': () => doSomething(), textContent: 'Click me' })
    *
    *     // Any HTML attribute (pass-through)
    *     input({ type: 'number', min: '0', max: '100', value: String(val) })
@@ -83,15 +89,15 @@ class Renderer {
    * })
    * ```
    *
-   * @param cb - Builder callback that describes the desired DOM tree.
-   * @returns An opaque {@link RenderResult} to pass to {@link render}.
+   * @param cb - Tags callback that describes the desired DOM tree.
+   * @returns An opaque {@link Renderable} to pass to {@link render}.
    */
-  html = (cb: (reconciler: Reconciler) => void): RenderResult => {
-    return new RenderResult(cb);
+  html = (cb: (tags: Tags) => void): Renderable => {
+    return new Renderable(cb);
   };
 
   /**
-   * Apply a `RenderResult` (produced by {@link html}) to a DOM root node.
+   * Apply a {@link Renderable} (produced by {@link html}) to a DOM root node.
    *
    * A `Reconciler` instance is cached per root, so repeated calls with the
    * same root reuse the same instance and only patch nodes that changed
@@ -106,9 +112,9 @@ class Renderer {
    * const app = (count: number) =>
    *   html(({ div, button, span }) => {
    *     div({}, () => {
-   *       button({ onclick: () => render(app(count - 1), root), textContent: '-' })
+   *       button({ '@click': () => render(app(count - 1), root), textContent: '-' })
    *       span({ textContent: String(count) })
-   *       button({ onclick: () => render(app(count + 1), root), textContent: '+' })
+   *       button({ '@click': () => render(app(count + 1), root), textContent: '+' })
    *     })
    *   })
    *
@@ -116,10 +122,10 @@ class Renderer {
    * render(app(0), root)
    * ```
    *
-   * @param result - The `RenderResult` to apply.
+   * @param renderable - The {@link Renderable} to apply.
    * @param root   - Target DOM node (shadow root, element, or `document.body`).
    */
-  render = (result: RenderResult, root: Node): void => {
+  render = (renderable: Renderable, root: Node): void => {
     let reconciler = this._reconcilerCache.get(root);
 
     if (!reconciler) {
@@ -131,7 +137,7 @@ class Renderer {
     this._activeReconciler = reconciler;
 
     try {
-      reconciler.build(root, () => result._cb(reconciler));
+      reconciler.build(root, () => renderable._cb(reconciler));
     } finally {
       this._activeReconciler = prev;
     }
@@ -141,11 +147,11 @@ class Renderer {
 export const { html, render, getReconciler, tags } = new Renderer();
 
 /**
- * @internal - Returns the render callback stored inside a {@link RenderResult}.
+ * @internal - Returns the render callback stored inside a {@link Renderable}.
  *
  * Used by `aeico-ssr` to execute the callback against a non-DOM serializer
  * implementation without accessing the private `_cb` field directly.
  */
-export function getCallback(r: RenderResult): (reconciler: Reconciler) => void {
+export function getCallback(r: Renderable): (tags: Tags) => void {
   return r._cb;
 }

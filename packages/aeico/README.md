@@ -32,7 +32,7 @@ class MyCounter extends AeicoElement {
 
   override render() {
     return html(({ button, span }) => {
-      button({ onclick: () => this.count++, textContent: '+' });
+      button({ '@click': () => this.count++, textContent: '+' });
       span({ textContent: String(this.count) });
     });
   }
