@@ -73,23 +73,27 @@ img({ src: '/logo.png', alt: 'Logo', width: '48', height: '48' })
 
 ## Event handlers
 
-Event handlers are assigned via direct property assignment, not `addEventListener`.
-Use the standard lowercase event name prefixed with `on`:
+Event handlers are bound via `addEventListener`, declared with an `@` prefix
+followed by the standard DOM event name (**without** the `on` prefix):
 
 ```typescript
-button({ onclick: handleClick, textContent: 'Submit' })
+button({ '@click': handleClick, textContent: 'Submit' })
 
 input({
-  oninput: (e) => (this.value = (e.target as HTMLInputElement).value),
-  onfocus: () => (this.focused = true),
-  onblur:  () => (this.focused = false),
+  '@input': (e) => (this.value = (e.target as HTMLInputElement).value),
+  '@focus': () => (this.focused = true),
+  '@blur':  () => (this.focused = false),
 })
 
 div({
-  onmouseenter: () => (this.hovered = true),
-  onmouseleave: () => (this.hovered = false),
+  '@mouseenter': () => (this.hovered = true),
+  '@mouseleave': () => (this.hovered = false),
 })
 ```
+
+Do **not** pass a function to a bare `onclick` / `oninput` prop - without the
+`@` prefix a function value falls through to `setAttribute` and is stringified,
+so the handler silently never fires.
 
 For managed listeners that auto-clean up on component disconnect, use `this.listen()`
 from inside lifecycle hooks (`onMounted`, `onUpdated`) instead.

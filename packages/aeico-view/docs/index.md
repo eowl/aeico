@@ -98,7 +98,7 @@ html(({ div, button, detached }) => {
   div({}, () => {
     button({
       textContent: 'Add',
-      onclick: () => {
+      '@click': () => {
         detached(() => {
           // builder calls here won't corrupt the parent build's cursor
           const { div: d, span } = getReconciler()
@@ -139,7 +139,7 @@ import { html } from 'aeico-view'
 const tpl = html(({ div, span, button }) => {
   div({ className: 'card' }, () => {
     span({ textContent: 'Hello' })
-    button({ onclick: () => alert('hi'), textContent: 'Click' })
+    button({ '@click': () => alert('hi'), textContent: 'Click' })
   })
 })
 ```
@@ -157,9 +157,9 @@ function update(count: number) {
   render(
     html(({ div, button, span }) => {
       div({}, () => {
-        button({ onclick: () => update(count - 1), textContent: '-' })
+        button({ '@click': () => update(count - 1), textContent: '-' })
         span({ textContent: String(count) })
-        button({ onclick: () => update(count + 1), textContent: '+' })
+        button({ '@click': () => update(count + 1), textContent: '+' })
       })
     }),
     root,

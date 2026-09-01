@@ -74,7 +74,6 @@ class Renderer {
    *     div({ style: { color: 'red', fontSize: '14px' } })
    *
    *     // Event handlers via the '@event' syntax (addEventListener).
-   *     // A bare `onclick: fn` prop does NOT bind a listener - a function
    *     // value without the '@' prefix falls through to setAttribute and is
    *     // stringified.  Always use '@' + the DOM event name (e.g. '@click').
    *     button({ '@click': () => doSomething(), textContent: 'Click me' })
@@ -113,9 +112,9 @@ class Renderer {
    * const app = (count: number) =>
    *   html(({ div, button, span }) => {
    *     div({}, () => {
-   *       button({ onclick: () => render(app(count - 1), root), textContent: '-' })
+   *       button({ '@click': () => render(app(count - 1), root), textContent: '-' })
    *       span({ textContent: String(count) })
-   *       button({ onclick: () => render(app(count + 1), root), textContent: '+' })
+   *       button({ '@click': () => render(app(count + 1), root), textContent: '+' })
    *     })
    *   })
    *
